@@ -64,7 +64,7 @@ const VeterinaModal = (props) => {
                   "Some Error Occured"
                 ) : (
                   <>
-                    {data.specialities.map((data, i) => (
+                    {data?.specialities.map((data, i) => (
                       <tr key={i}>
                         <td className="text-start">{data.speciality}</td>
                         <td className="text-start">{data.veterinarianCount}</td>

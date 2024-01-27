@@ -2,38 +2,36 @@ const { Sequelize } = require("sequelize");
 const Database = require("../../../config/connection");
 const Category = Database.category;
 const Product = Database.product;
-const Admin = Database.user
-const jwt = require("jsonwebtoken")
+const Admin = Database.user;
+const jwt = require("jsonwebtoken");
 const createCategory = async (req, res) => {
- 
-    try {
-      const exist = await Category.findOne({});
-  
-      if (req.body.category === "" || req.body.category === null) {
-        return res.status(400).json({
-          message: "category is required",
-        });
-      }
-  
-      if (!exist) {
-        const { category } = req.body;
-        const newCategory = await Category.create({ category });
-        return res.status(201).json({
-          message: "category created",
-          result: newCategory,
-        });
-      }
-  
-      return res.status(201).json({
-        message: "category existed",
-      });
-    } catch (error) {
-      return res.status(500).send({
-        message: "Error category creation",
-        error: error.message,
+  try {
+    const exist = await Category.findOne({});
+
+    if (req.body.category === "" || req.body.category === null) {
+      return res.status(400).json({
+        message: "category is required",
       });
     }
- 
+
+    if (!exist) {
+      const { category } = req.body;
+      const newCategory = await Category.create({ category });
+      return res.status(201).json({
+        message: "category created",
+        result: newCategory,
+      });
+    }
+
+    return res.status(201).json({
+      message: "category existed",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Error category creation",
+      error: error.message,
+    });
+  }
 };
 
 const updateCategory = async (req, res) => {
@@ -63,7 +61,7 @@ const updateCategory = async (req, res) => {
 const deleteCategory = async (req, res) => {
   const id = req.params.id;
   const category = await Category.findOne({ where: { id: id } });
-  const {pass,email} = req.body
+  const { pass, email } = req.body;
   const token = req.headers.authorization.split(" ")[1];
   const decoded = jwt.verify(token, "hello$%#@!ADMIN___++");
   const user = await Admin.findOne({
@@ -77,10 +75,10 @@ const deleteCategory = async (req, res) => {
   }
   if (decoded.role !== user.role) {
     return res.status(400).send({
-     message: "Not authorized",
-     success: false,
-   });
- }
+      message: "Not authorized",
+      success: false,
+    });
+  }
   if (category?.id === id) {
     await Category.destroy({ where: { id: id } });
     return res.status(200).send({
@@ -95,8 +93,8 @@ const deleteCategory = async (req, res) => {
   }
 };
 const getSingleCategory = async (req, res) => {
-  const id = req.params.id
-  const category = await Category.findAll({where:{id:id}});
+  const id = req.params.id;
+  const category = await Category.findAll({ where: { id: id } });
   res.status(200).send({
     message: "category",
     category,
@@ -117,16 +115,8 @@ const getTotalWallpaperByCategory = async (req, res) => {
         model: Product,
         as: "categoryData",
       },
-      attributes: [
-        "id",
-        "category",
-        "createdAt",
-        [
-          Sequelize.fn("COUNT", Sequelize.col("categoryData.id")),
-          "productCount",
-        ],
-      ],
-      group: ["Category.id", "Category.category"],
+      attributes: ["id", "category", "createdAt", [Sequelize.fn("COUNT", Sequelize.col("categoryData.id")), "productCount"]],
+      group: ["category.id", "category.category", "category.createdAt"],
     });
 
     res.status(200).send({
