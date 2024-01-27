@@ -1,0 +1,120 @@
+.vaccination-section {
+  font-family: "Inter";
+  box-shadow: 0px 4px 12px 0px rgb(0 0 0 / 3%);
+  .padding {
+    padding: 0 !important;
+  }
+  .vaccination-filter-container-main {
+    .filter-box {
+      h1 {
+        font: normal normal 600 18px/21px Inter;
+      }
+    }
+  }
+
+  .vaccination-second {
+    border-radius: 8px;
+    background-color: #fff;
+    .history {
+      display: none !important;
+    }
+    .main-title-box {
+      .vaccination-main-title {
+        font: normal normal bold 26px/31px Inter;
+        margin-bottom: 5px;
+        text-align: start;
+      }
+      .vaccination-sub-title {
+        font: normal normal normal 12px/15px Inter;
+        text-align: start;
+      }
+    }
+    .vaccination-table-container {
+      padding: 20px;
+      .vaccination-filter-container-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .vaccination-record-box {
+          font: normal normal medium 15px/19px Inter;
+          letter-spacing: -0.15px;
+          color: #8a98a5;
+          p {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    .vaccination-table {
+      table {
+        width: 100%;
+        tr {
+          // border-bottom: 1px solid #e2e6e9;
+          padding: 10px 0;
+          th {
+            font: normal normal 600 12px/15px Inter;
+            border-bottom: 1px solid #e2e6e9;
+            color: #8a98a5;
+            padding: 10px 20px;
+            text-align: start;
+            &:last-child {
+              text-align: end;
+            }
+          }
+          td {
+            padding: 1.25rem 20px;
+            text-align: start;
+            &:last-child {
+              text-align: end;
+            }
+            .star-icon-wrapper {
+              font-weight: bold;
+              .bi {
+                color: #336cfb;
+                margin-left: 5px;
+                font-size: 18px;
+                margin-bottom: 10px;
+              }
+            }
+
+            button {
+              padding: 10px;
+              width: 102px;
+              color: #000;
+              font: 13px/26px Inter;
+              font-weight: bold;
+              background: #f6f8ff 0% 0% no-repeat padding-box;
+              border-radius: 8px;
+              border: 0;
+            }
+          }
+          .textSuccess {
+            color: #25bb00;
+          }
+          .textDanger {
+            color: #e32929;
+          }
+          td:first-child {
+            font: normal normal 600 12px/15px Inter;
+
+            color: #8a98a5;
+          }
+          td:nth-child(2),
+          td:nth-child(4),
+          td:nth-child(5) {
+            font: normal normal normal 13px/21px Inter;
+            font-weight: 500;
+          }
+          td:nth-child(3) {
+            font: normal normal normal 13px/21px Inter;
+            font-weight: 600;
+          }
+        }
+        tr:not(:last-child) {
+          border-bottom: 1px solid #e2e6e9; /* Adjust the border style as needed */
+        }
+      }
+    }
+  }
+}

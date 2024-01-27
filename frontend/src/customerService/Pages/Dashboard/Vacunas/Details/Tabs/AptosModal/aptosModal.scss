@@ -1,0 +1,30 @@
+.modal {
+  .modal-content {
+    border-radius: 8px !important;
+    .modal-header {
+      border-bottom: 1px solid #eff2f5 !important;
+      .modal-title {
+        font: normal normal 600 18px/21px Inter;
+      }
+    }
+    .modal-body {
+      form {
+        width: 100%;
+        input::placeholder {
+          color: #b9bfc2 !important;
+          font: normal normal normal 14px/17px Inter;
+        }
+        .form-select {
+          color: #5e6278!important;
+          font: normal normal normal 14px/17px Inter;
+        }
+      }
+    }
+    .modal-footer {
+      padding: 20px 50px !important;
+      .footer-btn {
+        padding: 15px 20px !important;
+      }
+    }
+  }
+}

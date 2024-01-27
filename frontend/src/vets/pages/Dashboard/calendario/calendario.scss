@@ -1,0 +1,178 @@
+.calendario {
+  background: #f6f8ff 0% 0% no-repeat padding-box;
+  width: 100%;
+  height: 100%;
+  padding: 25px 45px;
+  font-family: "Inter";
+  border-radius: 8px;
+
+  .main-title-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .calendario-detail-main-title {
+      font: normal normal bold 26px/31px Inter;
+      margin-bottom: 5px;
+      text-align: start;
+    }
+
+    .calendario-detail-sub-title {
+      font: normal normal normal 12px/15px Inter;
+      text-align: start;
+      margin-bottom: 0;
+    }
+  }
+
+  .maincontainer {
+    border-radius: 8px;
+    margin-top: 20px;
+    background: #fff;
+    padding: 25px;
+
+    .fc-col-header-cell {
+      padding: 0.75rem 0.5rem;
+
+      a {
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+    }
+
+    .fc-timegrid-axis-cushion {
+      font: normal normal 11px/14px Inter;
+      font-weight: 600;
+      letter-spacing: -0.11px;
+
+    }
+
+    .fc-scrollgrid-sync-inner {
+      font: normal normal 12px/15px Inter;
+      font-weight: 600;
+      letter-spacing: 0px;
+
+      a {
+        color: #1d2328 !important;
+      }
+    }
+
+    .fc-timegrid-slot-label-cushion {
+      font: normal normal 11px/14px Inter;
+      font-weight: 600;
+      letter-spacing: -0.11px;
+
+    }
+
+    a {
+      text-decoration: none !important;
+    }
+
+    .fc-toolbar-chunk {
+      .fc-button-group {
+        background: transparent !important;
+
+        .fc-button-active {
+          background-color: #f1f1f2 !important;
+
+          font: normal normal 13px/16px Inter;
+          font-weight: 600;
+          letter-spacing: 0px;
+          color: #1d2328;
+        }
+
+        .fc-button {
+          background: #f9f9f9;
+
+          &:focus {
+            box-shadow: none !important;
+          }
+        }
+
+        .fc-prev-button {
+          background: #f1f6f4;
+
+          color: #000;
+          border: 0;
+
+          padding: 0.75rem 1.25rem;
+        }
+
+        .fc-next-button {
+          background: #f1f6f4;
+
+          color: #000;
+          border: 0;
+          padding: 0.75rem 1.25rem;
+        }
+
+        .fc-dayGridMonth-button {
+          background: #f9f9f9;
+
+          color: #000;
+          border: 0;
+
+          padding: 0.75rem 1.25rem;
+          box-shadow: none !important;
+
+
+          vertical-align: middle;
+          font-weight: 500;
+          text-transform: capitalize;
+        }
+
+        .fc-timeGridWeek-button {
+          background: #f9f9f9;
+
+          color: #000;
+          border: 0;
+
+          padding: 0.75rem 1.25rem;
+          box-shadow: none !important;
+
+
+          vertical-align: middle;
+          font-weight: 500;
+          text-transform: capitalize;
+        }
+
+        .fc-timeGridWeek-button {
+          background: #f9f9f9;
+
+          color: #000;
+          border: 0;
+
+        }
+
+        .fc-timeGridDay-button {
+          background: #f9f9f9;
+
+          color: #000;
+          border: 0;
+
+        }
+
+      }
+
+      .fc-today-button {
+
+
+        font: normal normal 13px/16px Inter;
+
+        letter-spacing: 0px;
+
+        background: #f1f6f4;
+
+        color: #000;
+        border: 0;
+        margin-left: 5px;
+        padding: 0.75rem 1.25rem;
+        box-shadow: none !important;
+
+        border-radius: 0.475rem;
+        vertical-align: middle;
+        font-weight: 500;
+        text-transform: capitalize;
+      }
+    }
+  }
+}

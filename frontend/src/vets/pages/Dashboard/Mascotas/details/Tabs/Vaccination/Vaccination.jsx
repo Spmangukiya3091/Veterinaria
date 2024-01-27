@@ -1,0 +1,93 @@
+import React, { useEffect, useState } from "react";
+import "./vaccination.scss";
+import { vaccinationData } from "./vaccinationData";
+import { useGetSinglePetVaccinationDetailsQuery } from "../../../../../../../services/ApiServices";
+import { Button, Spinner } from "react-bootstrap";
+import moment from "moment";
+
+const Vaccination = ({ id }) => {
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const vaccinationList = useGetSinglePetVaccinationDetailsQuery(id, { refetchOnMountOrArgChange: true });
+
+  useEffect(() => {
+    if (!vaccinationList.isLoading) {
+      setData(vaccinationList.data?.vaccinations);
+      setLoading(false);
+    } else if (vaccinationList.isError) {
+      setLoading(false);
+      setError(true);
+    }
+  }, [vaccinationList]);
+
+  return (
+    <>
+      {loading === true ? (
+        <Spinner animation="border" variant="primary" />
+      ) : error === true ? (
+        "Some Error Occured"
+      ) : (
+        <div className="historical-table-container">
+          <div className="card card-flush">
+            <div className="card-header align-items-center py-5 gap-2 gap-md-5">
+              <div className="card-title">
+                <h1>Vacunación</h1>
+              </div>
+              <p className="text-gray-400 fw-bolder fs-5">{data.length} Vacunas</p>
+            </div>
+            <div className="card-body pt-0">
+              <table className="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
+                <thead>
+                  <tr className="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                    <th className="">COD.</th>
+                    <th className="text-start ">TIPO</th>
+                    <th className="text-start ">EXPLORACIÓN</th>
+                    <th className="text-start ">F. VACUNACIÓN</th>
+                    <th className="text-start ">F. VALIDEZ</th>
+                    <th className="text-end ">ESTADO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.length > 0 ? (
+                    data.map(({ id, vaccine, exploration, F_vaccination, validity, status }, i) => (
+                      <tr key={i}>
+                        <td className="text-start">{i + 1}</td>
+                        <td className="text-start">{vaccine}</td>
+                        <td className={`text-start ${exploration === "APTO" ? "textSuccess" : "textDanger"}`}>{exploration}</td>
+                        <td className="text-start">{F_vaccination === null ? "-" : moment(F_vaccination).format("DD MMM YYYY")}</td>
+                        <td className="text-start">{validity === null ? "-" : moment(validity).format("DD MMM YYYY")}</td>
+                        <td className="text-end">
+                          <div
+                            className={
+                              status === "vaccinated"
+                                ? "badge badge-light-primary text-primary"
+                                : status === "rejected"
+                                ? "badge badge-light-danger text-danger"
+                                : "badge badge-light-warning text-warning "
+                            }
+                          >
+                            <p className="status-p mb-0">
+                              {status === "vaccinated" ? "Vacunado" : status === "rejected" ? "Rechazada" : "Pendiente"}
+                            </p>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="7">No data available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Vaccination;

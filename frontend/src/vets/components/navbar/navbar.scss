@@ -1,0 +1,160 @@
+.navbars {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+  .navbar {
+    width: 100%;
+    padding: 0 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .avatar-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .sb-avatar__text {
+        background: #013183 !important;
+      }
+      .fa-solid {
+        margin-left: 8px;
+        color: #000 !important;
+      }
+      .avatar-title-box {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 8px;
+        .avatar-main-title {
+          font: normal normal 15px/19px Inter;
+          font-weight: 600;
+          margin-bottom: 5px;
+        }
+        .avatar-sub-title {
+          margin-bottom: 0;
+          font: normal normal normal 12px/15px Inter;
+        }
+      }
+    }
+
+    .nav-title {
+      font: normal normal 600 18px/21px Inter;
+      margin-bottom: 0;
+    }
+    .dropdown {
+      .dropdown-toggle {
+        background: transparent !important;
+        padding: 10px !important;
+      }
+      .logout-btn {
+        background: #fff !important;
+        border-top: 1px solid #e1e1e1 !important;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: 46px;
+        background: #fff 0% 0% no-repeat padding-box;
+        border-radius: 0px 0px 8px 8px;
+        width: 100%;
+        .bi.bi-box-arrow-left {
+          margin-right: 10px;
+          color: #000 !important;
+        }
+        p {
+          margin-bottom: 0;
+        }
+      }
+      .dropdown-menu {
+        width: 289px;
+        padding-bottom: 0;
+        left: -108px;
+        top: 60px;
+        border-radius: 8px !important;
+        .profile-avatar-box {
+          margin: 20px 0;
+        }
+      }
+      button {
+        background: transparent !important;
+        border: 0;
+        color: #000 !important;
+        &:hover {
+          background: transparent !important;
+          border: 0;
+          color: #000 !important;
+        }
+      }
+      .dropdown-toggle::after {
+        display: none;
+      }
+      .profile-avatar-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .sb-avatar {
+          width: 60px !important;
+          height: 60px !important;
+          .sb-avatar__text {
+            width: 60px !important;
+            height: 60px !important;
+            background: #013183 !important;
+          }
+        }
+
+        span {
+          font: normal normal 27px/33px Inter;
+          font-weight: 600;
+        }
+        .fa-solid {
+          margin-left: 8px;
+        }
+        .profile-avatar-title-box {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          margin-left: 15px;
+          .profile-avatar-main-title {
+            font: normal normal 600 18px/21px Inter;
+            margin-bottom: 5px;
+          }
+          .profile-avatar-sub-title {
+            margin-bottom: 0;
+            font: normal normal normal 13px/21px Inter;
+          }
+        }
+      }
+    }
+    .notification-box {
+      margin-left: auto;
+      .notification-btn {
+        padding: 10px !important;
+        font-size: 20px !important;
+        margin-right: 28px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        background: #f6f8ff 0% 0% no-repeat padding-box !important;
+        .fa-solid {
+          margin-inline: 5px !important;
+          color: #000 !important;
+        }
+        .fa-regular {
+          color: #000 !important;
+          font-size: 20px;
+        }
+        border-radius: 8px;
+        border: 0;
+        color: #000 !important;
+        .badge {
+          border-radius: 50%;
+          background: #336cfb !important ;
+          color: #fff !important;
+          font-size: 17px;
+        }
+      }
+    }
+  }
+}

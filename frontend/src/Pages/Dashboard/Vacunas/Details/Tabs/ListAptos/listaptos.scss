@@ -1,0 +1,151 @@
+.listaptos-table-container {
+  background: #fff;
+  margin-top: 20px;
+  border-radius: 8px;
+
+  .card {
+    .card-header {
+      padding: 20px 25px;
+
+      .card-title {
+        .title {
+          font: normal normal 600 18px/21px Inter;
+        }
+      }
+    }
+
+    .card-body {
+      padding: 0 !important;
+
+      table {
+        thead {
+          tr {
+            th {
+              padding-left: 25px !important;
+              padding-right: 25px !important;
+            }
+          }
+        }
+
+        tbody {
+          tr {
+            td {
+              font: normal normal 13px/21px Inter;
+              font-weight: normal;
+              padding-left: 25px !important;
+              padding-right: 25px !important;
+
+              .rating-label {
+                width: 100px;
+
+                .blue-star {
+                  color: #ffad0f !important;
+                }
+
+                .grey-star {
+                  color: #dfe1e3 !important;
+                }
+              }
+
+              .star-icon-wrapper {
+                font-weight: 600;
+
+                .bi {
+                  color: #336cfb;
+                  font-size: 18px;
+                  margin-bottom: 10px;
+                  margin-left: 5px;
+                }
+              }
+
+              .fecha {
+                width: 90px;
+              }
+
+              .view-btn {
+                width: 108px !important;
+              }
+
+              &:nth-child(1) {
+                width: 7%;
+              }
+
+              &:nth-child(3) {
+                width: 38%;
+              }
+
+              &:nth-child(2),
+              &:nth-child(4),
+              &:nth-child(5) {
+                width: 14%;
+              }
+
+              &:nth-child(6) {
+                width: 13%;
+              }
+
+              &:last-child {
+                text-align: end;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .listaptos-filter-container-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .filter-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .form-control-feedback {
+        position: absolute;
+        z-index: 2;
+        display: block;
+        width: 2.375rem;
+        height: 2.375rem;
+        line-height: 2.375rem;
+        text-align: center;
+        pointer-events: none;
+        color: #aaa;
+      }
+
+      .form-control {
+        background: #f6f8ff 0% 0% no-repeat padding-box;
+        border-radius: 8px;
+        padding-left: 2.375rem;
+
+        &:focus {
+          box-shadow: none !important;
+          border: 0 !important;
+        }
+
+        &:focus-visible {
+          border: 0 !important;
+          outline: none !important;
+        }
+      }
+    }
+
+    .listaptos-record-box {
+      font: normal normal medium 15px/19px Inter;
+      letter-spacing: -0.15px;
+      color: #8a98a5;
+
+      p {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.listaptos-table {
+  background: #fff;
+  padding: 20px;
+}

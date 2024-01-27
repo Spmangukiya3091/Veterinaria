@@ -1,0 +1,24 @@
+.citas-pagination-container{
+    margin-top: 34px;
+    .pagination{
+        justify-content: flex-end !important;
+        .fa-solid{
+            color:#1D2328 ;
+            font-weight: 700;
+        }
+        .page-item{
+            margin-right: 5px !important;
+        .page-link{
+            color:#1D2328 ;
+            border: 0;
+           margin-right: 0;
+        }
+    }
+        .active{
+            .page-link{
+                color:#fff !important ;
+                border: 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32"
+  viewBox="0 0 32 32">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectángulo_10775" data-name="Rectángulo 10775" width="32" height="32"
+        transform="translate(110.557 44.557)" fill="#8a98a5" stroke="#707070" stroke-width="1" />
+    </clipPath>
+  </defs>
+  <g id="Enmascarar_grupo_57895" data-name="Enmascarar grupo 57895" transform="translate(-110.557 -44.557)"
+    clip-path="url(#clip-path)">
+    <g id="calendar_1_" data-name="calendar (1)" transform="translate(110.508 44.508)">
+      <g id="Grupo_58596" data-name="Grupo 58596">
+        <g id="Grupo_58595" data-name="Grupo 58595">
+          <path id="Trazado_3" data-name="Trazado 3"
+            d="M29.076,14.935V2.955a.94.94,0,0,0-.94-.94h-4.6V.94a.94.94,0,1,0-1.881,0V2.014H15.478V.94A.94.94,0,1,0,13.6.94V2.014H7.42V.94A.94.94,0,0,0,5.54.94V2.014H.94a.94.94,0,0,0-.94.94v25.18a.94.94,0,0,0,.94.94H14.935A10,10,0,1,0,29.076,14.935ZM1.881,3.9H27.195V8.058H1.881Zm0,23.3V9.938H27.195v3.551A10,10,0,0,0,13.489,27.195H1.881Zm20.211,3.022a8.125,8.125,0,1,1,8.125-8.125A8.134,8.134,0,0,1,22.092,30.216Z"
+            fill="#8a98a5" />
+        </g>
+      </g>
+      <g id="Grupo_58598" data-name="Grupo 58598" transform="translate(21.152 18.13)">
+        <g id="Grupo_58597" data-name="Grupo 58597">
+          <path id="Trazado_4" data-name="Trazado 4"
+            d="M27.685,23.356H25.6V21.275a.94.94,0,0,0-1.881,0V24.3a.94.94,0,0,0,.94.94h3.022a.94.94,0,0,0,0-1.881Z"
+            transform="translate(-23.723 -20.334)" fill="#8a98a5" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

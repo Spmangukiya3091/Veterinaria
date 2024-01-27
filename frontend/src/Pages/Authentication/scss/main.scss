@@ -1,0 +1,227 @@
+.main-auth-container {
+  font-family: "Inter";
+
+
+    .overlay-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+  }
+  
+  #kt_app_root {
+    height: 100vh;
+  }
+
+  .main-section-auth {
+    z-index: 100;
+
+    .left-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .left-inner-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+
+        .main-heading {
+          color: #fff;
+          font: normal normal 600 38px/46px Inter;
+
+          sup {
+            font: normal normal medium 22px/26px Inter;
+          }
+        }
+
+        .sub-heading {
+          font: normal normal normal 15px/19px Inter;
+          color: #fff;
+        }
+      }
+    }
+
+    .right-container {
+      width: 100%;
+
+      .right-inner-container {
+        border-radius: 10px;
+
+        background: #fff;
+
+        hr {
+          margin: 30px 0;
+          border: 1px solid #B9BFC2;
+          width: 100%;
+        }
+
+        .form-subtitle {
+          text-align: start;
+          font: normal normal normal 14px/21px Inter;
+
+          margin-bottom: 30px;
+          width: 100%;
+        }
+
+        .back-login-btn {
+          background: #336cfb;
+          width: 100%;
+          border-radius: 5px;
+          margin-top: 60px;
+          padding: 15px 0 !important;
+        }
+
+        .time-counter {
+          color: #336cfb;
+          margin-top: 10px;
+          margin-bottom: 40px;
+        }
+
+        .verification-link-btn {
+          width: 100%;
+          background: #F6F8FF;
+          border: 0 !important;
+          border-radius: 5px;
+          margin-top: 10px;
+          color: #000;
+        }
+
+        .forget-sub-title {
+          font-size: 14px;
+          margin-bottom: 30px;
+          font-weight: 500;
+          text-align: start;
+          width: 100%;
+        }
+
+        .forget-sub-title-bottom {
+          font-size: 14px;
+
+          font-weight: 500;
+          text-align: start;
+          width: 100%;
+        }
+
+        .form-title {
+          text-align: start;
+          font-size: 32px;
+          font-weight: 700;
+          margin-bottom: 20px;
+          line-height: 34px;
+          width: 100%;
+
+          p {
+            margin-bottom: 0;
+          }
+        }
+
+        form {
+          .form-control-wrapper {
+            margin-bottom: 20px;
+          }
+
+          width: 100%;
+
+          input {
+            border: 1px solid #e2e6e9 !important;
+
+            &::placeholder {
+              color: #b9bfc2;
+            }
+          }
+
+          label {
+            font: normal normal normal 12px/15px Inter;
+            width: 100%;
+            text-align: start;
+          }
+
+          .send-email-btn {
+            width: 100%;
+            font: 15px/19px Inter;
+            font-weight: normal;
+            border-radius: 5px !important;
+            background: #336cfb;
+            margin-top: 40px;
+            margin-bottom: 80px;
+          }
+
+          button {
+            width: 100%;
+            border-radius: 5px !important;
+            background: #336cfb;
+          }
+        }
+
+        .forget-container {
+          width: 100%;
+
+          .forget-title {
+            text-align: start;
+          }
+
+          .forget-btn {
+            border-radius: 5px !important;
+            margin-top: 10px;
+            background: #F6F8FF;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 500;
+            border: 0 !important;
+            color: #000;
+
+            &:hover {
+              border-radius: 5px !important;
+              margin-top: 10px;
+              background: #F6F8FF !important;
+              width: 100%;
+              font-size: 14px;
+              font-weight: 500;
+              border: 0 !important;
+              color: #000 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .background {
+    height: 100%;
+    width: 100%;
+
+    position: fixed;
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.swal2-actions {
+  margin-top: 0;
+}
+
+.swal2-modal {
+  margin-top: 0;
+  width: 25rem;
+  border-radius: 15px;
+
+  .swal2-confirm {
+    padding: 12px 20px;
+    margin: 15px 0 5px 5px;
+  }
+
+  .swal2-deny,
+  .swal2-cancel {
+    padding: 12px 70px;
+    color: #000000 !important;
+  }
+}

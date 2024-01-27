@@ -1,0 +1,46 @@
+.modal-content {
+  border-radius: 15px !important;
+
+  .modal-header {
+    border-bottom: 0 !important;
+    font: normal normal 600 18px/21px Inter;
+  }
+
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font: normal normal normal 13px/21px Inter;
+    .bi-question-circle {
+      font-size: 8rem;
+      color: #336cfb;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      .form-label {
+        font: normal normal normal 12px/15px Inter;
+      }
+      .form-control::placeholder {
+        font: normal normal normal 14px/17px Inter;
+        color: #b9bfc2;
+      }
+      width: 100%;
+      margin-top: 15px;
+    }
+    p {
+      margin-bottom: 0;
+      text-align: center;
+      font-weight: 600;
+    }
+  }
+
+  .modal-footer {
+    justify-content: center !important;
+    padding: 30px 50px !important;
+    .btn {
+      border-radius: 5px;
+      padding: 10px 50px !important;
+    }
+  }
+}

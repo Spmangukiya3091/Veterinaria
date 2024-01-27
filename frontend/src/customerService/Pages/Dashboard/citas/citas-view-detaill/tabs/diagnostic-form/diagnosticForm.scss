@@ -1,0 +1,229 @@
+.diagnostic-container {
+  font-family: "Inter";
+
+  .grey-text {
+    text-align: left;
+    font: normal normal 600 18px/21px Inter !important;
+
+    color: #8a98a5 !important;
+  }
+
+  .second {
+    .upload-hide {
+      .form-control {
+        display: none;
+      }
+    }
+
+    .diagnostic-btn-group {
+      margin-top: 30px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .btn-imprimir {
+        background: #f6f8ff 0% 0% no-repeat padding-box;
+        border-radius: 6px;
+        font: normal normal 14px/26px Inter;
+        font-weight: 600;
+        letter-spacing: 0px;
+        color: #000;
+        border: 0;
+        padding: 15px;
+        margin-right: 10px;
+      }
+
+      .btn-guardar {
+        background: #336cfb 0% 0% no-repeat padding-box;
+        border-radius: 8px;
+        font: normal normal 14px/26px Inter;
+        font-weight: 600;
+        letter-spacing: 0px;
+        color: #ffffff;
+        border: 0;
+        padding: 15px;
+      }
+    }
+
+    .file-upload-box {
+      background: #f6f9ff 0% 0% no-repeat padding-box;
+      padding: 18px 25px;
+      border: 1px dashed #1f87ff;
+      border-radius: 6px;
+
+      .file-upload-box-wrapper {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        .uploadFile {
+          width: 32px;
+          height: 32px;
+          margin-right: 20px;
+        }
+      }
+    }
+
+    .add-list-btn {
+      padding: 13px;
+      background: #f6f8ff;
+      border: 0;
+      font: normal normal 13px/26px Inter;
+      font-weight: 600;
+      color: #000;
+      margin: 30px 0;
+    }
+
+    .calificacion-box {
+      display: flex !important;
+      justify-content: space-between;
+      align-items: center !important;
+      margin-top: 48px;
+
+      .star-wrapper {
+        border: 1px solid #e2e6e9;
+        border-radius: 10px;
+        padding: 18px 15px;
+
+        span {
+          margin-right: 15px !important;
+        }
+      }
+
+      .count {
+        font: normal normal 600 18px/21px Inter;
+        margin-left: 5px;
+      }
+
+      h4 {
+        font: normal normal 600 18px/21px Inter;
+        margin-bottom: 0;
+      }
+    }
+
+    .form-select {
+      border: 1px solid #e2e6e9 !important;
+      border-radius: 5px;
+      font: normal normal normal 14px/17px Inter;
+      padding: 0.75rem 1rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      line-height: 1.5;
+      color: #5e6278;
+      
+
+    }
+
+  
+
+    .form-control {
+      border: 1px solid #e2e6e9 !important;
+      border-radius: 5px;
+
+      &::placeholder {
+        font: normal normal normal 14px/17px Inter;
+
+        color: #b9bfc2;
+      }
+    }
+
+    .form-label {
+      font: normal normal normal 12px/15px Inter;
+      width: 100%;
+      text-align: start;
+    }
+
+    .details {
+      background-color: #fff;
+      padding: 30px 32px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 12px 0px rgb(0 0 0 / 3%);
+
+      .ql-editor {
+        &::before {
+          font-style: normal !important;
+          color: #8a98a5;
+        }
+
+        .ql-bold {
+          color: #8a98a5;
+        }
+      }
+
+      .quill {
+        .ql-formats {
+          button {
+            .ql-fill {
+              fill: #8a98a5;
+            }
+
+            .ql-stroke {
+              stroke: #8a98a5;
+            }
+          }
+
+          .ql-picker {
+            color: #8a98a5;
+
+            .ql-stroke {
+              color: #8a98a5;
+              stroke: #8a98a5;
+            }
+          }
+        }
+
+        .ql-toolbar {
+          border: 1px solid #f1f1f2;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+          color: #99a1b7;
+        }
+
+        .ql-container {
+          min-height: 200px;
+          border: 1px solid #f1f1f2;
+          border-top: 0;
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
+      }
+
+      .text-muted {
+        font: normal normal normal 12px/15px Inter;
+        color: #8a98a5 !important;
+        float: left;
+        margin-bottom: 20px;
+      }
+
+      .third {
+        margin: 15px auto;
+        background-color: #fff;
+        padding: 30px 32px;
+        border-radius: 8px;
+        text-align: left;
+        box-shadow: 0px 4px 12px 0px rgb(0 0 0 / 3%);
+
+        .files {
+          margin-top: 30px;
+        }
+      }
+
+      h4 {
+        text-align: left;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      .diagnos-details {
+        .row {
+          text-align: left;
+          margin-bottom: 20px;
+
+          b {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}

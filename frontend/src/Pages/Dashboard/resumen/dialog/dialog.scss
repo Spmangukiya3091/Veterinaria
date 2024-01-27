@@ -1,0 +1,87 @@
+.dialog-content{
+    box-shadow: 0px 3px 40px #0000001f;
+    padding: 10px;
+   background: #fff;
+    inset: 0px auto auto 0px !important;
+   
+    .detail-section {
+        .detail-heading {
+          margin-bottom: 25px;
+          font: normal normal 20px/24px Inter;
+          font-weight: bold;
+          letter-spacing: -0.2px;
+          color: #000000;
+        }
+        .top-date-wrapper {
+          margin-bottom: 17px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          p {
+            font: normal normal 15px/19px Inter;
+            font-weight: 600;
+            letter-spacing: -0.15px;
+            color: #000000;
+          }
+          button {
+            background: #F6F8FF 0% 0% no-repeat padding-box;
+            border-radius: 8px;
+            border: 0;
+            color: #000;
+            font: normal normal 13px/16px Inter;
+            font-weight: medium;
+            padding: 10px 12px;
+            &:hover{
+              background: #F6F8FF 0% 0% no-repeat padding-box !important;
+              color: #000 !important;
+            }
+            .fa-regular {
+              margin-right: 6px;
+              color: #000;
+            }
+          }
+        }
+        p {
+          margin-bottom: 0;
+          font: normal normal 20px/24px Inter;
+          font-weight: bold;
+          letter-spacing: -0.2px;
+          color: #000000;
+        }
+        .detail-wrapper {
+          margin-top: 20px;
+          padding: 0 8px;
+          border-left: 4px solid #e2e6e9;
+          margin-top: 15px;
+          
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .detail-title-box {
+            .active-text {
+              color: #336cfb !important ;
+            }
+            .detail-title-main {
+              text-align: start;
+              margin-bottom: 5px;
+              font: normal normal 14px/17px Inter;
+              font-weight: 600;
+            }
+            .detail-title-sub {
+              text-align: start;
+              margin-bottom: 0;
+              font: normal normal normal 14px/17px Inter;
+            }
+          }
+          .detail-btn-wrapper {
+            .detail-btn {
+              border: 0;
+              color: #000;
+              font: 13px/26px Inter;
+              font-weight: bold;
+              background: #F6F8FF 0% 0% no-repeat padding-box;
+            }
+          }
+        }
+      }
+}
