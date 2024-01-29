@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Product = Database.product;
 const History = Database.history;
 const Admin = Database.user;

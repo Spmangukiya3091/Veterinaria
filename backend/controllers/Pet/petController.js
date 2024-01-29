@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Pet = Database.pet;
 const Owner = Database.owner;
 const Vaccination = Database.vaccination;

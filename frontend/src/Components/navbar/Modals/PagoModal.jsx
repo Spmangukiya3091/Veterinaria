@@ -116,7 +116,7 @@ const PagoModal = (props) => {
                   <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor}>
                     <option>Doctor</option>
                     {doctors?.data?.veterinarianList
-                      .filter((doctor) => doctor.speciality === "Doctor")
+                      
                       .map(({ id, name, surname }) => (
                         <option key={id} value={name + " " + surname}>
                           {name + " " + surname}

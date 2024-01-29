@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useAddPetMutation, useGetOwnersListQuery, useGetSinglePetQuery, useUpdatePetMutation } from "../../../../services/ApiServices";
 import moment from "moment";
 
@@ -17,9 +17,9 @@ function MascotasModal({ show, handleClose, id }) {
     hair: "",
     color: "",
   });
-  const [addPet, { isLoading: isAddPetLoading, isError: isAddPetError }] = useAddPetMutation();
-  const [editPet, { isLoading: isEditPetLoading, isError: isEditPetError }] = useUpdatePetMutation();
-  const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true });
+  const [addPet, response] = useAddPetMutation();
+  const [editPet, response2] = useUpdatePetMutation();
+  const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
   const ownersList = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
@@ -54,8 +54,7 @@ function MascotasModal({ show, handleClose, id }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "ownerId") {
-      const ownerText = name === "ownerId" ? e.target.options[e.target.selectedIndex].text : "";
-      console.log(ownerText);
+      const ownerText = e.target.options[e.target.selectedIndex].text;
       setFormData({
         ...formData,
         [name]: value,
@@ -70,30 +69,37 @@ function MascotasModal({ show, handleClose, id }) {
   };
 
   const handleSubmit = async () => {
-    try {
-      if (id !== undefined) {
-        // Update existing pet
-        const body = { id: id, ...formData };
-        console.log(body);
-        await editPet(body);
-        if (!isEditPetLoading) {
-          handleClose();
-          success();
-        }
-      } else {
-        // Add new pet
-        console.log(formData);
-        await addPet(formData);
-        if (!isAddPetLoading) {
-          handleClose();
-          success();
-        }
-      }
-    } catch (error) {
-      console.error("Error occurred:", error);
+    if (id !== undefined) {
+      // Update existing pet
+      const body = { id: id, ...formData };
+      await editPet(body);
+    } else {
+      // Add new pet
+      await addPet(formData);
     }
   };
 
+  useEffect(() => {
+    if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
+      handleClose();
+      success();
+      setFormData({
+        name: "",
+        owner: "",
+        ownerId: "",
+        sex: "",
+        dob: "",
+        Species: "",
+        breed: "",
+        hair: "",
+        color: "",
+      });
+    } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
+      failer(response?.error?.data?.message || response2?.error?.data?.message);
+      console.error("Error occured: ", response?.error || response2?.error);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2, id]);
   return (
     <>
       <Modal size="lg" show={show} onHide={handleClose} centered>
@@ -192,7 +198,7 @@ function MascotasModal({ show, handleClose, id }) {
             type="submit"
             onClick={handleSubmit}
             className="footer-btn btn btn-primary"
-            disabled={isAddPetLoading || isEditPetLoading}
+            disabled={response.isLoading || response2.isLoading}
           >
             Guardar Cambios
           </Button>

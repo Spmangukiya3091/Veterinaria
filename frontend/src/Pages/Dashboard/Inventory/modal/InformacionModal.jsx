@@ -3,56 +3,66 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { failer, success } from "../../../../Components/alert/success";
 import { useAddCategoryMutation, useGetSingleCategoryQuery, useUpdateCategoryMutation } from "../../../../services/ApiServices";
 
+const CategoryInput = ({ formData, setFormData, label, name, error }) => {
+  return (
+    <Form.Group className="mb-3 w-100" controlId={`formBasic${name}`}>
+      <Form.Label>{label}</Form.Label>
+      <Form.Control
+        aria-label="Default"
+        placeholder={label}
+        name={name}
+        onChange={(e) => setFormData({ ...formData, [name]: e.target.value })}
+        value={formData[name]}
+        isInvalid={error}
+      />
+      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+    </Form.Group>
+  );
+};
+
 function InformacionModal({ show, handleClose, id }) {
   const [formData, setFormData] = useState({
     category: "",
   });
 
+  const [categoryError, setCategoryError] = useState("");
+
   const { data: categoryData } = useGetSingleCategoryQuery(id, { refetchOnMountOrArgChange: true });
   const [addCategory, response2] = useAddCategoryMutation();
   const [updateCategory, response] = useUpdateCategoryMutation();
 
-  // Update form data when categoryData changes (fetch completed)
   useEffect(() => {
     if (categoryData) {
       setFormData({
-        category: categoryData?.category[0]?.category, // Assuming categoryData has the appropriate structure
+        category: categoryData?.category[0]?.category,
       });
     }
   }, [categoryData]);
+
   const handleSaveChanges = () => {
+    if (formData.category.trim().length === 0) {
+      setCategoryError("Category is required.");
+      return;
+    }
+    setCategoryError("");
+
     if (id) {
-      // If id is provided, it's an update
       updateCategory({ id, ...formData });
     } else {
-      // If id is not provided, it's a create
       addCategory(formData);
     }
   };
 
   useEffect(() => {
-    if (id) {
-      if (!response2.isLoading && response2.status === "fulfilled") {
-        handleClose();
-        setFormData({
-          category: "",
-        });
-        success("Category updated successfully!");
-      } else if (response2.isError && response2.status === "rejected") {
-        failer(response2?.error?.data?.message);
-      }
-    } else {
-      if (!response.isLoading && response.status === "fulfilled") {
-        handleClose();
-        setFormData({
-          category: "",
-        });
-        success("Category updated successfully!");
-      } else if (response.isError && response.status === "rejected") {
-        failer(response?.error?.data?.message);
-      }
+    if (response.isSuccess || response2.isSuccess) {
+      handleClose();
+      setFormData({
+        category: "",
+      });
+      success("Category updated successfully!");
+    } else if (response.isError || response2.isError) {
+      failer(response?.error?.data?.message || response2?.error?.data?.message);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (
@@ -62,16 +72,7 @@ function InformacionModal({ show, handleClose, id }) {
           <Modal.Title>Información de Categoría</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group className="mb-3 w-100" controlId="formBasicSelect">
-            <Form.Label>Categoría</Form.Label>
-            <Form.Control
-              aria-label="Default"
-              placeholder="Categoría"
-              name="category"
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              value={formData.category}
-            />
-          </Form.Group>
+          <CategoryInput formData={formData} setFormData={setFormData} label="Categoría" name="category" error={categoryError} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" className="footer-btn btn btn-secondary" onClick={handleClose}>

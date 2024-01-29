@@ -15,6 +15,7 @@ import {
   useGetOwnerGraphQuery,
   useGetPaymentGraphQuery,
   useGetPendingAppoinmentQuery,
+  useGetCategoryWithProductsQuery,
 } from "../../../services/ApiServices";
 
 function Resumen() {
@@ -40,7 +41,7 @@ function Resumen() {
   const appoinmentGraph = useGetAppoinmentGraphQuery(null, { refetchOnMountOrArgChange: true });
   const paymentGraph = useGetPaymentGraphQuery(null, { refetchOnMountOrArgChange: true });
   const ownerGraph = useGetOwnerGraphQuery(null, { refetchOnMountOrArgChange: true });
-  const categoryList = useGetAllCategoriesQuery(null, { refetchOnMountOrArgChange: true });
+  const categoryList = useGetCategoryWithProductsQuery(null, { refetchOnMountOrArgChange: true });
   const pendingAppointmentsList = useGetPendingAppoinmentQuery(null, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {

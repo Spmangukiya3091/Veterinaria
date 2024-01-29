@@ -63,8 +63,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     documentation: {
-      type: DataTypes.JSON
-     
+      type: DataTypes.JSON,
     },
     medication: { type: DataTypes.JSON },
 

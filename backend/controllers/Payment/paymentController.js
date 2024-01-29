@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Payment = Database.payment;
 const Admin = Database.user;
 const jwt = require("jsonwebtoken")

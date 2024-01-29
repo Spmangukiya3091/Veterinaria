@@ -52,14 +52,14 @@ const InventoryDetails = () => {
                 <div className="information">
                   <div className="d-flex  text-center flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-75px">$ {data.price + ".00"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Precio</div>
                     </div>
 
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-50px">{data.stock}</span>
                       </div>
                       <div className="fw-semibold text-muted">Stock</div>

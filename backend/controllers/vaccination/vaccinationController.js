@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Vaccination = Database.vaccination;
 const Pet = Database.pet;
 const Vaccine = Database.vaccine;

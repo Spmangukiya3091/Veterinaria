@@ -10,8 +10,10 @@ import { showToast } from "../../../../../../../store/tostify";
 import { useGetALlProductListQuery } from "../../../../../../../services/ApiServices";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { useCookies } from "react-cookie";
 
 function DiagnosticForm({ data, refetch }) {
+  const [cookies] = useCookies(["authToken"]);
   const [list, setList] = useState({ intake: "", Name: "", frequency: "" });
   const [lists, setLists] = useState([]);
   const [star, setStar] = useState();
@@ -77,32 +79,6 @@ function DiagnosticForm({ data, refetch }) {
     setStar(newRating);
   };
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     const formApiData = new FormData();
-  //     formApiData.append("condition_name", formData.condition_name);
-  //     formApiData.append("description", formData.description);
-  //     formApiData.append("rating", star);
-  //     formApiData.append("medication", lists);
-  //     formApiData.append("internal_observation", formData.internal_observation);
-
-  //     // Append selected files
-  //     selectedFiles.forEach((file, index) => {
-  //       formApiData.append(`file_${index}`, file);
-  //     });
-
-  //     console.log("Submitted FormData:", formData);
-  //     const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/appointment/registerDiagnostic/${data.id}`, formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     });
-
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const handleSubmit = async () => {
     try {
       const formApiData = new FormData();
@@ -124,6 +100,7 @@ function DiagnosticForm({ data, refetch }) {
       const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/appointment/registerDiagnostic/${data.id}`, formApiData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + cookies.authToken,
         },
       });
 

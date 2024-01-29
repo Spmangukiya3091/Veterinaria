@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Owner = Database.owner;
 const Appointment = Database.appointment;
 const jwt = require("jsonwebtoken")

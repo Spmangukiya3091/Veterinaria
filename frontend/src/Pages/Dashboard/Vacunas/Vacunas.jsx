@@ -52,7 +52,6 @@ const Vacunas = ({ email }) => {
 
   const handleClose = () => {
     setShow(false);
-    vaccineList.refetch();
   };
   const handleShow = (e, id) => {
     setShow(true);
@@ -257,7 +256,6 @@ const Vacunas = ({ email }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -364,11 +362,7 @@ const Vacunas = ({ email }) => {
                                 <i className="fa-solid fa-chevron-down"></i>
                               </Dropdown.Toggle>
                               {dropdowns[i] && (
-                                <Dropdown.Menu
-                                  className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                  
-                                  
-                                >
+                                <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                                   <Dropdown.Item className="menu-item px-3">
                                     <Link to={`/dashboard/vacunas/vacunas-details/${id}`} className="menu-link px-3">
                                       Ver detalles
@@ -431,7 +425,7 @@ const Vacunas = ({ email }) => {
             }}
             onDelete={handleDeleteVerify}
           />
-          <VacunasModal show={show} onHide={handleClose} id={vaccineId} />
+          <VacunasModal show={show} onHide={handleClose} id={vaccineId} filter={vaccineList} />
           <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}

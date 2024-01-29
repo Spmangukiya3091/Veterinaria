@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const resumenController = require("../../../controllers/Veterinaria/Resumen/resumen");
+const resumenController = require("../../../controllers/Resumen/resumen");
 const Secure = require("../../../middlewares/secure/secure");
 router.get("/dashboardSummary", Secure(["masterAdmin", "customerService"]), resumenController.dashboardSummaryData);
 router.get("/ownerGraph", Secure(["masterAdmin", "customerService"]), resumenController.ownerGraph);

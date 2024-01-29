@@ -23,7 +23,7 @@ function Medicamentos({ data }) {
               </tr>
             </thead>
             <tbody style={{ overflowY: "auto" }}>
-              {data?.categoryList.map((category, i) => (
+              {data?.categories.map((category, i) => (
                 <tr key={i}>
                   <td>{category.category}</td>
                   <td>{category.productCount}</td>

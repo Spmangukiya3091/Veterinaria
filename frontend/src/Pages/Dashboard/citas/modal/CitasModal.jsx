@@ -12,7 +12,7 @@ import {
 } from "../../../../services/ApiServices";
 import moment from "moment";
 
-function CitasModal({ show, handleClose, citas, id, filter }) {
+function CitasModal({ show, handleClose, id }) {
   const [formData, setFormData] = useState({
     owner: "",
     ownerId: "",
@@ -29,8 +29,8 @@ function CitasModal({ show, handleClose, citas, id, filter }) {
   const pets = useGetPetByOwnerQuery(formData.ownerId, { refetchOnMountOrArgChange: true });
   const veterinarians = useGetVeterinariansQuery(null, { refetchOnMountOrArgChange: true });
   const citasDetail = useGetSingleAppointmentQuery(id, { refetchOnMountOrArgChange: true });
-  const [addCitas, response2] = useAddAppoinmentMutation();
-  const [updateCitas, response] = useUpdateAppointmentMutation();
+  const [addCitas, response] = useAddAppoinmentMutation();
+  const [updateCitas, response2] = useUpdateAppointmentMutation();
 
   useEffect(() => {
     if (id !== undefined && id !== "" && !citasDetail.isLoading && citasDetail.data?.appointment) {
@@ -122,26 +122,26 @@ function CitasModal({ show, handleClose, citas, id, filter }) {
   };
 
   useEffect(() => {
-    if (id !== undefined && id !== "") {
-      if (!response.isLoading && response.status === "fulfilled") {
-        handleClose();
-        success();
-        filter.refetch();
-      } else if (response.isError && response.status === "rejected") {
-        console.log(response.error);
-        failer(response?.error?.data?.message);
-      }
-    } else {
-      if (!response2.isLoading && response2.status === "fulfilled") {
-        handleClose();
-        success();
-        filter.refetch();
-      } else if (response2.isError && response2.status === "rejected") {
-        console.log(response.error);
-        failer(response2?.error?.data?.message);
-      }
+    if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
+      handleClose();
+      success();
+      setFormData({
+        name: "",
+        owner: "",
+        ownerId: "",
+        sex: "",
+        dob: "",
+        Species: "",
+        breed: "",
+        hair: "",
+        color: "",
+      });
+    } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
+      failer(response?.error?.data?.message || response2?.error?.data?.message);
+      console.error("Error occured: ", response?.error || response2?.error);
     }
-  }, [response, response2]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2, id]);
 
   return (
     <Modal size="lg" show={show} onHide={handleClose} centered>

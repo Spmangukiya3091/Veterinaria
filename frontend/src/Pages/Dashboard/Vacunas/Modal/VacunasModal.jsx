@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
-import { useAddVaccineMutation, useGetSingleVaccineQuery } from "../../../../services/ApiServices";
+import { failer, success } from "../../../../Components/alert/success";
+import { useAddVaccineMutation, useGetSingleVaccineQuery, useUpdateVaccineMutation } from "../../../../services/ApiServices";
 
-const VacunasModal = (props) => {
+const VacunasModal = ({ id, onHide, filter, show }) => {
   const [formData, setFormData] = useState({
     name: "",
     stock: "",
     validity: "",
   });
   const [addVaccine, response] = useAddVaccineMutation();
-  const vaccineDetails = useGetSingleVaccineQuery(props.id !== undefined ? props.id : "", { refetchOnMountOrArgChange: true });
+  const [updateVaccine, response2] = useUpdateVaccineMutation();
+  const vaccineDetails = useGetSingleVaccineQuery(id !== undefined ? id : "", { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
-    if (!vaccineDetails.isLoading && props.id !== undefined) {
+    if (!vaccineDetails.isLoading && id !== undefined) {
       const { name, stock, validity } = vaccineDetails?.data?.vaccine;
       setFormData({
         name: name,
@@ -21,7 +22,7 @@ const VacunasModal = (props) => {
         validity: validity,
       });
     }
-  }, [props.id, vaccineDetails]);
+  }, [id, vaccineDetails]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,24 +32,35 @@ const VacunasModal = (props) => {
     });
   };
 
-  const handleSubmit = () => {
-    addVaccine(formData);
-    console.log(response);
-    if (!response.isLoading) {
+  const handleSubmit = async () => {
+    if (id !== undefined) {
+      // Update existing pet
+      const body = { id: id, ...formData };
+      await updateVaccine(body);
+    } else {
+      await addVaccine(formData);
+    }
+  };
+
+  useEffect(() => {
+    if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
       setFormData({
         name: "",
         stock: "",
         validity: "",
       });
-      props.onHide();
+      filter.refetch();
+      onHide();
       success();
-    } else if (response.isError) {
-      console.log("error", response.error);
+    } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
+      failer(response?.error?.data?.message || response2?.error?.data?.message);
+      console.error("Error occured: ", response?.error || response2?.error);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2, id]);
   return (
     <>
-      <Modal show={props.show} onHide={props.onHide} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal show={show} onHide={onHide} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Información de Vacuna</Modal.Title>
         </Modal.Header>
@@ -61,7 +73,7 @@ const VacunasModal = (props) => {
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Stock</Form.Label>
-              <Form.Control placeholder="Stock" name="stock" value={formData.stock} onChange={handleChange} />
+              <Form.Control type="number" placeholder="Stock" name="stock" value={formData.stock} onChange={handleChange} />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -71,7 +83,7 @@ const VacunasModal = (props) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={onHide} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button

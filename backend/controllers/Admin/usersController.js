@@ -1,9 +1,9 @@
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Auth = Database.user;
 const Veterinarian = Database.veterinarian;
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const Secure = require("../../../middlewares/secure/secure");
+const Secure = require("../../middlewares/secure/secure");
 const fs = require("fs");
 const { Op } = require("sequelize");
 var transporter = nodemailer.createTransport({

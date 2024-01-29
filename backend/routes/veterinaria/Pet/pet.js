@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const petController = require("../../../controllers/Veterinaria/Pet/petController");
+const petController = require("../../../controllers/Pet/petController");
 const Secure = require("../../../middlewares/secure/secure");
 router.get("/petExcelSheet",Secure(['masterAdmin']), petController.petExcelFile)
 router.get("/petSummaryPdf/:id",Secure(['masterAdmin','customerService']), petController.petSummaryPdf)

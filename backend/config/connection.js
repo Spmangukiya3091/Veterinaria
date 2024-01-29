@@ -30,19 +30,19 @@ const Database = {};
 
 //------------------ vets ---------------------//
 
-Database.user = require("../models/Veterinaria/Admin/users")(sequelize, DataTypes);
-Database.payment = require("../models/Veterinaria/Payment/payment")(sequelize, DataTypes);
-Database.category = require("../models/Veterinaria/Products/category")(sequelize, DataTypes);
-Database.product = require("../models/Veterinaria/Products/products")(sequelize, DataTypes);
-Database.history = require("../models/Veterinaria/Products/history")(sequelize, DataTypes);
-Database.vaccine = require("../models/Veterinaria/Vaccine/vaccine")(sequelize, DataTypes);
-Database.owner = require("../models/Veterinaria/Owner/owner")(sequelize, DataTypes);
-Database.pet = require("../models/Veterinaria/Pet/pet")(sequelize, DataTypes);
-Database.appointment = require("../models/Veterinaria/Appointment/appointment")(sequelize, DataTypes);
-Database.speciality = require("../models/Veterinaria/Veterinarian/speciality")(sequelize, DataTypes);
-Database.veterinarian = require("../models/Veterinaria/Veterinarian/veterinarian")(sequelize, DataTypes);
-Database.vaccination = require("../models/Veterinaria/vaccination/vaccination")(sequelize, DataTypes);
-Database.petInfo = require("../models/Veterinaria/Pet/petInfo")(sequelize, DataTypes);
+Database.user = require("../models/Admin/users")(sequelize, DataTypes);
+Database.payment = require("../models/Payment/payment")(sequelize, DataTypes);
+Database.category = require("../models/Products/category")(sequelize, DataTypes);
+Database.product = require("../models/Products/products")(sequelize, DataTypes);
+Database.history = require("../models/Products/history")(sequelize, DataTypes);
+Database.vaccine = require("../models/Vaccine/vaccine")(sequelize, DataTypes);
+Database.owner = require("../models/Owner/owner")(sequelize, DataTypes);
+Database.pet = require("../models/Pet/pet")(sequelize, DataTypes);
+Database.appointment = require("../models/Appointment/appointment")(sequelize, DataTypes);
+Database.speciality = require("../models/Veterinarian/speciality")(sequelize, DataTypes);
+Database.veterinarian = require("../models/Veterinarian/veterinarian")(sequelize, DataTypes);
+Database.vaccination = require("../models/vaccination/vaccination")(sequelize, DataTypes);
+Database.petInfo = require("../models/Pet/petInfo")(sequelize, DataTypes);
 Database.sequelize = sequelize;
 
 Database.category.hasMany(Database.product, {

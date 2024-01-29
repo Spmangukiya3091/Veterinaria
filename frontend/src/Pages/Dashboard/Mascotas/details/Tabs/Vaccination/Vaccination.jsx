@@ -23,7 +23,7 @@ const Vaccination = ({ id }) => {
 
   useEffect(() => {
     if (!vaccinationList.isLoading) {
-      setData(vaccinationList?.data?.Vaccination);
+      setData(vaccinationList?.data?.vaccinations);
       setLoading(false);
     } else if (vaccinationList.isError) {
       setLoading(false);

@@ -150,13 +150,13 @@ const MascotasDetails = ({ email }) => {
                 <div className="information">
                   <div className="time  text-center d-flex flex-wrap justify-content-center mb-3">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-2 ">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-75px fs-4">{data?.totalAppointments} citas</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Agendadas</div>
                     </div>
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-2">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-75px fs-4">{data?.completeAppointments} citas</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Completadas</div>
@@ -224,23 +224,19 @@ const MascotasDetails = ({ email }) => {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu
-                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
-                  >
+                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={handleShowCitas} to="#" className="menu-link px-3" >
+                      <Link onClick={handleShowCitas} to="#" className="menu-link px-3">
                         Agenda cita
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={handleShowMascota} to="#" className="menu-link px-3" >
+                      <Link onClick={handleShowMascota} to="#" className="menu-link px-3">
                         Editar
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={() => setModalShow(true)} to="#" className="menu-link px-3 delete" >
+                      <Link onClick={() => setModalShow(true)} to="#" className="menu-link px-3 delete">
                         Eliminar
                       </Link>
                     </Dropdown.Item>

@@ -1,13 +1,13 @@
 const { Sequelize } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Speciality = Database.speciality;
 const Admin = Database.user;
 const Veterinarian = Database.veterinarian;
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 const createSpeciality = async (req, res) => {
   try {
-    const exist = await Speciality.findOne({});
+    const exist = await Speciality.findOne({ where: { speciality: req.body.speciality } });
 
     if (req.body.speciality === "" || req.body.speciality === null) {
       return res.status(400).json({
@@ -34,7 +34,6 @@ const createSpeciality = async (req, res) => {
     });
   }
 };
-
 
 const updateSpeciality = async (req, res) => {
   try {
@@ -77,10 +76,10 @@ const deleteSpeciality = async (req, res) => {
   }
   if (decoded.role !== user.role) {
     return res.status(400).send({
-     message: "Not authorized",
-     success: false,
-   });
- }
+      message: "Not authorized",
+      success: false,
+    });
+  }
   if (speciality?.id === id) {
     await Speciality.destroy({ where: { id: id } });
     return res.status(200).send({
@@ -113,7 +112,7 @@ const getSingleSpeciality = async (req, res) => {
 };
 const getVeterinariansBySpeciality = async (req, res) => {
   try {
-    const speciality = await Speciality.findAll({
+    const specialities = await Speciality.findAll({
       include: {
         model: Veterinarian,
         as: "specialityData",
@@ -122,25 +121,35 @@ const getVeterinariansBySpeciality = async (req, res) => {
         "id",
         "speciality",
         "createdAt",
-        [
-          Sequelize.fn("COUNT", Sequelize.col("specialityData.id")),
-          "veterinarianCount",
-        ],
+        [Sequelize.fn("COUNT", Sequelize.col("specialityData.id")), "veterinarianCount"],
+        [Sequelize.fn("ANY_VALUE", Sequelize.col("specialityData.id")), "veterinarianId"],
+        // Include other non-aggregated columns in the GROUP BY clause
       ],
-      group: ["Speciality.id", "Speciality.speciality"],
+      group: [
+        "speciality.id",
+        "speciality.speciality",
+        "speciality.createdAt",
+        "specialityData.id", // Include "specialityData.id" in the GROUP BY clause
+        "specialityData.avatar",
+        "specialityData.name",
+        "specialityData.surname",
+        // Add other non-aggregated columns from Veterinarian model here
+      ],
     });
 
     res.status(200).send({
       message: "specialities",
-      specialities: speciality.map((ele) => ({
+      specialities: specialities.map((ele) => ({
         id: ele.id,
         speciality: ele.speciality,
         createdAt: ele.createdAt,
         veterinarianCount: ele.specialityData.length,
+        veterinarianId: ele.veterinarianId,
+        // Add other non-aggregated columns from Veterinarian model here
       })),
     });
   } catch (error) {
-    console.error("Error fetching category data:", error);
+    console.error("Error fetching speciality data:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

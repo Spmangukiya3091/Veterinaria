@@ -12,7 +12,7 @@ import {
   useUpdateAppointmentMutation,
 } from "../../../../../services/ApiServices";
 import moment from "moment";
-function CitasModal({ show, handleClose, citas, id, filter }) {
+function CitasModal({ show, handleClose, id }) {
   const [formData, setFormData] = useState({
     owner: "",
     ownerId: "",
@@ -29,8 +29,8 @@ function CitasModal({ show, handleClose, citas, id, filter }) {
   const pets = useGetPetByOwnerQuery(formData.ownerId, { refetchOnMountOrArgChange: true });
   const veterinarians = useGetVeterinariansQuery(null, { refetchOnMountOrArgChange: true });
   const citasDetail = useGetSingleAppointmentQuery(id, { refetchOnMountOrArgChange: true });
-  const [addCitas, response2] = useAddAppoinmentMutation();
-  const [updateCitas, response] = useUpdateAppointmentMutation();
+  const [addCitas, response] = useAddAppoinmentMutation();
+  const [updateCitas, response2] = useUpdateAppointmentMutation();
 
   useEffect(() => {
     if (id !== undefined && !citasDetail.isLoading && citasDetail.data?.appointment[0]) {
@@ -122,54 +122,26 @@ function CitasModal({ show, handleClose, citas, id, filter }) {
     }
   };
   useEffect(() => {
-    if (id !== undefined) {
-      try {
-        if (!response.isLoading && response.status === "fulfilled") {
-          handleClose();
-          success();
-          setFormData({
-            owner: "",
-            ownerId: "",
-            pet: "",
-            petId: "",
-            veterinarian: "",
-            veterinarianId: "",
-            date: "",
-            scheduleStart: "",
-            scheduleEnd: "",
-            observation: "",
-          });
-          filter.refetch();
-        }
-      } catch (error) {
-        failer(error);
-        console.log("error occured: ", error);
-      }
-    } else {
-      try {
-        if (!response2.isLoading && response2.status === "fulfilled") {
-          handleClose();
-          success();
-          setFormData({
-            owner: "",
-            ownerId: "",
-            pet: "",
-            petId: "",
-            veterinarian: "",
-            veterinarianId: "",
-            date: "",
-            scheduleStart: "",
-            scheduleEnd: "",
-            observation: "",
-          });
-          filter.refetch();
-        }
-      } catch (error) {
-        failer(error);
-        console.error("Error occured: ", error);
-      }
+    if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
+      handleClose();
+      success();
+      setFormData({
+        name: "",
+        owner: "",
+        ownerId: "",
+        sex: "",
+        dob: "",
+        Species: "",
+        breed: "",
+        hair: "",
+        color: "",
+      });
+    } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
+      failer(response?.error?.data?.message || response2?.error?.data?.message);
+      console.error("Error occured: ", response?.error || response2?.error);
     }
-  }, [id, response, response2]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2, id]);
 
   return (
     <Modal size="lg" show={show} onHide={handleClose} centered>

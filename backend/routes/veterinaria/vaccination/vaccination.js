@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const vaccinationController = require("../../../controllers/Veterinaria/vaccination/vaccinationController");
+const vaccinationController = require("../../../controllers/vaccination/vaccinationController");
 const Secure = require("../../../middlewares/secure/secure");
 
 

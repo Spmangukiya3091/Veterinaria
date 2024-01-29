@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router(); 
 const Secure = require("../../../middlewares/secure/secure")
 const uploadDoc = require('../../../middlewares/veterinaria/appointment')
-const appointmentController = require("../../../controllers/Veterinaria/Appointment/appointmentController")
+const appointmentController = require("../../../controllers/Appointment/appointmentController")
 router.get("/appointmentExcelFile",Secure(['masterAdmin']), appointmentController.appointmentExcelFile)
 router.get("/appointmentsList",Secure(['masterAdmin','customerService','user']), appointmentController.updateAppointmentsStatus)
 router.get("/allAppointments",Secure(['customerService','masterAdmin']) ,appointmentController.getAllAppointments )

@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Veterinarian = Database.veterinarian;
 const Appointment = Database.appointment;
 const Owner = Database.owner;

@@ -133,19 +133,19 @@ const PropietariosDetails = ({ email }) => {
                 <div className="information">
                   <div className="time  text-center d-flex flex-wrap justify-content-between mb-3">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3  ">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-75px fs-4">{data.totalAppointments}</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Agendadas</div>
                     </div>
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 ">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-75px fs-4">{data.completeAppointments}</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Completadas</div>
                     </div>
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3  ">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-75px fs-4">{data.totalPets}</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Animales</div>

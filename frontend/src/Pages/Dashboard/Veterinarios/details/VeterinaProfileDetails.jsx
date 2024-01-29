@@ -140,14 +140,14 @@ const VeterinaProfileDetails = ({ email }) => {
                 <div className="information">
                   <div className="d-flex  text-start flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-75px">{data?.totalAppointments} citas</span>
                       </div>
                       <div className="fw-semibold text-muted">Citas totales</div>
                     </div>
 
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
-                      <div className="fs-4 fw-bold text-gray-700">
+                      <div className="fs-5 fw-bold text-gray-700">
                         <span className="w-50px">{data?.pendingAppointments} citas</span>
                       </div>
                       <div className="fw-semibold text-muted">Citas pendientes</div>

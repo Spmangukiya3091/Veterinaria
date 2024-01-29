@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const uploadAvatar = require("../../../middlewares/veterinaria/veterinarian");
-const specialityController = require("../../../controllers/Veterinaria/Veterinarian/specialityController");
-const veterinarianController = require("../../../controllers/Veterinaria/Veterinarian/veterinarian");
+const specialityController = require("../../../controllers/Veterinarian/specialityController");
+const veterinarianController = require("../../../controllers/Veterinarian/veterinarian");
 const Secure = require("../../../middlewares/secure/secure");
 
 // speciality

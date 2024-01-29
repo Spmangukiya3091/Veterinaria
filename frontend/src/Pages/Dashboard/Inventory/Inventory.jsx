@@ -283,7 +283,6 @@ const Inventory = ({ email }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -404,11 +403,7 @@ const Inventory = ({ email }) => {
                                 <i className="fa-solid fa-chevron-down"></i>
                               </Dropdown.Toggle>
                               {dropdowns[i] && (
-                                <Dropdown.Menu
-                                  className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                  
-                                  
-                                >
+                                <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                                   <Dropdown.Item className="menu-item px-3">
                                     <Link to={`/dashboard/Inventario/details/${id}`} className="menu-link px-3">
                                       Ver detalles
@@ -422,7 +417,6 @@ const Inventory = ({ email }) => {
                                       }}
                                       to="#"
                                       className="menu-link px-3"
-                                      
                                     >
                                       Editar
                                     </Link>
@@ -434,7 +428,6 @@ const Inventory = ({ email }) => {
                                         setPID(id);
                                       }}
                                       className="menu-link px-3 delete"
-                                      
                                     >
                                       Eliminar producto
                                     </Link>

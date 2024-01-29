@@ -1,12 +1,12 @@
 const { Sequelize } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Category = Database.category;
 const Product = Database.product;
 const Admin = Database.user;
 const jwt = require("jsonwebtoken");
 const createCategory = async (req, res) => {
   try {
-    const exist = await Category.findOne({});
+    const exist = await Category.findOne({ where: { category: req.body.category } });
 
     if (req.body.category === "" || req.body.category === null) {
       return res.status(400).json({

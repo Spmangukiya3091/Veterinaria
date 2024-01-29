@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const productController = require("../../../controllers/Veterinaria/Products/productController");
-const categoryController = require("../../../controllers/Veterinaria/Products/categoryController");
+const productController = require("../../../controllers/Products/productController");
+const categoryController = require("../../../controllers/Products/categoryController");
 const Secure = require("../../../middlewares/secure/secure");
 
 // category

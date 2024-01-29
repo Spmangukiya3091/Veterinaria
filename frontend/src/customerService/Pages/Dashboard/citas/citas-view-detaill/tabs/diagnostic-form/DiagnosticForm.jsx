@@ -10,8 +10,12 @@ import { showToast } from "../../../../../../../store/tostify";
 import { useGetALlProductListQuery } from "../../../../../../../services/ApiServices";
 import axios from "axios";
 import { useDispatch } from "react-redux";
+import { useCookies } from "react-cookie";
+
 
 function DiagnosticForm({ data, refetch }) {
+  const [cookies] = useCookies(["authToken"]);
+
   const [list, setList] = useState({ intake: "", Name: "", frequency: "" });
   const [lists, setLists] = useState([]);
   const [star, setStar] = useState();
@@ -98,6 +102,8 @@ function DiagnosticForm({ data, refetch }) {
       const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/appointment/registerDiagnostic/${data.id}`, formApiData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + cookies.authToken,
+
         },
       });
 

@@ -27,8 +27,8 @@ function InventoryModal(props) {
 
   const categoryList = useGetAllCategoriesQuery(null, { refetchOnMountOrArgChange: true });
   const productDetails = useGetSingleProductQuery(props.id, { refetchOnMountOrArgChange: true });
-  const [addProduct, response2] = useAddProductMutation();
-  const [updateProduct, response] = useUpdateProductMutation();
+  const [addProduct, response] = useAddProductMutation();
+  const [updateProduct, response2] = useUpdateProductMutation();
 
   useEffect(() => {
     if (props.id !== undefined && !productDetails.isLoading && productDetails?.data?.product[0]) {
@@ -92,6 +92,8 @@ function InventoryModal(props) {
       await addProduct(formData);
     }
   };
+  console.log(response);
+  console.log(response2);
   useEffect(() => {
     if (props.id !== undefined) {
       if (!response2.isLoading && response2.status === "fulfilled") {
@@ -118,7 +120,7 @@ function InventoryModal(props) {
       }
     } else {
       if (!response.isLoading && response.status === "fulfilled") {
-        props.onHide();
+        console.log(response);
         success();
         setFormData({
           product: "",
@@ -134,6 +136,7 @@ function InventoryModal(props) {
           price: "", // Initialize as an empty string
           presentation: "",
         });
+        props.onHide();
         props.filter.refetch();
       } else if (response.isError && response.status === "rejected") {
         console.log(response.error);

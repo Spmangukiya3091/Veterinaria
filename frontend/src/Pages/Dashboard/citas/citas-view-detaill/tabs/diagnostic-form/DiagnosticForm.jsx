@@ -10,8 +10,10 @@ import { useGetALlProductListQuery } from "../../../../../../services/ApiService
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { showToast } from "../../../../../../store/tostify";
+import { useCookies } from "react-cookie";
 
 function DiagnosticForm({ data, refetch }) {
+  const [cookies] = useCookies(["authToken"]);
   const [list, setList] = useState({ intake: "", Name: "", frequency: "" });
   const [lists, setLists] = useState([]);
   const [star, setStar] = useState();
@@ -98,6 +100,7 @@ function DiagnosticForm({ data, refetch }) {
       const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/appointment/registerDiagnostic/${data.id}`, formApiData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: "Bearer " + cookies.authToken,
         },
       });
 
@@ -114,7 +117,7 @@ function DiagnosticForm({ data, refetch }) {
       }
     } catch (error) {
       console.log(error);
-      dispatch(showToast(error.message, "FAIL_TOAST"));
+      dispatch(showToast(error?.response?.data?.message, "FAIL_TOAST"));
     }
   };
 

@@ -1,9 +1,9 @@
 const { Op } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Vaccine = Database.vaccine;
 const Vaccination = Database.vaccination;
 const Admin = Database.user;
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const ExcelJS = require("exceljs");
 const createVaccine = async (req, res) => {
   try {
@@ -93,10 +93,10 @@ const deleteVaccine = async (req, res) => {
   }
   if (decoded.role !== user.role) {
     return res.status(400).send({
-     message: "Not authorized",
-     success: false,
-   });
- }
+      message: "Not authorized",
+      success: false,
+    });
+  }
   if (vaccine?.id === id) {
     await Vaccine.destroy({ where: { id: id } });
     return res.status(200).send({
@@ -130,9 +130,7 @@ const getAllVaccines = async (req, res) => {
       creation: vaccine.createdAt,
     };
 
-    const aptosCount = vaccine?.vaccinationData.filter(
-      (vaccination) => vaccination.exploration === "APTO"
-    ).length;
+    const aptosCount = vaccine?.vaccinationData.filter((vaccination) => vaccination.exploration === "APTO").length;
 
     return { ...vaccines, aptos: aptosCount };
   });
@@ -158,12 +156,8 @@ const getSingleVaccine = async (req, res) => {
     stock: vaccines.stock,
     creation: vaccines.createdAt,
   };
-  const apto = vaccines.vaccinationData.filter(
-    (ele) => ele.exploration === "APTO"
-  ).length;
-  const vaccinated = vaccines.vaccinationData.filter(
-    (ele) => ele.status === "vaccinated"
-  ).length;
+  const apto = vaccines.vaccinationData.filter((ele) => ele.exploration === "APTO").length;
+  const vaccinated = vaccines.vaccinationData.filter((ele) => ele.status === "vaccinated").length;
   res.status(200).send({
     message: "vaccine",
     vaccine,
@@ -175,7 +169,7 @@ const vaccineFilter = async (req, res) => {
   try {
     const startDate = new Date(req.query.startDate);
     const endDate = new Date(req.query.endDate);
-   
+
     if (req.query.startDate && req.query.endDate) {
       const filteredRecords = await Vaccine.findAll({
         include: [
@@ -199,11 +193,9 @@ const vaccineFilter = async (req, res) => {
           stock: vaccine.stock,
           creation: vaccine.createdAt,
         };
-    
-        const aptosCount = vaccine?.vaccinationData.filter(
-          (vaccination) => vaccination.exploration === "APTO"
-        ).length;
-    
+
+        const aptosCount = vaccine?.vaccinationData.filter((vaccination) => vaccination.exploration === "APTO").length;
+
         return { ...vaccines, aptos: aptosCount };
       });
       res.status(200).json({
@@ -211,13 +203,15 @@ const vaccineFilter = async (req, res) => {
         vaccineList: vaccineList,
       });
     } else {
-      const vaccinesList = await Vaccine.findAll({ include: [
-        {
-          model: Vaccination,
-          as: "vaccinationData",
-          attributes: ["exploration"],
-        },
-      ],});
+      const vaccinesList = await Vaccine.findAll({
+        include: [
+          {
+            model: Vaccination,
+            as: "vaccinationData",
+            attributes: ["exploration"],
+          },
+        ],
+      });
       const vaccineList = vaccinesList.map((vaccine) => {
         const vaccines = {
           id: vaccine.id,
@@ -226,11 +220,9 @@ const vaccineFilter = async (req, res) => {
           stock: vaccine.stock,
           creation: vaccine.createdAt,
         };
-    
-        const aptosCount = vaccine?.vaccinationData.filter(
-          (vaccination) => vaccination.exploration === "APTO"
-        ).length;
-    
+
+        const aptosCount = vaccine?.vaccinationData.filter((vaccination) => vaccination.exploration === "APTO").length;
+
         return { ...vaccines, aptos: aptosCount };
       });
       res.status(200).send({
@@ -264,22 +256,11 @@ const vaccineExcelFile = async (req, res) => {
       formattedVaccine.F_DE_CREACIÓN = formatDate(formattedVaccine.createdAt);
       formattedVaccine.TIEMPO_VALIDEZ = formattedVaccine.validity;
 
-      const aptosCount = formattedVaccine.vaccinationData.filter(
-        (vaccination) => vaccination.exploration === "APTO"
-      ).length;
+      const aptosCount = formattedVaccine.vaccinationData.filter((vaccination) => vaccination.exploration === "APTO").length;
 
       formattedVaccine.N_DE_APTOS = aptosCount;
 
-      const unwantedFields = [
-        "createdAt",
-        "updatedAt",
-        "id",
-        "name",
-        "stock",
-        "validity",
-        "exploration",
-        "vaccinationData",
-      ];
+      const unwantedFields = ["createdAt", "updatedAt", "id", "name", "stock", "validity", "exploration", "vaccinationData"];
       unwantedFields.forEach((field) => delete formattedVaccine[field]);
 
       return formattedVaccine;
@@ -302,10 +283,7 @@ const vaccineExcelFile = async (req, res) => {
     });
 
     // Prepare the Excel file for download
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     res.setHeader("Content-Disposition", "attachment; filename=vaccine.xlsx");
 
     // Write the workbook data to the response

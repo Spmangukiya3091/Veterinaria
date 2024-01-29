@@ -3,8 +3,11 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "./modal.scss";
 import { success } from "../../../../Components/alert/success";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const UserModal = (props) => {
+  const [cookies] = useCookies(["authToken"]);
+
   const [userId, setUserId] = useState();
   const [userData, setUserData] = useState({
     email: "",
@@ -83,6 +86,7 @@ const UserModal = (props) => {
         const editUserResponse = await axios.put(`${process.env.REACT_APP_SERVER_URL}/users/updateProfile/${userId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + cookies.authToken,
           },
         });
 
@@ -128,6 +132,7 @@ const UserModal = (props) => {
         const createUserResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/users/userRegistration`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + cookies.authToken,
           },
         });
 
@@ -231,7 +236,7 @@ const UserModal = (props) => {
                 >
                   <option value="">Tipo de usuario</option>
                   <option value="masterAdmin">Administrador Estándar</option>
-                  <option value="customer service">Servicio al Cliente</option>
+                  <option value="customerService">Servicio al Cliente</option>
                 </Form.Select>
               </Form.Group>
             </Col>

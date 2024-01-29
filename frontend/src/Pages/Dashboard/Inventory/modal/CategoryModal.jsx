@@ -75,7 +75,7 @@ function CategoryModal({ show, handleClose, email }) {
     categories.refetch();
   };
   const handleOpen = () => setOpen(true);
-
+  console.log(response);
   useEffect(() => {
     if (!response.isLoading && response.status === "fulfilled") {
       success();
@@ -86,6 +86,7 @@ function CategoryModal({ show, handleClose, email }) {
       });
       // Refetch or update data if needed
       categories.refetch();
+      handleClose();
     } else if (response.isError) {
       console.log(response.error);
       failer(response?.error?.data?.message);

@@ -149,7 +149,7 @@ function CitasDetail({ email }) {
                 </div>
                 <div className="d-flex text-center flex-center">
                   <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
-                    <div className="fs-4 fw-bold text-gray-700">
+                    <div className="fs-5 fw-bold text-gray-700">
                       <span className="w-75px">
                         {moment(`2023-01-01 ${data?.scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm ") +
                           " - " +
@@ -160,7 +160,7 @@ function CitasDetail({ email }) {
                   </div>
 
                   <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
-                    <div className="fs-4 fw-bold text-gray-700">
+                    <div className="fs-5 fw-bold text-gray-700">
                       <span className="w-50px">{moment(data?.date).format("DD MMM YYYY")}</span>
                     </div>
                     <div className="fw-semibold text-muted ">Fecha</div>

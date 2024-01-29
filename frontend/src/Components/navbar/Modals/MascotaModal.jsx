@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { success } from "../../alert/success";
+import { failer, success } from "../../alert/success";
 import { useAddPetMutation, useGetOwnersListQuery } from "../../../services/ApiServices";
 import moment from "moment";
 
@@ -16,7 +16,7 @@ const MascotaModal = (props) => {
     hair: "",
     color: "",
   });
-  const [addPet, { isLoading: isAddPetLoading }] = useAddPetMutation();
+  const [addPet, response] = useAddPetMutation();
   const ownersList = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });
 
   const handleChange = (e) => {
@@ -38,18 +38,33 @@ const MascotaModal = (props) => {
   };
 
   const handleSubmit = async () => {
-    try {
-      // Add new pet
-      console.log(formData);
-      await addPet(formData);
-      if (!isAddPetLoading) {
-        props.onHide();
-        success();
-      }
-    } catch (error) {
-      console.error("Error occurred:", error);
-    }
+    // Add new pet
+    console.log(formData);
+    await addPet(formData);
   };
+
+  useEffect(() => {
+    if (!response.isLoading && response.status === "fulfilled") {
+      props.onHide();
+      success();
+      setFormData({
+        name: "",
+        owner: "",
+        ownerId: "",
+        sex: "",
+        dob: "",
+        Species: "",
+        breed: "",
+        hair: "",
+        color: "",
+      });
+      // filter.refetch();
+    } else if (response.isError && response.status === "rejected") {
+      failer(response?.error?.data?.message);
+      console.error("Error occured: ", response?.error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
   return (
     <>
       <Modal size="lg" show={props.show} onHide={props.onHide} centered>
@@ -143,7 +158,7 @@ const MascotaModal = (props) => {
           >
             Cancelar
           </Button>
-          <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary" disabled={isAddPetLoading}>
+          <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary" disabled={response.isLoading}>
             Guardar Cambios
           </Button>
         </Modal.Footer>

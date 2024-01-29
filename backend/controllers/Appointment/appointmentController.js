@@ -1,10 +1,10 @@
 const { Op, Sequelize } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Appointment = Database.appointment;
 const ExcelJS = require("exceljs");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const moment = require('moment');
+const moment = require("moment");
 const Admin = Database.user;
 const createAppointment = async (req, res) => {
   try {
@@ -79,24 +79,18 @@ const registerDiagnostic = async (req, res) => {
         [uploadedFileName]: `${req.protocol}://${req.get("host")}/profile/appointment/${file.filename}`,
       });
       return acc;
-    }, [])
-    const documentation_array = JSON.parse(array)
+    }, []);
+    const documentation_array = JSON.parse(array);
     const appointment = {
       condition_name: req.body.condition_name,
       description: req.body.description,
 
-      documentation:documentation_array, 
+      documentation: documentation_array,
 
-      medication:
-        req.body.medication === "" || !req.body.medication
-          ? null
-          : JSON.parse(req.body.medication),
-      internal_observation:
-        req.body.internal_observation === "" || !req.body.internal_observation
-          ? null
-          : req.body.internal_observation,
+      medication: req.body.medication === "" || !req.body.medication ? null : JSON.parse(req.body.medication),
+      internal_observation: req.body.internal_observation === "" || !req.body.internal_observation ? null : req.body.internal_observation,
       status: "complete",
-      rating:req.body.rating
+      rating: req.body.rating,
     };
     if (appointmentExist) {
       if (appointment.condition_name === "" || appointment.condition_name === null) {
@@ -131,8 +125,6 @@ const registerDiagnostic = async (req, res) => {
 };
 const updateAppointment = async (req, res) => {
   try {
-   
-    
     const id = req.params.id;
     const appointmentExist = await Appointment.findOne({ where: { id: id } });
 
@@ -233,11 +225,11 @@ const deleteAppointmentRecord = async (req, res) => {
     const id = req.params.id;
     const appointment_record = await Appointment.findOne({ where: { id: id } });
     const { pass, email } = req.body;
-   
+
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, "hello$%#@!ADMIN___++");
     const user = await Admin.findOne({
-      where: { email: email},
+      where: { email: email },
     });
     if (!user) {
       return res.status(400).send({
@@ -245,13 +237,13 @@ const deleteAppointmentRecord = async (req, res) => {
         success: false,
       });
     }
-   
+
     if (decoded.role !== user.role) {
       return res.status(400).send({
-       message: "Not authorized",
-       success: false,
-     });
-   }
+        message: "Not authorized",
+        success: false,
+      });
+    }
     if (pass !== user.password) {
       return res.status(400).send({
         message: "Password doesn't match",
@@ -266,11 +258,9 @@ const deleteAppointmentRecord = async (req, res) => {
       });
     }
 
-   
-
-if(appointment_record.documentation !== null){
-  const myArray = JSON.parse( appointment_record.documentation);
-  console.log("myArray", myArray.length)
+    if (appointment_record.documentation !== null) {
+      const myArray = JSON.parse(appointment_record.documentation);
+      console.log("myArray", myArray.length);
       if (myArray.length > 0) {
         myArray.map((docPath) => {
           const fileName = Object.keys(docPath)[0];
@@ -302,7 +292,6 @@ if(appointment_record.documentation !== null){
 };
 const appointmentExcelFile = async (req, res) => {
   try {
-   
     const appointmentData = await Appointment.findAll({});
     const plainAppointmentData = appointmentData.map((appointment) => {
       const formattedAppointment = appointment.get({ plain: true });
@@ -381,7 +370,6 @@ function formatDate(dateString) {
   return `${year}/${month}/${day}`;
 }
 
-
 // const updateAppointmentsStatus = async () => {
 //   try {
 //     const currentTime = moment();
@@ -413,32 +401,27 @@ function formatDate(dateString) {
 //   }
 // };
 
-
-
 const updateAppointmentsStatus = async () => {
   try {
     const currentTime = moment();
-  
-    const today = moment().startOf('day');
+
+    const today = moment().startOf("day");
 
     const appointments = await Appointment.findAll();
 
     appointments.forEach(async (appointment) => {
-      const scheduleEndTime = moment(appointment.scheduleEnd, 'HH:mm');
+      const scheduleEndTime = moment(appointment.scheduleEnd, "HH:mm");
 
-      
-      const isToday = moment(appointment.date).isSame(today, 'day');
-      const isGoneDays = moment(appointment.date).isBefore(today, 'day');
-      const sixHoursDuration = moment.duration(6, 'hours');
-      
+      const isToday = moment(appointment.date).isSame(today, "day");
+      const isGoneDays = moment(appointment.date).isBefore(today, "day");
+      const sixHoursDuration = moment.duration(6, "hours");
+
       const addition = scheduleEndTime.clone().add(sixHoursDuration);
 
       if (isToday || isGoneDays) {
-       
         if (addition.isSameOrBefore(currentTime)) {
-        
-          if (appointment.status === 'pending') {
-            await Appointment.update({ status: 'no attempt' }, { where: { id: appointment.id } });
+          if (appointment.status === "pending") {
+            await Appointment.update({ status: "no attempt" }, { where: { id: appointment.id } });
           }
         }
       }
@@ -447,7 +430,6 @@ const updateAppointmentsStatus = async () => {
     console.error("Error updating appointments:", error);
   }
 };
-
 
 const dateWiseAppointment = async (req, res) => {
   try {
@@ -598,11 +580,11 @@ const getSingleAppointment = async (req, res) => {
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
-console.log("app-----------",typeof appointment.documentation)
+    console.log("app-----------", typeof appointment.documentation);
     if (appointment.medication !== null && appointment.documentation !== null) {
-      const documentationArray = JSON.parse(appointment.documentation || '[]');
-      const medications =  JSON.parse(appointment.medication || '[]');
-      const medicationArray = JSON.parse(medications)
+      const documentationArray = JSON.parse(appointment.documentation || "[]");
+      const medications = JSON.parse(appointment.medication || "[]");
+      const medicationArray = JSON.parse(medications);
       const updatedAppointment = {
         ...appointment.toJSON(),
         documentation: documentationArray,

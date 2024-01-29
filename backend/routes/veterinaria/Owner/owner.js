@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Secure = require("../../../middlewares/secure/secure");
-const ownerController = require("../../../controllers/Veterinaria/Owner/ownerController");
+const ownerController = require("../../../controllers/Owner/ownerController");
 router.get("/ownerExcelFile", Secure(["masterAdmin"]), ownerController.ownerExcelFile);
 router.get("/petAppointmentsOfOwner/:id", Secure(["customerService", "masterAdmin", "user"]), ownerController.petAppointmentDataOfOwner);
 router.get("/ownersList", Secure(["customerService", "masterAdmin", "user"]), ownerController.getAllOwners);

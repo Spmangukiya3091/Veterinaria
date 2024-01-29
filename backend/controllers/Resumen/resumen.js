@@ -1,6 +1,6 @@
 const moment = require("moment");
 const { Op } = require("sequelize");
-const Database = require("../../../config/connection");
+const Database = require("../../config/connection");
 const Appointment = Database.appointment;
 const Pet = Database.pet;
 const User = Database.user;
@@ -160,8 +160,8 @@ const paymentGraph = async (req, res) => {
 
     const lastSixMonthsData = [];
     const lastYearLastSixMonthsData = [];
-    const currentMonthTotalAmount = currentMonthPayments.reduce((total, payment) => total + payment.amount, 0);
-    const currentYearTotalAmount = currentYearPayments.reduce((total, payment) => total + payment.amount, 0);
+    const currentMonthTotalAmount = currentMonthPayments.reduce((total, payment) => total + payment.final_amount, 0);
+    const currentYearTotalAmount = currentYearPayments.reduce((total, payment) => total + payment.final_amount, 0);
 
     for (let i = 0; i < 6; i++) {
       const monthDate = new Date(currentDate);
@@ -179,14 +179,14 @@ const paymentGraph = async (req, res) => {
           const paymentDate = new Date(payment.createdAt);
           return paymentDate.getFullYear() === year && paymentDate.getMonth() === monthDate.getMonth();
         })
-        .reduce((total, payment) => total + payment.amount, 0);
+        .reduce((total, payment) => total + payment.final_amount, 0);
 
       const lastYearTotalAmount = payments
         .filter((payment) => {
           const paymentDate = new Date(payment.createdAt);
           return paymentDate.getFullYear() === year && paymentDate.getMonth() === monthDate.getMonth();
         })
-        .reduce((total, payment) => total + payment.amount, 0);
+        .reduce((total, payment) => total + payment.final_amount, 0);
 
       lastSixMonthsData.push({ month, totalAmount });
       lastYearLastSixMonthsData.push({ month, lastYearTotalAmount });

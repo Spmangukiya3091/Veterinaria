@@ -206,7 +206,7 @@ const Roles = ({ email }) => {
       console.log(dltResponse.error);
       dispatch(showToast(dltResponse.error.message, "FAIL_TOAST"));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, dltResponse]);
 
   return (
@@ -344,7 +344,6 @@ const Roles = ({ email }) => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu
                               className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                              
                               id="kt_menu_62444587ce1ee"
                             >
                               <div className="px-7 py-5">
@@ -453,11 +452,7 @@ const Roles = ({ email }) => {
                                       <i className="fa-solid fa-chevron-down"></i>
                                     </Dropdown.Toggle>
                                     {dropdowns[i] && (
-                                      <Dropdown.Menu
-                                        className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                        
-                                        
-                                      >
+                                      <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                                         <Dropdown.Item className="menu-item px-3">
                                           <div
                                             onClick={(e) => {
