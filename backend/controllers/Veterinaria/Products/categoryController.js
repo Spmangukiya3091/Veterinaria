@@ -134,6 +134,38 @@ const getTotalWallpaperByCategory = async (req, res) => {
   }
 };
 
+const getTotalProductsByCategory = async (req, res) => {
+  try {
+    const categories = await Category.findAll({
+      include: {
+        model: Product,
+        as: "categoryData",
+      },
+      attributes: [
+        "id",
+        "category",
+        "createdAt",
+        [Sequelize.fn("COUNT", Sequelize.fn("DISTINCT", Sequelize.col("categoryData.id"))), "productCount"],
+        // Add other aggregated columns or include them in the GROUP BY clause
+      ],
+      group: ["category.id", "category.category", "category.createdAt", "categoryData.id"], // Include "categoryData.id" in the GROUP BY clause
+    });
+
+    res.status(200).send({
+      message: "categories",
+      categories: categories.map((ele) => ({
+        id: ele.id,
+        category: ele.category,
+        createdAt: ele.createdAt,
+        productCount: ele.categoryData.length,
+      })),
+    });
+  } catch (error) {
+    console.error("Error fetching category data:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createCategory,
   updateCategory,
@@ -141,4 +173,5 @@ module.exports = {
   getAllCategories,
   getSingleCategory,
   getTotalWallpaperByCategory,
+  getTotalProductsByCategory,
 };

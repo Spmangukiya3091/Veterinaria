@@ -9,9 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     category: {
       type: DataTypes.STRING,
       allowNULL: false,
-     
     },
   });
- 
+
   return Category;
 };

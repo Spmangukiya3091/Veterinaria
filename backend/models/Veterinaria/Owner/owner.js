@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNULL: false,
       },
       phone_1: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINTEGER,
         allowNULL: false,
       },  phone_2: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINTEGER,
         allowNULL: false,
       },
       doc_identity: {

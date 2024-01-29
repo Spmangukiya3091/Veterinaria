@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNULL: false,
     },
     phone: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINTEGER,
       allowNULL: false,
     },
     email: {
