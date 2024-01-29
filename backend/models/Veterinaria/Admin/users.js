@@ -23,7 +23,7 @@ name:{
     
    },
    phone:{
-    type: DataTypes.BIGINTEGER,
+    type: DataTypes.BIGINT,
    
    },
     email: {
