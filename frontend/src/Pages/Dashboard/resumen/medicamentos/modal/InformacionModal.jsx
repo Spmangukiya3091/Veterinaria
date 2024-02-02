@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { success } from "../../../../../Components/alert/success";
-import { useAddCategoryMutation, useUpdateCategoryMutation } from "../../../../../services/ApiServices";
+import { failer, success } from "../../../../../Components/alert/success";
+import { useAddCategoryMutation, useGetSingleCategoryQuery, useUpdateCategoryMutation } from "../../../../../services/ApiServices";
 
-function InformacionModal({ show, handleClose, id }) {
+function InformacionModal({ show, handleClose, id, filter }) {
   const [formData, setFormData] = useState({ category: "" });
-  const [addCategory] = useAddCategoryMutation();
-  const [updateCategory] = useUpdateCategoryMutation();
+  const [addCategory, response] = useAddCategoryMutation();
+  const [updateCategory, response2] = useUpdateCategoryMutation();
+  const singleCategory = useGetSingleCategoryQuery(id, { refetchOnMountOrArgChange: true });
+ 
+  useEffect(() => {
+    if (id !== undefined && !singleCategory.isLoading) {
+      setFormData({ category: singleCategory?.data?.category[0]?.category });
+    }
+  }, [singleCategory, id]);
 
   const handleSubmit = () => {
     if (id !== undefined) {
@@ -15,14 +22,40 @@ function InformacionModal({ show, handleClose, id }) {
         category: formData.category,
       };
       updateCategory(body);
-      handleClose();
-      success();
     } else {
       addCategory(formData);
-      handleClose();
-      success();
     }
   };
+
+  useEffect(() => {
+    if (id !== undefined) {
+      if (!response2.isLoading && response2.isSuccess) {
+        setFormData({
+          category: "",
+        });
+        handleClose();
+        success();
+        filter.refetch();
+      } else if (response2.isError) {
+        failer(response2?.error?.data?.message);
+        console.log("error");
+      }
+    } else {
+      if (!response.isLoading && response.isSuccess) {
+        setFormData({
+          category: "",
+        });
+        handleClose();
+        success();
+        filter.refetch();
+      } else if (response.isError) {
+        failer(response?.error?.data?.message);
+        console.log("error");
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2]);
+
   return (
     <div>
       <Modal show={show} onHide={handleClose} centered>

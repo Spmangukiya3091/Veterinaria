@@ -99,7 +99,7 @@ const PagoModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Propietario</Form.Label>
                   <Form.Select aria-label="Default select example" name="owner" onChange={handleChange} value={formData.owner}>
-                    <option>Propietario</option>
+                    <option disabled>Propietario</option>
                     {owners?.data?.ownersList.map(({ id, name, surname }) => (
                       <option key={id} value={name + " " + surname}>
                         {name + " " + surname}
@@ -114,7 +114,7 @@ const PagoModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Doctor</Form.Label>
                   <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor}>
-                    <option>Doctor</option>
+                    <option disabled>Doctor</option>
                     {doctors?.data?.veterinarianList
                       
                       .map(({ id, name, surname }) => (
@@ -171,7 +171,7 @@ const PagoModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Método de Pago</Form.Label>
                   <Form.Select name="payment_method" onChange={handleChange} value={formData.payment_method}>
-                    <option>Método de Pago</option>
+                    <option disabled>Método de Pago</option>
                     <option value="cash">Efectivo</option>
                     <option value="credit card">Tarjeta de Crédito</option>
                     <option value="debit card">Tarjeta de Débito</option>

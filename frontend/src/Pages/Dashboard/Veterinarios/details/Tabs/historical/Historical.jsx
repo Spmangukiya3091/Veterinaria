@@ -5,6 +5,7 @@ import SingleInputDateRangePicker from "../../../../../../Components/date-picker
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
 import moment from "moment";
 import { useGetAppoinmentByDoctorQuery } from "../../../../../../services/ApiServices";
+import Loader from "../../../../../../Components/loader/Loader";
 
 const Historical = ({ id }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -24,9 +25,9 @@ const Historical = ({ id }) => {
   useEffect(() => {
     if (!allVetAppoinment.isLoading && id !== undefined) {
       setLoading(false);
-      setData(allVetAppoinment?.data?.appointments);
+      setData(allVetAppoinment?.data?.appointments || []);
     } else if (allVetAppoinment.isError) {
-      setError(false);
+      setError(true);
       setLoading(false);
     }
   }, [allVetAppoinment, id]);
@@ -45,7 +46,7 @@ const Historical = ({ id }) => {
     setSearchQuery(`${id}`);
   };
   const filteredData = data.filter(({ pet }) => {
-    const searchString = searchValue;
+    const searchString = searchValue.toLowerCase();
     return pet.toLowerCase().includes(searchString);
   });
 
@@ -66,34 +67,38 @@ const Historical = ({ id }) => {
       [name]: value,
     });
   };
+
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
 
   const handleSearchFilter = () => {
     // Refetch data based on the search criteria
-    setSearchQuery(
-      searchData.status === ""
-        ? `${id}?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
-        : searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}`
-        : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
-    );
-    // historyList.refetch();
+    const queryParams = [];
+
+    if (searchData.status) {
+      queryParams.push(`status=${searchData.status}`);
+    }
+
+    if (searchData.startDate || searchData.endDate) {
+      queryParams.push(`startDate=${searchData.startDate}&endDate=${searchData.endDate}`);
+    }
+
+    const newQuery = `${id}${queryParams.length > 0 ? "?" : ""}${queryParams.join("&")}`;
+    console.log(newQuery);
+    setSearchQuery(newQuery);
     setDropdownOpen(false);
   };
   return (
     <>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error ? (
         "Some Error Occured"
       ) : (
@@ -147,7 +152,6 @@ const Historical = ({ id }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -170,7 +174,7 @@ const Historical = ({ id }) => {
                                   onChange={handleChange}
                                   value={searchData.status}
                                 >
-                                  <option>Seleccionar</option>
+                                  <option disabled >Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>
@@ -263,7 +267,7 @@ const Historical = ({ id }) => {
                           </td>
                           <td className="text-end">
                             <a
-                              href={`/dashboard/citas-view?status=${status}`}
+                              href={`/dashboard/citas-view/${id}?status=${status}`}
                               className="btn btn-sm btn-light btn-active-light-primary"
                               data-kt-menu-trigger="click"
                               data-kt-menu-placement="bottom-end"

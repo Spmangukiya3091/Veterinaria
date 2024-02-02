@@ -12,6 +12,7 @@ import moment from "moment";
 import { failer, success } from "../../../../Components/alert/success";
 import { useDispatch } from "react-redux";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
+import Loader from "../../../../Components/loader/Loader";
 
 const InventoryDetails = ({ email }) => {
   const location = useLocation();
@@ -109,7 +110,7 @@ const InventoryDetails = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

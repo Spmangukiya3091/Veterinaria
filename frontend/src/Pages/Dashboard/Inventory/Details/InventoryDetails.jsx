@@ -12,6 +12,7 @@ import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVe
 import { failer, success } from "../../../../Components/alert/success";
 import { showToast } from "../../../../store/tostify";
 import { useDispatch } from "react-redux";
+import Loader from "../../../../Components/loader/Loader";
 
 const InventoryDetails = ({ email }) => {
   const location = useLocation();
@@ -109,7 +110,7 @@ const InventoryDetails = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -196,11 +197,7 @@ const InventoryDetails = ({ email }) => {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu
-                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
-                  >
+                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
                       <div
                         className="menu-link px-3"

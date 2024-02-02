@@ -1,112 +1,237 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "./modal.scss";
-import { success } from "../../../../Components/alert/success";
-const VeterinaUserModal = (props) => {
-  //   const [selectedImage, setSelectedImage] = useState(null);
+import { failer, success } from "../../../../Components/alert/success";
+import departamentoData from "../../../../../Department.json";
+import { useGetSingleVeterinQuery, useGetSpecialitiesQuery } from "../../../../../services/ApiServices";
+import { useCookies } from "react-cookie";
+import moment from "moment";
+import axios from "axios";
 
-  //   // Function to handle the file input change and update the selected image
-  //   const handleImageChange = (event) => {
-  //     const file = event.target.files[0];
-  //     if (file) {
-  //       const imageUrl = URL.createObjectURL(file);
-  //       setSelectedImage(imageUrl);
-  //     }
-  //   };
+const VeterinaUserModal = (props) => {
+  const [cookies] = useCookies(["authToken"]);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    surname: "",
+    avatar: "",
+    speciality: "",
+    identity: "",
+    dob: "",
+    phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    sex: "",
+    address: "",
+    department: "",
+    district: "",
+    workingDays: [],
+    start_time: "",
+    end_time: "",
+    specialityId: "",
+  });
+
+  const specialityList = useGetSpecialitiesQuery(null, { refetchOnMountOrArgChange: true });
+  const [specialities, setSpecialities] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedDepartamento, setSelectedDepartamento] = useState("");
+  const [distritos, setDistritos] = useState([]);
   const fileInputRef = useRef(null);
+  // const dispatch = useDispatch();
+
+  const getVeterinDetails = useGetSingleVeterinQuery(props.id, { refetchOnMountOrArgChange: true });
+
+  useEffect(() => {
+    if (!specialityList.isLoading) {
+      setSpecialities(specialityList.data?.specialityList || []);
+    }
+  }, [specialityList]);
+
+  useEffect(() => {
+    if (props.id !== undefined && !getVeterinDetails.isLoading && getVeterinDetails.data) {
+      const {
+        name,
+        surname,
+        avatar,
+        speciality,
+        identity,
+        dob,
+        phone,
+        email,
+        password,
+        sex,
+        address,
+        department,
+        district,
+        workingDays,
+        start_time,
+        end_time,
+        specialityId,
+      } = getVeterinDetails.data.veterinarianData;
+
+      setFormData({
+        name,
+        surname,
+        avatar,
+        speciality,
+        identity,
+        dob,
+        phone,
+        email,
+        password,
+        confirmPassword: password,
+        sex,
+        address,
+        department,
+        district,
+        workingDays,
+        start_time,
+        end_time,
+        specialityId,
+      });
+    }
+  }, [props.id, getVeterinDetails]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
+    setFormData((prevData) => ({
+      ...prevData,
+      avatar: file,
+    }));
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "specialityId") {
+      const specialityText = e.target.options[e.target.selectedIndex]?.text || "";
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        speciality: specialityText,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleCheckboxChange = useCallback(
+    (label) => {
+      const isChecked = formData.workingDays.includes(label);
+
+      if (isChecked) {
+        const updatedWorkingDays = formData.workingDays.filter((day) => day !== label);
+        setFormData((prevData) => ({
+          ...prevData,
+          workingDays: updatedWorkingDays,
+        }));
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          workingDays: [...prevData.workingDays, label],
+        }));
+      }
+    },
+    [formData.workingDays],
+  );
   const handleUploadButtonClick = () => {
-    // Trigger a click on the hidden file input field
     fileInputRef.current.click();
   };
 
+  const handleDepartamentoChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedDepartamento(selectedValue);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      department: selectedValue,
+      district: "", // Reset district when department changes
+    }));
+    const selectedDepartamentoData = departamentoData.find((departamento) => departamento.Department === selectedValue);
+
+    if (selectedDepartamentoData) {
+      setDistritos(selectedDepartamentoData.DISTRITOS || []);
+    } else {
+      setDistritos([]);
+      setFormData((prevData) => ({
+        ...prevData,
+        department: "", // Reset department when no option is selected
+      }));
+    }
+  };
+
+  const handleModalHide = () => {
+    props.onHide();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (props.id !== undefined) {
+        // Handle update logic
+        const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/veterinarian/UpdateVeterinarian/${props.id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + cookies.authToken,
+          },
+        });
+
+        if (response.status === 200) {
+          // Handle success
+          success();
+          handleModalHide();
+        }
+      } else {
+        // Handle create logic
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/veterinarian/createVeterinarian`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + cookies.authToken,
+          },
+        });
+
+        if (response.status === 201) {
+          // Handle success
+          success();
+          handleModalHide();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      failer(error?.response?.data?.message);
+      // dispatch(showToast("Internal Server Error", "FAIL_TOAST"));
+    }
+  };
   return (
     <>
-      {" "}
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
+      <Modal show={props.show} onHide={handleModalHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Información de Doctor
-          </Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">{props.id !== undefined ? "Editar" : "Crear"} Información de Doctor</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Row>
               <Col>
-                {/* <Form.Group className="mb-3" controlId="formBasicSelect">
-                  <div className="d-flex gap-10">
-                    <div className="image mx-4">
-                
-                      <img
-                        className="round-image"
-                        src={selectedImage || "../images/Elipse3.png"}
-                        alt=""
-                      />
-                    </div>
-                    <div className="form-field">
-                      <p className="mb-5">
-                        Adjunta una foto de perfil para completar datos
-                        adicionales.
-                      </p>
-                      <Form.Control
-                        type="file"
-                        onChange={(e) => {
-                          handleImageChange(e);
-                        }}
-                      />
-                    </div>
-                  </div>
-                </Form.Group> */}
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <div className="d-flex gap-10">
                     <div className="image mx-4">
-                      {/* Display the selected image or a default placeholder */}
                       <img
                         className="round-image"
-                        src={
-                          selectedFile
-                            ? URL.createObjectURL(selectedFile)
-                            : "../images/Elipse3.png"
-                        }
+                        src={selectedFile ? URL.createObjectURL(selectedFile) : formData.avatar || "/images/avatarImg.png"}
                         alt=""
                       />
                     </div>
                     <div className="form-field">
-                      <Form.Control
-                        type="file"
-                        onChange={(e) => {
-                          handleImageChange(e);
-                        }}
-                        ref={fileInputRef}
-                        style={{ display: "none" }} // Hide the file input
-                      />
+                      <Form.Control type="file" onChange={(e) => handleImageChange(e)} ref={fileInputRef} style={{ display: "none" }} />
                       <div className="info">
-                        <p>
-                          Adjunta una foto de perfil para completar datos
-                          adicionales.
-                        </p>
-                        {selectedFile && (
-                          <p className="mt-3 filename">
-                            {selectedFile !== null
-                              ? selectedFile.name
-                              : "no file found"}
-                          </p>
-                        )}
+                        <p>Adjunta una foto de perfil para completar datos adicionales.</p>
+                        {selectedFile && <p className="mt-3 filename">{selectedFile !== null ? selectedFile.name : "no file found"}</p>}
                       </div>
-                      <Button onClick={handleUploadButtonClick}>
-                        Adjuntar
-                      </Button>
+                      <Button onClick={handleUploadButtonClick}>Adjuntar</Button>
                     </div>
                   </div>
                 </Form.Group>
@@ -116,13 +241,13 @@ const VeterinaUserModal = (props) => {
                   <Col>
                     <Form.Group className="mb-3" controlId="formBasicDate">
                       <Form.Label>Nombres</Form.Label>
-                      <Form.Control type="text" placeholder="Nombres" />
+                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="name" placeholder="Nombres" value={formData.name} />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="formBasicDate">
                       <Form.Label>Apellidos</Form.Label>
-                      <Form.Control type="text" placeholder="Nombres" />
+                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="surname" placeholder="Apellidos" value={formData.surname} />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -132,10 +257,20 @@ const VeterinaUserModal = (props) => {
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Especialidad</Form.Label>
-                  <Form.Select aria-label="Default select example">
-                    <option>Especialidad</option>
-                    <option value="1">Administrador</option>
-                    <option value="2">Atención</option>
+                  <Form.Select
+                    aria-label="Default select example"
+                    value={formData.specialityId}
+                    onChange={(e) => handleChange(e)}
+                    name="specialityId"
+                  >
+                    <option disabled >Seleccionar</option>
+                    {specialities
+                      ? specialities.map((speciality, i) => (
+                          <option key={i} value={speciality.id}>
+                            {speciality.speciality}
+                          </option>
+                        ))
+                      : ""}
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -146,7 +281,9 @@ const VeterinaUserModal = (props) => {
                       <Form.Label>F. de Nacimiento</Form.Label>
                       <Form.Control
                         type="date"
-                        aria-label="Default"
+                        value={formData.dob ? moment(formData.dob).format("YYYY-MM-DD") : ""}
+                        onChange={(e) => handleChange(e)}
+                        name="dob"
                         className="text-gray-400"
                         placeholder="F. de Nacimiento"
                       />
@@ -156,6 +293,9 @@ const VeterinaUserModal = (props) => {
                     <Form.Group className="mb-3">
                       <Form.Label>Doc. Identidad</Form.Label>
                       <Form.Control
+                        onChange={(e) => handleChange(e)}
+                        value={formData.identity}
+                        name="identity"
                         aria-label="Default"
                         placeholder="Doc. Identidad"
                       />
@@ -168,7 +308,14 @@ const VeterinaUserModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Teléfono</Form.Label>
-                  <Form.Control aria-label="Default " placeholder="Teléfono" />
+                  <Form.Control
+                    aria-label="Default"
+                    value={formData.phone}
+                    type="number"
+                    onChange={(e) => handleChange(e)}
+                    name="phone"
+                    placeholder="Teléfono"
+                  />
                 </Form.Group>
               </Col>
               <Col>
@@ -176,6 +323,9 @@ const VeterinaUserModal = (props) => {
                   <Form.Label>Correo electrónico</Form.Label>
                   <Form.Control
                     aria-label="Default"
+                    onChange={(e) => handleChange(e)}
+                    value={formData.email}
+                    name="email"
                     placeholder="Correo electrónico"
                   />
                 </Form.Group>
@@ -185,38 +335,57 @@ const VeterinaUserModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Sexo</Form.Label>
-                  <Form.Select aria-label="Default select example">
-                    <option>Sexo</option>
-                    <option value="1">Administrador</option>
-                    <option value="2">Atención</option>
+                  <Form.Select aria-label="Default select example" value={formData.sex} onChange={(e) => handleChange(e)} name="sex">
+                    <option disabled>Sexo</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Dirección</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Dirección" />
+                  <Form.Control
+                    aria-label="Default"
+                    value={formData.address}
+                    onChange={(e) => handleChange(e)}
+                    name="address"
+                    placeholder="Dirección"
+                  />
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" controlId="departamentoSelect">
                   <Form.Label>Departamento</Form.Label>
-                  <Form.Select aria-label="Default select example">
-                    <option>Departamento</option>
-                    <option value="1">Administrador</option>
-                    <option value="2">Atención</option>
+                  <Form.Select
+                    aria-label="Departamento"
+                    onChange={(e) => {
+                      handleDepartamentoChange(e);
+                    }}
+                    name="department"
+                    value={selectedDepartamento || formData.department}
+                  >
+                    <option value="">Select Departamento</option>
+                    {departamentoData.map((departamento, i) => (
+                      <option key={i} value={departamento.Department}>
+                        {departamento.Department}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" controlId="distritoSelect">
                   <Form.Label>Distrito</Form.Label>
-                  <Form.Select aria-label="Default select example">
-                    <option>Distrito</option>
-                    <option value="1">Administrador</option>
-                    <option value="2">Atención</option>
+                  <Form.Select aria-label="Distrito" onChange={(e) => handleChange(e)} name="district" value={formData.district}>
+                    <option value="">Select Distrito</option>
+                    {distritos.map((distrito, i) => (
+                      <option key={i} value={distrito}>
+                        {distrito}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -230,39 +399,53 @@ const VeterinaUserModal = (props) => {
                       <Form.Check
                         className="my-2"
                         type="checkbox"
+                        checked={formData.workingDays.includes("Lunes")}
                         label="Lunes"
+                        onChange={() => handleCheckboxChange("Lunes")}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
+                        checked={formData.workingDays.includes("Martes")}
                         label="Martes"
+                        onChange={() => handleCheckboxChange("Martes")}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
+                        checked={formData.workingDays.includes("Miércoles")}
                         label="Miércoles"
+                        onChange={() => handleCheckboxChange("Miércoles")}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
+                        checked={formData.workingDays.includes("Jueves")}
                         label="Jueves"
+                        onChange={() => handleCheckboxChange("Jueves")}
                       />
                     </Col>
                     <Col>
                       <Form.Check
                         className="my-2"
                         type="checkbox"
+                        checked={formData.workingDays.includes("Viernes")}
                         label="Viernes"
+                        onChange={() => handleCheckboxChange("Viernes")}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
+                        checked={formData.workingDays.includes("Sábado")}
                         label="Sábado"
+                        onChange={() => handleCheckboxChange("Sábado")}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
+                        checked={formData.workingDays.includes("Domingo")}
                         label="Domingo"
+                        onChange={() => handleCheckboxChange("Domingo")}
                       />
                     </Col>
                   </Row>
@@ -276,6 +459,9 @@ const VeterinaUserModal = (props) => {
                       <Form.Control
                         type="time"
                         aria-label="Default"
+                        value={formData.start_time}
+                        onChange={(e) => handleChange(e)}
+                        name="start_time"
                         placeholder="Ingreso"
                       />
                     </Form.Group>
@@ -286,6 +472,9 @@ const VeterinaUserModal = (props) => {
                       <Form.Control
                         type="time"
                         aria-label="Default"
+                        value={formData.end_time}
+                        onChange={(e) => handleChange(e)}
+                        name="end_time"
                         placeholder="Salida"
                       />
                     </Form.Group>
@@ -299,6 +488,9 @@ const VeterinaUserModal = (props) => {
                   <Form.Label>Crear contraseña</Form.Label>
                   <Form.Control
                     aria-label="Default"
+                    onChange={(e) => handleChange(e)}
+                    value={formData.password}
+                    name="password"
                     placeholder="Crear contraseña"
                   />
                 </Form.Group>
@@ -308,6 +500,9 @@ const VeterinaUserModal = (props) => {
                   <Form.Label>Confirmar contraseña</Form.Label>
                   <Form.Control
                     aria-label="Default"
+                    onChange={(e) => handleChange(e)}
+                    value={formData.confirmPassword}
+                    name="confirmPassword"
                     placeholder="Confirmar contraseña"
                   />
                 </Form.Group>
@@ -316,21 +511,10 @@ const VeterinaUserModal = (props) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            onClick={props.onHide}
-            className="footer-btn btn btn-secondary"
-          >
+          <Button onClick={handleModalHide} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
-          <Button
-            variant="primary"
-            type="submit"
-            onClick={() => {
-              props.onHide();
-              success();
-            }}
-            className="footer-btn btn btn-primary"
-          >
+          <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary">
             Guardar Cambios
           </Button>
         </Modal.Footer>

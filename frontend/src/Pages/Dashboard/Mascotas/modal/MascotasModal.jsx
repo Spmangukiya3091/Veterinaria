@@ -79,27 +79,70 @@ function MascotasModal({ show, handleClose, id }) {
     }
   };
 
+  // useEffect(() => {
+  //   if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
+  //     handleClose();
+  //     success();
+  //     setFormData({
+  //       name: "",
+  //       owner: "",
+  //       ownerId: "",
+  //       sex: "",
+  //       dob: "",
+  //       Species: "",
+  //       breed: "",
+  //       hair: "",
+  //       color: "",
+  //     });
+  //   } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
+  //     failer(response?.error?.data?.message || response2?.error?.data?.message);
+  //     console.error("Error occured: ", response?.error || response2?.error);
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [response, response2, id]);
+
   useEffect(() => {
-    if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
-      handleClose();
-      success();
-      setFormData({
-        name: "",
-        owner: "",
-        ownerId: "",
-        sex: "",
-        dob: "",
-        Species: "",
-        breed: "",
-        hair: "",
-        color: "",
-      });
-    } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
-      failer(response?.error?.data?.message || response2?.error?.data?.message);
-      console.error("Error occured: ", response?.error || response2?.error);
+    if (id !== undefined) {
+      if (!response2.isLoading && response2.status === "fulfilled") {
+        handleClose();
+        success();
+        setFormData({
+          name: "",
+          owner: "",
+          ownerId: "",
+          sex: "",
+          dob: "",
+          Species: "",
+          breed: "",
+          hair: "",
+          color: "",
+        });
+      } else if (response2.isError && response2.status === "rejected") {
+        console.log(response2.error);
+        failer(response2?.error?.data?.message);
+      }
+    } else {
+      if (!response.isLoading && response.status === "fulfilled") {
+        console.log(response);
+        success();
+        setFormData({
+          name: "",
+          owner: "",
+          ownerId: "",
+          sex: "",
+          dob: "",
+          Species: "",
+          breed: "",
+          hair: "",
+          color: "",
+        });
+        handleClose();
+      } else if (response.isError && response.status === "rejected") {
+        console.log(response.error);
+        failer(response?.error?.data?.message);
+      }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response, response2, id]);
+  }, [response, response2]);
   return (
     <>
       <Modal size="lg" show={show} onHide={handleClose} centered>
@@ -119,7 +162,7 @@ function MascotasModal({ show, handleClose, id }) {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Propietario</Form.Label>
                   <Form.Select aria-label="Default select" name="ownerId" onChange={handleChange} value={formData.ownerId}>
-                    <option>Propietario</option>
+                    <option disabled>Propietario</option>
                     {ownersList?.data?.ownersList.map((owner) => (
                       <option key={owner.id} value={owner.id}>
                         {owner.name + " " + owner.surname}
@@ -134,7 +177,7 @@ function MascotasModal({ show, handleClose, id }) {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Sexo</Form.Label>
                   <Form.Select aria-label="Default select example" name="sex" onChange={handleChange} value={formData.sex}>
-                    <option>Sexo</option>
+                    <option disabled>Sexo</option>
                     <option value="Macho">Macho</option>
                     <option value="Hembra">Hembra</option>
                   </Form.Select>

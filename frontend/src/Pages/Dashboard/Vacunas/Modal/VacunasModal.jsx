@@ -56,7 +56,7 @@ const VacunasModal = ({ id, onHide, filter, show }) => {
       failer(response?.error?.data?.message || response2?.error?.data?.message);
       console.error("Error occured: ", response?.error || response2?.error);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2, id]);
   return (
     <>

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useState } from "react";
 import {
   useAddProductMutation,
@@ -27,8 +27,8 @@ function InventoryModal(props) {
 
   const categoryList = useGetAllCategoriesQuery(null, { refetchOnMountOrArgChange: true });
   const productDetails = useGetSingleProductQuery(props.id, { refetchOnMountOrArgChange: true });
-  const [addProduct] = useAddProductMutation();
-  const [updateProduct] = useUpdateProductMutation();
+  const [addProduct, response] = useAddProductMutation();
+  const [updateProduct, response2] = useUpdateProductMutation();
 
   useEffect(() => {
     if (props.id !== undefined && !productDetails.isLoading && productDetails?.data?.product[0]) {
@@ -87,25 +87,64 @@ function InventoryModal(props) {
         id: props.id,
         ...formData,
       };
-      try {
-        await updateProduct(body);
-        props.onHide();
-        success("Product updated successfully!");
-      } catch (error) {
-        console.error("Error updating product:", error);
-        // Handle error if needed
-      }
+      await updateProduct(body);
     } else {
-      try {
-        await addProduct(formData);
-        props.onHide();
-        success("Product created successfully!");
-      } catch (error) {
-        console.error("Error creating product:", error);
-        // Handle error if needed
-      }
+      await addProduct(formData);
     }
   };
+
+  useEffect(() => {
+    if (props.id !== undefined) {
+      if (!response2.isLoading && response2.status === "fulfilled") {
+        props.onHide();
+        success();
+        setFormData({
+          product: "",
+          categoryId: "",
+          category: "",
+          composition: "",
+          stock: "",
+          sku: "",
+          status: "",
+          laboratory: "",
+          description: "",
+          brand: "",
+          price: "", // Initialize as an empty string
+          presentation: "",
+        });
+        props.filter.refetch();
+      } else if (response2.isError && response2.status === "rejected") {
+        console.log(response2.error);
+        failer(response2?.error?.data?.message);
+      }
+    } else {
+      if (!response.isLoading && response.status === "fulfilled") {
+        console.log(response);
+        success();
+        setFormData({
+          product: "",
+          categoryId: "",
+          category: "",
+          composition: "",
+          stock: "",
+          sku: "",
+          status: "",
+          laboratory: "",
+          description: "",
+          brand: "",
+          price: "", // Initialize as an empty string
+          presentation: "",
+        });
+        props.onHide();
+        props.filter.refetch();
+      } else if (response.isError && response.status === "rejected") {
+        console.log(response.error);
+        failer(response?.error?.data?.message);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2]);
+
   return (
     <>
       <Modal size="lg" show={props.show} onHide={props.onHide} centered>
@@ -127,7 +166,7 @@ function InventoryModal(props) {
                 <Form.Group className="mb-3">
                   <Form.Label>Categoría</Form.Label>
                   <Form.Select aria-label="Default select example" value={formData.categoryId} name="categoryId" onChange={handleChange}>
-                    <option>Categoría</option>
+                    <option disabled>Categoría</option>
                     {categoryList?.data?.categoryList.map((category, i) => (
                       <option key={i} value={category.id}>
                         {category.category}
@@ -169,7 +208,7 @@ function InventoryModal(props) {
                     <Form.Group className="mb-3">
                       <Form.Label>Estado</Form.Label>
                       <Form.Select aria-label="Default select example" value={formData.status} name="status" onChange={handleChange}>
-                        <option>Estado</option>
+                        <option disabled>Estado</option>
                         <option value="active">Activo</option>
                         <option value="inactive">InActivo</option>
                       </Form.Select>
@@ -243,7 +282,26 @@ function InventoryModal(props) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide} className="footer-btn btn btn-secondary">
+          <Button
+            onClick={() => {
+              props.onHide();
+              setFormData({
+                product: "",
+                categoryId: "",
+                category: "",
+                composition: "",
+                stock: "",
+                sku: "",
+                status: "",
+                laboratory: "",
+                description: "",
+                brand: "",
+                price: "",
+                presentation: "",
+              });
+            }}
+            className="footer-btn btn btn-secondary"
+          >
             Cancelar
           </Button>
           <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary">

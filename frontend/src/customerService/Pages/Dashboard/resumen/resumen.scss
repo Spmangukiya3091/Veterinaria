@@ -4,14 +4,17 @@
   height: 100%;
   padding: 25px 45px;
   font-family: "Inter";
+
   .proximas {
     margin-top: 20px;
     border-radius: 8px;
     background-color: #fff;
+
     .proximas-top-heading {
       width: 100%;
       text-align: start;
       padding: 20px;
+
       p {
         margin-bottom: 0;
         font: normal normal 15px/19px Inter;
@@ -20,24 +23,30 @@
         color: #000000;
       }
     }
+
     .owners-table {
       table {
         width: 100%;
+
         tr {
           .th-space {
             width: 108px;
           }
+
           padding: 10px 0;
+
           th {
             text-align: start;
             font: normal normal 600 12px/15px Inter;
             border-bottom: 1px solid #e2e6e9;
             color: #8a98a5;
             padding: 10px 20px;
+
             &:last-child {
               text-align: end !important;
             }
           }
+
           td {
             font: normal normal 13px/21px Inter;
             font-weight: normal;
@@ -47,29 +56,38 @@
             .btn {
               width: 108px !important;
             }
+
             &:nth-child(1) {
               width: 7%;
             }
+
             &:nth-child(2) {
               width: 29%;
             }
+
             &:nth-child(3) {
               width: 27%;
             }
+
             &:nth-child(4) {
               width: 15%;
             }
+
             &:nth-child(5) {
               width: 11%;
             }
+
             &:nth-child(6) {
               width: 12%;
             }
+
             &:last-child {
-              text-align: end !important;
+              text-align: end ;
             }
+
             .star-icon-wrapper {
               font-weight: bold;
+
               .bi {
                 color: #336cfb;
                 margin-left: 5px;
@@ -77,15 +95,18 @@
                 margin-bottom: 10px;
               }
             }
+
             .status-wrapper {
               display: flex;
               justify-content: center;
               align-items: center;
               width: 100%;
+
               .status-green {
                 width: 118px !important;
                 background: #25bb00 0% 0% no-repeat padding-box !important;
               }
+
               .status {
                 display: flex;
                 padding: 5px;
@@ -94,9 +115,11 @@
                 background: #ffe229 0% 0% no-repeat padding-box;
                 border-radius: 18px;
                 width: 102px;
+
                 .fa-solid {
                   font-size: 8px !important;
                 }
+
                 p {
                   margin-bottom: 0;
                 }
@@ -104,6 +127,7 @@
             }
 
             padding: 10px 0;
+
             button {
               padding: 10px !important;
               color: #000;
@@ -112,6 +136,7 @@
               background: #F6F8FF 0% 0% no-repeat padding-box !important;
               border-radius: 8px;
               border: 0;
+
               &:hover {
                 padding: 10px !important;
                 color: #000;
@@ -123,14 +148,17 @@
               }
             }
           }
+
           td:first-child {
             font: normal normal 600 12px/15px Inter;
 
             color: #8a98a5;
           }
         }
+
         tr:not(:last-child) {
-          border-bottom: 1px solid #e2e6e9; /* Adjust the border style as needed */
+          border-bottom: 1px solid #e2e6e9;
+          /* Adjust the border style as needed */
         }
       }
     }
@@ -139,16 +167,20 @@
   .bg-body {
     margin-bottom: 0 !important;
   }
+
   .resumen-top-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   .active-detail {
     border-left: 4px solid #336cfb !important;
   }
+
   .detail-section {
     padding: 10px;
+
     .detail-heading {
       margin-bottom: 25px;
       font: normal normal 20px/24px Inter;
@@ -156,17 +188,20 @@
       letter-spacing: -0.2px;
       color: #000000;
     }
+
     .top-date-wrapper {
       margin-bottom: 17px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       p {
         font: normal normal 15px/19px Inter;
         font-weight: 600;
         letter-spacing: -0.15px;
         color: #000000;
       }
+
       button {
         background: #F6F8FF 0% 0% no-repeat padding-box !important;
         border-radius: 8px !important;
@@ -175,6 +210,7 @@
         font: normal normal 13px/16px Inter;
         font-weight: 600 !important;
         padding: 10px 12px !important;
+
         &:hover,
         &:focus,
         &:active {
@@ -193,6 +229,7 @@
         }
       }
     }
+
     p {
       margin-bottom: 0;
       font: normal normal 20px/24px Inter;
@@ -200,6 +237,7 @@
       letter-spacing: -0.2px;
       color: #000000;
     }
+
     .detail-wrapper {
       margin-top: 20px;
       padding: 0 8px;
@@ -209,22 +247,26 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       .detail-title-box {
         .active-text {
-          color: #336cfb !important ;
+          color: #336cfb !important;
         }
+
         .detail-title-main {
           text-align: start;
           margin-bottom: 5px;
           font: normal normal 14px/17px Inter;
           font-weight: 600;
         }
+
         .detail-title-sub {
           text-align: start;
           margin-bottom: 0;
           font: normal normal normal 14px/17px Inter;
         }
       }
+
       .detail-btn-wrapper {
         .detail-btn {
           border: 0 !important;
@@ -232,6 +274,7 @@
           font: 13px/26px Inter;
           font-weight: bold !important;
           background: #F6F8FF 0% 0% no-repeat padding-box !important;
+
           &:hover {
             border: 0 !important;
             color: #000 !important;
@@ -250,17 +293,20 @@
       margin-bottom: 5px;
       text-align: start;
     }
+
     .resumen-sub-title {
       font: normal normal normal 12px/15px Inter;
       text-align: start;
       margin-bottom: 0;
     }
   }
+
   .calendar-box {
     .export-btn {
       margin-right: 10px;
       background: #fff !important;
       color: #000 !important;
+
       :hover {
         .fa-solid {
           color: #000 !important;
@@ -271,44 +317,54 @@
         color: #000 !important;
       }
     }
+
     .dropdown {
       .active {
         background: #f1faff !important;
         color: #336cfb !important;
+
         .fa-solid {
           color: #336cfb !important;
         }
       }
+
       .dropdown-toggle {
-&::after {
-                      display: none;
-                    }
+        &::after {
+          display: none;
+        }
+
         font-weight: normal;
         background: #fff 0% 0% no-repeat padding-box;
         font: normal normal 13px/26px Inter;
         letter-spacing: 0px;
         color: #000000;
+
         .fa-solid {
           color: #000;
           margin-left: 10px;
           font-size: 12px;
         }
+
         &:hover {
           background: #f1faff !important;
           color: #336cfb;
+
           .fa-solid {
             color: #336cfb;
           }
         }
+
         &:active,
         &:focus {
           background: #f1faff !important;
           color: #336cfb;
+
           .fa-solid {
             color: #336cfb;
           }
         }
       }
+
       .dropdown-menu {
         box-shadow: 0px 3px 12px rgb(0 0 0 / 16%);
         border: 0;
@@ -317,33 +373,40 @@
         position: absolute !important;
         inset: 0px auto auto 0px !important;
         transform: translate(20px, 50px) !important;
+
         a:active {
           background: transparent !important;
         }
+
         .delete {
           color: #fc5f6b;
         }
+
         .dropdown-item {
           padding-left: 0 !important;
           padding-right: 0 !important;
         }
       }
     }
+
     .calendar-btn-top {
       padding: 15px;
       border: 0;
       background: #336cfb !important;
       color: #fff !important;
+
       &:hover {
         padding: 15px;
         border: 0;
         background: #336cfb !important;
         color: #fff !important;
       }
+
       .fa-regular {
         margin-right: 8px;
       }
     }
+
     .calendar-btn {
       padding: 15px;
       border: 0;
@@ -358,12 +421,14 @@
         background: #f6f8ff !important;
         color: #000 !important;
       }
+
       .fa-regular {
         margin-right: 8px;
         color: #000 !important;
       }
     }
   }
+
   .card {
     text-decoration: none;
     text-align: start;
@@ -377,6 +442,7 @@
       align-items: start !important;
       justify-content: space-between;
       margin-bottom: 10px;
+
       .calendar-p {
         margin-bottom: 0 !important;
         font: normal normal 15px/19px Inter !important;
@@ -385,16 +451,20 @@
         color: #000000;
       }
     }
+
     .card-body {
       padding: 0 !important;
+
       .card-top-box {
         display: flex;
         align-items: center;
         padding: 20px;
         border-bottom: 1px solid #dfdfe3;
+
         img {
           margin-right: 15px;
         }
+
         .letf-main-text {
           margin-bottom: 0;
           font: normal normal 15px/19px Inter;
@@ -402,6 +472,7 @@
           letter-spacing: -0.15px;
           color: #8a98a5;
         }
+
         .left-sub-text {
           margin-top: 5px;
           margin-bottom: 0;
@@ -410,17 +481,21 @@
           color: #000000;
         }
       }
+
       .card-bottom-box {
         padding: 20px;
+
         hr {
           background-color: #dfdfe3 !important;
           border: 0;
           opacity: 1 !important;
         }
+
         .card-bottom-text-wrapper {
           display: flex;
           align-items: center;
           justify-content: space-between;
+
           .bottom-left-text {
             margin-bottom: 0;
             font: normal normal 13px/16px Inter;
@@ -428,6 +503,7 @@
             letter-spacing: 0px;
             color: #242424;
           }
+
           .bottom-right-text {
             margin-bottom: 0;
             font: normal normal 13px/16px Inter;
@@ -437,14 +513,17 @@
           }
         }
       }
+
       .fa-icons {
         font-size: 2rem !important;
         color: #336cfb !important;
       }
+
       .main-heading {
         font: normal normal 18px/21px Inter;
         font-weight: 600;
       }
+
       .sub-heading {
         color: #b5b5c3;
         font: normal normal 15px/19px Inter;
@@ -452,6 +531,7 @@
       }
     }
   }
+
   .card-wrapper {
     .card-main-title {
       text-align: start;
@@ -460,8 +540,10 @@
       margin-top: 20px;
     }
   }
+
   .calendar-section {
     margin-top: 20px;
+
     .calendar-card-wrapper2 {
       width: 100%;
       height: 100%;
@@ -479,12 +561,14 @@
       border: 1px solid #f1f1f2 !important;
       background: #fff;
       padding: 20px;
+
       .main-table-title {
         text-align: start;
         font: 15px/19px Inter;
         font-weight: bold;
       }
     }
+
     .calendar-card-wrapper-medicamentos {
       width: 100%;
       height: 100%;
@@ -495,25 +579,31 @@
 
       table {
         width: 100%;
+
         tr {
           border-bottom: 1px solid #e2e6e9;
           padding: 10px 0;
+
           th {
             font: normal normal 600 12px/15px Inter;
 
             color: #8a98a5;
             padding: 10px 20px;
             text-align: start;
+
             &:last-child {
               text-align: end;
             }
           }
+
           td {
             padding: 10px 20px;
             padding: 10px 20px;
             text-align: start;
+
             a {
               padding: 15px !important;
+
               .fa-solid {
                 color: #000;
               }
@@ -522,6 +612,7 @@
             &:last-child {
               text-align: end;
             }
+
             .table-btn {
               border-radius: 0.325rem;
               color: #000;
@@ -530,6 +621,7 @@
               background: #F6F8FF 0% 0% no-repeat padding-box !important;
               padding: calc(0.75rem + 1px) calc(1.5rem + 1px) !important;
               border: 0;
+
               &:hover,
               &:active,
               &:focus {
@@ -559,6 +651,7 @@
         font: 15px/19px Inter;
         font-weight: bold;
         padding: 20px;
+
         p {
           margin-bottom: 0;
         }
@@ -571,15 +664,18 @@
         border: 0;
         background: #F6F8FF 0% 0% no-repeat padding-box;
       }
+
       .date-main {
         margin-top: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
+
         .active {
           background: #ffe229 !important;
           border-radius: 8px;
         }
+
         .date-btn {
           display: flex;
           flex-direction: column;
@@ -591,10 +687,12 @@
           margin-inline: 4px;
           font: normal normal 12px/18px Inter;
           font-weight: 600;
+
           .month {
             font: normal normal medium 12px/18px Inter;
             margin-bottom: 5px;
           }
+
           .date {
             font: normal normal medium 12px/18px Inter;
             margin-bottom: 0;

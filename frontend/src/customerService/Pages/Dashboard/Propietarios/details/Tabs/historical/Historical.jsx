@@ -5,6 +5,7 @@ import SingleInputDateRangePicker from "../../../../../../Components/date-picker
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
 import moment from "moment";
 import { useGetPetAppoinmentOfOwnerQuery } from "../../../../../../../services/ApiServices";
+import Loader from "../../../../../../Components/loader/Loader";
 
 const Historical = ({ id }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -70,8 +71,8 @@ const Historical = ({ id }) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -93,7 +94,7 @@ const Historical = ({ id }) => {
   return (
     <>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error ? (
         "Some Error Occured"
       ) : (
@@ -147,7 +148,6 @@ const Historical = ({ id }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -170,7 +170,7 @@ const Historical = ({ id }) => {
                                   onChange={handleChange}
                                   value={searchData.status}
                                 >
-                                  <option>Seleccionar</option>
+                                  <option disabled >Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>
@@ -261,7 +261,7 @@ const Historical = ({ id }) => {
                           </td>
                           <td className="text-end">
                             <a
-                              href={`/customerservice/citas-view?status=${status}`}
+                              href={`/customerservice/citas-view/${id}?status=${status}`}
                               className="btn btn-sm btn-light btn-active-light-primary"
                               data-kt-menu-trigger="click"
                               data-kt-menu-placement="bottom-end"

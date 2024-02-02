@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import departamentoData from "../../../../../Department.json";
 import { useState } from "react";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useAddOwnerMutation, useEditOwnerMutation, useGetSingleOwnerQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
 
@@ -22,8 +22,8 @@ const PropietarioModal = (props) => {
     dob: "",
   });
 
-  const [addPropritario, { isLoading, isError }] = useAddOwnerMutation();
-  const [editPropritario, response] = useEditOwnerMutation();
+  const [addPropritario, response] = useAddOwnerMutation();
+  const [editPropritario, response2] = useEditOwnerMutation();
   const getOwner = useGetSingleOwnerQuery(props.id, { refetchOnMountOrArgChange: true });
   useEffect(() => {
     if (props.id !== undefined) {
@@ -85,7 +85,34 @@ const PropietarioModal = (props) => {
       };
       // console.log(body);
       editPropritario(body);
-      if (!response.isLoading) {
+    } else {
+      addPropritario(formData);
+    }
+  };
+
+  useEffect(() => {
+    if (props.id !== undefined) {
+      if (!response2.isLoading && response2.isSuccess) {
+        setFormData({
+          name: "",
+          surname: "",
+          phone_1: "",
+          phone_2: "",
+          doc_identity: "",
+          email: "",
+          address: "",
+          department: "",
+          district: "",
+          dob: "",
+        });
+        props.onHide();
+        success();
+      } else if (response2.isError) {
+        failer(response2?.error?.data?.message);
+        console.log("error");
+      }
+    } else {
+      if (!response.isLoading && response.isSuccess) {
         setFormData({
           name: "",
           surname: "",
@@ -101,30 +128,12 @@ const PropietarioModal = (props) => {
         props.onHide();
         success();
       } else if (response.isError) {
-        console.log("error");
-      }
-    } else {
-      addPropritario(formData);
-      if (!isLoading) {
-        setFormData({
-          name: "",
-          surname: "",
-          phone_1: "",
-          phone_2: "",
-          doc_identity: "",
-          email: "",
-          address: "",
-          department: "",
-          district: "",
-          dob: "",
-        });
-        props.onHide();
-        success();
-      } else if (isError) {
+        failer(response?.error?.data?.message);
         console.log("error");
       }
     }
-  };
+  }, [response, response2]);
+
   return (
     <>
       <Modal show={props.show} onHide={props.onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

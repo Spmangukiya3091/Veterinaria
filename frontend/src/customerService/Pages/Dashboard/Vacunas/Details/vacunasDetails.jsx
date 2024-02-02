@@ -8,11 +8,12 @@ import VacunasModal from "../Modal/VacunasModal";
 import Alert from "../../../../Components/alert/Alert";
 import { useGetSingleVaccineQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
+import Loader from "../../../../Components/loader/Loader";
 
 const VacunasDetails = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
-  
+
   const [showDropdown, setShowDropdown] = useState(true);
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -39,7 +40,7 @@ const VacunasDetails = () => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

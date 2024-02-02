@@ -5,6 +5,7 @@ import "./datePicker.scss";
 
 function SingleInputDateRangePicker({ value, onChange }) {
   const handleDateChange = (selectedDates) => {
+    console.log(selectedDates)
     if (onChange) {
       onChange(selectedDates);
     }

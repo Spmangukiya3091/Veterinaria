@@ -15,6 +15,7 @@ import { failer, success } from "../../../Components/alert/success";
 // import { useDispatch } from "react-redux";
 // import { showToast } from "../../../store/tostify";
 import axios from "axios";
+import Loader from "../../../Components/loader/Loader";
 
 function Citas({ email }) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -23,7 +24,7 @@ function Citas({ email }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [appId, setAppId] = useState("");
+  const [appId, setAppId] = useState();
   const [searchValue, setSearchValue] = useState("");
   const [searchData, setSearchData] = useState({
     status: "",
@@ -104,8 +105,8 @@ function Citas({ email }) {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -216,7 +217,7 @@ function Citas({ email }) {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -287,7 +288,7 @@ function Citas({ email }) {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option>Seleccionar</option>
+                                  <option disabled>Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>

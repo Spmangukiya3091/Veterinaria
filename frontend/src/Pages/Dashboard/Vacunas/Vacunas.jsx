@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./vacunas.scss";
-import { Button, ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import { vacunasData } from "./vacunasData";
 import { Link } from "react-router-dom";
 import VacunasModal from "./Modal/VacunasModal";
@@ -14,6 +14,7 @@ import { showToast } from "../../../store/tostify";
 import { useDispatch } from "react-redux";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import axios from "axios";
+import Loader from "../../../Components/loader/Loader";
 
 const Vacunas = ({ email }) => {
   const dispatch = useDispatch();
@@ -98,8 +99,8 @@ const Vacunas = ({ email }) => {
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -198,7 +199,7 @@ const Vacunas = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

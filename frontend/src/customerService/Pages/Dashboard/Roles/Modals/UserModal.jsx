@@ -100,7 +100,7 @@ const UserModal = (props) => {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Tipo de usuario</Form.Label>
                   <Form.Select aria-label="Default select example">
-                    <option>Tipo de usuario</option>
+                    <option disabled>Tipo de usuario</option>
                     <option value="Administrador Estandar">
                       Administrador Estandar
                     </option>

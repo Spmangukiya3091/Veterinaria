@@ -5,9 +5,9 @@ import SingleInputDateRangePicker from "../../../../../../Components/date-picker
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useGetPetAppoinmentQuery } from "../../../../../../services/ApiServices";
 import moment from "moment";
+import Loader from "../../../../../../Components/loader/Loader";
 
 function Historical({ id }) {
-  
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,14 +20,16 @@ function Historical({ id }) {
   });
   const [searchQuery, setSearchQuery] = useState(`${id}`);
 
-  const historyList = useGetPetAppoinmentQuery(searchQuery, { refetchOnMountOrArgChange: true });
+  const historyList = useGetPetAppoinmentQuery(searchQuery, {
+    refetchOnMountOrArgChange: true,
+  });
 
   useEffect(() => {
     if (!historyList.isLoading && id !== undefined) {
       setLoading(false);
-      setData(historyList?.data?.appointments);
+      setData(historyList?.data?.appointments || []);
     } else if (historyList.isError) {
-      setError(false);
+      setError(true);
       setLoading(false);
     }
   }, [historyList, id]);
@@ -47,16 +49,15 @@ function Historical({ id }) {
   };
 
   const filteredData = data.filter(({ pet }) => {
-    const searchString = searchValue;
+    const searchString = searchValue.toLowerCase();
     return pet.toLowerCase().includes(searchString);
   });
+
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
 
   const indexOfLastPost = currentPage * postsPerPage;
-
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-
   const adjustedIndexOfFirstPost = Math.max(0, indexOfFirstPost);
 
   const currentPosts = filteredData.slice(adjustedIndexOfFirstPost, indexOfLastPost);
@@ -68,34 +69,37 @@ function Historical({ id }) {
       [name]: value,
     });
   };
+
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
 
   const handleSearchFilter = () => {
-    // Refetch data based on the search criteria
-    setSearchQuery(
-      searchData.status === ""
-        ? `${id}?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
-        : searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}`
-        : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
-    );
-    // historyList.refetch();
+    const queryParams = [];
+
+    if (searchData.status) {
+      queryParams.push(`status=${searchData.status}`);
+    }
+
+    if (searchData.startDate || searchData.endDate) {
+      queryParams.push(`startDate=${searchData.startDate}&endDate=${searchData.endDate}`);
+    }
+
+    const newQuery = `${id}${queryParams.length > 0 ? "?" : ""}${queryParams.join("&")}`;
+    console.log(newQuery);
+    setSearchQuery(newQuery);
     setDropdownOpen(false);
   };
   return (
     <>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error ? (
         "Some Error Occured"
       ) : (
@@ -149,7 +153,6 @@ function Historical({ id }) {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -172,7 +175,7 @@ function Historical({ id }) {
                                   onChange={handleChange}
                                   value={searchData.status}
                                 >
-                                  <option>Seleccionar</option>
+                                  <option disabled >Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>

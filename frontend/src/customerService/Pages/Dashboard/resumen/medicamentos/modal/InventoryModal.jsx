@@ -37,7 +37,7 @@ function InventoryModal(props) {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Categoría</Form.Label>
                   <Form.Select aria-label="Default select example">
-                    <option>Categoría</option>
+                    <option disabled>Categoría</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
@@ -70,7 +70,7 @@ function InventoryModal(props) {
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                       <Form.Label>Estado</Form.Label>
                       <Form.Select aria-label="Default select example">
-                        <option>Estado</option>
+                        <option disabled>Estado</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
                         <option value="3">Three</option>

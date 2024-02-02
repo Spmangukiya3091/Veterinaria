@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import "./roles.scss";
 import { Link } from "react-router-dom";
-import {
-  Button,
-  ButtonGroup,
-  Col,
-  Collapse,
-  Dropdown,
-  Form,
-  Row,
-} from "react-bootstrap";
+import { Button, ButtonGroup, Col, Collapse, Dropdown, Form, Row } from "react-bootstrap";
 import { RolesData } from "./RolesData";
 import UserModal from "./Modals/UserModal";
 import UpdPwdModal from "./Modals/UpdPwdModal";
@@ -23,9 +15,7 @@ const Roles = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [dropdowns, setDropdown] = useState(
-    new Array(RolesData.length).fill(false),
-  );
+  const [dropdowns, setDropdown] = useState(new Array(RolesData.length).fill(false));
 
   const handleClose = () => setShow(false);
   const handlePwdClose = () => setShowPwd(false);
@@ -56,10 +46,7 @@ const Roles = () => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const adjustedIndexOfFirstPost = Math.max(0, indexOfFirstPost);
-  const currentPosts = RolesData.slice(
-    adjustedIndexOfFirstPost,
-    indexOfLastPost,
-  );
+  const currentPosts = RolesData.slice(adjustedIndexOfFirstPost, indexOfLastPost);
 
   return (
     <>
@@ -73,16 +60,9 @@ const Roles = () => {
             <Col lg={2} xl={3} className="w-lg-250px w-xl-350px">
               <div className="head container-sm">
                 <div className="img mb-7">
-              <img
- width={"82px"}
-                        className="round-image"
-                        src="/images/avatarImg.png"
-                        alt=""
-                      />
+                  <img width={"82px"} className="round-image" src="/images/avatarImg.png" alt="" />
                 </div>
-                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">
-                  Nombre completo de Admin
-                </p>
+                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">Nombre completo de Admin</p>
 
                 <div className="information">
                   <div className="fs-6 pb-5">
@@ -101,11 +81,7 @@ const Roles = () => {
                         >
                           Details
                           <span className="ms-2 rotate-180">
-                            <i
-                              className={`fa-solid fa-chevron-${
-                                showDropdown ? "up" : "down"
-                              } fs-8`}
-                            ></i>
+                            <i className={`fa-solid fa-chevron-${showDropdown ? "up" : "down"} fs-8`}></i>
                           </span>
                         </div>
                       </div>
@@ -125,9 +101,7 @@ const Roles = () => {
                           <div className="text-gray-600">1234 567 890</div>
 
                           <div className="fw-bold mt-5">Fecha creación</div>
-                          <div className="text-gray-600">
-                            10 Nov 2023, 2:40 pm
-                          </div>
+                          <div className="text-gray-600">10 Nov 2023, 2:40 pm</div>
                           <div className="d-flex flex-column mt-9">
                             <Button
                               className="btn btn-primary p-5 my-2"
@@ -161,13 +135,7 @@ const Roles = () => {
                     <div className="card-title">
                       <div className="d-flex align-items-center position-relative my-1">
                         <span className="svg-icon svg-icon-1 position-absolute ms-4">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                          >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <rect
                               opacity="0.5"
                               x="17.0365"
@@ -207,25 +175,18 @@ const Roles = () => {
                             Filtros
                           </Dropdown.Toggle>
                           <Dropdown.Menu
-                            className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${
-                              isDropdownOpen ? "show" : ""
-                            }`}
-                            
+                            className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
                             id="kt_menu_62444587ce1ee"
                           >
                             <div className="px-7 py-5">
-                              <div className="fs-5 text-dark fw-bolder">
-                                Filtros
-                              </div>
+                              <div className="fs-5 text-dark fw-bolder">Filtros</div>
                             </div>
                             {/* <div className="separator border-gray-200"></div> */}
                             <Dropdown.Divider className=" border-gray-200" />
                             <div>
                               <div className="px-7 py-5">
                                 <div className="mb-5 ">
-                                  <label className="form-label fw-bold">
-                                    Tipo de usuario
-                                  </label>
+                                  <label className="form-label fw-bold">Tipo de usuario</label>
                                   <div>
                                     <select
                                       className="form-select form-select-solid"
@@ -234,7 +195,7 @@ const Roles = () => {
                                       data-dropdown-parent="#kt_menu_62444587ce1ee"
                                       data-allow-clear="true"
                                     >
-                                      <option>Seleccionar</option>
+                                      <option disabled >Seleccionar</option>
                                       <option value="Administrador Estandar">Administrador Estandar</option>
 
                                       <option value="Servicio al Cliente">Servicio al Cliente</option>
@@ -242,9 +203,7 @@ const Roles = () => {
                                   </div>
                                 </div>
                                 <div className="calender">
-                                  <Form.Label className="fw-bold">
-                                    Fecha de creación
-                                  </Form.Label>
+                                  <Form.Label className="fw-bold">Fecha de creación</Form.Label>
                                   <SingleInputDateRangePicker />
                                 </div>
                               </div>
@@ -283,10 +242,7 @@ const Roles = () => {
                     </div>
                   </div>
                   <div className="card-body pt-0">
-                    <table
-                      className="table align-middle table-row-dashed fs-6 gy-5"
-                      id="kt_ecommerce_products_table"
-                    >
+                    <table className="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
                       <thead>
                         <tr className="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                           <th className="">COD.</th>
@@ -299,86 +255,50 @@ const Roles = () => {
                       </thead>
                       <tbody>
                         {currentPosts ? (
-                          currentPosts.map(
-                            (
-                              {
-                                COD,
-                                NOMBRE,
-                                USUARIO,
-                                CORREO,
-                                UCONEXION,
-                                DETALLES,
-                              },
-                              i,
-                            ) => (
-                              <tr key={i}>
-                                <td className="text-start pe-0">
-                                  <span className=" text-gray-600 ">{COD}</span>
-                                </td>
-                                <td className="text-start pe-0">{NOMBRE}</td>
+                          currentPosts.map(({ COD, NOMBRE, USUARIO, CORREO, UCONEXION, DETALLES }, i) => (
+                            <tr key={i}>
+                              <td className="text-start pe-0">
+                                <span className=" text-gray-600 ">{COD}</span>
+                              </td>
+                              <td className="text-start pe-0">{NOMBRE}</td>
 
-                                <td className="text-start pe-0" data-order="16">
-                                  {USUARIO}
-                                </td>
-                                <td className="text-start pe-0">{CORREO}</td>
-                                <td className="text-start pe-0">{UCONEXION}</td>
-                                <td className="text-end">
-                                  <Dropdown
-                                    as={ButtonGroup}
-                                    show={dropdowns}
-                                    onClose={() => closeDropdowns(i)}
-                                    onToggle={() => toggleDropdowns(i)}
+                              <td className="text-start pe-0" data-order="16">
+                                {USUARIO}
+                              </td>
+                              <td className="text-start pe-0">{CORREO}</td>
+                              <td className="text-start pe-0">{UCONEXION}</td>
+                              <td className="text-end">
+                                <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
+                                  <Dropdown.Toggle
+                                    className={`dropdown-toggle btn btn-sm  btn-flex btn-center  ${dropdowns[i] === true ? "active" : ""}`}
+                                    id="dropdown-basic"
                                   >
-                                    <Dropdown.Toggle
-                                      className={`dropdown-toggle btn btn-sm  btn-flex btn-center  ${
-                                        dropdowns[i] === true ? "active" : ""
-                                      }`}
-                                      id="dropdown-basic"
-                                    >
-                                      {DETALLES}
-                                      <i className="fa-solid fa-chevron-down"></i>
-                                    </Dropdown.Toggle>
-                                    {dropdowns[i] && (
-                                      <Dropdown.Menu
-                                        className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                        
-                                        
-                                      >
-                                        <Dropdown.Item className="menu-item px-3">
-                                          <Link
-                                            to="#"
-                                            className="menu-link px-3"
-                                          >
-                                            Contraseña a correo
-                                          </Link>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="menu-item px-3">
-                                          <Link
-                                            to="#"
-                                            className="menu-link px-3"
-                                            onClick={handleShow}
-                                            
-                                          >
-                                            Editar
-                                          </Link>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="menu-item px-3">
-                                          <Link
-                                            to="#"
-                                            className="menu-link px-3 delete"
-                                            onClick={() => setModalShow(true)}
-                                            
-                                          >
-                                            Eliminar usuario
-                                          </Link>
-                                        </Dropdown.Item>
-                                      </Dropdown.Menu>
-                                    )}
-                                  </Dropdown>
-                                </td>
-                              </tr>
-                            ),
-                          )
+                                    {DETALLES}
+                                    <i className="fa-solid fa-chevron-down"></i>
+                                  </Dropdown.Toggle>
+                                  {dropdowns[i] && (
+                                    <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
+                                      <Dropdown.Item className="menu-item px-3">
+                                        <Link to="#" className="menu-link px-3">
+                                          Contraseña a correo
+                                        </Link>
+                                      </Dropdown.Item>
+                                      <Dropdown.Item className="menu-item px-3">
+                                        <Link to="#" className="menu-link px-3" onClick={handleShow}>
+                                          Editar
+                                        </Link>
+                                      </Dropdown.Item>
+                                      <Dropdown.Item className="menu-item px-3">
+                                        <Link to="#" className="menu-link px-3 delete" onClick={() => setModalShow(true)}>
+                                          Eliminar usuario
+                                        </Link>
+                                      </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                  )}
+                                </Dropdown>
+                              </td>
+                            </tr>
+                          ))
                         ) : (
                           <tr>
                             <td colSpan="7">No data available</td>
@@ -389,17 +309,9 @@ const Roles = () => {
                   </div>
                 </div>
               </div>
-              <Alert
-                show={modalShow}
-                onHide={handleHide}
-                msg={"¿Seguro de completar esta operación?"}
-              />
+              <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
               <UserModal show={show} onHide={handleClose} />
-              <CitasPagination
-                current={currentPage}
-                total={Math.ceil(RolesData.length / postsPerPage)}
-                onPageChange={setCurrentPage}
-              />
+              <CitasPagination current={currentPage} total={Math.ceil(RolesData.length / postsPerPage)} onPageChange={setCurrentPage} />
 
               <UpdPwdModal show={showPwd} onHide={handlePwdClose} />
             </Col>

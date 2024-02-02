@@ -1,83 +1,69 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useAddSpecialityMutation, useEditSpecialtyMutation, useGetSingleSpecialityQuery } from "../../../../services/ApiServices";
 
-function EspecialidadModal({ show, handleClose, id }) {
+function EspecialidadModal({ show, handleClose, id, filter }) {
   const [formData, setFormData] = useState({
     speciality: "",
   });
 
-  const [addSpeciality] = useAddSpecialityMutation();
-  const [updateSpeciality] = useEditSpecialtyMutation();
+  const [addSpeciality, response] = useAddSpecialityMutation();
+  const [updateSpeciality, response2] = useEditSpecialtyMutation();
 
-  const {
-    data: singleSpecialty,
-    isLoading,
-    isError,
-  } = useGetSingleSpecialityQuery(id, {
+  const singleSpecialty = useGetSingleSpecialityQuery(id, {
     refetchOnMountOrArgChange: true,
   });
 
   useEffect(() => {
-    if (id !== undefined && singleSpecialty && singleSpecialty.speciality.length > 0) {
-      // Set form data with fetched specialty when id is not undefined and data is available
-      setFormData({ speciality: singleSpecialty.speciality[0].speciality });
+    if (id !== undefined && !singleSpecialty.isLoading) {
+      
+      setFormData({ speciality: singleSpecialty?.data?.speciality?.speciality });
     }
   }, [id, singleSpecialty]);
 
   const handleSubmit = async () => {
-    try {
-      if (id !== undefined) {
-        if (isLoading) {
-          console.log("Fetching data...");
-          return;
-        }
-
-        if (isError) {
-          console.error("Error fetching data:", singleSpecialty.error);
-          return;
-        }
-
-        const body = {
-          id,
-          speciality: formData.speciality,
-        };
-
-        // Update the specialty
-        const updateResult = await updateSpeciality(body);
-
-        if (updateResult.error) {
-          console.error("Error updating specialty:", updateResult.error);
-          //   error("Error updating specialty.");
-        } else {
-          // Reset form and close modal on success
-          setFormData({ speciality: "" });
-          handleClose();
-          success("Specialty updated successfully!");
-        }
-      } else {
-        // Add new specialty logic
-        const addResult = await addSpeciality(formData);
-
-        if (addResult.error) {
-          console.error("Error adding specialty:", addResult.error);
-          //   error("Error adding specialty.");
-        } else {
-          // Reset form and close modal on success
-          setFormData({ speciality: "" });
-          handleClose();
-          success("Specialty added successfully!");
-        }
-      }
-    } catch (error) {
-      // Handle general error
-      console.error("Error occurred:", error);
-      error("An unexpected error occurred.");
+    if (id !== undefined) {
+      const body = {
+        id,
+        speciality: formData.speciality,
+      };
+      // Update the specialty
+      await updateSpeciality(body);
+    } else {
+      // Add new specialty logic
+      await addSpeciality(formData);
     }
   };
-
+  useEffect(() => {
+    if (id !== undefined) {
+      if (!response2.isLoading && response2.isSuccess) {
+        setFormData({
+          speciality: "",
+        });
+        handleClose();
+        filter.refetch();
+        success();
+      } else if (response2.isError) {
+        failer(response2?.error?.data?.message);
+        console.log("error");
+      }
+    } else {
+      if (!response.isLoading && response.isSuccess) {
+        setFormData({
+          speciality: "",
+        });
+        handleClose();
+        success();
+        filter.refetch();
+      } else if (response.isError) {
+        failer(response?.error?.data?.message);
+        console.log("error");
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2]);
   return (
     <div>
       <Modal show={show} onHide={handleClose} centered>

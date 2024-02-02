@@ -14,6 +14,7 @@ import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVe
 import { showToast } from "../../../../../store/tostify";
 import { failer, success } from "../../../../Components/alert/success";
 import { useDispatch } from "react-redux";
+import Loader from "../../../../Components/loader/Loader";
 
 const MascotasDetails = ({ email }) => {
   const location = useLocation();
@@ -112,7 +113,7 @@ const MascotasDetails = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

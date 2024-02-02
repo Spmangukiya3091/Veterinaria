@@ -106,14 +106,39 @@ const PagosModal = (props) => {
         props.onHide();
         success();
         props.filter.refetch();
+        setFormData({
+          payment_no: 0,
+          transfer_no: 0,
+          owner: "",
+          doctor: "",
+          service: "",
+          amount: 0,
+          discount: 0,
+          payment_method: "",
+          final_amount: 0,
+          description: "",
+        });
       } else if (response2.isError && response2.status === "rejected") {
         console.log(response2.error);
         failer(response2?.error?.data?.message);
       }
     } else {
       if (!response.isLoading && response.status === "fulfilled") {
-        props.onHide();
+        console.log(response);
         success();
+        setFormData({
+          payment_no: 0,
+          transfer_no: 0,
+          owner: "",
+          doctor: "",
+          service: "",
+          amount: 0,
+          discount: 0,
+          payment_method: "",
+          final_amount: 0,
+          description: "",
+        });
+        props.onHide();
         props.filter.refetch();
       } else if (response.isError && response.status === "rejected") {
         console.log(response.error);
@@ -162,7 +187,7 @@ const PagosModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Propietario</Form.Label>
                   <Form.Select aria-label="Default select example" name="owner" onChange={handleChange} value={formData.owner}>
-                    <option>Propietario</option>
+                    <option disabled>Propietario</option>
                     {owners?.data?.ownersList.map(({ id, name, surname }) => (
                       <option key={id} value={name + " " + surname}>
                         {name + " " + surname}
@@ -177,14 +202,12 @@ const PagosModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Doctor</Form.Label>
                   <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor}>
-                    <option>Doctor</option>
-                    {doctors?.data?.veterinarianList
-                      
-                      .map(({ id, name, surname }) => (
-                        <option key={id} value={name + " " + surname}>
-                          {name + " " + surname}
-                        </option>
-                      ))}
+                    <option disabled>Doctor</option>
+                    {doctors?.data?.veterinarianList.map(({ id, name, surname }) => (
+                      <option key={id} value={name + " " + surname}>
+                        {name + " " + surname}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -234,7 +257,7 @@ const PagosModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Método de Pago</Form.Label>
                   <Form.Select name="payment_method" onChange={handleChange} value={formData.payment_method}>
-                    <option>Método de Pago</option>
+                    <option disabled>Método de Pago</option>
                     <option value="cash">Efectivo</option>
                     <option value="credit card">Tarjeta de Crédito</option>
                     <option value="debit card">Tarjeta de Débito</option>

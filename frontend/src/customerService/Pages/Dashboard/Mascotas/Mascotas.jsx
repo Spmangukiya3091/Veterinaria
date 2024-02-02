@@ -13,6 +13,7 @@ import { failer, success } from "../../../Components/alert/success";
 import { showToast } from "../../../../store/tostify";
 import { useDispatch } from "react-redux";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
+import Loader from "../../../Components/loader/Loader";
 
 const Mascotas = ({ email }) => {
   const navigate = useNavigate();
@@ -117,8 +118,8 @@ const Mascotas = ({ email }) => {
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -187,7 +188,7 @@ const Mascotas = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

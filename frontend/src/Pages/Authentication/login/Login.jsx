@@ -62,6 +62,34 @@ function Login() {
         sameSite: "Lax",
         secure: false,
       });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "192.168.1.15",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "192.168.1.15",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "192.168.1.15",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "192.168.1.15",
+        sameSite: "Lax",
+        secure: false,
+      });
       dispatch(showToast("iniciar sesión exitosamente", "SUCCESS_TOAST"));
     } else if (data === undefined) {
       dispatch(showToast("Invalid email or password", "FAIL_TOAST"));

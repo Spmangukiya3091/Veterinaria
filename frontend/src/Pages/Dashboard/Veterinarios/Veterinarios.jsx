@@ -8,14 +8,16 @@ import SingleInputDateRangePicker from "../../../Components/date-picker/DatePick
 import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useGetSpecialitiesQuery, useGetVeterinariansFilterQuery } from "../../../services/ApiServices";
+import Loader from "../../../Components/loader/Loader";
 
-const Veterinarios = () => {
+const Veterinarios = ({ email }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
+  const [specialityData, setSpecialityData] = useState([]);
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -30,7 +32,8 @@ const Veterinarios = () => {
   useEffect(() => {
     if (!veterinList.isLoading && !specialities.isLoading) {
       setLoading(false);
-      setData(veterinList.data.veterinarianList);
+      setData(veterinList?.data?.veterinarianList);
+      setSpecialityData(specialities?.data?.specialityList);
     } else if (veterinList.isError || specialities.isError) {
       setError(true);
       setLoading(false);
@@ -102,8 +105,8 @@ const Veterinarios = () => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -181,8 +184,8 @@ const Veterinarios = () => {
                                 onChange={handleChange}
                                 value={searchData.speciality}
                               >
-                                <option>Seleccionar</option>
-                                {specialities?.data?.specialityList.map((speciality, i) => (
+                                <option disabled>Seleccionar</option>
+                                {specialityData.map((speciality, i) => (
                                   <option key={i} value={speciality.speciality}>
                                     {speciality.speciality}
                                   </option>
@@ -237,7 +240,7 @@ const Veterinarios = () => {
               </div>
             </div>
             {loading ? (
-              <Spinner animation="border" variant="primary" />
+              <Loader />
             ) : error ? (
               "Some Error Occured"
             ) : (
@@ -276,7 +279,7 @@ const Veterinarios = () => {
           </div>
         </div>
         <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
-        <VeterinaModal show={show} onHide={handleClose} />
+        <VeterinaModal show={show} onHide={handleClose} email={email} />
         <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
         <VeterinaUserModal show={openModal} onHide={handleModalHide} />
       </div>

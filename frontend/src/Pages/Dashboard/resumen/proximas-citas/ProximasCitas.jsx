@@ -20,7 +20,7 @@ function ProximasCitas({ data }) {
             </tr>
           </thead>
           <tbody>
-            {data ? (
+            {data.appointments.length > 0 ? (
               data.appointments.map(({ id, pet, veterinarian, scheduleStart, scheduleEnd, date }, i) => (
                 <tr key={i}>
                   <td>{i + 1}</td>
@@ -47,7 +47,9 @@ function ProximasCitas({ data }) {
               ))
             ) : (
               <tr>
-                <td colSpan="7">No data available</td>
+                <td colSpan="7" style={{textAlign: "center"}}>
+                  No data available
+                </td>
               </tr>
             )}
           </tbody>

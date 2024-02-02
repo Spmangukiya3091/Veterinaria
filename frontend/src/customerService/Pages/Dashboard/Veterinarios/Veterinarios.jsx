@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  Col,
-  Dropdown,
-  Form,
-  Row,
-} from "react-bootstrap";
+import { Button, ButtonGroup, Card, Col, Dropdown, Form, Row } from "react-bootstrap";
 import "./veterinarios.scss";
 import { veterinaData } from "./VeterinaData";
 import VeterinaModal from "./Modals/VeterinaModal";
@@ -17,7 +9,7 @@ import SingleInputDateRangePicker from "../../../Components/date-picker/DatePick
 import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
 
-const Veterinarios = () => {
+const Veterinarios = ({ email }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -45,10 +37,7 @@ const Veterinarios = () => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const adjustedIndexOfFirstPost = Math.max(0, indexOfFirstPost);
-  const currentPosts = veterinaData.slice(
-    adjustedIndexOfFirstPost,
-    indexOfLastPost,
-  );
+  const currentPosts = veterinaData.slice(adjustedIndexOfFirstPost, indexOfLastPost);
 
   return (
     <>
@@ -63,13 +52,7 @@ const Veterinarios = () => {
               <div className="card-title">
                 <div className="d-flex align-items-center position-relative my-1">
                   <span className="svg-icon svg-icon-1 position-absolute ms-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <rect
                         opacity="0.5"
                         x="17.0365"
@@ -109,10 +92,7 @@ const Veterinarios = () => {
                       Filtros
                     </Dropdown.Toggle>
                     <Dropdown.Menu
-                      className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${
-                        isDropdownOpen ? "show" : ""
-                      }`}
-                      
+                      className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
                       id="kt_menu_62444587ce1ee"
                     >
                       <div className="px-7 py-5">
@@ -123,9 +103,7 @@ const Veterinarios = () => {
                       <div>
                         <div className="px-7 py-5">
                           <div className="mb-5 ">
-                            <label className="form-label fw-bold">
-                              Especialidad
-                            </label>
+                            <label className="form-label fw-bold">Especialidad</label>
                             <div>
                               <select
                                 className="form-select form-select-solid"
@@ -134,18 +112,14 @@ const Veterinarios = () => {
                                 data-dropdown-parent="#kt_menu_62444587ce1ee"
                                 data-allow-clear="true"
                               >
-                                <option>Seleccionar</option>
+                                <option disabled>Seleccionar</option>
                                 <option value="Pediatrics">Pediatrics</option>
-                                <option value="General medicine">
-                                  General medicine
-                                </option>
+                                <option value="General medicine">General medicine</option>
                               </select>
                             </div>
                           </div>
                           <div className="calender">
-                            <Form.Label className="fw-bold">
-                              Fecha de creación
-                            </Form.Label>
+                            <Form.Label className="fw-bold">Fecha de creación</Form.Label>
                             <SingleInputDateRangePicker />
                           </div>
                         </div>
@@ -189,40 +163,25 @@ const Veterinarios = () => {
             <div className="card-body">
               <Row>
                 {currentPosts ? (
-                  currentPosts.map(
-                    ({ IMAGEURL, DNAME, DESIGNATON, CALENDER, PROFILE }, i) => (
-                      <Col sm={6} md={4} lg={3} key={i}>
-                        <Card className="doctor-card">
-                          <Card.Img variant="top" src={IMAGEURL} />
-                          <Card.Body>
-                            <Card.Title>{DNAME}</Card.Title>
-                            <Card.Text>{DESIGNATON}</Card.Text>
-                            <div className="d-flex justify-content-center">
-                              <Button
-                                variant="primary"
-                                onClick={() =>
-                                  navigate("/customerservice/calendario")
-                                }
-                                className="me-4"
-                              >
-                                {CALENDER}
-                              </Button>
-                              <Button
-                                variant="secondary"
-                                onClick={() =>
-                                  navigate(
-                                    "/customerservice/veterinarios/veterinariodetails",
-                                  )
-                                }
-                              >
-                                {PROFILE}
-                              </Button>
-                            </div>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    ),
-                  )
+                  currentPosts.map(({ IMAGEURL, DNAME, DESIGNATON, CALENDER, PROFILE }, i) => (
+                    <Col sm={6} md={4} lg={3} key={i}>
+                      <Card className="doctor-card">
+                        <Card.Img variant="top" src={IMAGEURL} />
+                        <Card.Body>
+                          <Card.Title>{DNAME}</Card.Title>
+                          <Card.Text>{DESIGNATON}</Card.Text>
+                          <div className="d-flex justify-content-center">
+                            <Button variant="primary" onClick={() => navigate("/customerservice/calendario")} className="me-4">
+                              {CALENDER}
+                            </Button>
+                            <Button variant="secondary" onClick={() => navigate("/customerservice/veterinarios/veterinariodetails")}>
+                              {PROFILE}
+                            </Button>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  ))
                 ) : (
                   <div>
                     <p>No records Found</p>
@@ -232,17 +191,9 @@ const Veterinarios = () => {
             </div>
           </div>
         </div>
-        <Alert
-          show={modalShow}
-          onHide={handleHide}
-          msg={"¿Seguro de completar esta operación?"}
-        />
-        <VeterinaModal show={show} onHide={handleClose} />
-        <CitasPagination
-          current={currentPage}
-          total={Math.ceil(veterinaData.length / postsPerPage)}
-          onPageChange={setCurrentPage}
-        />
+        <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
+        <VeterinaModal show={show} onHide={handleClose} email={email} />
+        <CitasPagination current={currentPage} total={Math.ceil(veterinaData.length / postsPerPage)} onPageChange={setCurrentPage} />
         <VeterinaUserModal show={openModal} onHide={handleModalHide} />
       </div>
     </>

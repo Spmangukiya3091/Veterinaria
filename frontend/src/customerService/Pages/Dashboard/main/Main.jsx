@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./main.scss";
-import { Spinner } from "react-bootstrap";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Sidebar from "../../../Components/sidebar/Sidebar";
@@ -23,6 +22,7 @@ import Footer from "../../../Components/footer/Footer";
 import { useGetLoginUserDetailsQuery } from "../../../../services/ApiServices";
 import { ToastifyContainer } from "../../../../store/tostify";
 import { Helmet } from "react-helmet";
+import Loader from "../../../Components/loader/Loader";
 
 // import Roles from "../Roles/Roles";
 // import Veterinarios from "../Veterinarios/Veterinarios";
@@ -76,11 +76,11 @@ const CustomerServiceMain = () => {
       </Helmet>
       <ToastifyContainer />
       {loading !== false ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error !== false ? (
         "error"
       ) : (
-        <div className="main-section">
+        <div className="main-section-customer-service">
           <Sidebar />
 
           <div id="main" className="main">

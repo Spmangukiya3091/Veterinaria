@@ -11,6 +11,7 @@ import CitasPagination from "../../../Components/pagination/citas-pagination/Cit
 import { useGetALlProductListQuery, useRemoveProductMutation } from "../../../../services/ApiServices";
 import { failer, success } from "../../../Components/alert/success";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
+import Loader from "../../../Components/loader/Loader";
 
 const Inventory = ({ email }) => {
   const [show, setShow] = useState(false);
@@ -86,6 +87,8 @@ const Inventory = ({ email }) => {
       startDate: "",
       endDate: "",
     });
+    setSearchQuery("");
+
   };
 
   const filteredData = data.filter(({ product, category, presentation, sku }) => {
@@ -114,13 +117,15 @@ const Inventory = ({ email }) => {
 
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
+      console.log(selectedDates);
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
+  console.log(searchData);
 
   const handleSearchFilter = () => {
     // Refetch data based on the search criteria
@@ -192,7 +197,7 @@ const Inventory = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -250,7 +255,6 @@ const Inventory = ({ email }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -264,7 +268,7 @@ const Inventory = ({ email }) => {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option>Seleccionar</option>
+                                  <option disabled>Seleccionar</option>
                                   <option value="active">Activo</option>
                                   <option value="inactive">Inactivo</option>
                                 </select>
@@ -355,10 +359,10 @@ const Inventory = ({ email }) => {
                           <td className="text-start pe-0" data-order="status">
                             <div
                               className={`${
-                                status === "inactivo" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
+                                status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
                               } `}
                             >
-                              <p className="mb-0">{status === "inactivo" ? "Inactivo" : "Activo"}</p>
+                              <p className="mb-0">{status === "inactive" ? "Inactivo" : "Activo"}</p>
                             </div>
                           </td>
                           <td className="text-end">
@@ -371,11 +375,7 @@ const Inventory = ({ email }) => {
                                 <i className="fa-solid fa-chevron-down"></i>
                               </Dropdown.Toggle>
                               {dropdowns[i] && (
-                                <Dropdown.Menu
-                                  className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                  
-                                  
-                                >
+                                <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                                   <Dropdown.Item className="menu-item px-3">
                                     <Link to={`/customerservice/Inventario/details/${id}`} className="menu-link px-3">
                                       Ver detalles
@@ -389,18 +389,12 @@ const Inventory = ({ email }) => {
                                       }}
                                       to="#"
                                       className="menu-link px-3"
-                                      
                                     >
                                       Editar
                                     </Link>
                                   </Dropdown.Item>
                                   <Dropdown.Item className="menu-item px-3">
-                                    <Link
-                                      onClick={() => setModalShow(true)}
-                                      to="#"
-                                      className="menu-link px-3 delete"
-                                      
-                                    >
+                                    <Link onClick={() => setModalShow(true)} to="#" className="menu-link px-3 delete">
                                       Eliminar producto
                                     </Link>
                                   </Dropdown.Item>

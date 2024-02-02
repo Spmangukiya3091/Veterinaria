@@ -6,6 +6,7 @@ import MainTab from "./tabs/main/MainTab";
 import { useLocation } from "react-router-dom";
 import { useGetSingleAppointmentQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
+import Loader from "../../../../components/loader/Loader";
 function CitasDetail() {
   const location = useLocation();
   const [show, setShow] = useState(true);
@@ -32,7 +33,7 @@ function CitasDetail() {
   return (
     <>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error ? (
         "Some Error Occured"
       ) : (

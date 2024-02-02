@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "./modal.scss";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import departamentoData from "../../../../Department.json";
 import { useGetSingleVeterinQuery, useGetSpecialitiesQuery } from "../../../../services/ApiServices";
 import axios from "axios";
@@ -187,10 +187,6 @@ const VeterinaUserModal = (props) => {
           // Handle success
           success();
           handleModalHide();
-        } else {
-          // Handle error
-          dispatch(showToast(response.error, "FAIL_TOAST"));
-          console.error("Error updating user");
         }
       } else {
         // Handle create logic
@@ -205,15 +201,12 @@ const VeterinaUserModal = (props) => {
           // Handle success
           success();
           handleModalHide();
-        } else {
-          // Handle error
-          dispatch(showToast(response.error, "FAIL_TOAST"));
-          console.error("Error creating user");
         }
       }
     } catch (error) {
       console.log(error);
-      dispatch(showToast("Internal Server Error", "FAIL_TOAST"));
+      failer(error?.response?.data?.message);
+      // dispatch(showToast("Internal Server Error", "FAIL_TOAST"));
     }
   };
   return (
@@ -273,7 +266,7 @@ const VeterinaUserModal = (props) => {
                     onChange={(e) => handleChange(e)}
                     name="specialityId"
                   >
-                    <option>Seleccionar</option>
+                    <option disabled >Seleccionar</option>
                     {specialities
                       ? specialities.map((speciality, i) => (
                           <option key={i} value={speciality.id}>
@@ -346,7 +339,7 @@ const VeterinaUserModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Sexo</Form.Label>
                   <Form.Select aria-label="Default select example" value={formData.sex} onChange={(e) => handleChange(e)} name="sex">
-                    <option>Sexo</option>
+                    <option disabled>Sexo</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
                   </Form.Select>

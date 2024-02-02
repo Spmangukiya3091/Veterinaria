@@ -1,14 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import "./veterinaProfileDetails.scss";
-import {
-  ButtonGroup,
-  Col,
-  Collapse,
-  Dropdown,
-  Image,
-  Row,
-} from "react-bootstrap";
+import { ButtonGroup, Col, Collapse, Dropdown, Image, Row } from "react-bootstrap";
 import MainTab from "./Tabs/MainTab";
 
 import { Link } from "react-router-dom";
@@ -49,9 +42,7 @@ const VeterinaProfileDetails = () => {
               <div className="symbol symbol-100px symbol-circle mb-7">
                 <Image src="/images/doctor1.png" alt="image" />
               </div>
-              <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">
-                DR. APELLIDOS DE DOCTOR
-              </p>
+              <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">DR. APELLIDOS DE DOCTOR</p>
               <div className="information">
                 <div className="d-flex  text-start flex-center">
                   <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
@@ -65,9 +56,7 @@ const VeterinaProfileDetails = () => {
                     <div className="fs-5 fw-bold text-gray-700">
                       <span className="w-50px">5 citas</span>
                     </div>
-                    <div className="fw-semibold text-muted">
-                      Citas pendientes
-                    </div>
+                    <div className="fw-semibold text-muted">Citas pendientes</div>
                   </div>
                 </div>
               </div>
@@ -86,11 +75,7 @@ const VeterinaProfileDetails = () => {
                   >
                     Details
                     <span className="ms-2 rotate-180">
-                      <i
-                        className={`fa-solid fa-chevron-${
-                          show ? "up" : "down"
-                        } fs-8`}
-                      ></i>
+                      <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                     </span>
                   </div>
                 </div>
@@ -115,47 +100,20 @@ const VeterinaProfileDetails = () => {
           </Col>
           <Col className="ms-lg-15">
             <div className="drop-down">
-              <Dropdown
-                as={ButtonGroup}
-                show={isDropdownOpen}
-                onClose={closeDropdown}
-                onToggle={toggleDropdown}
-                className="dropdown"
-              >
-                <Dropdown.Toggle
-                  className={`dropdown-toggle btn btn-sm btn-flex btn-center ${
-                    isDropdownOpen ? "active" : ""
-                  }`}
-                  id="dropdown-basic"
-                >
+              <Dropdown as={ButtonGroup} show={isDropdownOpen} onClose={closeDropdown} onToggle={toggleDropdown} className="dropdown">
+                <Dropdown.Toggle className={`dropdown-toggle btn btn-sm btn-flex btn-center ${isDropdownOpen ? "active" : ""}`} id="dropdown-basic">
                   Accion
                   <i className="fa-solid fa-chevron-down"></i>
                 </Dropdown.Toggle>
 
-                <Dropdown.Menu
-                  className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                  
-                  
-                >
+                <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                   <Dropdown.Item className="menu-item px-3">
-                    <Link
-                      to={"#"}
-                      onClick={handleShowCitas}
-                      href="#"
-                      className="menu-link px-3"
-                      
-                    >
+                    <Link to={"#"} onClick={handleShowCitas} href="#" className="menu-link px-3">
                       Agenda cita
                     </Link>
                   </Dropdown.Item>
                   <Dropdown.Item className="menu-item px-3">
-                    <Link
-                      to={"#"}
-                      onClick={handleShowMascota}
-                      href="#"
-                      className="menu-link px-3"
-                      
-                    >
+                    <Link to={"#"} onClick={handleShowMascota} href="#" className="menu-link px-3">
                       Editar
                     </Link>
                   </Dropdown.Item>
@@ -171,13 +129,7 @@ const VeterinaProfileDetails = () => {
                     </Link>
                   </Dropdown.Item> */}
                   <Dropdown.Item className="menu-item px-3">
-                    <Link
-                      to={"#"}
-                      onClick={() => setModalShow(true)}
-                      href="#"
-                      className="menu-link px-3 delete"
-                      
-                    >
+                    <Link to={"#"} onClick={() => setModalShow(true)} href="#" className="menu-link px-3 delete">
                       Eliminar
                     </Link>
                   </Dropdown.Item>
@@ -191,11 +143,7 @@ const VeterinaProfileDetails = () => {
         </Row>
         {/* <MascotasModal show={shown} handleClose={handleCloseMascota} /> */}
         {/* <CitasModal show={open} handleClose={handleCloseCitas} /> */}
-        <Alert
-          show={modalShow}
-          onHide={handleHide}
-          msg={"¿Seguro de completar esta operación?"}
-        />
+        <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
       </section>
     </>
   );

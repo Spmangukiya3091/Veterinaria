@@ -306,6 +306,7 @@ export const veterinaApi = createApi({
       query: (body) => ({
         url: `specialityRemove/${body.id}`,
         method: "DELETE",
+        body: body,
       }),
     }),
 

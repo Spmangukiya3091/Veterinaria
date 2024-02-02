@@ -14,6 +14,7 @@ import { failer, success } from "../../../Components/alert/success";
 // import { showToast } from "../../../store/tostify";
 // import { useDispatch } from "react-redux";
 import axios from "axios";
+import Loader from "../../../Components/loader/Loader";
 
 const Inventory = ({ email }) => {
   // const dispatch = useDispatch();
@@ -85,6 +86,7 @@ const Inventory = ({ email }) => {
       startDate: "",
       endDate: "",
     });
+    setSearchQuery("");
   };
 
   const filteredData = data.filter(({ product, category, presentation, sku }) => {
@@ -115,8 +117,8 @@ const Inventory = ({ email }) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -225,7 +227,10 @@ const Inventory = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <>
+          {/* <Loader /> */}
+          <Loader />
+        </>
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -296,7 +301,7 @@ const Inventory = ({ email }) => {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option>Seleccionar</option>
+                                  <option disabled>Seleccionar</option>
                                   <option value="active">Activo</option>
                                   <option value="inactive">Inactivo</option>
                                 </select>
@@ -387,10 +392,10 @@ const Inventory = ({ email }) => {
                           <td className="text-start pe-0" data-order="status">
                             <div
                               className={`${
-                                status === "inactivo" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
+                                status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
                               } `}
                             >
-                              <p className="mb-0">{status === "inactivo" ? "Inactivo" : "Activo"}</p>
+                              <p className="mb-0">{status === "inactive" ? "Inactivo" : "Activo"}</p>
                             </div>
                           </td>
                           <td className="text-end">
@@ -450,7 +455,7 @@ const Inventory = ({ email }) => {
               </div>
             </div>
           </div>
-          <InventoryModal show={show} onHide={handleClose} id={PID} />
+          <InventoryModal show={show} onHide={handleClose} id={PID} filter={products} />
           <CategoryModal show={showCategory} handleClose={handleCloseCategory} email={email} />
           <Alert
             show={modalShow}

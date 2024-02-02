@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CategoryModal from "./modal/CategoryModal";
 import moment from "moment";
-function Medicamentos({ data }) {
+function Medicamentos({ data, filter }) {
   const [showCategory, setShowCategory] = useState(false);
-  const handleCloseCategory = () => setShowCategory(false);
+  const handleCloseCategory = () => {
+    setShowCategory(false);
+    filter.refetch();
+  };
   const handleShowCategory = () => setShowCategory(true);
   return (
     <>
@@ -23,7 +26,7 @@ function Medicamentos({ data }) {
               </tr>
             </thead>
             <tbody style={{ overflowY: "auto" }}>
-              {data?.categoryList.map((category, i) => (
+              {data?.categories.map((category, i) => (
                 <tr key={i}>
                   <td>{category.category}</td>
                   <td>{category.productCount}</td>

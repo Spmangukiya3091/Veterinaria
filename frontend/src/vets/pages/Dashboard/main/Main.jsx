@@ -19,6 +19,7 @@ import Navbars from "../../../components/navbar/Navbars";
 // import Desktop from "../desktop/Desktop";
 import { useGetSingleVeterinQuery } from "../../../../services/ApiServices";
 import { Helmet } from "react-helmet";
+import Loader from "../../../components/loader/Loader";
 
 function Main() {
   const navigate = useNavigate();
@@ -62,18 +63,18 @@ function Main() {
       setData(response?.data?.veterinarianData);
     }
   }, [response]);
-  
+
   return (
     <>
       <Helmet>
         <title>{capitalize(title)} : - Veterinaria Panel</title>
       </Helmet>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error ? (
         "error"
       ) : (
-        <div className="main-section">
+        <div className="main-section-veterine">
           <Sidebar />
 
           <div id="main" className="main">
@@ -91,8 +92,8 @@ function Main() {
               <Route path="/Inventario/details/:id" element={<InventoryDetails />} />
               {/* <Route path="/desktop" element={<Desktop />} /> */}
             </Routes>
-            <Footer />
           </div>
+          <Footer />
         </div>
       )}
     </>

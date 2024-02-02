@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./main.scss";
-import { Spinner } from "react-bootstrap";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Sidebar from "../../../Components/sidebar/Sidebar";
@@ -25,6 +24,7 @@ import VeterinaProfileDetails from "../Veterinarios/details/VeterinaProfileDetai
 import Footer from "../../../Components/footer/Footer";
 import { useGetLoginUserDetailsQuery } from "../../../services/ApiServices";
 import { Helmet } from "react-helmet";
+import Loader from "../../../Components/loader/Loader";
 
 const AdminMain = () => {
   const navigate = useNavigate();
@@ -72,11 +72,11 @@ const AdminMain = () => {
         <title>{capitalize(title)} : - Veterinaria Admin Panel</title>
       </Helmet>
       {loading !== false ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error !== false ? (
         "error"
       ) : (
-        <div className="main-section">
+        <div className="main-section-admin ">
           <Sidebar />
           <div id="main" className="main">
             <Navbars user={data} />
@@ -96,7 +96,7 @@ const AdminMain = () => {
               <Route path="/pagos" element={<Pagos email={data?.user?.email} />} />
               <Route path="/pagos/pagos-details/:id" element={<PagosDetails email={data?.user?.email} />} />
               <Route path="/roles" element={<Roles email={data?.user?.email} />} />
-              <Route path="/veterinarios" element={<Veterinarios />} />
+              <Route path="/veterinarios" element={<Veterinarios email={data?.user?.email} />} />
               <Route path="/veterinarios/details/:id" element={<VeterinaProfileDetails email={data?.user?.email} />} />
             </Routes>
             <Footer />

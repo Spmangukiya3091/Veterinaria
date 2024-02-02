@@ -93,6 +93,7 @@ function DiagnosticForm({ data, refetch }) {
       });
 
       // Append medication list
+      console.log(JSON.stringify(lists));
       formApiData.append("medication", JSON.stringify(lists));
 
       console.log("Submitted FormData:", formApiData);

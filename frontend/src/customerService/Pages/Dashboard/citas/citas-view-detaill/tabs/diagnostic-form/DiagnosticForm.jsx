@@ -12,7 +12,6 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
 
-
 function DiagnosticForm({ data, refetch }) {
   const [cookies] = useCookies(["authToken"]);
 
@@ -28,7 +27,7 @@ function DiagnosticForm({ data, refetch }) {
     internal_observation: "",
   });
   const dispatch = useDispatch();
-  const medicines = useGetALlProductListQuery(null, { refetchOnMountOrArgChange: true });
+  const medicines = useGetALlProductListQuery("", { refetchOnMountOrArgChange: true });
   const option = medicines?.data?.productList.filter((product) => product.product !== undefined).map((product) => product.product);
 
   const handleChange = (e) => {
@@ -103,7 +102,6 @@ function DiagnosticForm({ data, refetch }) {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + cookies.authToken,
-
         },
       });
 
@@ -230,8 +228,8 @@ function DiagnosticForm({ data, refetch }) {
                     <div className="files-inner">
                       {ele.Name}
                       <ul>
-                        <li>{ele.intake}</li>
-                        <li>{ele.frequency}</li>
+                        <li>{ele.intake} unidades</li>
+                        <li>{ele.frequency} veces al día</li>
                       </ul>
                     </div>
                     <img onClick={() => handleDeleteTodo(ind)} src="/images/delete.png" alt="delete" />

@@ -14,6 +14,7 @@ import { failer, success } from "../../../Components/alert/success";
 import { showToast } from "../../../store/tostify";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import Loader from "../../../Components/loader/Loader";
 
 const Pagos = ({ email }) => {
   const dispatch = useDispatch();
@@ -103,8 +104,8 @@ const Pagos = ({ email }) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -213,7 +214,7 @@ const Pagos = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -289,7 +290,7 @@ const Pagos = ({ email }) => {
                                   onChange={handleChange}
                                   value={searchData.payment_method}
                                 >
-                                  <option>Seleccionar</option>
+                                  <option disabled>Seleccionar</option>
                                   <option value="cash">Efectivo</option>
                                   <option value="credit card">Tarjeta de crédito</option>
                                   <option value="debit card">Tarjeta de Débito</option>
@@ -458,7 +459,7 @@ const Pagos = ({ email }) => {
             }}
             onDelete={handleDeleteVerify}
           />
-          <PagosModal show={show} onHide={handleClose} id={pId} />
+          <PagosModal show={show} onHide={handleClose} id={pId} filter={paymentList} />
           <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { success } from "../../alert/success";
+import { failer, success } from "../../alert/success";
 import departamentoData from "../../../Department.json";
 import { useState } from "react";
 import { useAddOwnerMutation } from "../../../services/ApiServices";
@@ -22,7 +22,7 @@ const PropietarioModal = (props) => {
     dob: "",
   });
 
-  const [addPropritario, { isLoading, isError }] = useAddOwnerMutation();
+  const [addPropritario, response] = useAddOwnerMutation();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -58,9 +58,12 @@ const PropietarioModal = (props) => {
     }
   };
 
-  const handleSubmit = () => {
-    addPropritario(formData);
-    if (!isLoading) {
+  const handleSubmit = async () => {
+    await addPropritario(formData);
+  };
+
+  useEffect(() => {
+    if (!response.isLoading && response.isSuccess) {
       setFormData({
         name: "",
         surname: "",
@@ -75,10 +78,12 @@ const PropietarioModal = (props) => {
       });
       props.onHide();
       success();
-    } else if (isError) {
+    } else if (response.isError) {
+      failer(response?.error?.data?.message);
       console.log("error");
     }
-  };
+  }, [response]);
+
   return (
     <>
       <Modal show={props.show} onHide={props.onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

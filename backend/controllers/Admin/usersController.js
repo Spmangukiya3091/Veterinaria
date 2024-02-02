@@ -326,7 +326,7 @@ const getAllUsersData = async (req, res) => {
 const updateUserProfile = async (req, res) => {
   const { name, email, password, role, confirmPassword, identification, phone } = req.body;
 
-  const profile = req.protocol + "://" + req.get("host") + `/profile/${req.file.filename}`;
+  const profile = req.protocol + "://" + req.get("host") + `/profile/profile/${req.file.filename}`;
   const id = req.params.id;
   const user = await Auth.findOne({ where: { id: id } });
   const existingFilename = user?.profile?.split("/").pop();

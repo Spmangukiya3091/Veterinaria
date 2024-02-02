@@ -83,7 +83,7 @@ const ProductoModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Categoría</Form.Label>
                   <Form.Select aria-label="Default select example" value={formData.categoryId} name="categoryId" onChange={handleChange}>
-                    <option>Categoría</option>
+                    <option disabled>Categoría</option>
                     {categoryList?.data?.categoryList.map((category, i) => (
                       <option key={i} value={category.id}>
                         {category.category}
@@ -125,7 +125,7 @@ const ProductoModal = (props) => {
                     <Form.Group className="mb-3">
                       <Form.Label>Estado</Form.Label>
                       <Form.Select aria-label="Default select example" value={formData.status} name="status" onChange={handleChange}>
-                        <option>Estado</option>
+                        <option disabled>Estado</option>
                         <option value="active">Activo</option>
                         <option value="inactive">InActivo</option>
                       </Form.Select>

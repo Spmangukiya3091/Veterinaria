@@ -14,6 +14,7 @@ import { failer, success } from "../../../Components/alert/success";
 // import { useDispatch } from "react-redux";
 // import { showToast } from "../../../store/tostify";
 import axios from "axios";
+import Loader from "../../../Components/loader/Loader";
 
 const Mascotas = ({ email }) => {
   const navigate = useNavigate();
@@ -115,8 +116,8 @@ const Mascotas = ({ email }) => {
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -217,7 +218,7 @@ const Mascotas = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -276,7 +277,6 @@ const Mascotas = ({ email }) => {
                         </Dropdown.Toggle>
                         <Dropdown.Menu
                           className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                          
                           id="kt_menu_62444587ce1ee"
                         >
                           <div className="px-7 py-5">
@@ -401,11 +401,7 @@ const Mascotas = ({ email }) => {
                                   <i className="fa-solid fa-chevron-down"></i>
                                 </Dropdown.Toggle>
                                 {dropdowns[i] && (
-                                  <Dropdown.Menu
-                                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                    
-                                    
-                                  >
+                                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                                     <Dropdown.Item className="menu-item px-3">
                                       <div onClick={() => navigate(`/dashboard/mascotas/details/${id}`)} className="menu-link px-3">
                                         Ver detalles
@@ -418,7 +414,6 @@ const Mascotas = ({ email }) => {
                                           setCitas({ petId: id, ownerId: ownerId });
                                         }}
                                         className="menu-link px-3"
-                                        
                                       >
                                         Agendar cita
                                       </div>
@@ -430,7 +425,6 @@ const Mascotas = ({ email }) => {
                                           setPetId(id);
                                         }}
                                         className="menu-link px-3"
-                                        
                                       >
                                         Editar
                                       </div>
@@ -443,7 +437,6 @@ const Mascotas = ({ email }) => {
                                           setModalShow(true);
                                         }}
                                         className="menu-link px-3 delete"
-                                        
                                       >
                                         Eliminar mascota
                                       </div>

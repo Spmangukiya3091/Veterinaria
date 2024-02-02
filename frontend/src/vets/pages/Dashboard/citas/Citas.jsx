@@ -7,6 +7,7 @@ import moment from "moment";
 import SingleInputDateRangePicker from "./date-picker/DatePicker";
 import { useGetAppoinmentByDoctorQuery } from "../../../../services/ApiServices";
 import StarRating from "../../../components/star/StarRating";
+import Loader from "../../../components/loader/Loader";
 
 function Citas({ id }) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -57,8 +58,8 @@ function Citas({ id }) {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -95,7 +96,7 @@ function Citas({ id }) {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -153,7 +154,6 @@ function Citas({ id }) {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -167,7 +167,7 @@ function Citas({ id }) {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option>Seleccionar</option>
+                                  <option disabled >Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>

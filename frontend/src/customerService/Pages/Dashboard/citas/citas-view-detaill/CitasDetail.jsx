@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { useGetSingleAppointmentQuery, useRemoveAppointmentMutation } from "../../../../../services/ApiServices";
 import { success } from "../../../../Components/alert/success";
 import { showToast } from "../../../../../store/tostify";
+import Loader from "../../../../Components/loader/Loader";
 
 function CitasDetail({ email }) {
   const location = useLocation();
@@ -110,7 +111,7 @@ function CitasDetail({ email }) {
   return (
     <>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader  />
       ) : error ? (
         "Some Error Occured"
       ) : (

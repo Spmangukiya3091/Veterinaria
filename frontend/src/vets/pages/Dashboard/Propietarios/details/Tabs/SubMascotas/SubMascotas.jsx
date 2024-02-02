@@ -39,7 +39,7 @@ const SubMascotas = ({ data }) => {
 
                       <td>
                         <Link
-                          to="/dashboard/mascotas/details"
+                          to={`/veterine/mascotas/details/${id}`}
                           className="btn btn-sm btn-light btn-active-light-primary"
                           data-kt-menu-trigger="click"
                           data-kt-menu-placement="bottom-end"

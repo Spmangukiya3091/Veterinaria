@@ -2,22 +2,36 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import "./veterinamodal.scss";
 import EspecialidadModal from "./EspecialidadModal";
-import { success } from "../../../../Components/alert/success";
-import { useGetSpecialityListQuery } from "../../../../services/ApiServices";
+import { failer, success } from "../../../../Components/alert/success";
+import { useGetSpecialityListQuery, useRemoveSpecialityMutation } from "../../../../services/ApiServices";
 import moment from "moment";
+import Loader from "../../../../Components/loader/Loader";
+import Alert from "../../../../Components/alert/Alert";
+import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
+import { Link } from "react-router-dom";
 
 const VeterinaModal = (props) => {
+  console.log(props.email)
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [spid, setSpid] = useState();
-  const specialityList = useGetSpecialityListQuery(null, { refetchOnMountOrArgChange: true });
+  const specialityList = useGetSpecialityListQuery("", { refetchOnMountOrArgChange: true });
+  const [modalShow, setModalShow] = useState(false);
+  const [openform, setOpenform] = useState(false);
+  const [dltSpeciality, response] = useRemoveSpecialityMutation();
+  const [dltData, setDltData] = useState({
+    id: "",
+    pass: "",
+    email: props.email,
+  });
 
   useEffect(() => {
     if (!specialityList.isLoading) {
+      console.log(specialityList.data);
       setLoading(false);
-      setData(specialityList.data);
+      setData(specialityList?.data?.specialities);
     } else if (specialityList.isError) {
       setError(true);
       setLoading(false);
@@ -29,6 +43,58 @@ const VeterinaModal = (props) => {
     setOpen(false);
     specialityList.refetch();
   };
+
+  const handleConfirmDelete = () => {
+    // Close the alert modal
+    setModalShow(false);
+
+    // Set the appointment ID in dltData
+    setDltData({
+      ...dltData,
+      id: spid,
+      email: props.email,
+    });
+
+    // Open the DeleteVerifyModal
+    setOpenform(true);
+  };
+
+  const handleDeleteVerify = async (enteredPassword) => {
+    if (enteredPassword !== "" || null) {
+      // Close the DeleteVerifyModal
+      setOpenform(false);
+
+      // Use the callback function provided by setDltData
+      const body = {
+        id: dltData.id,
+        email: dltData.email,
+        pass: enteredPassword,
+      };
+
+      // Now you can use the updated state
+
+      // Call the dltVaccine API
+      await dltSpeciality(body);
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    if (!response.isLoading && response.status === "fulfilled") {
+      success();
+      setDltData({
+        id: "",
+        pass: "",
+        email: "",
+      });
+      // Refetch or update data if needed
+      specialityList.refetch();
+    } else if (response.isError) {
+      console.log(response.error);
+      failer(response?.error?.data?.message);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
   return (
     <>
       <Modal show={props.show} onHide={props.onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -59,28 +125,37 @@ const VeterinaModal = (props) => {
               </thead>
               <tbody>
                 {loading ? (
-                  <Spinner animation="border" variant="primary" />
+                  <Loader />
                 ) : error ? (
                   "Some Error Occured"
                 ) : (
                   <>
-                    {data?.specialities.map((data, i) => (
+                    {data.map((data, i) => (
                       <tr key={i}>
                         <td className="text-start">{data.speciality}</td>
                         <td className="text-start">{data.veterinarianCount}</td>
                         <td className="text-start">{moment(data.createdAt).format("DD MMM YYYY")}</td>
                         <td className="text-end">
-                          <Button
+                          <Link
                             onClick={() => {
-                              props.onHide();
                               handleOpen();
+                              setSpid(data.id);
+                            }}
+                            className={` btn px-4 btn-secondary btn-center mx-2`}
+                            id="dropdown-basic"
+                          >
+                            <i className="fa-solid fa-pen"></i>
+                          </Link>
+                          <Link
+                            onClick={() => {
+                              setModalShow(true);
                               setSpid(data.id);
                             }}
                             className={` btn px-4 btn-secondary btn-center`}
                             id="dropdown-basic"
                           >
-                            <i className="fa-solid fa-pen"></i>
-                          </Button>
+                            <i className="fa-solid fa-trash"></i>
+                          </Link>
                         </td>
                       </tr>
                     ))}
@@ -107,7 +182,20 @@ const VeterinaModal = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <EspecialidadModal show={open} id={spid} handleClose={handleCloses} />
+      <EspecialidadModal show={open} id={spid} handleClose={handleCloses} filter={specialityList} />
+      <Alert show={modalShow} onHide={() => setModalShow(false)} msg={"¿Seguro de completar esta operación?"} opendltModal={handleConfirmDelete} />
+      <DeleteVerifyModal
+        show={openform}
+        onHide={() => {
+          setOpenform(false);
+          setDltData({
+            id: "",
+            pass: "",
+            email: "",
+          });
+        }}
+        onDelete={handleDeleteVerify}
+      />
     </>
   );
 };

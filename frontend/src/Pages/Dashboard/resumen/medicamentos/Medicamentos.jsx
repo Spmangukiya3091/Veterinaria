@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CategoryModal from "./modal/CategoryModal";
 import moment from "moment";
-function Medicamentos({ data }) {
+function Medicamentos({ data, filter }) {
   const [showCategory, setShowCategory] = useState(false);
-  const handleCloseCategory = () => setShowCategory(false);
-  const handleShowCategory = () => setShowCategory(true);
+  const handleCloseCategory = () => {
+    setShowCategory(false);
+    filter.refetch();
+  };
   return (
     <>
       <div className="calendar-card-wrapper-medicamentos">
@@ -32,7 +34,7 @@ function Medicamentos({ data }) {
                     <Link
                       to="#"
                       onClick={() => {
-                        handleShowCategory();
+                        setShowCategory(true);
                       }}
                       className="btn btn-bg-light btn-active-color-primary btn-sm"
                     >

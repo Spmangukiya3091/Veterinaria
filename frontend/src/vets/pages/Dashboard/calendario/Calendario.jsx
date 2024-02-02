@@ -7,6 +7,7 @@ import { Spinner } from "react-bootstrap";
 import "./calendario.scss";
 import esLocale from "@fullcalendar/core/locales/es";
 import { useGetVeterinariansAppointmentQuery } from "../../../../services/ApiServices";
+import Loader from "../../../components/loader/Loader";
 
 function Calendario({ id }) {
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ function Calendario({ id }) {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

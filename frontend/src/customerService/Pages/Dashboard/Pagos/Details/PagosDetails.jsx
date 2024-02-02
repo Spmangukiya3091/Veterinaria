@@ -9,6 +9,7 @@ import moment from "moment";
 import { useGetSinglePaymentQuery, useRemovePaymentMutation } from "../../../../../services/ApiServices";
 import { failer, success } from "../../../../Components/alert/success";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
+import Loader from "../../../../Components/loader/Loader";
 
 const PagosDetails = ({ email }) => {
   const location = useLocation();
@@ -99,7 +100,7 @@ const PagosDetails = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

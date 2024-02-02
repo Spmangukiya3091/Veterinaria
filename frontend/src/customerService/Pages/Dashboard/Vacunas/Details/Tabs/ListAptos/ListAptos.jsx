@@ -6,6 +6,7 @@ import { Button, Spinner } from "react-bootstrap";
 import AptosModal from "../AptosModal/AptosModal";
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useGetVaccinationbyVaccineIdQuery } from "../../../../../../../services/ApiServices";
+import Loader from "../../../../../../Components/loader/Loader";
 
 const ListAptos = ({ id }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,7 +39,7 @@ const ListAptos = ({ id }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -66,18 +67,18 @@ const ListAptos = ({ id }) => {
                   </thead>
                   <tbody>
                     {currentPosts ? (
-                      currentPosts.map(({ id, pet, owner, petId, petVaccinationData, status }, i) => (
+                      currentPosts.map(({ id, pet, owner, petId, status, species }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{petVaccinationData?.name}</td>
+                          <td className="text-start pe-0">{pet}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {petVaccinationData?.owner}
+                            {owner}
                           </td>
                           <td className="text-start pe-0">
-                            <div className=" fecha">{petVaccinationData?.Species}</div>
+                            <div className=" fecha">{species}</div>
                           </td>
                           <td>
                             <div className="status-wrapper">

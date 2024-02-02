@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./mascotas.scss";
-import { ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
 import CitasPagination from "../../../components/pagination/citas-pagination/Citas-Pagination";
 import { useGetPetsByVeterinarianQuery } from "../../../../services/ApiServices";
+import Loader from "../../../components/loader/Loader";
 
 const Mascotas = ({ id }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -42,15 +43,16 @@ const Mascotas = ({ id }) => {
     setSearchQuery("");
   };
 
-  const filteredData = data.filter(({ name, owner, species, sex }) => {
+  const filteredData = data.filter(({ name, owner, Species, sex }) => {
     const searchString = searchValue;
     return (
       name.toLowerCase().includes(searchString) ||
       owner.toLowerCase().includes(searchString) ||
-      species.toLowerCase().includes(searchString) ||
+      Species.toLowerCase().includes(searchString) ||
       sex.toLowerCase().includes(searchString)
     );
   });
+
   const handleSearchFilter = () => {
     // Refetch data based on the search criteria
     setSearchQuery(
@@ -63,8 +65,8 @@ const Mascotas = ({ id }) => {
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -81,7 +83,7 @@ const Mascotas = ({ id }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -139,7 +141,6 @@ const Mascotas = ({ id }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -202,8 +203,8 @@ const Mascotas = ({ id }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts ? (
-                      currentPosts.map(({ id, name, owner, ownerId, species, sex, age, rating }, i) => (
+                    {currentPosts.length > 0 ? (
+                      currentPosts.map(({ id, name, owner, ownerId, Species, sex, age, rating }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
@@ -214,7 +215,7 @@ const Mascotas = ({ id }) => {
                             {owner}
                           </td>
                           <td className="text-start pe-0">
-                            <div className=" fecha">{species}</div>
+                            <div className=" fecha">{Species}</div>
                           </td>
                           <td className="text-start pe-0" data-order="estado">
                             {sex}
@@ -241,7 +242,7 @@ const Mascotas = ({ id }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7">No data available</td>
+                        <td colSpan="8">No data available</td>
                       </tr>
                     )}
                   </tbody>

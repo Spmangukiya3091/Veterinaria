@@ -15,7 +15,7 @@ const AptosModal = (props) => {
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Propietario</Form.Label>
               <Form.Select aria-label="Default select example">
-                <option>Propietario</option>
+                <option disabled>Propietario</option>
                 <option value="1">One</option>
                 <option value="2">Two</option>
                 <option value="3">Three</option>
@@ -25,7 +25,7 @@ const AptosModal = (props) => {
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Nombre de mascota</Form.Label>
               <Form.Select aria-label="Default select example">
-                <option>Nombre</option>
+                <option disabled>Nombre</option>
                 <option value="1">One</option>
                 <option value="2">Two</option>
                 <option value="3">Three</option>

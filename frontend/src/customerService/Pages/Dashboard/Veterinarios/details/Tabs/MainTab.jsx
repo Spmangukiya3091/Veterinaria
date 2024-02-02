@@ -7,11 +7,7 @@ import Historical from "./historical/Historical";
 function MainTab() {
   return (
     <div className="main-tab">
-      <Tabs
-        defaultActiveKey="Información"
-        id="uncontrolled-tab-example"
-        className="mb-3"
-      >
+      <Tabs defaultActiveKey="Información"  className="mb-3">
         <Tab eventKey="Información" title="Información">
           <Information />
         </Tab>

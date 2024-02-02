@@ -10,7 +10,6 @@ import Column from "./column/Column";
 import PtientesChart from "./doughnutchart/PtientesChart";
 import {
   useGetAppoinmentGraphQuery,
-  useGetAllCategoriesQuery,
   useGetMetricsQuery,
   useGetOwnerGraphQuery,
   useGetPaymentGraphQuery,
@@ -149,7 +148,13 @@ function Resumen() {
               </div>
             </Col>
             <Col sm={12} md={6} lg={6}>
-              {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <Medicamentos data={categoryListData} />}
+              {loading ? (
+                <Spinner animation="border" variant="primary" />
+              ) : error ? (
+                "Some Error Occured"
+              ) : (
+                <Medicamentos data={categoryListData} filter={categoryList} />
+              )}
             </Col>
           </Row>
           <div>

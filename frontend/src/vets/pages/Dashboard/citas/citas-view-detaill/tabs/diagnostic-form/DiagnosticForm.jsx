@@ -26,7 +26,7 @@ function DiagnosticForm({ data, refetch }) {
     internal_observation: "",
   });
   const dispatch = useDispatch();
-  const medicines = useGetALlProductListQuery(null, { refetchOnMountOrArgChange: true });
+  const medicines = useGetALlProductListQuery("", { refetchOnMountOrArgChange: true });
   const option = medicines?.data?.productList.filter((product) => product.product !== undefined).map((product) => product.product);
 
   const handleChange = (e) => {
@@ -117,7 +117,7 @@ function DiagnosticForm({ data, refetch }) {
       }
     } catch (error) {
       console.log(error);
-      dispatch(showToast(error.message, "FAIL_TOAST"));
+      dispatch(showToast(error?.response?.data?.message, "FAIL_TOAST"));
     }
   };
 
@@ -227,8 +227,8 @@ function DiagnosticForm({ data, refetch }) {
                     <div className="files-inner">
                       {ele.Name}
                       <ul>
-                        <li>{ele.intake}</li>
-                        <li>{ele.frequency}</li>
+                        <li>{ele.intake} unidades</li>
+                        <li>{ele.frequency} veces al día</li>
                       </ul>
                     </div>
                     <img onClick={() => handleDeleteTodo(ind)} src="/images/delete.png" alt="delete" />

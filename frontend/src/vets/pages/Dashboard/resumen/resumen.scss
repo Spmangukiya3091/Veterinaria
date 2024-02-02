@@ -4,19 +4,24 @@
   height: 100%;
   padding: 25px 45px;
   font-family: "Inter";
+
   .bg-body {
     margin-bottom: 0 !important;
   }
+
   .resumen-top-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   .active-detail {
     border-left: 4px solid #336cfb !important;
   }
+
   .detail-section {
     padding: 10px;
+
     .detail-heading {
       margin-bottom: 25px;
       font: normal normal 20px/24px Inter;
@@ -24,17 +29,20 @@
       letter-spacing: -0.2px;
       color: #000000;
     }
+
     .top-date-wrapper {
       margin-bottom: 17px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       p {
         font: normal normal 15px/19px Inter;
         font-weight: 600;
         letter-spacing: -0.15px;
         color: #000000;
       }
+
       button {
         background: #f6f8ff 0% 0% no-repeat padding-box !important;
         border-radius: 8px !important;
@@ -43,6 +51,7 @@
         font: normal normal 13px/16px Inter;
         font-weight: 600 !important;
         padding: 10px 12px !important;
+
         &:hover,
         &:focus,
         &:active {
@@ -61,6 +70,7 @@
         }
       }
     }
+
     p {
       margin-bottom: 0;
       font: normal normal 20px/24px Inter;
@@ -68,6 +78,7 @@
       letter-spacing: -0.2px;
       color: #000000;
     }
+
     .detail-wrapper {
       margin-top: 20px;
       padding: 0 8px;
@@ -77,22 +88,26 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       .detail-title-box {
         .active-text {
-          color: #336cfb !important ;
+          color: #336cfb !important;
         }
+
         .detail-title-main {
           text-align: start;
           margin-bottom: 5px;
           font: normal normal 14px/17px Inter;
           font-weight: 600;
         }
+
         .detail-title-sub {
           text-align: start;
           margin-bottom: 0;
           font: normal normal normal 14px/17px Inter;
         }
       }
+
       .detail-btn-wrapper {
         .detail-btn {
           border: 0 !important;
@@ -100,6 +115,7 @@
           font: 13px/26px Inter;
           font-weight: bold !important;
           background: #f6f8ff 0% 0% no-repeat padding-box !important;
+
           &:hover {
             border: 0 !important;
             color: #000 !important;
@@ -118,28 +134,33 @@
       margin-bottom: 5px;
       text-align: start;
     }
+
     .resumen-sub-title {
       font: normal normal normal 12px/15px Inter;
       text-align: start;
       margin-bottom: 0;
     }
   }
+
   .calendar-box {
     .calendar-btn-top {
       padding: 15px;
       border: 0;
       background: #336cfb !important;
       color: #fff !important;
+
       &:hover {
         padding: 15px;
         border: 0;
         background: #336cfb !important;
         color: #fff !important;
       }
+
       .fa-regular {
         margin-right: 8px;
       }
     }
+
     .calendar-btn {
       padding: 15px;
       border: 0;
@@ -154,12 +175,14 @@
         background: #f6f8ff !important;
         color: #000 !important;
       }
+
       .fa-regular {
         margin-right: 8px;
         color: #000 !important;
       }
     }
   }
+
   .card {
     text-decoration: none;
     text-align: start;
@@ -168,11 +191,13 @@
     border: 1px solid #f1f1f2;
     font-family: Inter;
     padding: 20px;
+
     .header-section {
       display: flex;
       align-items: start !important;
       justify-content: space-between;
       margin-bottom: 10px;
+
       .calendar-p {
         margin-bottom: 0 !important;
         font: normal normal 15px/19px Inter !important;
@@ -181,6 +206,7 @@
         color: #000000;
       }
     }
+
     .card-body {
       padding: 0 !important;
 
@@ -188,10 +214,12 @@
         font-size: 2rem !important;
         color: #336cfb;
       }
+
       .main-heading {
         font: normal normal 18px/21px Inter;
         font-weight: 600;
       }
+
       .sub-heading {
         color: #b5b5c3;
         font: normal normal 15px/19px Inter;
@@ -199,6 +227,7 @@
       }
     }
   }
+
   .card-wrapper {
     .card-main-title {
       text-align: start;
@@ -207,8 +236,10 @@
       margin-top: 20px;
     }
   }
+
   .calendar-section {
     margin-top: 20px;
+
     .calendar-card-wrapper2 {
       width: 100%;
       height: 100%;
@@ -226,12 +257,14 @@
       border: 1px solid #f1f1f2 !important;
       background: #fff;
       padding: 20px;
+
       .main-table-title {
         text-align: start;
         font: 15px/19px Inter;
         font-weight: bold;
       }
     }
+
     .calendar-card-wrapper-medicamentos {
       width: 100%;
       height: 100%;
@@ -242,26 +275,32 @@
 
       table {
         width: 100%;
+
         tr {
           border-bottom: 1px solid #e2e6e9;
           padding: 10px 0;
+
           th {
             font: normal normal 600 12px/15px Inter;
 
             color: #8a98a5;
             padding: 10px 20px;
             text-align: start;
+
             &:last-child {
               text-align: end;
             }
           }
+
           td {
             padding: 10px 20px;
             padding: 10px 20px;
             text-align: start;
+
             &:last-child {
               text-align: end;
             }
+
             .table-btn {
               border-radius: 0.325rem;
               color: #000;
@@ -270,6 +309,7 @@
               background: #f6f8ff 0% 0% no-repeat padding-box !important;
               padding: calc(0.75rem + 1px) calc(1.5rem + 1px) !important;
               border: 0;
+
               &:hover,
               &:active,
               &:focus {
@@ -283,11 +323,13 @@
               }
             }
           }
+
           td:first-child {
             font: normal normal 600 12px/15px Inter;
 
             color: #8a98a5;
           }
+
           td:nth-child(2),
           td:nth-child(3) {
             font: normal normal normal 13px/21px Inter;
@@ -301,6 +343,7 @@
         font: 15px/19px Inter;
         font-weight: bold;
         padding: 20px;
+
         p {
           margin-bottom: 0;
         }
@@ -313,15 +356,18 @@
         border: 0;
         background: #f6f8ff 0% 0% no-repeat padding-box;
       }
+
       .date-main {
         margin-top: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
+
         .active {
           background: #ffe229 !important;
           border-radius: 8px;
         }
+
         .date-btn {
           display: flex;
           flex-direction: column;
@@ -333,10 +379,12 @@
           margin-inline: 4px;
           font: normal normal 12px/18px Inter;
           font-weight: 600;
+
           .month {
             font: normal normal medium 12px/18px Inter;
             margin-bottom: 5px;
           }
+
           .date {
             font: normal normal medium 12px/18px Inter;
             margin-bottom: 0;

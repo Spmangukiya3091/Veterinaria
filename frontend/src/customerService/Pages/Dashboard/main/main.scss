@@ -1,4 +1,4 @@
-.main-section {
+.main-section-customer-service {
   #main {
     transition: all 0.3s;
   }
@@ -46,7 +46,8 @@
       background: #fff 0% 0% no-repeat padding-box;
       border-radius: 8px;
 
-      &:active,&:focus {
+      &:active,
+      &:focus {
         background-color: #f1faff !important;
         color: #336cfb !important;
 

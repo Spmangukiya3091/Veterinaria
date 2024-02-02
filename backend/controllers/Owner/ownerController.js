@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const Database = require("../../config/connection");
 const Owner = Database.owner;
 const Appointment = Database.appointment;
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const ExcelJS = require("exceljs");
 const Pet = Database.pet;
 const Admin = Database.user;
@@ -15,36 +15,29 @@ const createOwner = async (req, res) => {
       phone_2: req.body.phone_2,
       doc_identity: req.body.doc_identity,
       email: req.body.email,
-      address:
-        req.body.address === "" || !req.body.address ? null : req.body.address,
+      address: req.body.address === "" || !req.body.address ? null : req.body.address,
       dob: req.body.dob === "" || !req.body.dob ? null : new Date(req.body.dob),
-      department:
-        req.body.department === "" || !req.body.department
-          ? null
-          : req.body.department,
-      district:
-        req.body.district === "" || !req.body.district
-          ? null
-          : req.body.district,
+      department: req.body.department === "" || !req.body.department ? null : req.body.department,
+      district: req.body.district === "" || !req.body.district ? null : req.body.district,
     };
     if (owner.name === "" || owner.name === null) {
-      res.status(201).send({
+      res.status(400).send({
         message: "name is required",
       });
     } else if (owner.surname === "" || owner.surname === null) {
-      res.status(201).send({
+      res.status(400).send({
         message: "surname is required",
       });
     } else if (owner.phone === "" || owner.phone === null) {
-      res.status(201).send({
+      res.status(400).send({
         message: "phone is required",
       });
     } else if (owner.doc_identity === "" || owner.doc_identity === null) {
-      res.status(201).send({
+      res.status(400).send({
         message: "doc_identity is required",
       });
     } else if (owner.email === "" || owner.email === null) {
-      res.status(201).send({
+      res.status(400).send({
         message: "email is required",
       });
     } else {
@@ -116,10 +109,10 @@ const deleteOwnerRecord = async (req, res) => {
   }
   if (decoded.role !== user.role) {
     return res.status(400).send({
-     message: "Not authorized",
-     success: false,
-   });
- }
+      message: "Not authorized",
+      success: false,
+    });
+  }
   if (owner_record?.id === id) {
     await Owner.destroy({ where: { id: id } });
     res.status(200).send({
@@ -182,14 +175,8 @@ const ownerExcelFile = async (req, res) => {
       worksheet.addRow(row);
     });
 
-    res.setHeader(
-      "Content-Type",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    );
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename=appointment.xlsx"
-    );
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    res.setHeader("Content-Disposition", "attachment; filename=appointment.xlsx");
 
     await workbook.xlsx.write(res);
     res.end();
@@ -268,9 +255,7 @@ const getSingleOwner = async (req, res) => {
     const totalAppointments = owner.ownerAppointmentData.length;
 
     // Calculate pending appointment count
-    const completeAppointments = owner.ownerAppointmentData.filter(
-      (appointment) => appointment.status === "complete"
-    ).length;
+    const completeAppointments = owner.ownerAppointmentData.filter((appointment) => appointment.status === "complete").length;
 
     // Find the last appointment date and time
     let lastAppointment = null;
@@ -339,9 +324,7 @@ const petAppointmentDataOfOwner = async (req, res) => {
       where: { id: id },
     });
     const owner = owners?.name;
-    const appointments = owners?.ownerAppointmentData
-      ? owners?.ownerAppointmentData
-      : [];
+    const appointments = owners?.ownerAppointmentData ? owners?.ownerAppointmentData : [];
     res.status(200).send({
       message: "appointmentList",
 
@@ -369,9 +352,7 @@ const petAppointmentDataOfOwner = async (req, res) => {
       where: { id: id },
     });
     const owner = owners?.name;
-    const appointments = owners?.ownerAppointmentData
-      ? owners?.ownerAppointmentData
-      : [];
+    const appointments = owners?.ownerAppointmentData ? owners?.ownerAppointmentData : [];
     res.status(200).send({
       message: "appointmentList",
 
@@ -392,16 +373,14 @@ const petAppointmentDataOfOwner = async (req, res) => {
       where: { id: id },
     });
     const owner = owners?.name;
-    const appointments = owners?.ownerAppointmentData
-      ? owners?.ownerAppointmentData
-      : [];
+    const appointments = owners?.ownerAppointmentData ? owners?.ownerAppointmentData : [];
     res.status(200).send({
       message: "appointmentList",
 
       owner: owner,
       appointments: appointments,
     });
-  }else if (!req.query.startDate && !req.query.endDate && !req.query.status) {
+  } else if (!req.query.startDate && !req.query.endDate && !req.query.status) {
     const owners = await Owner.findOne({
       include: [
         {
@@ -412,9 +391,7 @@ const petAppointmentDataOfOwner = async (req, res) => {
       where: { id: id },
     });
     const owner = owners?.name;
-    const appointments = owners?.ownerAppointmentData
-      ? owners?.ownerAppointmentData
-      : [];
+    const appointments = owners?.ownerAppointmentData ? owners?.ownerAppointmentData : [];
     res.status(200).send({
       message: "appointmentList",
 

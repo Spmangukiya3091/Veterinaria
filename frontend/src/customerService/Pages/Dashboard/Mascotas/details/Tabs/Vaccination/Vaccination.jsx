@@ -8,6 +8,7 @@ import AddVacunaModal from "../../../modal/AddVacunaModal";
 import UpdVacunaStat from "../../../modal/UpdVacunaStat";
 import moment from "moment";
 import { useGetSinglePetVaccinationDetailsQuery } from "../../../../../../../services/ApiServices";
+import Loader from "../../../../../../Components/loader/Loader";
 
 const Vaccination = ({ id }) => {
   const [show, setShow] = useState(false);
@@ -50,7 +51,7 @@ const Vaccination = ({ id }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

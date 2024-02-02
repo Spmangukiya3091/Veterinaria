@@ -81,6 +81,7 @@ const registerDiagnostic = async (req, res) => {
       return acc;
     }, []);
     const documentation_array = JSON.parse(array);
+    
     const appointment = {
       condition_name: req.body.condition_name,
       description: req.body.description,
@@ -259,7 +260,7 @@ const deleteAppointmentRecord = async (req, res) => {
     }
 
     if (appointment_record.documentation !== null) {
-      const myArray = JSON.parse(appointment_record.documentation);
+      const myArray = appointment_record.documentation;
       console.log("myArray", myArray.length);
       if (myArray.length > 0) {
         myArray.map((docPath) => {
@@ -580,15 +581,15 @@ const getSingleAppointment = async (req, res) => {
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
-    console.log("app-----------", typeof appointment.documentation);
+
     if (appointment.medication !== null && appointment.documentation !== null) {
       const documentationArray = JSON.parse(appointment.documentation || "[]");
       const medications = JSON.parse(appointment.medication || "[]");
-      const medicationArray = JSON.parse(medications);
+
       const updatedAppointment = {
         ...appointment.toJSON(),
         documentation: documentationArray,
-        medication: medicationArray,
+        medication: medications,
       };
 
       return res.status(200).json({

@@ -10,6 +10,7 @@ import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
 import moment from "moment";
 import { useGetAllVaccinesByFilterQuery } from "../../../../services/ApiServices";
+import Loader from "../../../Components/loader/Loader";
 
 const Vacunas = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -91,8 +92,8 @@ const Vacunas = () => {
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -106,7 +107,7 @@ const Vacunas = () => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -164,7 +165,6 @@ const Vacunas = () => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">

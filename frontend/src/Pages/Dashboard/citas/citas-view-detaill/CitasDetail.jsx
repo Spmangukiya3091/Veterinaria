@@ -12,6 +12,7 @@ import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVe
 import { failer, success } from "../../../../Components/alert/success";
 import { useDispatch } from "react-redux";
 import { showToast } from "../../../../store/tostify";
+import Loader from "../../../../Components/loader/Loader";
 
 function CitasDetail({ email }) {
   const location = useLocation();
@@ -112,7 +113,7 @@ function CitasDetail({ email }) {
   return (
     <>
       {loading ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error ? (
         "Some Error Occured"
       ) : (
@@ -219,18 +220,13 @@ function CitasDetail({ email }) {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu
-                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
-                  >
+                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
                       {data?.status === "pending" ? (
                         <Link
                           // to={`/dashboard/citas-view/`}
                           onClick={handleShow}
                           className="menu-link px-3"
-                          
                         >
                           Editar cita
                         </Link>
@@ -239,14 +235,13 @@ function CitasDetail({ email }) {
                           // to={`/dashboard/citas-view/${data?.id}`}
                           onClick={handleShow}
                           className="menu-link px-3"
-                          
                         >
                           Editar cita
                         </Link>
                       )}
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={() => setModalShow(true)} className="menu-link px-3 delete" >
+                      <Link onClick={() => setModalShow(true)} className="menu-link px-3 delete">
                         Eliminar cita
                       </Link>
                     </Dropdown.Item>

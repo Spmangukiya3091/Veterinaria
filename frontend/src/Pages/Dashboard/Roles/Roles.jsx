@@ -13,6 +13,7 @@ import { useCookies } from "react-cookie";
 import { showToast } from "../../../store/tostify";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { success } from "../../../Components/alert/success";
+import Loader from "../../../Components/loader/Loader";
 
 const Roles = ({ email }) => {
   const cookies = useCookies();
@@ -113,8 +114,8 @@ const Roles = ({ email }) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -212,7 +213,7 @@ const Roles = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         " <Error error={errmsg} />"
       ) : (
@@ -366,7 +367,7 @@ const Roles = ({ email }) => {
                                         onChange={handleChange}
                                         value={searchData.role}
                                       >
-                                        <option>Seleccionar</option>
+                                        <option disabled >Seleccionar</option>
                                         <option value="masterAdmin">Administrador Estandar</option>
 
                                         <option value="customer service">Servicio al Cliente</option>

@@ -52,7 +52,7 @@ function InformacionModal({ show, handleClose, id }) {
         failer(response?.error?.data?.message);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (

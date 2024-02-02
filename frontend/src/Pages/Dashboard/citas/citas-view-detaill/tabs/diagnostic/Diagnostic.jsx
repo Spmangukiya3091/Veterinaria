@@ -45,7 +45,7 @@ function Diagnostic({ data }) {
           <h4>Documentación</h4>
           {data && data.documentation !== null ? (
             data.documentation.length > 0 ? (
-              data.documentation.map((document, index) => (
+              data?.documentation.map((document, index) => (
                 <div key={index} className="files mb-2">
                   {Object.entries(document).map(([key, value]) => (
                     <div key={key} className="d-flex justify-content-between w-100">
@@ -71,7 +71,8 @@ function Diagnostic({ data }) {
           <h4>Medicación</h4>
           <p>Medicación Recetado</p>
           {data && data.medication ? (
-            data.medication.map((med, i) => (
+            // JSON.parse(data?.medication).map((med, i) => (
+            data?.medication.map((med, i) => (
               <div key={i} className="files mb-2">
                 <div className="files-inner">
                   {med.Name}

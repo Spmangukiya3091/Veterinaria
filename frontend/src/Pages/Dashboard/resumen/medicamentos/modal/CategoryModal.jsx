@@ -4,16 +4,27 @@ import "./category.scss";
 import { useState } from "react";
 import InformacionModal from "./InformacionModal";
 import { Link } from "react-router-dom";
-import { useGetAllCategoriesQuery } from "../../../../../services/ApiServices";
+import { useGetAllCategoriesQuery, useRemoveCategoryMutation } from "../../../../../services/ApiServices";
 import moment from "moment";
 import Alert from "../../../../../Components/alert/Alert";
-function CategoryModal({ show, handleClose }) {
+import { failer, success } from "../../../../../Components/alert/success";
+import DeleteVerifyModal from "../../../../../Components/alert/VerifyModal/DeleteVerifyModal";
+
+function CategoryModal({ show, handleClose, email }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
   const [catID, setCatID] = useState();
-  const [dltmodal, setDltmodal] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [openform, setOpenform] = useState(false);
+  const [dltVaccine, response] = useRemoveCategoryMutation();
+  const [dltData, setDltData] = useState({
+    id: "",
+    pass: "",
+    email: email,
+  });
+
   const categoryList = useGetAllCategoriesQuery(null, { refetchOnMountOrArgChange: true });
   useEffect(() => {
     if (!categoryList.isLoading) {
@@ -26,15 +37,64 @@ function CategoryModal({ show, handleClose }) {
     }
   }, [categoryList]);
 
-  const handleClosedltModal = () => {
-    setDltmodal(false);
-    categoryList.refetch();
-  };
   const handleCloses = () => {
     setOpen(false);
-    categoryList.refetch();
+    setCatID();
   };
   const handleOpen = () => setOpen(true);
+
+  const handleConfirmDelete = () => {
+    // Close the alert modal
+    setModalShow(false);
+
+    // Set the appointment ID in dltData
+    setDltData({
+      ...dltData,
+      id: catID,
+      email: email,
+    });
+
+    // Open the DeleteVerifyModal
+    setOpenform(true);
+  };
+
+  const handleDeleteVerify = async (enteredPassword) => {
+    if (enteredPassword !== "" || null) {
+      // Close the DeleteVerifyModal
+      setOpenform(false);
+
+      // Use the callback function provided by setDltData
+      const body = {
+        id: dltData.id,
+        email: dltData.email,
+        pass: enteredPassword,
+      };
+
+      // Now you can use the updated state
+
+      // Call the dltVaccine API
+      await dltVaccine(body);
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    if (!response.isLoading && response.status === "fulfilled") {
+      success();
+      setDltData({
+        id: "",
+        pass: "",
+        email: "",
+      });
+      // Refetch or update data if needed
+      categoryList.refetch();
+    } else if (response.isError) {
+      console.log(response.error);
+      failer(response?.error?.data?.message);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
+
   return (
     <>
       {loading ? (
@@ -88,7 +148,7 @@ function CategoryModal({ show, handleClose }) {
                           <Link
                             to="#"
                             onClick={() => {
-                              setDltmodal(true);
+                              setModalShow(true);
                               setCatID(category.id);
                             }}
                             className="btn btn-bg-light btn-active-color-primary btn-sm"
@@ -105,8 +165,20 @@ function CategoryModal({ show, handleClose }) {
           </Modal.Body>
         </Modal>
       )}
-      <InformacionModal show={open} id={catID} handleClose={handleCloses} />
-      <Alert show={dltmodal} onHide={handleClosedltModal} msg={"¿Seguro de completar esta operación?"} />
+      <InformacionModal show={open} id={catID} handleClose={handleCloses} filter={categoryList} />
+      <Alert show={modalShow} onHide={() => setModalShow(false)} msg={"¿Seguro de completar esta operación?"} opendltModal={handleConfirmDelete} />
+      <DeleteVerifyModal
+        show={openform}
+        onHide={() => {
+          setOpenform(false);
+          setDltData({
+            id: "",
+            pass: "",
+            email: "",
+          });
+        }}
+        onDelete={handleDeleteVerify}
+      />
     </>
   );
 }

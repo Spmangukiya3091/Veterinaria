@@ -13,7 +13,7 @@ function MainTab({ data, appointmentId }) {
   const status = searchParams.get("tab");
   return (
     <div className="main-tab">
-      <Tabs defaultActiveKey={status === "vacunas" ? "Vaccination" : "Información"} id="uncontrolled-tab-example" className="mb-3">
+      <Tabs defaultActiveKey={status === "vacunas" ? "Vaccination" : "Información"}  className="mb-3">
         <Tab eventKey="Información" title="Información">
           <Information data={data} />
         </Tab>

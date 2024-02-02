@@ -11,11 +11,11 @@ import Column from "./column/Column";
 import PtientesChart from "./doughnutchart/PtientesChart";
 import {
   useGetAppoinmentGraphQuery,
-  useGetAllCategoriesQuery,
   useGetMetricsQuery,
   useGetOwnerGraphQuery,
   useGetPaymentGraphQuery,
   useGetPendingAppoinmentQuery,
+  useGetCategoryWithProductsQuery,
 } from "../../../../services/ApiServices";
 
 function Resumen() {
@@ -41,7 +41,7 @@ function Resumen() {
   const appoinmentGraph = useGetAppoinmentGraphQuery(null, { refetchOnMountOrArgChange: true });
   const paymentGraph = useGetPaymentGraphQuery(null, { refetchOnMountOrArgChange: true });
   const ownerGraph = useGetOwnerGraphQuery(null, { refetchOnMountOrArgChange: true });
-  const categoryList = useGetAllCategoriesQuery(null, { refetchOnMountOrArgChange: true });
+  const categoryList = useGetCategoryWithProductsQuery(null, { refetchOnMountOrArgChange: true });
   const pendingAppointmentsList = useGetPendingAppoinmentQuery(null, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
@@ -88,22 +88,6 @@ function Resumen() {
           <p className="resumen-sub-title">Resumen</p>
         </div>
         <div className="calendar-box">
-          {/* <Button className="export-btn">
-            <svg className="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-              <defs>
-                <clipPath id="a">
-                  <path data-name="Rectángulo 11046" fill="#1d2328" stroke="#707070" d="M17 15h16v16H17z" />
-                </clipPath>
-              </defs>
-              <g data-name="Enmascarar grupo 57952" transform="translate(-17 -15)" clipPath="url(#a)">
-                <path
-                  d="M26.6 15h-6.4a1.6 1.6 0 0 0-1.6 1.6v12.8a1.6 1.6 0 0 0 1.6 1.6h9.6a1.6 1.6 0 0 0 1.6-1.6v-9.6L26.6 15m3.2 14.4h-9.6V16.6h5.6v4h4v8.8m-1.6-7.2v5.68l-1.68-1.68-2.24 2.24-2.24-2.24 2.24-2.24-1.76-1.76Z"
-                  fill="#1d2328"
-                />
-              </g>
-            </svg>
-            Exportar datos
-          </Button> */}
           <Dropdown as={ButtonGroup} align="end" className="filter-dropdown">
             <Dropdown.Toggle className="filter-btn">
               {`Mes: ${months[selectedMonth - 1]}`}
@@ -149,7 +133,13 @@ function Resumen() {
               </div>
             </Col>
             <Col sm={12} md={6} lg={6}>
-              {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <Medicamentos data={categoryListData} />}
+              {loading ? (
+                <Spinner animation="border" variant="primary" />
+              ) : error ? (
+                "Some Error Occured"
+              ) : (
+                <Medicamentos data={categoryListData} filter={categoryList} />
+              )}
             </Col>
           </Row>
           <div>

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import CitasPagination from "../../../components/pagination/citas-pagination/Citas-Pagination";
 import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
 import { useGetOwnersByVeterinarianQuery } from "../../../../services/ApiServices";
+import Loader from "../../../components/loader/Loader";
 
 const Propietarios = ({ id }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -81,15 +82,15 @@ const Propietarios = ({ id }) => {
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -147,7 +148,6 @@ const Propietarios = ({ id }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">

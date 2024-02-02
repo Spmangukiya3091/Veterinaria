@@ -8,6 +8,7 @@ import esLocale from "@fullcalendar/core/locales/es";
 import { Button, Form, Spinner } from "react-bootstrap";
 import CitasModal from "../citas/modal/CitasModal";
 import { useGetVeterinariansAppointmentQuery, useGetVeterinariansQuery } from "../../../services/ApiServices";
+import Loader from "../../../Components/loader/Loader";
 
 function Calendario() {
   const [show, setShow] = useState(false);
@@ -42,7 +43,7 @@ function Calendario() {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -59,7 +60,7 @@ function Calendario() {
                         setVeteId(e.target.value);
                       }}
                     >
-                      <option>Seleccionar el doctor</option>
+                      <option disabled>Seleccionar el doctor</option>
                       {data.map(({ id, name, surname }) => (
                         <option key={id} value={id}>
                           {name + " " + surname}

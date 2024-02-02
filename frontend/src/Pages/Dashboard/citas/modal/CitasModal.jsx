@@ -12,7 +12,7 @@ import {
 } from "../../../../services/ApiServices";
 import moment from "moment";
 
-function CitasModal({ show, handleClose, id }) {
+function CitasModal({ show, handleClose, id, filter }) {
   const [formData, setFormData] = useState({
     owner: "",
     ownerId: "",
@@ -110,38 +110,60 @@ function CitasModal({ show, handleClose, id }) {
   };
 
   const handleSubmit = async () => {
-    if (id !== undefined && id !== "") {
+    if (id !== undefined) {
       const body = {
         id,
         ...formData,
       };
       updateCitas(body);
-    } else {
+    } else if (id === undefined) {
       addCitas(formData);
     }
   };
-
   useEffect(() => {
-    if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
-      handleClose();
-      success();
-      setFormData({
-        name: "",
-        owner: "",
-        ownerId: "",
-        sex: "",
-        dob: "",
-        Species: "",
-        breed: "",
-        hair: "",
-        color: "",
-      });
-    } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
-      failer(response?.error?.data?.message || response2?.error?.data?.message);
-      console.error("Error occured: ", response?.error || response2?.error);
+    if (id !== undefined && id !== " ") {
+      if (!response2.isLoading && response2.isSuccess) {
+        setFormData({
+          owner: "",
+          ownerId: "",
+          pet: "",
+          petId: "",
+          veterinarian: "",
+          veterinarianId: "",
+          date: "",
+          scheduleStart: "",
+          scheduleEnd: "",
+          observation: "",
+        });
+        handleClose();
+        filter.refetch();
+        success();
+      } else if (response2.isError && response2.status === "rejected") {
+        failer(response2?.error?.data?.message);
+      }
+    } else if (id === undefined || id === " ") {
+      if (!response.isLoading && response.isSuccess) {
+        setFormData({
+          owner: "",
+          ownerId: "",
+          pet: "",
+          petId: "",
+          veterinarian: "",
+          veterinarianId: "",
+          date: "",
+          scheduleStart: "",
+          scheduleEnd: "",
+          observation: "",
+        });
+        handleClose();
+        success();
+        filter.refetch();
+      } else if (response.isError && response.status === "rejected") {
+        failer(response?.error?.data?.message);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response, response2, id]);
+  }, [response, response2]);
 
   return (
     <Modal size="lg" show={show} onHide={handleClose} centered>
@@ -155,7 +177,7 @@ function CitasModal({ show, handleClose, id }) {
               <Form.Group className="mb-3">
                 <Form.Label>Propietario</Form.Label>
                 <Form.Select aria-label="Default select example" name="owner" onChange={handleOwnerChange} value={formData.ownerId}>
-                  <option>Seleccione Propietario</option>
+                  <option disabled>Seleccione Propietario</option>
                   {owners?.data?.ownersList.map((owner) => (
                     <option key={owner.id} value={owner.id}>
                       {owner.name + " " + owner.surname}
@@ -243,23 +265,17 @@ function CitasModal({ show, handleClose, id }) {
           variant="secondary"
           onClick={() => {
             handleClose();
-            setFormData({
-              owner: "",
-              ownerId: "",
-              pet: "",
-              petId: "",
-              veterinarian: "",
-              veterinarianId: "",
-              date: "",
-              scheduleStart: "",
-              scheduleEnd: "",
-              observation: "",
-            });
           }}
         >
           Cancelar
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button
+          variant="primary"
+          type="submit"
+          onClick={handleSubmit}
+          className=" btn btn-primary"
+          disabled={response.isLoading || response2.isLoading}
+        >
           Guardar Cambios
         </Button>
       </Modal.Footer>

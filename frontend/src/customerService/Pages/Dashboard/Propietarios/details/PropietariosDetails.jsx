@@ -9,6 +9,7 @@ import moment from "moment";
 import { useGetPetByOwnerQuery, useGetSingleOwnerQuery, useRemoveOwnerMutation } from "../../../../../services/ApiServices";
 import { failer, success } from "../../../../Components/alert/success";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
+import Loader from "../../../../Components/loader/Loader";
 
 const PropietariosDetails = ({ email }) => {
   const navigate = useNavigate();
@@ -111,7 +112,7 @@ const PropietariosDetails = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -178,11 +179,11 @@ const PropietariosDetails = ({ email }) => {
                       <div className="text-gray-600">{data.ownerData.doc_identity}</div>
 
                       <div className="fw-bold mt-5">Fecha creación</div>
-                      <div className="text-gray-600">{moment(data.ownerData.dob).format("DD MMM YYYY, HH:MM A")}</div>
+                      <div className="text-gray-600">{moment(data.ownerData.createdAt).format("DD MMM YYYY, HH:MM A")}</div>
 
                       <div className="fw-bold mt-5">Última Cita</div>
                       <div className="text-gray-600">
-                        {data.lastAppointment !== null ? moment(data.lastAppointment).format("DD MMM YYYY, HH:MM A") : "Sin última cita"}
+                        {data.lastAppointment.date !== "" ? moment(data.lastAppointment.date).format("DD MMM YYYY, HH:MM A") : "Sin última cita"}
                       </div>
                     </div>
                   </Collapse>

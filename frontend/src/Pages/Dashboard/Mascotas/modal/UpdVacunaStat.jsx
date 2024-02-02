@@ -42,7 +42,7 @@ function UpdVacunaStat({ show, handleClose, vaccineId }) {
                 }}
                 value={status}
               >
-                <option>Seleccionar Estado</option>
+                <option disabled>Seleccionar Estado</option>
                 <option value="pending">Pendiente</option>
                 <option value="rejected">Rechazada</option>
                 <option value="vaccinated">Vacunado</option>

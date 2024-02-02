@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./vaccination.scss";
-import { vaccinationData } from "./vaccinationData";
 import { useGetSinglePetVaccinationDetailsQuery } from "../../../../../../../services/ApiServices";
-import { Button, Spinner } from "react-bootstrap";
 import moment from "moment";
+import Loader from "../../../../../../components/loader/Loader";
 
 const Vaccination = ({ id }) => {
   const [data, setData] = useState();
@@ -25,7 +24,7 @@ const Vaccination = ({ id }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

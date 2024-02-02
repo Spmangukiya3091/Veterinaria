@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import {
   useAddPaymentMutation,
   useGetOwnersListQuery,
@@ -89,37 +89,63 @@ const PagosModal = (props) => {
 
   const handleSubmit = () => {
     if (props.id !== undefined) {
-      try {
-        console.log(formData);
-        const body = {
-          id: props.id,
-          ...formData,
-        };
-        updatePayment(body);
-        if (!response2.isLoading) {
-          props.onHide();
-          success();
-        } else {
-          console.log(response2.error);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      console.log(formData);
+      const body = {
+        id: props.id,
+        ...formData,
+      };
+      updatePayment(body);
     } else {
-      try {
-        console.log(formData);
-        addPayment(formData);
-        if (!response.isLoading) {
-          props.onHide();
-          success();
-        } else {
-          console.log(response.error);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      addPayment(formData);
     }
   };
+  useEffect(() => {
+    if (props.id !== undefined) {
+      if (!response2.isLoading && response2.status === "fulfilled") {
+        props.onHide();
+        success();
+        props.filter.refetch();
+        setFormData({
+          payment_no: 0,
+          transfer_no: 0,
+          owner: "",
+          doctor: "",
+          service: "",
+          amount: 0,
+          discount: 0,
+          payment_method: "",
+          final_amount: 0,
+          description: "",
+        });
+      } else if (response2.isError && response2.status === "rejected") {
+        console.log(response2.error);
+        failer(response2?.error?.data?.message);
+      }
+    } else {
+      if (!response.isLoading && response.status === "fulfilled") {
+        console.log(response);
+        success();
+        props.filter.refetch();
+        setFormData({
+          payment_no: 0,
+          transfer_no: 0,
+          owner: "",
+          doctor: "",
+          service: "",
+          amount: 0,
+          discount: 0,
+          payment_method: "",
+          final_amount: 0,
+          description: "",
+        });
+        props.onHide();
+      } else if (response.isError && response.status === "rejected") {
+        console.log(response.error);
+        failer(response?.error?.data?.message);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2]);
   return (
     <>
       <Modal show={props.show} onHide={props.onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -160,7 +186,7 @@ const PagosModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Propietario</Form.Label>
                   <Form.Select aria-label="Default select example" name="owner" onChange={handleChange} value={formData.owner}>
-                    <option>Propietario</option>
+                    <option disabled>Propietario</option>
                     {owners?.data?.ownersList.map(({ id, name, surname }) => (
                       <option key={id} value={name + " " + surname}>
                         {name + " " + surname}
@@ -175,7 +201,7 @@ const PagosModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Doctor</Form.Label>
                   <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor}>
-                    <option>Doctor</option>
+                    <option disabled>Doctor</option>
                     {doctors?.data?.veterinarianList.map(({ id, name, surname }) => (
                       <option key={id} value={name + " " + surname}>
                         {name + " " + surname}
@@ -230,7 +256,7 @@ const PagosModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Método de Pago</Form.Label>
                   <Form.Select name="payment_method" onChange={handleChange} value={formData.payment_method}>
-                    <option>Método de Pago</option>
+                    <option disabled>Método de Pago</option>
                     <option value="cash">Efectivo</option>
                     <option value="credit card">Tarjeta de Crédito</option>
                     <option value="debit card">Tarjeta de Débito</option>

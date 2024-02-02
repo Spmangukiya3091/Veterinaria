@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import CitasPagination from "../../../components/pagination/citas-pagination/Citas-Pagination";
 import { useGetALlProductListQuery } from "../../../../services/ApiServices";
 import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
+import Loader from "../../../components/loader/Loader";
 
 const Inventory = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -44,6 +45,7 @@ const Inventory = () => {
       startDate: "",
       endDate: "",
     });
+    setSearchQuery("")
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,8 +81,8 @@ const Inventory = () => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -103,7 +105,7 @@ const Inventory = () => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -161,7 +163,6 @@ const Inventory = () => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -175,7 +176,7 @@ const Inventory = () => {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option>Seleccionar</option>
+                                  <option disabled >Seleccionar</option>
                                   <option value="active">Activo</option>
                                   <option value="inactive">Inactivo</option>
                                 </select>
@@ -242,10 +243,10 @@ const Inventory = () => {
                           <td className="text-start pe-0" data-order="status">
                             <div
                               className={`${
-                                status === "inactivo" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
+                                status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
                               } `}
                             >
-                              <p className="mb-0">{status === "inactivo" ? "Inactivo" : "Activo"}</p>
+                              <p className="mb-0">{status === "inactive" ? "Inactivo" : "Activo"}</p>
                             </div>
                           </td>
                           <td className="text-end">

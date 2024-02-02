@@ -5,6 +5,7 @@ import MainTab from "./Tabs/MainTab";
 import { useLocation } from "react-router-dom";
 import { useGetPetByOwnerQuery, useGetSingleOwnerQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
+import Loader from "../../../../components/loader/Loader";
 
 const PropietariosDetails = () => {
   const [show, setShow] = useState(true);
@@ -32,7 +33,7 @@ const PropietariosDetails = () => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

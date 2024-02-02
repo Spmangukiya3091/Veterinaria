@@ -5,6 +5,7 @@ import MainTab from "../Tabs/MainTab";
 import { useLocation } from "react-router-dom";
 import { useGetProductHistoryQuery, useGetSingleProductQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
+import Loader from "../../../../components/loader/Loader";
 const InventoryDetails = () => {
   const location = useLocation();
   const [show, setShow] = useState(true);
@@ -29,7 +30,7 @@ const InventoryDetails = () => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (

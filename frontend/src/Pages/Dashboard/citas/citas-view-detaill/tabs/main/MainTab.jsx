@@ -9,7 +9,7 @@ import DiagnosticForm from "../diagnostic-form/DiagnosticForm";
 function MainTab({ data, petId, refetch }) {
   return (
     <div className="main-tab">
-      <Tabs defaultActiveKey="Diagnóstico" id="uncontrolled-tab-example">
+      <Tabs defaultActiveKey="Diagnóstico" >
         <Tab eventKey="Diagnóstico" title="Diagnóstico">
           {data.status === "pending" ? <DiagnosticForm data={data} refetch={refetch} /> : <Diagnostic data={data} />}
         </Tab>

@@ -10,6 +10,7 @@ import moment from "moment";
 import PagosModal from "../Modal/PagosModal";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../Components/alert/success";
+import Loader from "../../../../Components/loader/Loader";
 // import { showToast } from "../../../../store/tostify";
 // import { useDispatch } from "react-redux";
 
@@ -103,7 +104,7 @@ const PagosDetails = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -179,23 +180,14 @@ const PagosDetails = ({ email }) => {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu
-                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
-                  >
+                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={handleShow} href="#" className="menu-link px-3" >
+                      <Link onClick={handleShow} href="#" className="menu-link px-3">
                         Editar
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link
-                        onClick={() => setModalShow(true)}
-                        href="#"
-                        className="menu-link px-3 delete"
-                        
-                      >
+                      <Link onClick={() => setModalShow(true)} href="#" className="menu-link px-3 delete">
                         Eliminar pago
                       </Link>
                     </Dropdown.Item>

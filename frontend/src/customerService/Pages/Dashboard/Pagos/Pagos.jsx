@@ -11,6 +11,7 @@ import { useGetAllPaymentFilterQuery, useRemovePaymentMutation } from "../../../
 import moment from "moment";
 import { failer, success } from "../../../Components/alert/success";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
+import Loader from "../../../Components/loader/Loader";
 
 const Pagos = ({ email }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -98,8 +99,8 @@ const Pagos = ({ email }) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
         ...searchData,
-        startDate: selectedDates[0]?.toISOString()?.split("T")[0] || "",
-        endDate: selectedDates[1]?.toISOString()?.split("T")[0] || "",
+        startDate: selectedDates[0] || "",
+        endDate: selectedDates[1] || "",
       });
     }
   };
@@ -175,7 +176,7 @@ const Pagos = ({ email }) => {
   return (
     <>
       {loading === true ? (
-        <Spinner animation="border" variant="primary" />
+        <Loader />
       ) : error === true ? (
         "Some Error Occured"
       ) : (
@@ -232,7 +233,6 @@ const Pagos = ({ email }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -251,7 +251,7 @@ const Pagos = ({ email }) => {
                                   onChange={handleChange}
                                   value={searchData.payment_method}
                                 >
-                                  <option>Seleccionar</option>
+                                  <option disabled>Seleccionar</option>
                                   <option value="cash">Efectivo</option>
                                   <option value="credit card">Tarjeta de crédito</option>
                                   <option value="debit card">Tarjeta de Débito</option>
@@ -356,11 +356,7 @@ const Pagos = ({ email }) => {
                                 <i className="fa-solid fa-chevron-down"></i>
                               </Dropdown.Toggle>
                               {dropdowns[i] && (
-                                <Dropdown.Menu
-                                  className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                  
-                                  
-                                >
+                                <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                                   <Dropdown.Item className="menu-item px-3">
                                     <Link to={`/customerservice/pagos/pagos-details/${id}`} className="menu-link px-3">
                                       Ver detalles
