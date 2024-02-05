@@ -183,7 +183,7 @@ const PropietariosDetails = ({ email }) => {
 
                       <div className="fw-bold mt-5">Última Cita</div>
                       <div className="text-gray-600">
-                        {data.lastAppointment.date !== "" ? moment(data.lastAppointment.date).format("DD MMM YYYY, HH:MM A") : "Sin última cita"}
+                        {data.lastAppointment !== null ? moment(data.lastAppointment.date).format("DD MMM YYYY, HH:MM A") : "Sin última cita"}
                       </div>
                     </div>
                   </Collapse>
@@ -198,18 +198,14 @@ const PropietariosDetails = ({ email }) => {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu
-                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
-                  >
+                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={handleShow} to="#" className="menu-link px-3" >
+                      <Link onClick={handleShow} to="#" className="menu-link px-3">
                         Editar
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={() => setModalShow(true)} to="#" className="menu-link px-3 delete" >
+                      <Link onClick={() => setModalShow(true)} to="#" className="menu-link px-3 delete">
                         Eliminar propietario
                       </Link>
                     </Dropdown.Item>

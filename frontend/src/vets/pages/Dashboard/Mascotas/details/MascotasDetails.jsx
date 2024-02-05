@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./mascotasDetails.scss";
-import { Col, Collapse, Row, Spinner } from "react-bootstrap";
+import { Col, Collapse, Row } from "react-bootstrap";
 import MainTab from "./Tabs/MainTab";
 import { Link, useLocation } from "react-router-dom";
 import { useGetSinglePetQuery } from "../../../../../services/ApiServices";
@@ -46,7 +46,7 @@ const MascotasDetails = () => {
             <Col lg={2} xl={3} className="w-lg-250px w-xl-350px">
               <div className="head container-sm">
                 <div className="img mb-7">
-                  <img src="/images/DogIcon.svg" alt="mascota" />
+                  <img src="/images/DogIcon.svg" alt="mascota" height={"50px"} />
                 </div>
                 <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.pet?.name}</p>
                 <div className="information">

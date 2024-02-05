@@ -11,7 +11,7 @@ function Sidebar() {
       <aside id="sidebar" className="toggle-sidebar sidebar">
         <Link to="/dashboard/resumen">
           {" "}
-          <img src="../images/vets.svg" alt="Administrador" />
+          <img src="/images/vets.svg" alt="Administrador" />
         </Link>
 
         <p className="sidebar-title">MENU</p>

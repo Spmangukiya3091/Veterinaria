@@ -2,27 +2,30 @@
   font-family: "Inter";
   padding: 25px;
 
-  
+
   .heading {
     padding: 1.5rem 0;
     text-align: start;
-   .p-head{
-    margin-bottom: 5px;
-  font: normal normal bold 26px/31px Inter;
-   }
-      p {
-        text-align: left;
-        font-size: 15px;
-        font-weight: 500;
-      }
+
+    .p-head {
+      margin-bottom: 5px;
+      font: normal normal bold 26px/31px Inter;
     }
-    
-  
+
+    p {
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+    }
+  }
+
+
   .head {
     background-color: #fff;
     padding: 30px 32px;
     border-radius: 8px;
     box-shadow: 0px 4px 12px 0px rgb(0 0 0 / 3%);
+
     .img {
       background-color: #F6F8FF;
       display: flex;
@@ -32,17 +35,19 @@
       height: 100px;
       width: 100px;
       margin: 10px auto;
+
       .bi-capsule-pill {
         color: #8a98a5;
-        font-size: 32px;
+        font-size: 40px;
       }
     }
-    
+
     .pet-name {
       font: normal normal 15px/22px Inter;
       font-weight: 600;
       margin-bottom: 10px;
     }
+
     .status {
       background-color: #D9EFFF;
       color: #0092FF;
@@ -59,46 +64,57 @@
         font-size: 8px;
         margin-right: 10px;
       }
+
       p {
         margin-bottom: 0;
         font-weight: 600;
         font-size: 14px;
       }
     }
+
     .information {
       text-align: left;
+
       .time {
         margin: 20px 0;
+
         p {
           margin-bottom: 0;
         }
+
         .time1 {
           border: 1px dashed #b9bfc2;
           border-radius: 8px;
           margin-bottom: 10px;
           padding: 10px 15px;
+
           h5 {
             font-size: 22px;
             font-weight: bold;
             margin-bottom: 0;
           }
+
           p {
             color: #8a98a5;
             font-size: 15px;
           }
         }
       }
+
       .info {
         margin-bottom: 20px;
+
         h6 {
           font-size: 15px;
           color: black;
           margin-bottom: 5px;
         }
+
         .edad-count {
           color: black;
           font: normal normal 600 13px/21px Inter;
         }
+
         p {
           font: normal normal 500 13px/21px Inter;
           color: #336cfb;
@@ -106,22 +122,27 @@
           margin-bottom: 0;
         }
       }
+
       .info-new {
         margin-bottom: 20px;
+
         h6 {
           font-size: 15px;
           color: black;
           margin-bottom: 5px;
         }
+
         p {
           font: normal normal 600 15px/19px Inter;
           color: #000000;
           margin-bottom: 0;
+
           i {
             color: #336cfb;
           }
         }
       }
+
       .timezone {
         h6 {
           font-size: 15px;
@@ -129,6 +150,7 @@
           margin-bottom: 5px;
           font-weight: normal;
         }
+
         p {
           font: normal normal 13px/21px Inter;
           font-weight: 700;

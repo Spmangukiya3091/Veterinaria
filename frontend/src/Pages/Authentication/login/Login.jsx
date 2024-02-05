@@ -24,7 +24,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data } = await userLogin(formData);
+    const { data, isError, error } = await userLogin(formData);
     const expiresIn = 24 * 60 * 60 * 60;
     if (data !== undefined) {
       if (data.user.role === "user") {
@@ -34,59 +34,87 @@ function Login() {
       } else if (data.user.role === "customerService") {
         navigate("/customerservice/resumen");
       }
+      // setCookie("user", data.user.id, {
+      //   maxAge: expiresIn,
+      //   path: "/dashboard",
+      //   domain: "localhost",
+      //   sameSite: "Lax",
+      //   secure: false,
+      // });
+      // setCookie("user", data.user.id, {
+      //   maxAge: expiresIn,
+      //   path: "/",
+      //   domain: "localhost",
+      //   sameSite: "Lax",
+      //   secure: false,
+      // });
+      // setCookie("authToken", data.token, {
+      //   maxAge: expiresIn,
+      //   path: "/dashboard",
+      //   domain: "localhost",
+      //   sameSite: "Lax",
+      //   secure: false,
+      // });
+      // setCookie("authToken", data.token, {
+      //   maxAge: expiresIn,
+      //   path: "/",
+      //   domain: "localhost",
+      //   sameSite: "Lax",
+      //   secure: false,
+      // });
+      // setCookie("user", data.user.id, {
+      //   maxAge: expiresIn,
+      //   path: "/dashboard",
+      //   domain: "192.168.1.15",
+      //   sameSite: "Lax",
+      //   secure: false,
+      // });
+      // setCookie("user", data.user.id, {
+      //   maxAge: expiresIn,
+      //   path: "/",
+      //   domain: "192.168.1.15",
+      //   sameSite: "Lax",
+      //   secure: false,
+      // });
+      // setCookie("authToken", data.token, {
+      //   maxAge: expiresIn,
+      //   path: "/dashboard",
+      //   domain: "192.168.1.15",
+      //   sameSite: "Lax",
+      //   secure: false,
+      // });
+      // setCookie("authToken", data.token, {
+      //   maxAge: expiresIn,
+      //   path: "/",
+      //   domain: "192.168.1.15",
+      //   sameSite: "Lax",
+      //   secure: false,
+      // });
       setCookie("user", data.user.id, {
         maxAge: expiresIn,
         path: "/dashboard",
-        domain: "localhost",
+        domain: "3.6.24.106",
         sameSite: "Lax",
         secure: false,
       });
       setCookie("user", data.user.id, {
         maxAge: expiresIn,
         path: "/",
-        domain: "localhost",
+        domain: "3.6.24.106",
         sameSite: "Lax",
         secure: false,
       });
       setCookie("authToken", data.token, {
         maxAge: expiresIn,
         path: "/dashboard",
-        domain: "localhost",
+        domain: "3.6.24.106",
         sameSite: "Lax",
         secure: false,
       });
       setCookie("authToken", data.token, {
         maxAge: expiresIn,
         path: "/",
-        domain: "localhost",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "192.168.1.15",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "192.168.1.15",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "192.168.1.15",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "192.168.1.15",
+        domain: "3.6.24.106",
         sameSite: "Lax",
         secure: false,
       });
@@ -95,6 +123,9 @@ function Login() {
       dispatch(showToast("Invalid email or password", "FAIL_TOAST"));
     } else if (data.user.role !== "masterAdmin") {
       dispatch(showToast("invalid user type", "FAIL_TOAST"));
+    } else if (isError) {
+      dispatch(showToast(error?.data?.message, "FAIL_TOAST"));
+      navigate("/");
     }
   };
 

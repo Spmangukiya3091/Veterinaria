@@ -187,7 +187,7 @@ const PropietariosDetails = ({ email }) => {
 
                       <div className="fw-bold mt-5">Última Cita</div>
                       <div className="text-gray-600">
-                        {data.lastAppointment.date !== "" ? moment(data.lastAppointment.date).format("DD MMM YYYY, HH:MM A") : "Sin última cita"}
+                        {data.lastAppointment !== null ? moment(data.lastAppointment.date).format("DD MMM YYYY, HH:MM A") : "Sin última cita"}
                       </div>
                     </div>
                   </Collapse>

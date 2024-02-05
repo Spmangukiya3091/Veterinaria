@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./roles.scss";
 import { useDispatch } from "react-redux";
-import { Button, ButtonGroup, Col, Collapse, Dropdown, Form, Row, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Collapse, Dropdown, Form, Row, Image } from "react-bootstrap";
 import UserModal from "./Modals/UserModal";
 import UpdPwdModal from "./Modals/UpdPwdModal";
 import SingleInputDateRangePicker from "../../../Components/date-picker/DatePicker";
@@ -227,7 +227,12 @@ const Roles = ({ email }) => {
               <Col lg={2} xl={3} className="w-lg-250px w-xl-350px">
                 <div className="head container-sm">
                   <div className="symbol symbol-100px symbol-circle mb-7">
-                    <img className="" src={`${loginuserDetails ? loginuserDetails.profile : "/images/avatarImg.png"}`} alt="" width={"82px"} />
+                    <Image
+                      className="object-fit-cover"
+                      src={`${loginuserDetails ? loginuserDetails.profile : "/images/avatarImg.png"}`}
+                      alt=""
+                      width={"82px"}
+                    />
                   </div>
                   <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{loginuserDetails ? loginuserDetails.name : ""}</p>
 
@@ -367,7 +372,7 @@ const Roles = ({ email }) => {
                                         onChange={handleChange}
                                         value={searchData.role}
                                       >
-                                        <option disabled >Seleccionar</option>
+                                        <option disabled>Seleccionar</option>
                                         <option value="masterAdmin">Administrador Estandar</option>
 
                                         <option value="customer service">Servicio al Cliente</option>

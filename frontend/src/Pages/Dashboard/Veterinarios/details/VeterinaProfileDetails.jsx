@@ -133,7 +133,7 @@ const VeterinaProfileDetails = ({ email }) => {
             <Col lg={2} xl={3} className="w-lg-250px w-xl-350px">
               <div className="head container-sm">
                 <div className="symbol symbol-100px symbol-circle mb-7">
-                  <Image src={data?.veterinarianData?.avatar || "/images/doctor1.png"} alt="image" />
+                  <Image src={data?.veterinarianData?.avatar || "/images/doctor1.png"} className="object-fit-cover" alt="image" />
                 </div>
                 <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">
                   DR. {data.veterinarianData.name + " " + data.veterinarianData.surname}

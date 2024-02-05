@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./mascotasDetails.scss";
-import { Button, ButtonGroup, Col, Collapse, Dropdown, Row, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Collapse, Dropdown, Row } from "react-bootstrap";
 import MainTab from "./Tabs/MainTab";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ import ExportModal from "../modal/ExportModal";
 import moment from "moment";
 import { useGetSinglePetQuery, useRemovePetMutation } from "../../../../../services/ApiServices";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
-import { showToast } from "../../../../../store/tostify";
+// import { showToast } from "../../../../../store/tostify";
 import { failer, success } from "../../../../Components/alert/success";
 import { useDispatch } from "react-redux";
 import Loader from "../../../../Components/loader/Loader";
@@ -147,7 +147,7 @@ const MascotasDetails = ({ email }) => {
             <Col lg={2} xl={3} className="w-lg-250px w-xl-350px">
               <div className="head container-sm">
                 <div className="img mb-7">
-                  <img src="/images/DogIcon.svg" alt="mascota" height={"60px"} />
+                  <img src="/images/DogIcon.svg" alt="mascota" height={"50px"} />
                 </div>
                 <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.pet?.name}</p>
                 <div className="information">
@@ -227,23 +227,19 @@ const MascotasDetails = ({ email }) => {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu
-                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
-                  >
+                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={handleShowCitas} to="#" className="menu-link px-3" >
+                      <Link onClick={handleShowCitas} to="#" className="menu-link px-3">
                         Agenda cita
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={handleShowMascota} to="#" className="menu-link px-3" >
+                      <Link onClick={handleShowMascota} to="#" className="menu-link px-3">
                         Editar
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={() => setModalShow(true)} to="#" className="menu-link px-3 delete" >
+                      <Link onClick={() => setModalShow(true)} to="#" className="menu-link px-3 delete">
                         Eliminar
                       </Link>
                     </Dropdown.Item>

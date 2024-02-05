@@ -62,7 +62,6 @@ const VacunasDetails = ({ email }) => {
 
   const handleDeleteVerify = async (enteredPassword) => {
     if (enteredPassword !== "" || null) {
-      
       // Close the DeleteVerifyModal
       setOpenform(false);
 
@@ -79,7 +78,6 @@ const VacunasDetails = ({ email }) => {
       // console.log(body);
       await dltVaccine(body);
     } else {
-      
     }
   };
   useEffect(() => {
@@ -95,7 +93,7 @@ const VacunasDetails = ({ email }) => {
       console.log(response.error);
       dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, response]);
 
   return (
@@ -116,7 +114,7 @@ const VacunasDetails = ({ email }) => {
               <div className="head container-sm">
                 <div className="img mb-7">
                   {/* <i className="fa-solid fa-syringe fs-3x"></i> */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" className=" fs-3x">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32" className="fs-5x">
                     <defs>
                       <clipPath id="a">
                         <path data-name="Rectángulo 11095" fill="#8a98a5" stroke="#707070" d="M155 50h32v32h-32z" />
@@ -199,23 +197,14 @@ const VacunasDetails = ({ email }) => {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu
-                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
-                  >
+                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={handleShow} href="#" className="menu-link px-3" >
+                      <Link onClick={handleShow} href="#" className="menu-link px-3">
                         Editar
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link
-                        onClick={() => setModalShow(true)}
-                        href="#"
-                        className="menu-link px-3 delete"
-                        
-                      >
+                      <Link onClick={() => setModalShow(true)} href="#" className="menu-link px-3 delete">
                         Eliminar vacuna
                       </Link>
                     </Dropdown.Item>
