@@ -18,7 +18,7 @@ import {
 
 function Resumen({ id }) {
   const openCustomDialog = () => {
-    const newTab = window.open("/dialog", "_blank", "width=550,height=600");
+    const newTab = window.open("/veterine/dialog", "_blank", "width=550,height=600");
     newTab.document.body.innerHTML = '<div id="custom-dialog-root"></div> ';
   };
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ function Resumen({ id }) {
   const [medicineData, setMedicineData] = useState([]);
 
   const metricasData = useGetVetsMothlyMetricsQuery(id, { refetchOnMountOrArgChange: true });
-  const dateQuery = `${id}?date=${"2024-01-27"}`;
+  const dateQuery = `${id}?date=${new Date()}`;
   const nextAppointments = useGetVetsAppointmentsByDateQuery(dateQuery, { refetchOnMountOrArgChange: true });
   const appointments = useGetVetsAppoinmentGraphQuery(id, { refetchOnMountOrArgChange: true });
   const patientsAgeGraph = useGetVetsOwnerGraphQuery(id, { refetchOnMountOrArgChange: true });

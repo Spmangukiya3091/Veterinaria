@@ -36,11 +36,6 @@ app.use("/appointment", appointmentRouteHandler);
 app.use("/vaccination", vaccinationRouteHandler);
 app.use("/profile", express.static("./public/veterinaria"));
 
-
-
-
-
-
 sequelize
   .sync()
   .then(() => {

@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Dialog from "./Pages/Dashboard/resumen/dialog/Dialog";
 import Login from "./Pages/Authentication/login/Login";
 import ForgetPassword from "./Pages/Authentication/forgetPassword/forgetpass/ForgetPassword";
 import Verification from "./Pages/Authentication/forgetPassword/verification/Verification";
@@ -10,6 +9,7 @@ import VeterineMain from "./vets/pages/Dashboard/main/Main.jsx";
 import CustomerServiceMain from "./customerService/Pages/Dashboard/main/Main.jsx";
 import { ToastifyContainer } from "./store/tostify";
 import { CookiesProvider } from "react-cookie";
+import Dialog from "./vets/pages/Dashboard/resumen/dialog/Dialog.jsx";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         <CookiesProvider>
           <ToastifyContainer />
           <Routes>
-            <Route exact path="/dialog" element={<Dialog />} />
+            <Route exact path="/veterine/dialog" element={<Dialog />} />
             <Route exact path="/" element={<Login />} />
             <Route path="/forget" element={<ForgetPassword />} />
             <Route exact path="/verification/:email" element={<Verification />} />

@@ -1,6 +1,6 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useGetVetsAppointmentsByDateQuery } from "../../../../../services/ApiServices";
 
@@ -57,10 +57,10 @@ function ProximasCitas({ id }) {
               <div className="header-section align-items-start">
                 <p className="calendar-p">Próximas citas agendadas</p>
                 <div className="calendar-box">
-                  <Button to="#" className="calendar-btn">
+                  <Link to="/veterine/calendario" className="calendar-btn btn btn-primary">
                     <i className="fa-regular fa-calendar"></i>
                     Ver Calendario
-                  </Button>
+                  </Link>
                 </div>
               </div>
               <div className="card-body">
@@ -96,7 +96,7 @@ function ProximasCitas({ id }) {
                               moment(`2023-01-01 ${appointment.scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A")}
                           </div>
                           <Link to="#" className="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">
-                            {`Cita #${appointment.id} - ${appointment.description}`}
+                            {`Cita #${appointment.id} - ${appointment.pet}`}
                           </Link>
                         </div>
                         <Link to="#" className="btn btn-bg-light btn-active-color-primary btn-sm">
