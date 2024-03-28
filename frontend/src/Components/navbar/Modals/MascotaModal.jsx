@@ -23,7 +23,7 @@ const MascotaModal = (props) => {
     const { name, value } = e.target;
     if (name === "ownerId") {
       const ownerText = name === "ownerId" ? e.target.options[e.target.selectedIndex].text : "";
-      console.log(ownerText);
+      // console.log(ownerText);
       setFormData({
         ...formData,
         [name]: value,
@@ -39,7 +39,7 @@ const MascotaModal = (props) => {
 
   const handleSubmit = async () => {
     // Add new pet
-    console.log(formData);
+    // console.log(formData);
     await addPet(formData);
   };
 

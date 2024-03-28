@@ -96,7 +96,7 @@ function DiagnosticForm({ data, refetch }) {
       // Append medication list
       formApiData.append("medication", JSON.stringify(lists));
 
-      console.log("Submitted FormData:", formApiData);
+      // console.log("Submitted FormData:", formApiData);
 
       const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/appointment/registerDiagnostic/${data.id}`, formApiData, {
         headers: {
@@ -104,8 +104,6 @@ function DiagnosticForm({ data, refetch }) {
           Authorization: "Bearer " + cookies.authToken,
         },
       });
-
-      console.log(response);
 
       if (response.status === 200) {
         // API call successful
@@ -117,7 +115,7 @@ function DiagnosticForm({ data, refetch }) {
         dispatch(showToast("Error al guardar el diagnóstico. Inténtelo de nuevo.", "FAIL_TOAST"));
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       dispatch(showToast(error.message, "FAIL_TOAST"));
     }
   };

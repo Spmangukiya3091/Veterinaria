@@ -266,13 +266,13 @@ const VeterinaUserModal = (props) => {
                     onChange={(e) => handleChange(e)}
                     name="specialityId"
                   >
-                    <option disabled >Seleccionar</option>
+                    <option disabled="true" selected="true" value={""} >Seleccionar</option>
                     {specialities
                       ? specialities.map((speciality, i) => (
-                          <option key={i} value={speciality.id}>
-                            {speciality.speciality}
-                          </option>
-                        ))
+                        <option key={i} value={speciality.id}>
+                          {speciality.speciality}
+                        </option>
+                      ))
                       : ""}
                   </Form.Select>
                 </Form.Group>
@@ -339,7 +339,7 @@ const VeterinaUserModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Sexo</Form.Label>
                   <Form.Select aria-label="Default select example" value={formData.sex} onChange={(e) => handleChange(e)} name="sex">
-                    <option disabled>Sexo</option>
+                    <option disabled selected="true" value={""}>Sexo</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
                   </Form.Select>
@@ -370,7 +370,7 @@ const VeterinaUserModal = (props) => {
                     name="department"
                     value={selectedDepartamento || formData.department}
                   >
-                    <option value="">Select Departamento</option>
+                    <option selected="true" value={""} disabled>Select Departamento</option>
                     {departamentoData.map((departamento, i) => (
                       <option key={i} value={departamento.Department}>
                         {departamento.Department}
@@ -383,7 +383,7 @@ const VeterinaUserModal = (props) => {
                 <Form.Group className="mb-3" controlId="distritoSelect">
                   <Form.Label>Distrito</Form.Label>
                   <Form.Select aria-label="Distrito" onChange={(e) => handleChange(e)} name="district" value={formData.district}>
-                    <option value="">Select Distrito</option>
+                    <option selected="true" value={""} disabled>Select Distrito</option>
                     {distritos.map((distrito, i) => (
                       <option key={i} value={distrito}>
                         {distrito}

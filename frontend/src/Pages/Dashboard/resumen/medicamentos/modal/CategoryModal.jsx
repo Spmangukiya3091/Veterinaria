@@ -75,6 +75,7 @@ function CategoryModal({ show, handleClose, email }) {
       // Call the dltVaccine API
       await dltVaccine(body);
     } else {
+      failer("Invalid Password ");
     }
   };
 
@@ -89,7 +90,7 @@ function CategoryModal({ show, handleClose, email }) {
       // Refetch or update data if needed
       categoryList.refetch();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

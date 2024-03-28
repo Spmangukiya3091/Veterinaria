@@ -6,7 +6,7 @@ import { success } from "../../../../../../Components/alert/success";
 const AptosModal = (props) => {
   return (
     <>
-      <Modal {...props} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal show={props.show} onHide={props.onHide} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Información de Aptos</Modal.Title>
         </Modal.Header>

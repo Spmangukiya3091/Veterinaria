@@ -34,62 +34,62 @@ function Login() {
       } else if (data.user.role === "customerService") {
         navigate("/customerservice/resumen");
       }
-      // setCookie("user", data.user.id, {
-      //   maxAge: expiresIn,
-      //   path: "/dashboard",
-      //   domain: "localhost",
-      //   sameSite: "Lax",
-      //   secure: false,
-      // });
-      // setCookie("user", data.user.id, {
-      //   maxAge: expiresIn,
-      //   path: "/",
-      //   domain: "localhost",
-      //   sameSite: "Lax",
-      //   secure: false,
-      // });
-      // setCookie("authToken", data.token, {
-      //   maxAge: expiresIn,
-      //   path: "/dashboard",
-      //   domain: "localhost",
-      //   sameSite: "Lax",
-      //   secure: false,
-      // });
-      // setCookie("authToken", data.token, {
-      //   maxAge: expiresIn,
-      //   path: "/",
-      //   domain: "localhost",
-      //   sameSite: "Lax",
-      //   secure: false,
-      // });
-      // setCookie("user", data.user.id, {
-      //   maxAge: expiresIn,
-      //   path: "/dashboard",
-      //   domain: "192.168.1.15",
-      //   sameSite: "Lax",
-      //   secure: false,
-      // });
-      // setCookie("user", data.user.id, {
-      //   maxAge: expiresIn,
-      //   path: "/",
-      //   domain: "192.168.1.15",
-      //   sameSite: "Lax",
-      //   secure: false,
-      // });
-      // setCookie("authToken", data.token, {
-      //   maxAge: expiresIn,
-      //   path: "/dashboard",
-      //   domain: "192.168.1.15",
-      //   sameSite: "Lax",
-      //   secure: false,
-      // });
-      // setCookie("authToken", data.token, {
-      //   maxAge: expiresIn,
-      //   path: "/",
-      //   domain: "192.168.1.15",
-      //   sameSite: "Lax",
-      //   secure: false,
-      // });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "localhost",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "localhost",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "localhost",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "localhost",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "192.168.1.15",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "192.168.1.15",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "192.168.1.15",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "192.168.1.15",
+        sameSite: "Lax",
+        secure: false,
+      });
       setCookie("user", data.user.id, {
         maxAge: expiresIn,
         path: "/dashboard",

@@ -91,7 +91,7 @@ const Historical = ({ id }) => {
     }
 
     const newQuery = `${id}${queryParams.length > 0 ? "?" : ""}${queryParams.join("&")}`;
-    console.log(newQuery);
+    // console.log(newQuery);
     setSearchQuery(newQuery);
     setDropdownOpen(false);
   };

@@ -39,8 +39,8 @@ const AdminMain = () => {
     paths[totalpaths - 1] === undefined
       ? "Dashboard"
       : totalpaths > 2
-      ? `${paths[totalpaths - 2] + " " + paths[totalpaths - 1]}`
-      : paths[totalpaths - 1];
+        ? `${paths[totalpaths - 2] + " " + paths[totalpaths - 1]}`
+        : paths[totalpaths - 1];
   const capitalize = (word) => {
     const lower = word.toLowerCase();
     return lower.charAt(0).toUpperCase() + lower.slice(1);

@@ -36,7 +36,6 @@ function Navbars({ user }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleLogout = () => {
-    console.log("logout");
     removeCookie("user");
     navigate("/");
     dispatch(showToast("Cerrar sesión exitosamente", "INFO_TOAST"));

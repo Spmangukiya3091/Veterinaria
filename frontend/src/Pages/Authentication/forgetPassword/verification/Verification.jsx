@@ -53,7 +53,7 @@ function Verification() {
     if (!response.isLoading && response.status === "fulfilled") {
       success();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
   }, [dispatch, navigate, response]);

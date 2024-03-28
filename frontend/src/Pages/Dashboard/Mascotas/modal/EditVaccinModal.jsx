@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useUpdateVaccinationValidityMutation } from "../../../../services/ApiServices";
 
-function EditVaccinModal({ show, handleClose, vaccineId }) {
+function EditVaccinModal({ show, handleClose, vaccineId, filter }) {
   const [formState, setFormState] = useState({
     F_vaccination: "",
     validity: "",
@@ -24,16 +24,18 @@ function EditVaccinModal({ show, handleClose, vaccineId }) {
     };
 
     await validityUpdate(body);
-
-    if (response && !response.isLoading) {
+  };
+  useEffect(() => {
+    if (!response.isLoading && response.isSuccess) {
       handleClose();
       success();
-    } else if (response && response.isError) {
-      console.log("error", response.error);
-    } else {
-      console.error("Invalid response structure:", response);
+      filter.refetch();
+    } else if (response.isError && response.status === "rejected") {
+      // console.log("error", response.error);
+      failer(response?.error?.data?.message);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
 
   return (
     <Modal size="md" show={show} onHide={handleClose} centered>

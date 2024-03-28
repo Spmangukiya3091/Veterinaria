@@ -122,7 +122,9 @@ const getVeterinariansBySpeciality = async (req, res) => {
         "speciality",
         "createdAt",
         [Sequelize.fn("COUNT", Sequelize.col("specialityData.id")), "veterinarianCount"],
-        [Sequelize.fn("ANY_VALUE", Sequelize.col("specialityData.id")), "veterinarianId"],
+        // [Sequelize.fn("ANY_VALUE", Sequelize.col("specialityData.id")), "veterinarianId"],
+        [Sequelize.fn("MIN", Sequelize.col("specialityData.id")), "veterinarianId"],
+
         // Include other non-aggregated columns in the GROUP BY clause
       ],
       group: [

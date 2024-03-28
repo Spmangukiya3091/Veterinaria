@@ -27,7 +27,7 @@ const VeterinaModal = (props) => {
 
   useEffect(() => {
     if (!specialityList.isLoading) {
-      console.log(specialityList.data);
+      // console.log(specialityList.data);
       setLoading(false);
       setData(specialityList?.data?.specialities);
     } else if (specialityList.isError) {
@@ -74,6 +74,7 @@ const VeterinaModal = (props) => {
       // Call the dltVaccine API
       await dltSpeciality(body);
     } else {
+      failer("Invalid Password ");
     }
   };
 
@@ -88,7 +89,7 @@ const VeterinaModal = (props) => {
       // Refetch or update data if needed
       specialityList.refetch();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,37 +129,41 @@ const VeterinaModal = (props) => {
                   "Some Error Occured"
                 ) : (
                   <>
-                    {data.map((data, i) => (
-                      <tr key={i}>
-                        <td className="text-start">{data.speciality}</td>
-                        <td className="text-start">{data.veterinarianCount}</td>
-                        <td className="text-start">{moment(data.createdAt).format("DD MMM YYYY")}</td>
-                        <td className="text-end">
-                          <Button
-                            onClick={() => {
-                              props.onHide();
-                              handleOpen();
-                              setSpid(data.id);
-                            }}
-                            className={` btn px-4 btn-secondary btn-center`}
-                            id="dropdown-basic"
-                          >
-                            <i className="fa-solid fa-pen"></i>
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              props.onHide();
-                              setModalShow(true);
-                              setSpid(data.id);
-                            }}
-                            className={` btn px-4 btn-secondary btn-center`}
-                            id="dropdown-basic"
-                          >
-                            <i className="fa-solid fa-trash"></i>
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
+                    {data.length > 0 ?
+
+                      data.map((data, i) => (
+                        <tr key={i}>
+                          <td className="text-start">{data.speciality}</td>
+                          <td className="text-start">{data.veterinarianCount}</td>
+                          <td className="text-start">{moment(data.createdAt).format("DD MMM YYYY")}</td>
+                          <td className="text-end">
+                            <Button
+                              onClick={() => {
+                                props.onHide();
+                                handleOpen();
+                                setSpid(data.id);
+                              }}
+                              className={` btn px-4 btn-secondary btn-center`}
+                              id="dropdown-basic"
+                            >
+                              <i className="fa-solid fa-pen"></i>
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                props.onHide();
+                                setModalShow(true);
+                                setSpid(data.id);
+                              }}
+                              className={` btn px-4 btn-secondary btn-center`}
+                              id="dropdown-basic"
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </Button>
+                          </td>
+                        </tr>
+                      ))
+
+                      : ""}
                   </>
                 )}
               </tbody>

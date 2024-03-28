@@ -177,7 +177,7 @@ function CitasModal({ show, handleClose, id, filter }) {
               <Form.Group className="mb-3">
                 <Form.Label>Propietario</Form.Label>
                 <Form.Select aria-label="Default select example" name="owner" onChange={handleOwnerChange} value={formData.ownerId}>
-                  <option disabled>Seleccione Propietario</option>
+                  <option>Seleccione Propietario</option>
                   {owners?.data?.ownersList.map((owner) => (
                     <option key={owner.id} value={owner.id}>
                       {owner.name + " " + owner.surname}

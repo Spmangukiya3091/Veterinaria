@@ -152,6 +152,7 @@ const Pagos = ({ email }) => {
       // Call the dltPagos API
       await dltPagos(body);
     } else {
+      failer("Invalid Password ");
     }
   };
 
@@ -166,7 +167,7 @@ const Pagos = ({ email }) => {
       // Refetch or update data if needed
       paymentList.refetch();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }

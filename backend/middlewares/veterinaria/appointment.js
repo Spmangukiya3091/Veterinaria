@@ -2,7 +2,7 @@ const multer = require("multer");
 const path = require("path");
 
 const ProfileStorage = multer.diskStorage({
-  destination: "./public/veterinaria/appointment",
+  destination: "./public/appointment",
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },

@@ -36,7 +36,7 @@ function Navbars({ user }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleLogout = () => {
-    console.log("logout");
+    // console.log("logout");
     removeCookie("user");
     removeCookie("authToken");
     navigate("/");

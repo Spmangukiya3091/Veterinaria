@@ -57,6 +57,7 @@ function CategoryModal({ show, handleClose, email }) {
       // Call the dltCategory API
       await dltCategory(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -75,7 +76,7 @@ function CategoryModal({ show, handleClose, email }) {
     categories.refetch();
   };
   const handleOpen = () => setOpen(true);
-  console.log(response);
+
   useEffect(() => {
     if (!response.isLoading && response.status === "fulfilled") {
       success();
@@ -88,7 +89,7 @@ function CategoryModal({ show, handleClose, email }) {
       categories.refetch();
       handleClose();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
 
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));

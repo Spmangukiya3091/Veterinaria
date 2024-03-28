@@ -7,14 +7,14 @@ import Historical from "./historical/Historical";
 import Vaccination from "./Vaccination/Vaccination";
 import { useLocation } from "react-router-dom";
 
-function MainTab({ data, appointmentId }) {
+function MainTab({ data, appointmentId, email }) {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
   const status = searchParams.get("tab");
   return (
     <div className="main-tab">
-      <Tabs defaultActiveKey={status === "vacunas" ? "Vaccination" : "Información"}  className="mb-3">
+      <Tabs defaultActiveKey={status === "vacunas" ? "Vaccination" : "Información"} className="mb-3">
         <Tab eventKey="Información" title="Información">
           <Information data={data} />
         </Tab>
@@ -22,7 +22,7 @@ function MainTab({ data, appointmentId }) {
           <Historical id={appointmentId} />
         </Tab>
         <Tab eventKey="Vaccination" title="Vacunación">
-          <Vaccination id={data?.id} />
+          <Vaccination id={data?.id} email={email} />
         </Tab>
       </Tabs>
     </div>

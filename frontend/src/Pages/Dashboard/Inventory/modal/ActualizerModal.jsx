@@ -29,7 +29,7 @@ function ActualizerModal({ show, handleClose, id, status }) {
       await updateStock(body);
 
       if (!isLoading) {
-        console.log(data); // Access the updated data
+        // console.log(data); // Access the updated data
         success("Stock updated successfully!");
         handleClose();
       } else {

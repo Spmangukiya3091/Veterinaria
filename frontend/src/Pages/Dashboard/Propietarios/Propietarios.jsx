@@ -8,7 +8,7 @@ import PropietariousModal from "./modal/PropietariousModal";
 import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useOwnerFilterQuery, useRemoveOwnerMutation } from "../../../services/ApiServices";
-import { success } from "../../../Components/alert/success";
+import { failer, success } from "../../../Components/alert/success";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { showToast } from "../../../store/tostify";
 import { useDispatch } from "react-redux";
@@ -161,6 +161,7 @@ const Propietarios = ({ email }) => {
       // Call the dltOwner API
       await dltOwner(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -174,10 +175,12 @@ const Propietarios = ({ email }) => {
       // Refetch or update data if needed
       allOwnersList.refetch();
     } else if (response.isError) {
-      console.log(response.error);
-      dispatch(showToast(response.error.message, "FAIL_TOAST"));
+      // console.log(response.error);
+      failer(response?.error?.data?.message)
+      // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
-  }, [dispatch, response]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
 
   const handleExportData = async () => {
     try {

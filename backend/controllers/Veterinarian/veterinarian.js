@@ -176,7 +176,7 @@ const deleteVeterinarian = async (req, res) => {
     }
 
     const existingFilename = veterinarian?.avatar.split("/").pop();
-    const imagePath = `./public/veterinaria/veterinarian/${existingFilename}`;
+    const imagePath = `./public/veterinarian/${existingFilename}`;
     console.log("imagePath", imagePath);
     console.log("existingFilename", existingFilename);
 

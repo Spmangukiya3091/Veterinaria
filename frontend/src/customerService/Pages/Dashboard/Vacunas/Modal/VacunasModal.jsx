@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useAddVaccineMutation, useGetSingleVaccineQuery } from "../../../../../services/ApiServices";
 
 const VacunasModal = (props) => {
@@ -31,10 +31,13 @@ const VacunasModal = (props) => {
     });
   };
 
-  const handleSubmit = () => {
-    addVaccine(formData);
-    console.log(response);
-    if (!response.isLoading) {
+  const handleSubmit = async () => {
+    await addVaccine(formData);
+    // console.log(response);
+  };
+
+  useEffect(() => {
+    if (!response.isLoading && response.isSuccess) {
       setFormData({
         name: "",
         stock: "",
@@ -42,10 +45,13 @@ const VacunasModal = (props) => {
       });
       props.onHide();
       success();
-    } else if (response.isError) {
-      console.log("error", response.error);
+    } else if (response.isError && response.status === "rejected") {
+      // console.log("error", response.error);
+      failer(response?.error?.data?.message);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
+
   return (
     <>
       <Modal show={props.show} onHide={props.onHide} size="md" aria-labelledby="contained-modal-title-vcenter" centered>

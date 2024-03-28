@@ -157,6 +157,7 @@ const Propietarios = ({ email }) => {
       // Call the dltOwner API
       await dltOwner(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -170,7 +171,7 @@ const Propietarios = ({ email }) => {
       // Refetch or update data if needed
       allOwnersList.refetch();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
 
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));

@@ -4,7 +4,6 @@ import "./event.scss";
 
 function Event({ lists, setLists, eventData, setEventData, show, handleClose }) {
   const [isChecked, setIsChecked] = useState(false);
-  console.log("eventData", eventData);
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };

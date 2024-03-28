@@ -70,7 +70,7 @@ const CitaModal = ({ show, onHide }) => {
 
   const handleSubmit = async () => {
     try {
-      console.log(formData);
+      // console.log(formData);
       addCitas(formData);
       if (!isLoading) {
         onHide();

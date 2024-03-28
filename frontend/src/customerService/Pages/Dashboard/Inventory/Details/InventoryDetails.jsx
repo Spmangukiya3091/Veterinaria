@@ -89,6 +89,7 @@ const InventoryDetails = ({ email }) => {
       // console.log(body);
       await dltProduct(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -101,7 +102,6 @@ const InventoryDetails = ({ email }) => {
       success();
       navigate("/customerservice/inventario");
     } else if (response.isError) {
-      console.log(response.error);
       failer(response?.error?.data?.message);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
@@ -197,11 +197,7 @@ const InventoryDetails = ({ email }) => {
                     <i className="fa-solid fa-chevron-down"></i>
                   </Dropdown.Toggle>
 
-                  <Dropdown.Menu
-                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
-                  >
+                  <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
                       <Link
                         to="#"
@@ -209,18 +205,12 @@ const InventoryDetails = ({ email }) => {
                         onClick={() => {
                           setProdShow(true);
                         }}
-                        
                       >
                         Editar
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link
-                        onClick={() => setModalShow(true)}
-                        href="#"
-                        className="menu-link px-3 delete"
-                        
-                      >
+                      <Link onClick={() => setModalShow(true)} href="#" className="menu-link px-3 delete">
                         Eliminar producto
                       </Link>
                     </Dropdown.Item>
