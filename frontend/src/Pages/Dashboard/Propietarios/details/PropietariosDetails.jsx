@@ -105,7 +105,7 @@ const PropietariosDetails = ({ email }) => {
       // Refetch or update data if needed
       navigate("/dashboard/propietarios");
     } else if (dltResponse.isError) {
-      console.log(dltResponse.error);
+      // console.log(dltResponse.error);
       failer(dltResponse?.error?.data?.message);
 
       // dispatch(showToast(dltResponse.error.message, "FAIL_TOAST"));

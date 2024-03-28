@@ -9,8 +9,8 @@ import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useGetAllVaccinesByFilterQuery, useRemoveVaccineMutation } from "../../../services/ApiServices";
 import moment from "moment";
-import { success } from "../../../Components/alert/success";
-import { showToast } from "../../../store/tostify";
+import { failer, success } from "../../../Components/alert/success";
+// import { showToast } from "../../../store/tostify";
 import { useDispatch } from "react-redux";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import axios from "axios";
@@ -143,6 +143,7 @@ const Vacunas = ({ email }) => {
       // Call the dltVaccine API
       await dltVaccine(body);
     } else {
+      failer("Invalid Password ");
     }
   };
 
@@ -156,9 +157,10 @@ const Vacunas = ({ email }) => {
       });
       // Refetch or update data if needed
       vaccineList.refetch();
-    } else if (response.isError) {
-      console.log(response.error);
-      dispatch(showToast(response.error.message, "FAIL_TOAST"));
+    } else if (response.isError && response.status === "rejected") {
+      // console.log(response.error);
+      // dispatch(showToast(response.error.message, "FAIL_TOAST"));
+      failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, response]);

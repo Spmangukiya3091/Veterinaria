@@ -1,8 +1,8 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
 const ExportModal = (props) => {
+
   return (
     <>
       <Modal size="md" show={props.show} onHide={props.onHide} centered>
@@ -11,12 +11,11 @@ const ExportModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex justify-content-around w-100 m-auto align-items-center">
-            <Link className="btn btn-primary" to={`${process.env.REACT_APP_SERVER_URL}/pet`}>
-              descargar
-            </Link>
+            <a href={`${process.env.REACT_APP_SERVER_URL}/profile/pets/pdfs/pet_summary_${props.id}.pdf`} download className="btn btn-primary" target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
+              Descargar
+            </a>
             <div>
-              {/* <img src={`${process.env.REACT_APP_SERVER_URL}/profile/pets/images/qr_code_${props.id}.png`} alt="qrCode" /> */}
-              <img src={`http://192.168.1.11:2000/profile/pets/images/qr_code_${props.id}.png`} alt="qrCode" />
+              <img src={`${process.env.REACT_APP_SERVER_URL}/profile/pets/images/qr_code_${props.id}.png`} alt="qrCode" />
             </div>
           </div>
         </Modal.Body>

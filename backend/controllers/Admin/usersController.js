@@ -331,7 +331,7 @@ const updateUserProfile = async (req, res) => {
   const user = await Auth.findOne({ where: { id: id } });
   const existingFilename = user?.profile?.split("/").pop();
 
-  const imagePath = `./public/veterinaria/profile/${existingFilename}`;
+  const imagePath = `./public/profile/${existingFilename}`;
   if (password !== "") {
     if (password !== confirmPassword) {
       res.status(200).send({
@@ -386,7 +386,7 @@ const deleteUserProfile = async (req, res) => {
   });
   const user = await Auth.findOne({ where: { id: id } });
   const existingFilename = user?.profile?.split("/").pop();
-  const imagePath = `./public/veterinaria/profile/${existingFilename}`;
+  const imagePath = `./public/profile/${existingFilename}`;
 
   if (!password) {
     return res.status(400).send({

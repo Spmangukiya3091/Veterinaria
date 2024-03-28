@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import {
   useAddAppoinmentMutation,
   useGetOwnersListQuery,
@@ -115,19 +115,20 @@ function CitasModal({ show, onHide, citas, id }) {
         ...formData,
       };
       try {
-        console.log(body);
-        updateCitas(body);
+        // console.log(body);
+        await updateCitas(body);
         if (!response.isLoading) {
           onHide();
           success();
         }
       } catch (error) {
         console.log("error occured: ", error);
+        failer(error?.response?.data?.message);
       }
     }
     try {
-      console.log(formData);
-      addCitas(formData);
+      // console.log(formData);
+      await addCitas(formData);
       if (!isLoading) {
         onHide();
         success();

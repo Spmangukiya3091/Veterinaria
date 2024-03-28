@@ -11,7 +11,7 @@ import CitaModal from "../Modals/CitaModal";
 import { useGetSingleVeterinQuery, useRemoveVeterineMutation } from "../../../../services/ApiServices";
 import moment from "moment";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { showToast } from "../../../../store/tostify";
 import { useDispatch } from "react-redux";
 import Loader from "../../../../Components/loader/Loader";
@@ -99,6 +99,7 @@ const VeterinaProfileDetails = ({ email }) => {
       // Call the dltMascotas API
       await dltMascotas(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -110,12 +111,13 @@ const VeterinaProfileDetails = ({ email }) => {
         email: "",
       });
       navigate("/dashboard/veterinarios");
-    } else if (response.isError) {
-      console.log(response.error);
-      dispatch(showToast(response.error.message, "FAIL_TOAST"));
+    } else if (response.isError && response.status === "rejected") {
+      // console.log(response.error);
+      // dispatch(showToast(response.error.message, "FAIL_TOAST"));
+      failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, response]);
+  }, [response]);
   return (
     <>
       {loading ? (

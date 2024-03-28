@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { success } from "../../alert/success";
+import { failer, success } from "../../alert/success";
 import { useAddPaymentMutation, useGetOwnersListQuery, useGetVeterinariansQuery } from "../../../../services/ApiServices";
 
 const PagoModal = (props) => {
@@ -45,20 +45,21 @@ const PagoModal = (props) => {
     });
   };
 
-  const handleSubmit = () => {
-    try {
-      console.log(formData);
-      addPayment(formData);
-      if (!response.isLoading) {
-        props.onHide();
-        success();
-      } else {
-        console.log(response.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSubmit = async () => {
+    // console.log(formData);
+    await addPayment(formData);
   };
+
+  useEffect(() => {
+    if (!response.isLoading && response.isSuccess) {
+      props.onHide();
+      success();
+    } else if (response.isError && response.status === "rejected") {
+      failer(response?.error?.data?.message);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
+
   return (
     <>
       <Modal show={props.show} onHide={props.onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -115,13 +116,11 @@ const PagoModal = (props) => {
                   <Form.Label>Doctor</Form.Label>
                   <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor}>
                     <option disabled>Doctor</option>
-                    {doctors?.data?.veterinarianList
-                      
-                      .map(({ id, name, surname }) => (
-                        <option key={id} value={name + " " + surname}>
-                          {name + " " + surname}
-                        </option>
-                      ))}
+                    {doctors?.data?.veterinarianList.map(({ id, name, surname }) => (
+                      <option key={id} value={name + " " + surname}>
+                        {name + " " + surname}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./vacunasDetail.scss";
-import { ButtonGroup, Col, Collapse, Dropdown, Row, Spinner } from "react-bootstrap";
+import { ButtonGroup, Col, Collapse, Dropdown, Row } from "react-bootstrap";
 import MainTab from "./Tabs/MainTab";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import VacunasModal from "../Modal/VacunasModal";
@@ -8,16 +8,16 @@ import Alert from "../../../../Components/alert/Alert";
 import { useGetSingleVaccineQuery, useRemoveVaccineMutation } from "../../../../services/ApiServices";
 import moment from "moment";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
-import { success } from "../../../../Components/alert/success";
-import { showToast } from "../../../../store/tostify";
-import { useDispatch } from "react-redux";
+import { failer, success } from "../../../../Components/alert/success";
+// import { showToast } from "../../../../store/tostify";
+// import { useDispatch } from "react-redux";
 import Loader from "../../../../Components/loader/Loader";
 
 const VacunasDetails = ({ email }) => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [showDropdown, setShowDropdown] = useState(true);
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -78,6 +78,7 @@ const VacunasDetails = ({ email }) => {
       // console.log(body);
       await dltVaccine(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -89,12 +90,13 @@ const VacunasDetails = ({ email }) => {
       });
       success();
       navigate("/dashboard/vacunas");
-    } else if (response.isError) {
-      console.log(response.error);
-      dispatch(showToast(response.error.message, "FAIL_TOAST"));
+    } else if (response.isError && response.status === "rejected") {
+      // console.log(response.error);
+      // dispatch(showToast(response.error.message, "FAIL_TOAST"));
+      failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, response]);
+  }, [response]);
 
   return (
     <>

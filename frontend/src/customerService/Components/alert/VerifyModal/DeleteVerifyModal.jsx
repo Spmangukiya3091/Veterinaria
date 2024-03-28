@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { failer } from "../../../../Components/alert/success";
 
 const DeleteVerifyModal = (props) => {
   const [password, setPassword] = useState("");
@@ -14,7 +15,8 @@ const DeleteVerifyModal = (props) => {
       props.onDelete(password);
     } else {
       // You can display an error message or prevent submission
-      console.log("Password cannot be empty");
+      // console.log("Password cannot be empty");
+      failer("Password cannot be empty");
     }
   };
 

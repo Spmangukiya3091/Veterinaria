@@ -82,8 +82,8 @@ const Pagos = ({ email }) => {
   };
 
   const filteredData = data.filter(({ owner, service, payment_no }) => {
-    const searchString = searchValue;
-    return owner.toLowerCase().includes(searchString) || service.toLowerCase().includes(searchString) || payment_no.toString().includes(searchString);
+    const searchString = searchValue.toLowerCase();
+    return (owner?.toLowerCase().includes(searchString) || service?.toLowerCase().includes(searchString) || payment_no?.toString().includes(searchString));
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -116,10 +116,10 @@ const Pagos = ({ email }) => {
       searchData.payment_method === ""
         ? `?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `?payment_method=${searchData.payment_method}`
-        : searchData.payment_method === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? ""
-        : `?payment_method=${searchData.payment_method}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `?payment_method=${searchData.payment_method}`
+          : searchData.payment_method === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? ""
+            : `?payment_method=${searchData.payment_method}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // appointmentsByFilter.refetch();
     setDropdownOpen(false);
@@ -171,7 +171,7 @@ const Pagos = ({ email }) => {
       // Refetch or update data if needed
       paymentList.refetch();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }

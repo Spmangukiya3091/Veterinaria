@@ -88,6 +88,7 @@ const PropietariosDetails = ({ email }) => {
 
       navigate("/customerservice/propietarios");
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {

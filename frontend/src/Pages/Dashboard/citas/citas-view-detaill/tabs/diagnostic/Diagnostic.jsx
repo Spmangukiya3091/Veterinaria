@@ -51,9 +51,9 @@ function Diagnostic({ data }) {
                     <div key={key} className="d-flex justify-content-between w-100">
                       <p>{key}</p>
                       <div className="files-inner">
-                        <Link to={value} download target="_blank">
+                        <a href={value} download target="_blank" rel="noreferrer">
                           <i className="bi bi-download"></i>
-                        </Link>
+                        </a>
                       </div>
                     </div>
                   ))}

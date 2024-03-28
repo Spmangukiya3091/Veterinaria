@@ -13,7 +13,7 @@ import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerif
 import { useDispatch } from "react-redux";
 import { showToast } from "../../../../store/tostify";
 import { useGetAppointmentFilterQuery, useRemoveAppointmentMutation } from "../../../../services/ApiServices";
-import { success } from "../../../Components/alert/success";
+import { failer, success } from "../../../Components/alert/success";
 import Loader from "../../../Components/loader/Loader";
 
 function Citas({ email }) {
@@ -160,6 +160,7 @@ function Citas({ email }) {
       // Call the dltCitas API
       await dltCitas(body);
     } else {
+      failer("Invalid Password ");
     }
   };
 
@@ -174,11 +175,12 @@ function Citas({ email }) {
       // Refetch or update data if needed
       appointmentsByFilter.refetch();
     } else if (response.isError) {
-      console.log(response.error);
-      dispatch(showToast(response.error.message, "FAIL_TOAST"));
+      // console.log(response.error);
+      // dispatch(showToast(response?.error?.data?.message, "FAIL_TOAST"));
+      failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, response]);
+  }, [response]);
 
   return (
     <>

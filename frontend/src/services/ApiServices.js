@@ -584,6 +584,12 @@ export const petApi = createApi({
         method: "GET",
       }),
     }),
+    petSummaryPdf: builder.query({
+      query: (filter) => ({
+        url: `petSummaryPdf/${filter}`,
+        method: "GET",
+      }),
+    }),
 
     getSinglePet: builder.query({
       query: (id) => ({
@@ -640,6 +646,7 @@ export const {
   useAddPetMutation,
   useUpdatePetMutation,
   useRemovePetMutation,
+  usePetSummaryPdfQuery
 } = petApi;
 
 export const vaccinationApi = createApi({

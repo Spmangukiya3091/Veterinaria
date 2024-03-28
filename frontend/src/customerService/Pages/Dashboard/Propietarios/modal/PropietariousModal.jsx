@@ -109,7 +109,7 @@ const PropietarioModal = (props) => {
         success();
       } else if (response2.isError) {
         failer(response2?.error?.data?.message);
-        console.log("error");
+        // console.log("error");
       }
     } else {
       if (!response.isLoading && response.isSuccess) {
@@ -129,9 +129,10 @@ const PropietarioModal = (props) => {
         success();
       } else if (response.isError) {
         failer(response?.error?.data?.message);
-        console.log("error");
+        // console.log("error");
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (

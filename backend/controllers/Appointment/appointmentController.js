@@ -80,8 +80,8 @@ const registerDiagnostic = async (req, res) => {
       });
       return acc;
     }, []);
-    const documentation_array = JSON.parse(array);
-    
+    const documentation_array = array;
+
     const appointment = {
       condition_name: req.body.condition_name,
       description: req.body.description,
@@ -266,7 +266,7 @@ const deleteAppointmentRecord = async (req, res) => {
         myArray.map((docPath) => {
           const fileName = Object.keys(docPath)[0];
           console.log("fileName--------------------------", fileName);
-          const imagePath = `./public/veterinaria/appointment/${fileName}`;
+          const imagePath = `./public/appointment/${fileName}`;
 
           fs.unlinkSync(imagePath, async (err) => {
             if (err) {
@@ -583,8 +583,10 @@ const getSingleAppointment = async (req, res) => {
     }
 
     if (appointment.medication !== null && appointment.documentation !== null) {
-      const documentationArray = JSON.parse(appointment.documentation || "[]");
-      const medications = JSON.parse(appointment.medication || "[]");
+      //const documentationArray = JSON.parse(appointment.documentation || "[]");
+      //const medications = JSON.parse(appointment.medication || "[]");
+      const documentationArray = appointment.documentation || [];
+      const medications = appointment.medication || [];
 
       const updatedAppointment = {
         ...appointment.toJSON(),

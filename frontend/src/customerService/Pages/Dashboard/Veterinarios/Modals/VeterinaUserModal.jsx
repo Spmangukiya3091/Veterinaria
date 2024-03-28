@@ -201,7 +201,7 @@ const VeterinaUserModal = (props) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       failer(error?.response?.data?.message);
       // dispatch(showToast("Internal Server Error", "FAIL_TOAST"));
     }

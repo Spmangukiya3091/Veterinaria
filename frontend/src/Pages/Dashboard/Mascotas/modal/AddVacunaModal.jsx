@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useAddVaccinationRecordMutation, useGetAllVaccinesQuery } from "../../../../services/ApiServices";
 
-function AddVacunaModal({ show, handleClose }) {
+function AddVacunaModal({ show, handleClose, filter }) {
   const location = useLocation();
   const [formData, setFormData] = useState({
     id: "",
@@ -29,15 +29,20 @@ function AddVacunaModal({ show, handleClose }) {
   };
 
   const handleSubmit = async () => {
-    console.log(formData);
+    // console.log(formData);
     await addVaccineRecord(formData);
-    if (!response.isLoading) {
+  };
+  useEffect(() => {
+    if (!response.isLoading && response.isSuccess) {
       handleClose();
       success();
-    } else if (response.isError) {
-      console.log("error", response.error);
+      filter.refetch();
+    } else if (response.isError && response.status === "rejected") {
+      // console.log("error", response.error);
+      failer(response?.error?.data?.message);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
 
   return (
     <div>

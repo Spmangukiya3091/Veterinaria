@@ -84,7 +84,7 @@ const Mascotas = ({ email }) => {
   };
 
   const filteredData = data.filter(({ name, owner, species, sex }) => {
-    const searchString = searchValue;
+    const searchString = searchValue.toLowerCase();
     return (
       name.toLowerCase().includes(searchString) ||
       owner.toLowerCase().includes(searchString) ||
@@ -161,6 +161,7 @@ const Mascotas = ({ email }) => {
       // Call the dltMascotas API
       await dltMascotas(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -176,7 +177,7 @@ const Mascotas = ({ email }) => {
     } else if (response.isError) {
       failer(response?.error?.data?.message);
       // dispatch(showToast(response?.error?.data?.message, "FAIL_TOAST"));
-      console.log(response.error);
+      // console.log(response.error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);

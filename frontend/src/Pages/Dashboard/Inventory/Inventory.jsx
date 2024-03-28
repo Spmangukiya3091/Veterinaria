@@ -169,6 +169,7 @@ const Inventory = ({ email }) => {
       // Call the dltInventory API
       await dltInventory(body);
     } else {
+      failer("Invalid Password ");
     }
   };
 
@@ -183,7 +184,7 @@ const Inventory = ({ email }) => {
       // Refetch or update data if needed
       products.refetch();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
 
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));

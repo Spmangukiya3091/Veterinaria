@@ -142,7 +142,7 @@ function CitasModal({ show, handleClose, id, filter }) {
         success();
       } else if (response2.isError) {
         failer(response2?.error?.data?.message);
-        console.log("error");
+        // console.log("error");
       }
     } else {
       if (!response.isLoading && response.isSuccess) {
@@ -163,7 +163,7 @@ function CitasModal({ show, handleClose, id, filter }) {
         filter.refetch();
       } else if (response.isError) {
         failer(response?.error?.data?.message);
-        console.log("error");
+        // console.log("error");
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -181,7 +181,7 @@ function CitasModal({ show, handleClose, id, filter }) {
               <Form.Group className="mb-3">
                 <Form.Label>Propietario</Form.Label>
                 <Form.Select aria-label="Default select example" name="owner" onChange={handleOwnerChange} value={formData.ownerId}>
-                  <option disabled>Seleccione Propietario</option>
+                  <option>Seleccione Propietario</option>
                   {owners?.data?.ownersList.map((owner) => (
                     <option key={owner.id} value={owner.id}>
                       {owner.name + " " + owner.surname}
@@ -194,7 +194,7 @@ function CitasModal({ show, handleClose, id, filter }) {
               <Form.Group className="mb-3">
                 <Form.Label>Mascota</Form.Label>
                 <Form.Select aria-label="Default select example" name="pet" onChange={handlePetChange} value={formData.petId}>
-                  <option disabled>Seleccione Mascota</option>
+                  <option>Seleccione Mascota</option>
                   {pets?.data?.pets.map((pet) => (
                     <option key={pet.id} value={pet.id}>
                       {pet.name}
@@ -209,7 +209,7 @@ function CitasModal({ show, handleClose, id, filter }) {
               <Form.Group className="mb-3">
                 <Form.Label>Veterinario</Form.Label>
                 <Form.Select aria-label="Default select example" name="veterinarian" onChange={handleVetChange} value={formData.veterinarianId}>
-                  <option disabled>Seleccione Veterinario</option>
+                  <option>Seleccione Veterinario</option>
                   {veterinarians?.data?.veterinarianList.map((vet) => (
                     <option key={vet.id} value={vet.id}>
                       {vet.name + " " + vet.surname}

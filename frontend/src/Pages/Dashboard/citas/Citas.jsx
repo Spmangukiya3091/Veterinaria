@@ -160,6 +160,7 @@ function Citas({ email }) {
       // Call the dltCitas API
       await dltCitas(body);
     } else {
+      failer("Invalid Password ");
     }
   };
 
@@ -174,7 +175,6 @@ function Citas({ email }) {
       // Refetch or update data if needed
       appointmentsByFilter.refetch();
     } else if (response.isError) {
-      console.log(response.error);
       failer(response?.error?.data?.message);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }

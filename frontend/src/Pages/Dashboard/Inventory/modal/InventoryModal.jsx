@@ -114,12 +114,12 @@ function InventoryModal(props) {
         });
         props.filter.refetch();
       } else if (response2.isError && response2.status === "rejected") {
-        console.log(response2.error);
+        // console.log(response2.error);
         failer(response2?.error?.data?.message);
       }
     } else {
       if (!response.isLoading && response.status === "fulfilled") {
-        console.log(response);
+        // console.log(response);
         success();
         setFormData({
           product: "",
@@ -138,10 +138,11 @@ function InventoryModal(props) {
         props.onHide();
         props.filter.refetch();
       } else if (response.isError && response.status === "rejected") {
-        console.log(response.error);
+        // console.log(response.error);
         failer(response?.error?.data?.message);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (

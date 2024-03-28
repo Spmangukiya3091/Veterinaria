@@ -48,7 +48,7 @@ const UpdPwdModal = (props) => {
       navigate("/");
       removeCookie("user");
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
   }, [dispatch, navigate, props, removeCookie, response]);

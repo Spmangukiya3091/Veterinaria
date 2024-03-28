@@ -12,7 +12,7 @@ import formatCreatedAtDate from "../../../helper/helper";
 import { useCookies } from "react-cookie";
 import { showToast } from "../../../store/tostify";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
-import { success } from "../../../Components/alert/success";
+import { failer, success } from "../../../Components/alert/success";
 import Loader from "../../../Components/loader/Loader";
 
 const Roles = ({ email }) => {
@@ -192,6 +192,7 @@ const Roles = ({ email }) => {
       // console.log(body);
       await dltUser(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -204,8 +205,9 @@ const Roles = ({ email }) => {
       success();
       userList.refetch();
     } else if (dltResponse.isError) {
-      console.log(dltResponse.error);
-      dispatch(showToast(dltResponse.error.message, "FAIL_TOAST"));
+      // console.log(dltResponse.error);
+      // dispatch(showToast(dltResponse.error.message, "FAIL_TOAST"));
+      failer(dltResponse?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, dltResponse]);

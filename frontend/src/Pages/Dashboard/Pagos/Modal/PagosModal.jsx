@@ -43,21 +43,6 @@ const PagosModal = (props) => {
         final_amount,
         description,
       });
-    } else if (paymentDetails.isError) {
-      console.log("error", paymentDetails.error);
-    } else {
-      setFormData({
-        payment_no: 0,
-        transfer_no: 0,
-        owner: "",
-        doctor: "",
-        service: "",
-        amount: 0,
-        discount: 0,
-        payment_method: "",
-        final_amount: 0,
-        description: "",
-      });
     }
   }, [paymentDetails, props.id]);
 
@@ -89,7 +74,6 @@ const PagosModal = (props) => {
 
   const handleSubmit = () => {
     if (props.id !== undefined) {
-      console.log(formData);
       const body = {
         id: props.id,
         ...formData,
@@ -118,12 +102,12 @@ const PagosModal = (props) => {
           description: "",
         });
       } else if (response2.isError && response2.status === "rejected") {
-        console.log(response2.error);
+        // console.log(response2.error);
         failer(response2?.error?.data?.message);
       }
     } else {
       if (!response.isLoading && response.status === "fulfilled") {
-        console.log(response);
+        // console.log(response);
         success();
         props.filter.refetch();
         setFormData({
@@ -140,11 +124,11 @@ const PagosModal = (props) => {
         });
         props.onHide();
       } else if (response.isError && response.status === "rejected") {
-        console.log(response.error);
+        // console.log(response.error);
         failer(response?.error?.data?.message);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
   return (
     <>

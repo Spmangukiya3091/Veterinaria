@@ -45,7 +45,7 @@ const MascotasDetails = ({ email }) => {
     } else if (petDetails.isError) {
       setLoading(false);
       setError(true);
-      console.log("error", petDetails.error);
+      // console.log("error", petDetails.error);
     }
   }, [id, petDetails]);
 
@@ -91,6 +91,7 @@ const MascotasDetails = ({ email }) => {
       // Call the dltMascotas API
       await dltMascotas(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -103,7 +104,7 @@ const MascotasDetails = ({ email }) => {
       });
       navigate("/customerservice/mascotas");
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }

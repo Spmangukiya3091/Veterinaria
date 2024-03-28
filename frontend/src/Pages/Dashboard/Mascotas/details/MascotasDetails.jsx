@@ -6,20 +6,20 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import CitasModal from "../../citas/modal/CitasModal";
 import MascotasModal from "../modal/MascotasModal";
 import Alert from "../../../../Components/alert/Alert";
-import { useGetSinglePetQuery, useRemovePetMutation } from "../../../../services/ApiServices";
+import { useGetSinglePetQuery, usePetSummaryPdfQuery, useRemovePetMutation } from "../../../../services/ApiServices";
 import moment from "moment";
 import ExportModal from "../modal/ExportModal";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
-import { success } from "../../../../Components/alert/success";
-import { showToast } from "../../../../store/tostify";
-import { useDispatch } from "react-redux";
+import { failer, success } from "../../../../Components/alert/success";
+// import { showToast } from "../../../../store/tostify";
+// import { useDispatch } from "react-redux";
 import Loader from "../../../../Components/loader/Loader";
 
 const MascotasDetails = ({ email }) => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [show, setShow] = useState(true);
   const [shown, setShown] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -37,6 +37,7 @@ const MascotasDetails = ({ email }) => {
   const [dltMascotas, response] = useRemovePetMutation();
 
   const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true });
+  const generatePdf = usePetSummaryPdfQuery(id, { refetchOnMountOrArgChange: true })
 
   useEffect(() => {
     if (!petDetails.isLoading) {
@@ -45,7 +46,7 @@ const MascotasDetails = ({ email }) => {
     } else if (petDetails.isError) {
       setLoading(false);
       setError(true);
-      console.log("error", petDetails.error);
+      // console.log("error", petDetails.error);
     }
   }, [id, petDetails]);
 
@@ -74,6 +75,11 @@ const MascotasDetails = ({ email }) => {
     setOpenform(true);
   };
 
+  const handleOpenPdfModal = async () => {
+    setExport(true)
+    await generatePdf.refetch()
+  }
+
   const handleDeleteVerify = async (enteredPassword) => {
     if (enteredPassword !== "" || null) {
       // Close the DeleteVerifyModal
@@ -91,6 +97,7 @@ const MascotasDetails = ({ email }) => {
       // Call the dltMascotas API
       await dltMascotas(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -102,12 +109,13 @@ const MascotasDetails = ({ email }) => {
         email: "",
       });
       navigate("/dashboard/mascotas");
-    } else if (response.isError) {
-      console.log(response.error);
-      dispatch(showToast(response.error.message, "FAIL_TOAST"));
+    } else if (response.isError && response.status === "rejected") {
+      // console.log(response.error);
+      // dispatch(showToast(response.error.message, "FAIL_TOAST"));
+      failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, response]);
+  }, [response]);
   return (
     <>
       {loading === true ? (
@@ -122,7 +130,7 @@ const MascotasDetails = ({ email }) => {
               <p>Mascotas » {data?.pet?.name}</p>
             </div>
             <div className="">
-              <Button onClick={() => setExport(true)}>
+              <Button onClick={() => handleOpenPdfModal()}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className="me-4">
                   <defs>
                     <clipPath id="a">
@@ -145,7 +153,7 @@ const MascotasDetails = ({ email }) => {
             <Col lg={2} xl={3} className="w-lg-250px w-xl-350px">
               <div className="head container-sm">
                 <div className="img mb-7">
-                  <img src="/images/DogIcon.svg" alt="mascota" height={"50px"}  />
+                  <img src="/images/DogIcon.svg" alt="mascota" height={"50px"} />
                 </div>
                 <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.pet?.name}</p>
                 <div className="information">
@@ -245,7 +253,7 @@ const MascotasDetails = ({ email }) => {
                 </Dropdown>
               </div>
               <div className="second ">
-                <MainTab data={data?.pet} appointmentId={id} />
+                <MainTab data={data?.pet} appointmentId={id} email={email} />
               </div>
             </Col>
           </Row>

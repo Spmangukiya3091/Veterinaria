@@ -14,7 +14,6 @@ function ForgetPassword() {
   const [verificationLink, response] = useVerificationLinkMutation();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email);
     await verificationLink(email);
   };
 
@@ -23,7 +22,7 @@ function ForgetPassword() {
       navigate(`/verification/${email.email}`);
       dispatch(showToast("Verification Link Sent Successfully", "SUCCESS_TOAST"));
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
   }, [dispatch, email.email, navigate, response]);

@@ -71,13 +71,13 @@ const ListAptos = ({ id }) => {
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{pet}</td>
+                          <td className="text-start pe-0">{petVaccinationData.name}</td>
 
                           <td className="text-start pe-0" data-order="16">
                             {owner}
                           </td>
                           <td className="text-start pe-0">
-                            <div className=" fecha">{species}</div>
+                            <div className=" fecha">{petVaccinationData.Species}</div>
                           </td>
                           <td>
                             <div className="status-wrapper">

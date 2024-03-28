@@ -3,14 +3,16 @@ import "./vaccination.scss";
 import { Link } from "react-router-dom";
 import EditVaccinModal from "../../../modal/EditVaccinModal";
 import Alert from "../../../../../../Components/alert/Alert";
-import { Button, Spinner } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import AddVacunaModal from "../../../modal/AddVacunaModal";
 import UpdVacunaStat from "../../../modal/UpdVacunaStat";
 import moment from "moment";
-import { useGetSinglePetVaccinationDetailsQuery } from "../../../../../../services/ApiServices";
+import { useGetSinglePetVaccinationDetailsQuery, useRemoveVaccinationMutation } from "../../../../../../services/ApiServices";
 import Loader from "../../../../../../Components/loader/Loader";
+import DeleteVerifyModal from "../../../../../../Components/alert/VerifyModal/DeleteVerifyModal";
+import { failer, success } from "../../../../../../Components/alert/success";
 
-const Vaccination = ({ id }) => {
+const Vaccination = ({ id, email }) => {
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [addVacuna, setAddVacuna] = useState(false);
@@ -19,6 +21,13 @@ const Vaccination = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [vaccineId, setVaccineId] = useState();
+  const [openform, setOpenform] = useState(false);
+  const [dltVaccination, response] = useRemoveVaccinationMutation();
+  const [dltData, setDltData] = useState({
+    id: "",
+    pass: "",
+    email: email,
+  });
 
   const vaccinationList = useGetSinglePetVaccinationDetailsQuery(id, { refetchOnMountOrArgChange: true });
 
@@ -32,22 +41,68 @@ const Vaccination = ({ id }) => {
     }
   }, [vaccinationList]);
 
-  const handleHide = () => {
-    setModalShow(false);
-  };
   const handleUpdStatclose = () => {
     setUpdStat(false);
-    vaccinationList.refetch();
   };
   const handleCloseEdit = () => {
     setShow(false);
-    vaccinationList.refetch();
   };
   const handleCloseVacuna = () => {
     setAddVacuna(false);
-    vaccinationList.refetch();
   };
 
+  const handleConfirmDelete = () => {
+    // Close the alert modal
+    setModalShow(false);
+
+    // Set the appointment ID in dltData
+    setDltData({
+      ...dltData,
+      id: vaccineId,
+      email: email,
+    });
+
+    // Open the DeleteVerifyModal
+    setOpenform(true);
+  };
+
+  const handleDeleteVerify = async (enteredPassword) => {
+    if (enteredPassword !== "" || null) {
+      // Close the DeleteVerifyModal
+      setOpenform(false);
+
+      // Use the callback function provided by setDltData
+      const body = {
+        id: dltData.id,
+        email: dltData.email,
+        pass: enteredPassword,
+      };
+
+      // Now you can use the updated state
+
+      // Call the dltVaccination API
+      await dltVaccination(body);
+    } else {
+      failer("Invalid Password ");
+    }
+  };
+  useEffect(() => {
+    if (!response.isLoading && response.status === "fulfilled") {
+      success();
+      setDltData({
+        id: "",
+        pass: "",
+        email: "",
+      });
+      // Refetch or update data if needed
+      vaccinationList.refetch();
+    } else if (response.isError) {
+      failer(response?.error?.data?.message);
+      // dispatch(showToast(response?.error?.data?.message, "FAIL_TOAST"));
+      // console.log(response.error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
   return (
     <>
       {loading === true ? (
@@ -171,10 +226,22 @@ const Vaccination = ({ id }) => {
           </div>
         </section>
       )}
-      <UpdVacunaStat show={updStat} handleClose={handleUpdStatclose} vaccineId={vaccineId} />
-      <EditVaccinModal show={show} handleClose={handleCloseEdit} vaccineId={vaccineId} />
-      <AddVacunaModal show={addVacuna} handleClose={handleCloseVacuna} />
-      <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} vaccineId={vaccineId} />
+      <UpdVacunaStat show={updStat} handleClose={handleUpdStatclose} vaccineId={vaccineId} filter={vaccinationList} />
+      <EditVaccinModal show={show} handleClose={handleCloseEdit} vaccineId={vaccineId} filter={vaccinationList} />
+      <AddVacunaModal show={addVacuna} handleClose={handleCloseVacuna} filter={vaccinationList} />
+      <Alert show={modalShow} onHide={() => setModalShow(false)} msg={"¿Seguro de completar esta operación?"} opendltModal={handleConfirmDelete} />
+      <DeleteVerifyModal
+        show={openform}
+        onHide={() => {
+          setOpenform(false);
+          setDltData({
+            id: "",
+            pass: "",
+            email: "",
+          });
+        }}
+        onDelete={handleDeleteVerify}
+      />
     </>
   );
 };

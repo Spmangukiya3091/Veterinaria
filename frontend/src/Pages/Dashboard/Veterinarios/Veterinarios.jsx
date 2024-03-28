@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, ButtonGroup, Card, Col, Dropdown, Form, Row, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Card, Col, Dropdown, Form, Row } from "react-bootstrap";
 import "./veterinarios.scss";
 import VeterinaModal from "./Modals/VeterinaModal";
 import { useNavigate } from "react-router-dom";
@@ -56,11 +56,9 @@ const Veterinarios = ({ email }) => {
     setSearchQuery("");
   };
   const filteredData = data.filter(({ name, surname }) => {
-    const searchString = searchValue;
+    const searchString = searchValue.toLowerCase();
     return (
       name.toLowerCase().includes(searchString) || surname.toLowerCase().includes(searchString)
-      // species.toLowerCase().includes(searchString) ||
-      // sex.toLowerCase().includes(searchString)
     );
   });
   const handleHide = () => {
@@ -84,10 +82,10 @@ const Veterinarios = ({ email }) => {
       searchData.speciality === ""
         ? `?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `?speciality=${searchData.speciality}`
-        : searchData.speciality === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? ""
-        : `?speciality=${searchData.speciality}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `?speciality=${searchData.speciality}`
+          : searchData.speciality === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? ""
+            : `?speciality=${searchData.speciality}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // veterinList.refetch();
     setDropdownOpen(false);

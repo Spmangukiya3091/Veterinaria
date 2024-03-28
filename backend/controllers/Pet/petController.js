@@ -148,10 +148,10 @@ const deletePetRecord = async (req, res) => {
   }
   if (decoded.role !== user.role) {
     return res.status(400).send({
-     message: "Not authorized",
-     success: false,
-   });
- }
+      message: "Not authorized",
+      success: false,
+    });
+  }
   if (pet_record?.id === id) {
     await Pet.destroy({ where: { id: id } });
     return res.status(200).send({
@@ -574,9 +574,9 @@ const petFilter = async (req, res) => {
         const ratings = pet.petAppointmentData.map((appointment) => appointment.rating);
         const sumOfRatings = ratings.reduce((total, rating) => total + rating, 0);
         const averageRating = sumOfRatings / ratings.length;
-        
-      
-        return { ...pets, rating:averageRating ? averageRating.toFixed(1) : null };
+
+
+        return { ...pets, rating: averageRating ? averageRating.toFixed(1) : null };
       });
       res.status(200).send({
         message: "petList",
@@ -592,123 +592,122 @@ const petFilter = async (req, res) => {
 const appointmentDataOfPet = async (req, res) => {
   const id = req.params.id;
   const startDate = new Date(req.query.startDate);
-    const endDate = new Date(req.query.endDate);
-    const status = req.query.status;
-    if (req.query.startDate && req.query.endDate && req.query.status){
-      const pets = await Pet.findOne({
-        include: [
-          {
-            model: Appointment,
-            as: "petAppointmentData",
-            where: {
-              [Op.and]: [
-                {
-                  createdAt: {
-                    [Op.gte]: startDate, 
-                    [Op.lte]: endDate,   
-                  },
+  const endDate = new Date(req.query.endDate);
+  const status = req.query.status;
+  if (req.query.startDate && req.query.endDate && req.query.status) {
+    const pets = await Pet.findOne({
+      include: [
+        {
+          model: Appointment,
+          as: "petAppointmentData",
+          where: {
+            [Op.and]: [
+              {
+                createdAt: {
+                  [Op.gte]: startDate,
+                  [Op.lte]: endDate,
                 },
-                { status }, 
-              ],
-            },
+              },
+              { status },
+            ],
           },
-        ],
-        where: { id: id }, 
-      });
-      const pet = pets?.name;
-      const appointments = pets?.petAppointmentData ?  pets?.petAppointmentData : [];
-      res.status(200).send({
-        message: "appointmentList",
-    
-        pet: pet,
-        appointments: appointments,
-      });
-      
-    }else if (req.query.startDate && req.query.endDate && !req.query.status) {
-      const pets = await Pet.findOne({
-        include: [
-          {
-            model: Appointment,
-            as: "petAppointmentData",
-            where: {
-              [Op.and]: [
-                {
-                  createdAt: {
-                    [Op.gte]: startDate, 
-                    [Op.lte]: endDate,   
-                  },
-                }
-                
-              ],
-            },
+        },
+      ],
+      where: { id: id },
+    });
+    const pet = pets?.name;
+    const appointments = pets?.petAppointmentData ? pets?.petAppointmentData : [];
+    res.status(200).send({
+      message: "appointmentList",
+
+      pet: pet,
+      appointments: appointments,
+    });
+
+  } else if (req.query.startDate && req.query.endDate && !req.query.status) {
+    const pets = await Pet.findOne({
+      include: [
+        {
+          model: Appointment,
+          as: "petAppointmentData",
+          where: {
+            [Op.and]: [
+              {
+                createdAt: {
+                  [Op.gte]: startDate,
+                  [Op.lte]: endDate,
+                },
+              }
+
+            ],
           },
-        ],
-        where: { id: id }, 
-      });
-      const pet = pets?.name;
-      const appointments = pets?.petAppointmentData ?  pets?.petAppointmentData : [];
-      res.status(200).send({
-        message: "appointmentList",
-    
-        pet: pet,
-        appointments: appointments,
-      });
-    }else if (req.query.status && !req.query.endDate && !req.query.startDate) {
-      const pets = await Pet.findOne({
-        include: [
-          {
-            model: Appointment,
-            as: "petAppointmentData",
-            where: {
-             status
-            },
+        },
+      ],
+      where: { id: id },
+    });
+    const pet = pets?.name;
+    const appointments = pets?.petAppointmentData ? pets?.petAppointmentData : [];
+    res.status(200).send({
+      message: "appointmentList",
+
+      pet: pet,
+      appointments: appointments,
+    });
+  } else if (req.query.status && !req.query.endDate && !req.query.startDate) {
+    const pets = await Pet.findOne({
+      include: [
+        {
+          model: Appointment,
+          as: "petAppointmentData",
+          where: {
+            status
           },
-        ],
-        where: { id: id }, 
-      });
-      const pet = pets?.name;
-      const appointments = pets?.petAppointmentData ?  pets?.petAppointmentData : [];
-      res.status(200).send({
-        message: "appointmentList",
-    
-        pet: pet,
-        appointments: appointments,
-      });
-    }else if (!req.query.status && !req.query.endDate && !req.query.startDate){
-      const pets = await Pet.findOne({
-        include: [
-          {
-            model: Appointment,
-            as: "petAppointmentData",
-          },
-        ],
-        where: { id: id },
-      });
-      const pet = pets?.name;
-      const appointments = pets?.petAppointmentData ?  pets?.petAppointmentData : [];
-      res.status(200).send({
-        message: "appointmentList",
-    
-        pet: pet,
-        appointments: appointments,
-      });
-    }
- 
+        },
+      ],
+      where: { id: id },
+    });
+    const pet = pets?.name;
+    const appointments = pets?.petAppointmentData ? pets?.petAppointmentData : [];
+    res.status(200).send({
+      message: "appointmentList",
+
+      pet: pet,
+      appointments: appointments,
+    });
+  } else if (!req.query.status && !req.query.endDate && !req.query.startDate) {
+    const pets = await Pet.findOne({
+      include: [
+        {
+          model: Appointment,
+          as: "petAppointmentData",
+        },
+      ],
+      where: { id: id },
+    });
+    const pet = pets?.name;
+    const appointments = pets?.petAppointmentData ? pets?.petAppointmentData : [];
+    res.status(200).send({
+      message: "appointmentList",
+
+      pet: pet,
+      appointments: appointments,
+    });
+  }
+
 };
 
 
-const generatePdfAndQrCode = async (pet,vaccinations, petInfos, req) => {
-
-  // Generate QR code
-  const qrCodeData = `http://192.168.1.11:2000/view-pet-summary/${pet.id}`;
+const generatePdfAndQrCode = async (pet, vaccinations, petInfos, req) => {
+  const qrCodeData = `http://localhost:2000/view-pet-summary/${pet.id}`;
   const qrCodeBuffer = await QRCode.toBuffer(qrCodeData);
-  const qrCodeImagePath = path.join(__dirname, "../../../public/veterinaria/pets/images", `qr_code_${pet.id}.png`);
+  const qrCodeImagePath = path.join(
+    __dirname,
+    "../../public/pets/images",
+    `qr_code_${pet.id}.png`
+  );
   await fs.promises.writeFile(qrCodeImagePath, qrCodeBuffer);
 
   let doc = new PDFDocument({ margin: 30, size: "A4" });
-
-  // Add QR code image to the PDF
- 
 
   const petTable = {
     title: "Pet Information",
@@ -716,7 +715,6 @@ const generatePdfAndQrCode = async (pet,vaccinations, petInfos, req) => {
     width: 450,
     headers: ["", ""],
     rows: [
-      // ["Name", pet.name],
       ["Owner", pet.owner],
       ["Sex", pet.sex],
       ["Dob", moment(pet.dob).format("LL")],
@@ -729,10 +727,7 @@ const generatePdfAndQrCode = async (pet,vaccinations, petInfos, req) => {
       ["Exploration", pet.exploration ? pet.exploration : "-"],
     ],
   };
- 
-  
-  
-  
+
   const formattedVaccinationData = vaccinations.map((vaccine) => [
     vaccine.owner || '-',
     vaccine.pet || '-',
@@ -742,10 +737,7 @@ const generatePdfAndQrCode = async (pet,vaccinations, petInfos, req) => {
     vaccine.validity ? moment(vaccine.validity).format('LL') : '-',
     vaccine.status || '-'
   ]);
-console.log("formattedVaccinationData",formattedVaccinationData);
-  // Construct rows for vaccinationTable with proper structure
 
-  
   const vaccinationTable = {
     title: "Vaccination Information",
     padding: 5,
@@ -758,39 +750,33 @@ console.log("formattedVaccinationData",formattedVaccinationData);
       "Validity",
       "Status",
     ],
- rows:formattedVaccinationData
+    rows: formattedVaccinationData
   };
 
-  // doc.fontSize(22).text(petTable.title, { align: "center" }).moveDown(1);
- // Calculate the center position for the table
-const pageWidth = doc.page.width;
-const tableWidth = 450; // Adjust this value according to your table width
-const tableX = (pageWidth - tableWidth) / 2;
+  const pageWidth = doc.page.width;
+  const tableWidth = 450;
+  const tableX = (pageWidth - tableWidth) / 2;
 
-// Draw the pet table centered on the page
-doc.fontSize(22)
-   .text(petTable.title, { align: "center" })
-   .moveDown(1);
-doc.lineWidth(0);
-doc.table(
-  {
-    headers: petTable.headers,
-    rows: petTable.rows,
-    prepareHeader: () => doc.font("Helvetica-Bold").fontSize(17),
-    prepareRow: () => doc.font("Helvetica").fontSize(18),
-    divider: { horizontal: { width: 0.1, opacity: 0 }, vertical: { width: 0, opacity: 0 } },
-  },
-  {
-    width: tableWidth,
-    x: tableX,
-    y: 100, // Adjust the Y position as per your requirement
-    // Draw header row
-  }
-);
+  doc.fontSize(22)
+    .text(petTable.title, { align: "center" })
+    .moveDown(1);
+  doc.lineWidth(0);
+  doc.table(
+    {
+      headers: petTable.headers,
+      rows: petTable.rows,
+      prepareHeader: () => doc.font("Helvetica-Bold").fontSize(17),
+      prepareRow: () => doc.font("Helvetica").fontSize(18),
+      divider: { horizontal: { width: 0.1, opacity: 0 }, vertical: { width: 0, opacity: 0 } },
+    },
+    {
+      width: tableWidth,
+      x: tableX,
+      y: 100,
+    }
+  );
 
-
-  
-doc.addPage();
+  doc.addPage();
   doc.fontSize(22)
     .text(vaccinationTable.title, { align: "center" })
     .moveDown(1);
@@ -802,35 +788,34 @@ doc.addPage();
       prepareRow: (row, i) => doc.font("Helvetica").fontSize(22),
     },
     {
-      drawHeaderRow: () => true, // Hide header row
-     // Hide vertical lines
+      drawHeaderRow: () => true,
     }
   );
- 
-console.log("--------vv",vaccinationTable);
-  // Set the paths for saving the PDF and the response image
-  const pdfPath = path.join(__dirname, "../../../public/veterinaria/pets/pdfs", `pet_summary_${pet.id}.pdf`);
-  const imagePath = path.join(__dirname, "../../../public/veterinaria/pets/images", `pet_summary_${pet.id}.png`);
 
-  // Pipe the PDF content to the file
+  const pdfPath = path.join(
+    __dirname,
+    "../../public/pets/pdfs",
+    `pet_summary_${pet.id}.pdf`
+  );
+  const imagePath = path.join(
+    __dirname,
+    "../../public/pets/images",
+    `pet_summary_${pet.id}.png`
+  );
+
   const fileStream = fs.createWriteStream(pdfPath);
   doc.pipe(fileStream);
-
-  // Finalize the PDF
   doc.end();
 
-  // Update or create PetInfo record
   if (petInfos?.petId === pet.id) {
-    // Update existing record
     await petInfo.update(
       {
         qrImage: req.protocol + "://" + req.get("host") + `/qr_code_${pet.id}.png`,
         pdf: req.protocol + "://" + req.get("host") + `/pet_summary_${pet.id}.pdf`,
       },
-      { where: { petId: pet.id } },
+      { where: { petId: pet.id } }
     );
   } else {
-    // Create new record
     await petInfo.create({
       petId: pet.id,
       qrImage: req.protocol + "://" + req.get("host") + `/qr_code_${pet.id}.png`,
@@ -839,57 +824,16 @@ console.log("--------vv",vaccinationTable);
   }
 };
 
-// const petSummaryPdf = async (req, res) => {
-//   try {
-//     const petId = req.params.id;
-//     const pet = await Pet.findOne({ where: { id: petId } });
-//     const vaccinations = await Vaccination.findAll({ where: { petId } });
-
-//     if (!pet) {
-//       return res.status(404).send("Pet not found");
-//     }
-
-//     // Check if PetInfo record already exists
-//     const petInfos= await petInfo.findOne({ where: { petId } });
-
-//     if (petInfos) {
-//       const pdfName = path.basename(petInfos.pdf);
-     
-//       const oldPdfPath = path.join(
-//         __dirname,
-//         "../../../public/veterinaria/pets/pdfs",
-//         pdfName
-//       );
-//       const oldImagePath = path.join(
-//         __dirname,
-//         "../../../public/veterinaria/pets/images",
-//         imageName
-//       );
-
-//       // Delete old files
-//       await fs.promises.unlink(oldPdfPath);
-//       await fs.promises.unlink(oldImagePath);
-//     }
-
-//     await generatePdfAndQrCode(pet, vaccinations, petInfos, req);
-
-//     res.status(200).send(`QR code and PDF regenerated successfully`);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
 const petSummaryPdf = async (req, res) => {
   try {
     const petId = req.params.id;
     const pet = await Pet.findOne({ where: { id: petId } });
-    const vaccinations = await Vaccination.findAll({ where: { petId:petId } });
-console.log("vaccinations",vaccinations)
-    if (!pet) {
-      return res.status(404).send("Pet not found");
+    const vaccinations = await Vaccination.findAll({ where: { petId: petId } });
+
+    if (!pet || !vaccinations) {
+      return res.status(404).send("Pet or vaccinations not found");
     }
 
-    // Check if PetInfo record already exists
     const petInfos = await petInfo.findOne({ where: { petId } });
 
     if (petInfos) {
@@ -898,16 +842,15 @@ console.log("vaccinations",vaccinations)
 
       const oldPdfPath = path.join(
         __dirname,
-        "../../../public/veterinaria/pets/pdfs",
+        "../../public/pets/pdfs",
         pdfName
       );
       const oldImagePath = path.join(
         __dirname,
-        "../../../public/veterinaria/pets/images",
+        "../../public/pets/images",
         qrCodeName
       );
 
-      // Check if old files exist and delete them
       if (fs.existsSync(oldPdfPath)) {
         await fs.promises.unlink(oldPdfPath);
       }
@@ -916,10 +859,9 @@ console.log("vaccinations",vaccinations)
       }
     }
 
-    // Generate new QR code and PDF
     await generatePdfAndQrCode(pet, vaccinations, petInfos, req);
 
-    res.status(200).send(`QR code and PDF regenerated successfully`);
+    res.status(200).send("QR code and PDF regenerated successfully");
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

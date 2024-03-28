@@ -79,8 +79,8 @@ const PropietarioModal = (props) => {
       props.onHide();
       success();
     } else if (response.isError) {
+      // console.log("error");
       failer(response?.error?.data?.message);
-      console.log("error");
     }
   }, [response]);
 

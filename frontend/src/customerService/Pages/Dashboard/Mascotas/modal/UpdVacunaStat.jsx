@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useUpdateVaccinationStatusMutation } from "../../../../../services/ApiServices";
 
 function UpdVacunaStat({ show, handleClose, vaccineId }) {
@@ -13,17 +13,21 @@ function UpdVacunaStat({ show, handleClose, vaccineId }) {
       status: status,
     };
     await statusUpdate(body);
-    if (response) {
-      if (!response.isLoading) {
-        handleClose();
-        success();
-      } else if (response.isError) {
-        console.log("error", response.error);
-      }
+  };
+
+  useEffect(() => {
+    if (response.isSuccess && !response.isLoading) {
+      handleClose();
+      success();
+    } else if (response.status === "rejected" && response.isError) {
+      // console.log("error", response.error);
+      failer(response?.error?.data?.message);
     } else {
       console.error("Invalid response structure:", response);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
+  
   return (
     <>
       <Modal size="md" show={show} onHide={handleClose} centered>

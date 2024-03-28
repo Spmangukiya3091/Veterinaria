@@ -88,7 +88,6 @@ const Inventory = ({ email }) => {
       endDate: "",
     });
     setSearchQuery("");
-
   };
 
   const filteredData = data.filter(({ product, category, presentation, sku }) => {
@@ -117,7 +116,6 @@ const Inventory = ({ email }) => {
 
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
-      console.log(selectedDates);
       setSearchData({
         ...searchData,
         startDate: selectedDates[0] || "",
@@ -125,7 +123,6 @@ const Inventory = ({ email }) => {
       });
     }
   };
-  console.log(searchData);
 
   const handleSearchFilter = () => {
     // Refetch data based on the search criteria
@@ -173,6 +170,7 @@ const Inventory = ({ email }) => {
       // Call the dltInventory API
       await dltInventory(body);
     } else {
+      failer("Invalid Password ");
     }
   };
 
@@ -187,7 +185,7 @@ const Inventory = ({ email }) => {
       // Refetch or update data if needed
       products.refetch();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
 
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));

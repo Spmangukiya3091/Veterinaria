@@ -88,6 +88,7 @@ const InventoryDetails = ({ email }) => {
       // console.log(body);
       await dltProduct(body);
     } else {
+      failer("Invalid Password ");
     }
   };
   useEffect(() => {
@@ -100,7 +101,7 @@ const InventoryDetails = ({ email }) => {
       success();
       navigate("/dashboard/inventario");
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
