@@ -95,7 +95,7 @@ function DiagnosticForm({ data, refetch }) {
       // Append medication list
       formApiData.append("medication", JSON.stringify(lists));
 
-      console.log("Submitted FormData:", formApiData);
+      // console.log("Submitted FormData:", formApiData);
 
       const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/appointment/registerDiagnostic/${data.id}`, formApiData, {
         headers: {
@@ -104,7 +104,7 @@ function DiagnosticForm({ data, refetch }) {
         },
       });
 
-      console.log(response);
+      // console.log(response);
 
       if (response.status === 200) {
         // API call successful

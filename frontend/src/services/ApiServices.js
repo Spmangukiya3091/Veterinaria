@@ -141,7 +141,7 @@ export const dashboardApi = createApi({
     // Dashboard APIs
     getMetrics: builder.query({
       query: (body) => ({
-        url: `dashboardSummary?month=${body}`,
+        url: `dashboardSummary?month=${body.month}&year=${body.year}`,
         method: "GET",
       }),
     }),
@@ -704,14 +704,11 @@ export const vaccinationApi = createApi({
       query: (body) => ({
         url: `createVaccinationRecord/${body.id}`,
         method: "POST",
-        body: {
-          vaccine: body.vaccine,
-          vaccineId: body.vaccineId,
-        },
+        body: body,
       }),
     }),
 
-    updateVaccination: builder.query({
+    updateVaccination: builder.mutation({
       query: (body) => ({
         url: `updateVaccination/${body.id}`,
         method: "PUT",
@@ -746,7 +743,7 @@ export const vaccinationApi = createApi({
   }),
 });
 export const {
-  useUpdateVaccinationQuery,
+  useUpdateVaccinationMutation,
   useGetAllVaccinationListQuery,
   useGetVaccinationbyVaccineIdQuery,
   useGetSinglePetVaccinationDetailsQuery,

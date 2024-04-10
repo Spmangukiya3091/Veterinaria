@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./citas.scss";
-import { ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import CitasPagination from "../../../components/pagination/citas-pagination/Citas-Pagination";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -70,10 +70,10 @@ function Citas({ id }) {
       searchData.status === ""
         ? `?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? ""
-        : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? ""
+            : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // appointmentsByFilter.refetch();
     setDropdownOpen(false);
@@ -226,7 +226,7 @@ function Citas({ id }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts ? (
+                    {currentPosts > 0 ? (
                       currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, createdAt, status, rating }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -250,13 +250,12 @@ function Citas({ id }) {
                           </td>
                           <td className="text-start pe-0" data-order="status">
                             <div
-                              className={`${
-                                status === "pending"
+                              className={`${status === "pending"
                                   ? "badge badge-light-warning text-warning"
                                   : status === "no attempt"
-                                  ? "badge badge-light-dark"
-                                  : "badge badge-light-success text-success "
-                              } `}
+                                    ? "badge badge-light-dark"
+                                    : "badge badge-light-success text-success "
+                                } `}
                             >
                               <p className="mb-0">{status === "pending" ? "Pendiente" : status === "no attempt" ? "No asistió" : "Completado"}</p>
                             </div>

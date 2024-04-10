@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import "./vacunas.scss";
-import { Button, ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import { vacunasData } from "./vacunasData";
 import { Link } from "react-router-dom";
 import VacunasModal from "./Modal/VacunasModal";

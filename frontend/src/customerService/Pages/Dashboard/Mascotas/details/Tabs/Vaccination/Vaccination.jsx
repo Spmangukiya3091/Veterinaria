@@ -3,7 +3,7 @@ import "./vaccination.scss";
 import { Link } from "react-router-dom";
 import EditVaccinModal from "../../../modal/EditVaccinModal";
 import Alert from "../../../../../../Components/alert/Alert";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, } from "react-bootstrap";
 import AddVacunaModal from "../../../modal/AddVacunaModal";
 import UpdVacunaStat from "../../../modal/UpdVacunaStat";
 import moment from "moment";
@@ -101,8 +101,8 @@ const Vaccination = ({ id }) => {
                               status === "vaccinated"
                                 ? "badge badge-light-primary text-primary"
                                 : status === "rejected"
-                                ? "badge badge-light-danger text-danger"
-                                : "badge badge-light-warning text-warning "
+                                  ? "badge badge-light-danger text-danger"
+                                  : "badge badge-light-warning text-warning "
                             }
                           >
                             <p className="status-p mb-0">

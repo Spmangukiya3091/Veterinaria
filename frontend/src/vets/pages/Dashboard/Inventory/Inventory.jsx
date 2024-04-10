@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./inventory.scss";
 
-import { ButtonGroup, Dropdown, Spinner, Form } from "react-bootstrap";
-import { inventoaryData } from "./inventoryData";
+import { ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CitasPagination from "../../../components/pagination/citas-pagination/Citas-Pagination";
 import { useGetALlProductListQuery } from "../../../../services/ApiServices";
@@ -93,10 +92,10 @@ const Inventory = () => {
       searchData.status === ""
         ? `?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? ""
-        : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? ""
+            : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // products.refetch(searchQuery);
     setDropdownOpen(false);
@@ -226,7 +225,7 @@ const Inventory = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts ? (
+                    {currentPosts > 0 ? (
                       currentPosts.map(({ id, sku, product, presentation, price, category, stock, status }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -242,9 +241,8 @@ const Inventory = () => {
                           <td className="text-start pe-0">{stock}</td>
                           <td className="text-start pe-0" data-order="status">
                             <div
-                              className={`${
-                                status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
-                              } `}
+                              className={`${status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
+                                } `}
                             >
                               <p className="mb-0">{status === "inactive" ? "Inactivo" : "Activo"}</p>
                             </div>

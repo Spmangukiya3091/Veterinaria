@@ -15,7 +15,7 @@ function MainTab({ data, id }) {
             <Detalles data={data} />
           </Tab>
           <Tab eventKey="Lista de aptos" title="Lista de aptos">
-            <ListAptos id={id} />
+            <ListAptos id={id} vaccineData={data} />
           </Tab>
         </Tabs>
       </div>

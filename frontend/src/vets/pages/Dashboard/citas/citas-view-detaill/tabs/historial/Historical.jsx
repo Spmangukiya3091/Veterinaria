@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./historical.scss";
-import { Dropdown, Form, ButtonGroup, Spinner } from "react-bootstrap";
+import { Dropdown, Form, ButtonGroup } from "react-bootstrap";
 import CitasPagination from "../../../../../../components/pagination/citas-pagination/Citas-Pagination";
 import SingleInputDateRangePicker from "../../../date-picker/DatePicker";
 import { useGetPetAppoinmentQuery } from "../../../../../../../services/ApiServices";
@@ -22,7 +22,7 @@ function Historical({ id }) {
 
   const historyList = useGetPetAppoinmentQuery(searchQuery, { refetchOnMountOrArgChange: true });
 
-  console.log(historyList)
+  // console.log(historyList)
   useEffect(() => {
     if (!historyList.isLoading && id !== undefined) {
       setLoading(false);
@@ -85,10 +85,10 @@ function Historical({ id }) {
       searchData.status === ""
         ? `${id}?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}`
-        : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `${id}?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? `${id}`
+            : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // historyList.refetch();
     setDropdownOpen(false);
@@ -150,7 +150,7 @@ function Historical({ id }) {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
+
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -254,8 +254,8 @@ function Historical({ id }) {
                                   status === "pending"
                                     ? "badge badge-light-warning text-warning"
                                     : status === "complete"
-                                    ? "badge badge-light-success text-success"
-                                    : "badge badge-secondary text-dark"
+                                      ? "badge badge-light-success text-success"
+                                      : "badge badge-secondary text-dark"
                                 }
                               >
                                 <p className="status-p mb-0">

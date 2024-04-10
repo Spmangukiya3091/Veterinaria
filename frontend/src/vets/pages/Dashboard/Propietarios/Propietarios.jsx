@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./propietarios.scss";
-import { ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import CitasPagination from "../../../components/pagination/citas-pagination/Citas-Pagination";
@@ -208,7 +208,7 @@ const Propietarios = ({ id }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts ? (
+                    {currentPosts > 0 ? (
                       currentPosts.map(({ id, name, surname, address, phone_1, doc_identity }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">

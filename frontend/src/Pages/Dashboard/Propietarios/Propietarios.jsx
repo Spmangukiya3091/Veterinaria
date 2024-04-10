@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import "./propietarios.scss";
-import { Button, ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
 import PropietariousModal from "./modal/PropietariousModal";
@@ -10,14 +10,11 @@ import CitasPagination from "../../../Components/pagination/citas-pagination/Cit
 import { useOwnerFilterQuery, useRemoveOwnerMutation } from "../../../services/ApiServices";
 import { failer, success } from "../../../Components/alert/success";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
-import { showToast } from "../../../store/tostify";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 import Loader from "../../../Components/loader/Loader";
 
 const Propietarios = ({ email }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -179,7 +176,7 @@ const Propietarios = ({ email }) => {
       failer(response?.error?.data?.message)
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
 
   const handleExportData = async () => {

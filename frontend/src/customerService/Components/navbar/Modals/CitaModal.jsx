@@ -18,6 +18,8 @@ const CitaModal = ({ show, onHide }) => {
     scheduleEnd: "",
     observation: "",
   });
+  const [validated, setValidated] = useState(false); // State for form validation
+
   const owners = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });
   const pets = useGetPetByOwnerQuery(formData.ownerId, { refetchOnMountOrArgChange: true });
   const veterinarians = useGetVeterinariansQuery(null, { refetchOnMountOrArgChange: true });
@@ -44,6 +46,8 @@ const CitaModal = ({ show, onHide }) => {
       ...formData,
       owner,
       ownerId,
+      petId: ""
+
     });
   };
 
@@ -88,13 +92,13 @@ const CitaModal = ({ show, onHide }) => {
           <Modal.Title>Información de cita</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Propietario</Form.Label>
                   <Form.Select aria-label="Default select example" name="owner" onChange={handleOwnerChange} value={formData.ownerId}>
-                    <option disabled>Seleccione Propietario</option>
+                    <option disabled="true" value={""} selected="true">Seleccione Propietario</option>
                     {owners?.data?.ownersList.map((owner) => (
                       <option key={owner.id} value={owner.id}>
                         {owner.name + " " + owner.surname}
@@ -107,7 +111,7 @@ const CitaModal = ({ show, onHide }) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Mascota</Form.Label>
                   <Form.Select aria-label="Default select example" name="pet" onChange={handlePetChange} value={formData.petId}>
-                    <option disabled>Seleccione Mascota</option>
+                    <option disabled="true" value={""} selected="true">Seleccione Mascota</option>
                     {pets?.data?.pets.map((pet) => (
                       <option key={pet.id} value={pet.id}>
                         {pet.name}
@@ -122,7 +126,7 @@ const CitaModal = ({ show, onHide }) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Veterinario</Form.Label>
                   <Form.Select aria-label="Default select example" name="veterinarian" onChange={handleVetChange} value={formData.veterinarianId}>
-                    <option disabled>Seleccione Veterinario</option>
+                    <option disabled="true" value={""} selected="true">Seleccione Veterinario</option>
                     {veterinarians?.data?.veterinarianList.map((vet) => (
                       <option key={vet.id} value={vet.id}>
                         {vet.name + " " + vet.surname}

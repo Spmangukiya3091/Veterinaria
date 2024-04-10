@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { ButtonGroup, Dropdown, Form, } from "react-bootstrap";
 import "./historical.scss";
 import SingleInputDateRangePicker from "../../../../citas/date-picker/DatePicker";
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
@@ -84,10 +84,10 @@ const Historical = ({ id }) => {
       searchData.status === ""
         ? `${id}?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}`
-        : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `${id}?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? `${id}`
+            : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // historyList.refetch();
     setDropdownOpen(false);
@@ -252,8 +252,8 @@ const Historical = ({ id }) => {
                                   status === "pending"
                                     ? "badge badge-light-warning text-warning"
                                     : status === "complete"
-                                    ? "badge badge-light-success text-success"
-                                    : "badge badge-secondary text-dark"
+                                      ? "badge badge-light-success text-success"
+                                      : "badge badge-secondary text-dark"
                                 }
                               >
                                 <p className="status-p mb-0">

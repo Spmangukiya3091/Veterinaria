@@ -5,7 +5,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import "./calendario.scss";
 import esLocale from "@fullcalendar/core/locales/es";
-import { Button, Form, Spinner } from "react-bootstrap";
+import { Button, Form, } from "react-bootstrap";
 import CitasModal from "../citas/modal/CitasModal";
 import { useGetVeterinariansAppointmentQuery, useGetVeterinariansQuery } from "../../../../services/ApiServices";
 import Loader from "../../../Components/loader/Loader";
@@ -60,7 +60,7 @@ function Calendario() {
                         setVeteId(e.target.value);
                       }}
                     >
-                      <option disabled>Seleccionar el doctor</option>
+                      <option disabled="true" value={""} selected="true">Seleccionar el doctor</option>
                       {data.map(({ id, name, surname }) => (
                         <option key={id} value={id}>
                           {name + " " + surname}

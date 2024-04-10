@@ -112,7 +112,7 @@ const Veterinarios = ({ email }) => {
                                 data-dropdown-parent="#kt_menu_62444587ce1ee"
                                 data-allow-clear="true"
                               >
-                                <option disabled>Seleccionar</option>
+                                <option disabled="true" value={""} selected="true">Seleccionar</option>
                                 <option value="Pediatrics">Pediatrics</option>
                                 <option value="General medicine">General medicine</option>
                               </select>
@@ -162,7 +162,7 @@ const Veterinarios = ({ email }) => {
             </div>
             <div className="card-body">
               <Row>
-                {currentPosts ? (
+                {currentPosts.length > 0 ? (
                   currentPosts.map(({ IMAGEURL, DNAME, DESIGNATON, CALENDER, PROFILE }, i) => (
                     <Col sm={6} md={4} lg={3} key={i}>
                       <Card className="doctor-card">

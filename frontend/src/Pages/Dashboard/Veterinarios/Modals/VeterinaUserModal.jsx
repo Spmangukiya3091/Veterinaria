@@ -7,7 +7,6 @@ import departamentoData from "../../../../Department.json";
 import { useGetSingleVeterinQuery, useGetSpecialitiesQuery } from "../../../../services/ApiServices";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { showToast } from "../../../../store/tostify";
 import moment from "moment";
 import { useCookies } from "react-cookie";
 
@@ -52,7 +51,7 @@ const VeterinaUserModal = (props) => {
   }, [specialityList]);
 
   useEffect(() => {
-    if (props.id !== undefined && !getVeterinDetails.isLoading && getVeterinDetails.data) {
+    if (props.id !== undefined && !getVeterinDetails.isLoading && getVeterinDetails?.data) {
       const {
         name,
         surname,
@@ -93,8 +92,31 @@ const VeterinaUserModal = (props) => {
         end_time,
         specialityId,
       });
+    } else {
+      setFormData({
+        name: "",
+        surname: "",
+        avatar: "",
+        speciality: "",
+        identity: "",
+        dob: "",
+        phone: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        sex: "",
+        address: "",
+        department: "",
+        district: "",
+        workingDays: "",
+        start_time: "",
+        end_time: "",
+        specialityId: "",
+      });
+
+
     }
-  }, [props.id, getVeterinDetails]);
+  }, [props.id, getVeterinDetails, props.show]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -168,7 +190,28 @@ const VeterinaUserModal = (props) => {
   };
 
   const handleModalHide = () => {
+    setFormData({
+      name: "",
+      surname: "",
+      avatar: "",
+      speciality: "",
+      identity: "",
+      dob: "",
+      phone: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      sex: "",
+      address: "",
+      department: "",
+      district: "",
+      workingDays: "",
+      start_time: "",
+      end_time: "",
+      specialityId: "",
+    });
     props.onHide();
+    props.filter.refetch()
   };
 
   const handleSubmit = async (e) => {
@@ -200,6 +243,7 @@ const VeterinaUserModal = (props) => {
         if (response.status === 201) {
           // Handle success
           success();
+
           handleModalHide();
         }
       }

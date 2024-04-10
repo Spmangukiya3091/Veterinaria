@@ -19,7 +19,7 @@ import {
 } from "../../../../services/ApiServices";
 
 function Resumen() {
-  const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
@@ -28,21 +28,60 @@ function Resumen() {
   const [ownerData, setOwnerData] = useState([]);
   const [categoryListData, setCategoryListData] = useState([]);
   const [pendingAppointments, setPendingAppointments] = useState([]);
+  const getCurrentMonth2 = () => {
+    const date = new Date();
 
-  const [selectedMonth, setSelectedMonth] = useState(getCurrentMonth());
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1
+    };
 
-  function getCurrentMonth() {
-    const currentDate = new Date();
-    const currentMonthIndex = currentDate.getMonth();
-    return currentMonthIndex + 1; // Adding 1 to convert to 1-based index
-  }
+  };
+  const [selectedMonth, setSelectedMonth] = useState({
+    year: getCurrentMonth2().year,
+    month: getCurrentMonth2().month
+  });
 
+  const getMonthName = (monthNumber) => {
+    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    return months[monthNumber - 1];
+  };
+
+  const getPastMonths = () => {
+    const currentMonth = getCurrentMonth2();
+    const months = [];
+
+    for (let i = 0; i < 12; i++) {
+      let year = currentMonth.year;
+      let month = currentMonth.month - i;
+
+      if (month <= 0) {
+        month += 12;
+        year -= 1;
+      }
+
+      months.unshift({
+        year: year,
+        month: month,
+        monthName: getMonthName(month)
+      });
+    }
+
+    // // Add default option "All" as the first item
+    // months.unshift({ year: "", month: "", monthName: "All" });
+
+    return months;
+  };
+
+  const pastMonths = getPastMonths().reverse();
+  // console.log(pastMonths.reverse())
   const metricasData = useGetMetricsQuery(selectedMonth, { refetchOnMountOrArgChange: true });
   const appoinmentGraph = useGetAppoinmentGraphQuery(null, { refetchOnMountOrArgChange: true });
   const paymentGraph = useGetPaymentGraphQuery(null, { refetchOnMountOrArgChange: true });
   const ownerGraph = useGetOwnerGraphQuery(null, { refetchOnMountOrArgChange: true });
   const categoryList = useGetCategoryWithProductsQuery(null, { refetchOnMountOrArgChange: true });
   const pendingAppointmentsList = useGetPendingAppoinmentQuery(null, { refetchOnMountOrArgChange: true });
+
 
   useEffect(() => {
     if (
@@ -74,11 +113,16 @@ function Resumen() {
     }
   }, [metricasData, appoinmentGraph, paymentGraph, ownerGraph, categoryList, pendingAppointmentsList]);
 
-  const handleMonthChange = (event) => {
-    const selectedMonthName = event.target.text;
-    const selectedMonthIndex = months.findIndex((month) => month === selectedMonthName);
-    setSelectedMonth(selectedMonthIndex + 1); // Adding 1 to convert to 1-based index
-    setLoading(true); // Set loading to true when changing the month
+  const handleMonthChange = (e, month, year) => {
+    // console.log("e", e);
+    // console.log("year", year);
+    // console.log("month", month);
+    setSelectedMonth({
+      ...selectedMonth,
+      month: month,
+      year: year
+    })
+    setLoading(true);
   };
   return (
     <div className="resumen">
@@ -90,14 +134,17 @@ function Resumen() {
         <div className="calendar-box">
           <Dropdown as={ButtonGroup} align="end" className="filter-dropdown">
             <Dropdown.Toggle className="filter-btn">
-              {`Mes: ${months[selectedMonth - 1]}`}
+              {`Mes: ${selectedMonth?.month === "" ? "Todo" : pastMonths.find((month) => month.month === selectedMonth?.month).monthName}`}
               <i className="fa-solid fa-chevron-down"></i>
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
-              {months.map((month, index) => (
-                <Dropdown.Item key={index} className="menu-item px-3" onClick={(e) => handleMonthChange(e)}>
-                  <Link className="menu-link px-3">{month}</Link>
+              <Dropdown.Item className="menu-item px-3" onClick={(e) => handleMonthChange(e, "", "")}>
+                <Link className="menu-link px-3">Todo</Link>
+              </Dropdown.Item>
+              {pastMonths.map((month, index) => (
+                <Dropdown.Item key={index} className="menu-item px-3" onClick={(e) => handleMonthChange(e, month?.month, month?.year)}>
+                  <Link className="menu-link px-3">{month?.monthName}</Link>
                 </Dropdown.Item>
               ))}
             </Dropdown.Menu>
@@ -106,7 +153,7 @@ function Resumen() {
       </div>
 
       <div className="card-wrapper">
-        {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <Metricas month={selectedMonth} data={data} />}
+        {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <Metricas month={selectedMonth.month} data={data} />}
       </div>
 
       <div className="calendar-section">

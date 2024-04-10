@@ -86,6 +86,8 @@ function CitasModal({ show, handleClose, id, filter }) {
       ...formData,
       owner,
       ownerId,
+      petId: ""
+
     });
   };
 

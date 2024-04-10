@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./citas.scss";
-import { Button, ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form, } from "react-bootstrap";
 import { citasData } from "./citasData";
 import { Link } from "react-router-dom";
 import CitasModal from "./modal/CitasModal";
@@ -54,6 +54,7 @@ function Citas({ email }) {
 
   const handleClose = () => {
     setShow(false);
+    setAppId("")
   };
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -117,10 +118,10 @@ function Citas({ email }) {
       searchData.status === ""
         ? `?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? ""
-        : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? ""
+            : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // appointmentsByFilter.refetch();
     setDropdownOpen(false);
@@ -288,7 +289,7 @@ function Citas({ email }) {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option disabled>Seleccionar</option>
+                                  <option disabled="true" value={""} selected="true">Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>
@@ -393,13 +394,12 @@ function Citas({ email }) {
                           </td>
                           <td className="text-start pe-0" data-order="status">
                             <div
-                              className={`${
-                                status === "pending"
-                                  ? "badge badge-light-warning text-warning"
-                                  : status === "no attempt"
+                              className={`${status === "pending"
+                                ? "badge badge-light-warning text-warning"
+                                : status === "no attempt"
                                   ? "badge badge-light-dark"
                                   : "badge badge-light-success text-success "
-                              } `}
+                                } `}
                             >
                               <p className="mb-0">{status === "pending" ? "Pendiente" : status === "no attempt" ? "No asistió" : "Completado"}</p>
                             </div>

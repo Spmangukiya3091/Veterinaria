@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const paymentController = require("../../../controllers/Payment/paymentController");
+const paymentController = require("../../../controllers/Veterinaria/Payment/paymentController");
 const Secure = require("../../../middlewares/secure/secure");
 router.get("/paymentExcelSheet",Secure(['masterAdmin']), paymentController.paymentExcelFile)
 router.get("/paymentsList",Secure(['masterAdmin','customerService']), paymentController.getAllPayments)

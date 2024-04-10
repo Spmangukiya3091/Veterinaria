@@ -41,7 +41,7 @@ const PropietarioModal = (props) => {
         dob: getOwner?.data?.ownerData.dob || "",
       }));
     }
-  }, [props.id, getOwner]);
+  }, [props.id, getOwner, props.show]);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -132,7 +132,7 @@ const PropietarioModal = (props) => {
         // console.log("error");
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (

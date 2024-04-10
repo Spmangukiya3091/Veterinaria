@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./main.scss";
-import { Spinner } from "react-bootstrap";
 import { useCookies } from "react-cookie";
 import Resumen from "../resumen/Resumen";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
@@ -36,8 +35,8 @@ function Main() {
     paths[totalpaths - 1] === undefined
       ? "Dashboard"
       : totalpaths > 2
-      ? `${paths[totalpaths - 2] + " " + paths[totalpaths - 1]}`
-      : paths[totalpaths - 1];
+        ? `${paths[totalpaths - 2] + " " + paths[totalpaths - 1]}`
+        : paths[totalpaths - 1];
   const capitalize = (word) => {
     const lower = word.toLowerCase();
     return lower.charAt(0).toUpperCase() + lower.slice(1);

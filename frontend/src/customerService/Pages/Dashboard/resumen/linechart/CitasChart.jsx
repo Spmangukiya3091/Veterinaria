@@ -4,7 +4,7 @@ import "../scss/graph.scss";
 import ReactApexChart from "react-apexcharts";
 
 function CitasChart({ data }) {
-  const weekData = data.weeklyData.filter((week) => week);
+  const weekData = data?.weeklyData.filter((week) => week);
   const [chartData, setChartData] = useState({
     series: [
       {

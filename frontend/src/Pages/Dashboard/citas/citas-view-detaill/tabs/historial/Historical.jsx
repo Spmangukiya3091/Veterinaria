@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./historical.scss";
-import { Dropdown, Form, ButtonGroup, Spinner } from "react-bootstrap";
+import { Dropdown, Form, ButtonGroup } from "react-bootstrap";
 import SingleInputDateRangePicker from "../../../../../../Components/date-picker/DatePicker";
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useGetPetAppoinmentQuery } from "../../../../../../services/ApiServices";
@@ -256,8 +256,8 @@ function Historical({ id }) {
                                   status === "pending"
                                     ? "badge badge-light-warning text-warning"
                                     : status === "complete"
-                                    ? "badge badge-light-success text-success"
-                                    : "badge badge-secondary text-dark"
+                                      ? "badge badge-light-success text-success"
+                                      : "badge badge-secondary text-dark"
                                 }
                               >
                                 <p className="status-p mb-0">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./citasDetail.scss";
-import { Col, Collapse, Row, Spinner } from "react-bootstrap";
+import { Col, Collapse, Row } from "react-bootstrap";
 
 import MainTab from "./tabs/main/MainTab";
 import { useLocation } from "react-router-dom";
@@ -19,13 +19,13 @@ function CitasDetail() {
   useEffect(() => {
     if (!singleCita.isLoading) {
       setLoading(false);
-      setData(singleCita?.data?.appointment);
+      setData(singleCita?.data?.appointments[0]);
     } else if (singleCita.isError) {
       setLoading(false);
       setError(true);
     }
   }, [singleCita]);
-  console.log(singleCita);
+  // console.log(singleCita);
 
   const refetchApi = () => {
     singleCita.refetch();
@@ -56,13 +56,12 @@ function CitasDetail() {
                 <div className="mb-9">
                   <div className="mb-9">
                     <p
-                      className={`d-inline fs-6 ${
-                        data?.status === "pending"
-                          ? "badge badge-light-warning text-warning"
-                          : data?.status === "complete"
+                      className={`d-inline fs-6 ${data?.status === "pending"
+                        ? "badge badge-light-warning text-warning"
+                        : data?.status === "complete"
                           ? "badge badge-light-success text-success"
                           : "badge badge-secondary text-dark"
-                      }`}
+                        }`}
                     >
                       {data?.status === "pending" ? "Pendiente" : data?.status === "complete" ? "Completado" : "No asistió"}
                     </p>

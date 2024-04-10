@@ -84,7 +84,7 @@ const MascotaModal = (props) => {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Propietario</Form.Label>
                   <Form.Select aria-label="Default select" name="ownerId" onChange={handleChange} value={formData.ownerId}>
-                    <option disabled>Propietario</option>
+                    <option disabled="true" value={""} selected="true">Propietario</option>
                     {ownersList?.data?.ownersList.map((owner) => (
                       <option key={owner.id} value={owner.id}>
                         {owner.name + " " + owner.surname}
@@ -99,7 +99,7 @@ const MascotaModal = (props) => {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Sexo</Form.Label>
                   <Form.Select aria-label="Default select example" name="sex" onChange={handleChange} value={formData.sex}>
-                    <option disabled>Sexo</option>
+                    <option disabled="true" value={""} selected="true">Sexo</option>
                     <option value="Macho">Macho</option>
                     <option value="Hembra">Hembra</option>
                   </Form.Select>

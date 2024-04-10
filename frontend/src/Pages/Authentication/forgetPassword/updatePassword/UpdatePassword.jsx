@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import { useUpdatePasswordMutation } from "../../../../services/ApiServices";
-import { showToast } from "../../../../store/tostify";
 
 function UpdatePassword() {
   const navigate = useNavigate();
@@ -35,8 +34,9 @@ function UpdatePassword() {
       success();
       navigate("/");
       // dispatch(showToast("Password Updated Successfully", "SUCCESS_TOAST"));
-    } else if (response.isError) {
-      dispatch(showToast(response.error.message, "FAIL_TOAST"));
+    } else if (response.isError && response.status === "rejected") {
+      console.log(response)
+      failer(response?.error?.data?.message)
     }
   }, [dispatch, navigate, response]);
 
@@ -80,7 +80,7 @@ function UpdatePassword() {
                           placeholder="Crear contraseña"
                           name="password"
                           onChange={handleOnChange}
-                          value={formData.confirmPassword}
+                          value={formData.passwordds}
                         />
                       </Form.Group>
 

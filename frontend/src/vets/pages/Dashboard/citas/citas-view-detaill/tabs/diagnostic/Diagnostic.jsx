@@ -30,22 +30,22 @@ function Diagnostic({ data }) {
             <Row>
               <Col lg={3}>Nombre de Padecimiento</Col>
               <Col lg={9}>
-                <b>{data?.condition_name}</b>
+                <b>{data?.condition_name || "-"}</b>
               </Col>
             </Row>
             <Row>
               <Col lg={3}>Descripción</Col>
               <Col lg={9}>
-                <b>{data.description ? parse(data?.description) : ""}</b>
+                <b>{data?.description ? parse(data?.description) : ""}</b>
               </Col>
             </Row>
           </div>
         </div>
         <div className="third container">
           <h4>Documentación</h4>
-          {data && data.documentation !== null ? (
-            data.documentation.length > 0 ? (
-              data.documentation.map((document, index) => (
+          {data && data?.documentation !== null ? (
+            data?.documentation.length > 0 ? (
+              data?.documentation.map((document, index) => (
                 <div key={index} className="files mb-2">
                   {Object.entries(document).map(([key, value]) => (
                     <div key={key} className="d-flex justify-content-between w-100">
@@ -70,8 +70,9 @@ function Diagnostic({ data }) {
         <div className="third container">
           <h4>Medicación</h4>
           <p>Medicación Recetado</p>
-          {data && data.medication ? (
-            data.medication.map((med, i) => (
+          {data && data?.medication ? (
+            // JSON.parse(data?.medication).map((med, i) => (
+            data?.medication.map((med, i) => (
               <div key={i} className="files mb-2">
                 <div className="files-inner">
                   {med.Name}
@@ -91,7 +92,7 @@ function Diagnostic({ data }) {
           <Row>
             <Col lg={3}>Observaciones Internas</Col>
             <Col lg={9}>
-              <b>{data?.internal_observation}</b>
+              <b>{data?.internal_observation || "-"}</b>
             </Col>
           </Row>
           <Row>
@@ -99,7 +100,7 @@ function Diagnostic({ data }) {
               <h4>Calificación del paciente</h4>
             </Col>
             <Col className="column" lg={9}>
-              <div className="rating">{renderStars(data?.rating)}</div>
+              <div className="rating">{renderStars(data?.rating || "-")}</div>
             </Col>
           </Row>
         </div>

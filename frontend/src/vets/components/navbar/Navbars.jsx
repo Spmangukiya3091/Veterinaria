@@ -10,6 +10,7 @@ import { showToast } from "../../../store/tostify";
 
 function Navbars({ user }) {
   const [show, setShow] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [cookies, , removeCookie] = useCookies(["user"]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ function Navbars({ user }) {
   const handleShow = () => setShow(true);
 
   const handleLogout = () => {
-    console.log("logout");
+    // console.log("logout");
     removeCookie("user");
     navigate("/");
     dispatch(showToast("Cerrar sesión exitosamente", "INFO_TOAST"));

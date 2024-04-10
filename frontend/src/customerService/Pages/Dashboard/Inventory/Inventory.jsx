@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./inventory.scss";
-import { Button, ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form, } from "react-bootstrap";
 import { inventoryData } from "./inventoryData";
 import { Link } from "react-router-dom";
 import InventoryModal from "./modal/InventoryModal";
@@ -56,10 +56,6 @@ const Inventory = ({ email }) => {
   const handleClose = () => {
     setShow(false);
     products.refetch();
-  };
-
-  const handleHide = () => {
-    setModalShow(false);
   };
 
   const handleCloseCategory = () => setShowCategory(false);
@@ -130,10 +126,10 @@ const Inventory = ({ email }) => {
       searchData.status === ""
         ? `?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? ""
-        : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? ""
+            : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // products.refetch(searchQuery);
     setDropdownOpen(false);
@@ -266,7 +262,7 @@ const Inventory = ({ email }) => {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option disabled>Seleccionar</option>
+                                  <option disabled="true" value={""} selected="true">Seleccionar</option>
                                   <option value="active">Activo</option>
                                   <option value="inactive">Inactivo</option>
                                 </select>
@@ -356,9 +352,8 @@ const Inventory = ({ email }) => {
                           <td className="text-start pe-0">{stock}</td>
                           <td className="text-start pe-0" data-order="status">
                             <div
-                              className={`${
-                                status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
-                              } `}
+                              className={`${status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "
+                                } `}
                             >
                               <p className="mb-0">{status === "inactive" ? "Inactivo" : "Activo"}</p>
                             </div>

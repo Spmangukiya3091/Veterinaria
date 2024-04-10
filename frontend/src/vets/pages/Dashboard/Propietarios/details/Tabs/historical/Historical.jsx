@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Dropdown, ButtonGroup, Form, Spinner } from "react-bootstrap";
+import { Dropdown, ButtonGroup, Form } from "react-bootstrap";
 import "./historical.scss";
 import SingleInputDateRangePicker from "../../../../citas/date-picker/DatePicker";
 import CitasPagination from "../../../../../../components/pagination/citas-pagination/Citas-Pagination";
@@ -85,10 +85,10 @@ const Historical = ({ id }) => {
       searchData.status === ""
         ? `${id}?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}`
-        : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `${id}?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? `${id}`
+            : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // historyList.refetch();
     setDropdownOpen(false);
@@ -172,7 +172,7 @@ const Historical = ({ id }) => {
                                   onChange={handleChange}
                                   value={searchData.status}
                                 >
-                                  <option disabled>Seleccionar</option>
+                                  <option disabled="true" value={""} selected="true">Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>

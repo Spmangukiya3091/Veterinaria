@@ -13,51 +13,51 @@ const Information = ({ data }) => {
             <tbody>
               <tr>
                 <td className="info-head">Apellidos</td>
-                <td className="info-details">{data?.veterinarianData?.surname}</td>
+                <td className="info-details">{data?.veterinarianData?.surname || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Nombre</td>
-                <td className="info-details">{data?.veterinarianData?.name}</td>
+                <td className="info-details">{data?.veterinarianData?.name || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Especialidad</td>
-                <td className="info-details">{data?.veterinarianData?.speciality}</td>
+                <td className="info-details">{data?.veterinarianData?.speciality || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Teléfono</td>
-                <td className="info-details">{data?.veterinarianData?.phone}</td>
+                <td className="info-details">{data?.veterinarianData?.phone || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Correo electrónico</td>
-                <td className="info-details">{data?.veterinarianData?.email}</td>
+                <td className="info-details">{data?.veterinarianData?.email || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Doc. Identidad</td>
-                <td className="info-details">{data?.veterinarianData?.identity}</td>
+                <td className="info-details">{data?.veterinarianData?.identity || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Sexo</td>
-                <td className="info-details">{data?.veterinarianData?.sex}</td>
+                <td className="info-details">{data?.veterinarianData?.sex || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">F. de Nacimiento</td>
-                <td className="info-details">{moment(data?.veterinarianData?.dob).format("DD MMM YYYY")}</td>
+                <td className="info-details">{moment(data?.veterinarianData?.dob).format("DD MMM YYYY") || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Dirección</td>
-                <td className="info-details">{data?.veterinarianData?.address}</td>
+                <td className="info-details">{data?.veterinarianData?.address || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Distrito</td>
-                <td className="info-details ">{data?.veterinarianData?.district}</td>
+                <td className="info-details ">{data?.veterinarianData?.district || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Departamento</td>
-                <td className="info-details">{data?.veterinarianData?.department}</td>
+                <td className="info-details">{data?.veterinarianData?.department || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Provincia</td>
-                <td className="info-details">{data?.veterinarianData?.department}</td>
+                <td className="info-details">{data?.veterinarianData?.department || "-"}</td>
               </tr>
             </tbody>
           </Table>

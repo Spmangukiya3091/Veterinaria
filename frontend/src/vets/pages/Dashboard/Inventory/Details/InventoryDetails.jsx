@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./inventoryDetail.scss";
-import { Col, Collapse, Row, Spinner } from "react-bootstrap";
+import { Col, Collapse, Row } from "react-bootstrap";
 import MainTab from "../Tabs/MainTab";
 import { useLocation } from "react-router-dom";
 import { useGetProductHistoryQuery, useGetSingleProductQuery } from "../../../../../services/ApiServices";

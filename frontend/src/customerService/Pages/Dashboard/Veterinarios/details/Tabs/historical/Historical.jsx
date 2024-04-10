@@ -148,7 +148,7 @@ const Historical = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentPosts ? (
+                {currentPosts.length > 0 ? (
                   currentPosts.map(({ COD, MASCOTA, HORARIO, FECHA, ESTADO, ACCIONES }, i) => (
                     <tr key={i}>
                       <td className="text-start pe-0">

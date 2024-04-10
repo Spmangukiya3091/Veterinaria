@@ -14,7 +14,7 @@ function ForgetPassword() {
   const [verificationLink, response] = useVerificationLinkMutation();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await verificationLink(email);
+    await verificationLink(email?.email);
   };
 
   useEffect(() => {

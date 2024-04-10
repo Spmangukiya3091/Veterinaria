@@ -4,7 +4,8 @@ const port = process.env.PORT || 2000;
 const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config/config.env" });
+dotenv.config({ path: "./config/.env" });
+
 const usersRouteHandler = require("./routes/veterinaria/Admin/usersRoutes");
 const paymentRouteHandler = require("./routes/veterinaria/Payment/payment");
 const productRouteHandler = require("./routes/veterinaria/Products/product");
@@ -15,10 +16,16 @@ const appointmentRouteHandler = require("./routes/veterinaria/Appointment/appoin
 const vaccinationRouteHandler = require("./routes/veterinaria/vaccination/vaccination");
 const veterinarianRouteHandler = require("./routes/veterinaria/Veterinarian/veterinarian");
 const dashboardRouteHandler = require("./routes/veterinaria/Resumen/resumen");
-
-
-
 const { sequelize } = require("./config/connection");
+const schedule = require('node-schedule');
+const { updateAppointmentsStatus } = require("./controllers/Veterinaria/Appointment/appointmentController");
+const { updateProductStatus } = require("./controllers/Veterinaria/Products/productController");
+
+
+schedule.scheduleJob('*/1 * * * * *', () => {
+  updateProductStatus();
+  updateAppointmentsStatus();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -31,7 +38,7 @@ app.use("/vaccine", vaccineRouteHandler);
 app.use("/owner", ownerRouteHandler);
 app.use("/pet", petRouteHandler);
 app.use("/dashboard", dashboardRouteHandler);
-app.use("/veterinarian",veterinarianRouteHandler)
+app.use("/veterinarian", veterinarianRouteHandler)
 app.use("/appointment", appointmentRouteHandler);
 app.use("/vaccination", vaccinationRouteHandler);
 app.use("/profile", express.static("./public"));

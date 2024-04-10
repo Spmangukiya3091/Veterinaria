@@ -10,6 +10,7 @@ import { success } from "../../../../Components/alert/success";
 function Verification() {
   const location = useLocation();
   const email = location.pathname.split("/")[2];
+  console.log(email)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [verificationLink, response] = useVerificationLinkMutation();

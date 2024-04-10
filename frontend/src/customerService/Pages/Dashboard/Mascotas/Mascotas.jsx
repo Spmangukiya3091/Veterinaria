@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./mascotas.scss";
-import { Button, ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form, } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
 import MascotasModal from "./modal/MascotasModal";
@@ -247,7 +247,7 @@ const Mascotas = ({ email }) => {
                         </Dropdown.Toggle>
                         <Dropdown.Menu
                           className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                          
+
                           id="kt_menu_62444587ce1ee"
                         >
                           <div className="px-7 py-5">
@@ -374,8 +374,8 @@ const Mascotas = ({ email }) => {
                                 {dropdowns[i] && (
                                   <Dropdown.Menu
                                     className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                    
-                                    
+
+
                                   >
                                     <Dropdown.Item className="menu-item px-3">
                                       <div onClick={() => navigate(`/customerservice/mascotas/details/${id}`)} className="menu-link px-3">
@@ -389,7 +389,7 @@ const Mascotas = ({ email }) => {
                                           setCitas({ petId: id, ownerId: ownerId });
                                         }}
                                         className="menu-link px-3"
-                                        
+
                                       >
                                         Agendar cita
                                       </div>
@@ -401,7 +401,7 @@ const Mascotas = ({ email }) => {
                                           setPetId(id);
                                         }}
                                         className="menu-link px-3"
-                                        
+
                                       >
                                         Editar
                                       </div>
@@ -414,7 +414,7 @@ const Mascotas = ({ email }) => {
                                           setModalShow(true);
                                         }}
                                         className="menu-link px-3 delete"
-                                        
+
                                       >
                                         Eliminar mascota
                                       </div>

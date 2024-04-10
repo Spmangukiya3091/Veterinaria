@@ -91,7 +91,7 @@ const VeterinaUserModal = (props) => {
         specialityId,
       });
     }
-  }, [props.id, getVeterinDetails]);
+  }, [props.id, getVeterinDetails, props.show]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -336,7 +336,7 @@ const VeterinaUserModal = (props) => {
                 <Form.Group className="mb-3">
                   <Form.Label>Sexo</Form.Label>
                   <Form.Select aria-label="Default select example" value={formData.sex} onChange={(e) => handleChange(e)} name="sex">
-                    <option disabled>Sexo</option>
+                    <option disabled="true" value={""} selected="true">Sexo</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
                   </Form.Select>

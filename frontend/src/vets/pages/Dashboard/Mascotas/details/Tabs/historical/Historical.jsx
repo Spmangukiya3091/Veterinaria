@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import "./historical.scss";
 import SingleInputDateRangePicker from "../../../../citas/date-picker/DatePicker";
 import CitasPagination from "../../../../../../components/pagination/citas-pagination/Citas-Pagination";

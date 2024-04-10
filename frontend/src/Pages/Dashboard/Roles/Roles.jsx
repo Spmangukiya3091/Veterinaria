@@ -25,7 +25,7 @@ const Roles = ({ email }) => {
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
   const [loginuserDetails, setUserDetails] = useState();
-  const [userID, setUserID] = useState();
+  const [userID, setUserID] = useState("");
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -58,6 +58,7 @@ const Roles = ({ email }) => {
 
   const handleClose = () => {
     setShow(false);
+    setUserID()
     userList.refetch();
     userDetails.refetch();
   };
@@ -110,6 +111,7 @@ const Roles = ({ email }) => {
     });
   };
 
+  // console.log(userID)
   const handleChangeDate = (selectedDates) => {
     if (selectedDates && selectedDates.length === 2) {
       setSearchData({
@@ -126,10 +128,10 @@ const Roles = ({ email }) => {
       searchData.role === ""
         ? `?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `?role=${searchData.role}`
-        : searchData.role === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? ""
-        : `?role=${searchData.role}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `?role=${searchData.role}`
+          : searchData.role === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? ""
+            : `?role=${searchData.role}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // products.refetch(searchQuery);
     setDropdownOpen(false);
@@ -374,7 +376,7 @@ const Roles = ({ email }) => {
                                         onChange={handleChange}
                                         value={searchData.role}
                                       >
-                                        <option disabled>Seleccionar</option>
+                                        <option disabled="true" value={""} selected="true">Seleccionar</option>
                                         <option value="masterAdmin">Administrador Estandar</option>
 
                                         <option value="customer service">Servicio al Cliente</option>
@@ -416,7 +418,7 @@ const Roles = ({ email }) => {
                       <div className="header-right">
                         <Button
                           onClick={() => {
-                            handleShow(undefined);
+                            handleShow();
                           }}
                           className="new-btn"
                         >

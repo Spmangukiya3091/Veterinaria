@@ -182,7 +182,7 @@ const Veterinarios = ({ email }) => {
                                 onChange={handleChange}
                                 value={searchData.speciality}
                               >
-                                <option disabled>Seleccionar</option>
+                                <option disabled="true" value={""} selected="true">Seleccionar</option>
                                 {specialityData.map((speciality, i) => (
                                   <option key={i} value={speciality.speciality}>
                                     {speciality.speciality}
@@ -279,7 +279,7 @@ const Veterinarios = ({ email }) => {
         <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
         <VeterinaModal show={show} onHide={handleClose} email={email} />
         <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
-        <VeterinaUserModal show={openModal} onHide={handleModalHide} />
+        <VeterinaUserModal show={openModal} onHide={handleModalHide} filter={veterinList} />
       </div>
     </>
   );

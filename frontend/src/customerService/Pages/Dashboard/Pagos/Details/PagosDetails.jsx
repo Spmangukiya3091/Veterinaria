@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./pagosdetails.scss";
-import { ButtonGroup, Col, Collapse, Dropdown, Row, Spinner } from "react-bootstrap";
+import { ButtonGroup, Col, Collapse, Dropdown, Row,} from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import MainTab from "./tabs/MainTab";
 import Alert from "../../../../Components/alert/Alert";
@@ -178,8 +178,8 @@ const PagosDetails = ({ email }) => {
 
                   <Dropdown.Menu
                     className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                    
-                    
+
+
                   >
                     <Dropdown.Item className="menu-item px-3">
                       <div onClick={handleShow} className="menu-link px-3">

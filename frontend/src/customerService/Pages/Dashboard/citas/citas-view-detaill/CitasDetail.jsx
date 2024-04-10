@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./citasDetail.scss";
-import { ButtonGroup, Col, Collapse, Dropdown, Row, Spinner } from "react-bootstrap";
+import { ButtonGroup, Col, Collapse, Dropdown, Row } from "react-bootstrap";
 import MainTab from "./tabs/main/MainTab";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import CitasModal from "../modal/CitasModal";
@@ -10,7 +10,6 @@ import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVe
 import { useDispatch } from "react-redux";
 import { useGetSingleAppointmentQuery, useRemoveAppointmentMutation } from "../../../../../services/ApiServices";
 import { failer, success } from "../../../../Components/alert/success";
-import { showToast } from "../../../../../store/tostify";
 import Loader from "../../../../Components/loader/Loader";
 
 function CitasDetail({ email }) {
@@ -29,7 +28,7 @@ function CitasDetail({ email }) {
   useEffect(() => {
     if (!singleCita.isLoading) {
       setLoading(false);
-      setData(singleCita?.data?.appointment);
+      setData(singleCita?.data?.appointments[0]);
     } else if (singleCita.isError) {
       setLoading(false);
       setError(true);
@@ -136,13 +135,12 @@ function CitasDetail({ email }) {
                 <div className="mb-9">
                   <div className="mb-9">
                     <p
-                      className={`d-inline fs-6 ${
-                        data?.status === "pending"
-                          ? "badge badge-light-warning text-warning"
-                          : data?.status === "complete"
+                      className={`d-inline fs-6 ${data?.status === "pending"
+                        ? "badge badge-light-warning text-warning"
+                        : data?.status === "complete"
                           ? "badge badge-light-success text-success"
                           : "badge badge-secondary text-dark"
-                      }`}
+                        }`}
                     >
                       {data?.status === "pending" ? "Pendiente" : data?.status === "complete" ? "Completado" : "No asistió"}
                     </p>

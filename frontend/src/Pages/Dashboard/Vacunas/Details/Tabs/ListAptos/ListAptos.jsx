@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
 import "./listaptos.scss";
 import { Link } from "react-router-dom";
-import { Button, Spinner } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import AptosModal from "../AptosModal/AptosModal";
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useGetVaccinationbyVaccineIdQuery } from "../../../../../../services/ApiServices";
 import Loader from "../../../../../../Components/loader/Loader";
 
-const ListAptos = ({ id }) => {
+const ListAptos = ({ id, vaccineData }) => {
+
   const [currentPage, setCurrentPage] = useState(1);
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
+  const [recordId, setRecordId] = useState("")
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [ownerId, setOwnerId] = useState("")
+  const [petId, setPetId] = useState("")
+  const [petName, setPetName] = useState("")
+  const [ownerName, setOwnerName] = useState("")
   const vaccinationList = useGetVaccinationbyVaccineIdQuery(id, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (!vaccinationList.isLoading) {
       setLoading(false);
       setData(vaccinationList?.data?.vaccination);
+
     } else if (vaccinationList.isError) {
       setError(true);
       setLoading(false);
@@ -26,7 +33,15 @@ const ListAptos = ({ id }) => {
   }, [vaccinationList]);
 
   const postsPerPage = 10;
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setOwnerId("")
+    setPetId("")
+    setRecordId("")
+    setPetName("")
+    setOwnerName("")
+    vaccinationList.refetch()
+  };
 
   const indexOfLastPost = currentPage * postsPerPage;
 
@@ -65,19 +80,19 @@ const ListAptos = ({ id }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts ? (
-                      currentPosts.map(({ id, pet, owner, petId, petVaccinationData, status, species }, i) => (
+                    {currentPosts.length > 0 ? (
+                      currentPosts.map(({ id, owner, petId, petVaccinationData, status, ownerId }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{petVaccinationData.name}</td>
+                          <td className="text-start pe-0">{petVaccinationData?.name || "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {owner}
+                            {owner || "-"}
                           </td>
                           <td className="text-start pe-0">
-                            <div className=" fecha">{petVaccinationData.Species}</div>
+                            <div className=" fecha">{petVaccinationData?.Species || "-"}</div>
                           </td>
                           <td>
                             <div className="status-wrapper">
@@ -99,7 +114,14 @@ const ListAptos = ({ id }) => {
                                 <i className="bi bi-eye-fill"></i>
                               </Link>
 
-                              <Link onClick={() => setShow(true)} className="btn btn-sm btn-light btn-active-light-primary mx-2">
+                              <Link onClick={() => {
+                                setShow(true)
+                                setOwnerId(ownerId)
+                                setPetId(petId)
+                                setRecordId(id)
+                                setPetName(petVaccinationData?.name)
+                                setOwnerName(owner)
+                              }} className="btn btn-sm btn-light btn-active-light-primary mx-2">
                                 <i className="fa-solid fa-pen"></i>
                               </Link>
                             </div>
@@ -116,7 +138,7 @@ const ListAptos = ({ id }) => {
               </div>
             </div>
           </div>
-          <AptosModal show={show} onHide={handleClose} />
+          <AptosModal show={show} onHide={handleClose} vaccineName={vaccineData.vaccine.name} ownerName={ownerName} petName={petName} id={recordId} vaccineId={id} filter={vaccinationList} owner={ownerId} petId={petId} />
           <CitasPagination current={currentPage} total={Math.ceil(data.length / postsPerPage)} onPageChange={setCurrentPage} />
         </>
       )}

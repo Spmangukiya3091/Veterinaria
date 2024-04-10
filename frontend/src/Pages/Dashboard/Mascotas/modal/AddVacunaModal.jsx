@@ -55,7 +55,7 @@ function AddVacunaModal({ show, handleClose, filter }) {
             <Form.Group className="mb-3" controlId="formBasicSelect">
               <Form.Label>Vacuna</Form.Label>
               <Form.Select aria-label="Default select example" name="vaccineId" onChange={handleChange}>
-                <option disabled>Vacuna</option>
+                <option disabled="true" value={""} selected="true">Vacuna</option>
                 {vaccines?.data?.vaccineList.map((vaccine) => (
                   <option key={vaccine.id} value={vaccine.id}>
                     {vaccine.name}

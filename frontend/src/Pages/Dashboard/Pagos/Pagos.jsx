@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form,} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { pagosData } from "./data";
 import SingleInputDateRangePicker from "../../../Components/date-picker/DatePicker";
@@ -290,7 +290,7 @@ const Pagos = ({ email }) => {
                                   onChange={handleChange}
                                   value={searchData.payment_method}
                                 >
-                                  <option disabled>Seleccionar</option>
+                                  <option disabled="true" value={""} selected="true">Seleccionar</option>
                                   <option value="cash">Efectivo</option>
                                   <option value="credit card">Tarjeta de crédito</option>
                                   <option value="debit card">Tarjeta de Débito</option>

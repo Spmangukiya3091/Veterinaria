@@ -3,7 +3,6 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { Spinner } from "react-bootstrap";
 import "./calendario.scss";
 import esLocale from "@fullcalendar/core/locales/es";
 import { useGetVeterinariansAppointmentQuery } from "../../../../services/ApiServices";

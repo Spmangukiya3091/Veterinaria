@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./pagosdetails.scss";
-import { ButtonGroup, Col, Collapse, Dropdown, Row, Spinner } from "react-bootstrap";
+import { ButtonGroup, Col, Collapse, Dropdown, Row } from "react-bootstrap";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import MainTab from "./tabs/MainTab";

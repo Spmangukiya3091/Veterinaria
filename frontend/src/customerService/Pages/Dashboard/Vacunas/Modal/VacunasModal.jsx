@@ -21,7 +21,7 @@ const VacunasModal = (props) => {
         validity: validity,
       });
     }
-  }, [props.id, vaccineDetails]);
+  }, [props.id, vaccineDetails, props.show]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

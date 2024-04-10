@@ -172,7 +172,7 @@ function DiagnosticForm({ data, refetch }) {
             <div>
               {selectedFiles.map((file, index) => (
                 <div key={index} className="files mb-2">
-                  <div className="files-inner">{file.name}</div>
+                  <div className="files-inner">{file?.name}</div>
                   <img onClick={() => handleFileRemove(index)} src="/images/delete.png" alt="delete" />
                 </div>
               ))}
@@ -224,17 +224,17 @@ function DiagnosticForm({ data, refetch }) {
             <p>Medicación Recetado</p>
             {lists
               ? lists.map((ele, ind) => (
-                  <div className="files mb-2">
-                    <div className="files-inner">
-                      {ele.Name}
-                      <ul>
-                        <li>{ele.intake} unidades</li>
-                        <li>{ele.frequency} veces al día</li>
-                      </ul>
-                    </div>
-                    <img onClick={() => handleDeleteTodo(ind)} src="/images/delete.png" alt="delete" />
+                <div className="files mb-2">
+                  <div className="files-inner">
+                    {ele.Name}
+                    <ul>
+                      <li>{ele.intake} unidades</li>
+                      <li>{ele.frequency} veces al día</li>
+                    </ul>
                   </div>
-                ))
+                  <img onClick={() => handleDeleteTodo(ind)} src="/images/delete.png" alt="delete" />
+                </div>
+              ))
               : ""}
           </div>
           <div className="third container">

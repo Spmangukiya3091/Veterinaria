@@ -13,6 +13,7 @@ import {
 import moment from "moment";
 
 function CitasModal({ show, handleClose, id, filter }) {
+  console.log(id)
   const [formData, setFormData] = useState({
     owner: "",
     ownerId: "",
@@ -25,13 +26,13 @@ function CitasModal({ show, handleClose, id, filter }) {
     scheduleEnd: "",
     observation: "",
   });
-  const owners = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });
-  const pets = useGetPetByOwnerQuery(formData.ownerId, { refetchOnMountOrArgChange: true });
+  const owners = useGetOwnersListQuery({ refetchOnMountOrArgChange: true });
+  const pets = useGetPetByOwnerQuery(formData?.ownerId, { refetchOnMountOrArgChange: true });
   const veterinarians = useGetVeterinariansQuery(null, { refetchOnMountOrArgChange: true });
   const citasDetail = useGetSingleAppointmentQuery(id, { refetchOnMountOrArgChange: true });
   const [addCitas, response] = useAddAppoinmentMutation();
   const [updateCitas, response2] = useUpdateAppointmentMutation();
-
+  console.log(citasDetail?.data)
   useEffect(() => {
     if (id !== undefined && id !== "" && !citasDetail.isLoading && citasDetail.data?.appointment) {
       const { owner, ownerId, pet, petId, veterinarian, veterinarianId, date, scheduleStart, scheduleEnd, observation } =
@@ -62,7 +63,7 @@ function CitasModal({ show, handleClose, id, filter }) {
         observation: "",
       });
     }
-  }, [citasDetail, id]);
+  }, [citasDetail, id, show]);
 
   useEffect(() => {
     // Reset petId when ownerId changes
@@ -85,6 +86,7 @@ function CitasModal({ show, handleClose, id, filter }) {
       ...formData,
       owner,
       ownerId,
+      petId: ""
     });
   };
 
@@ -135,8 +137,8 @@ function CitasModal({ show, handleClose, id, filter }) {
           scheduleEnd: "",
           observation: "",
         });
-        handleClose();
         filter.refetch();
+        handleClose();
         success();
       } else if (response2.isError && response2.status === "rejected") {
         failer(response2?.error?.data?.message);
@@ -155,16 +157,16 @@ function CitasModal({ show, handleClose, id, filter }) {
           scheduleEnd: "",
           observation: "",
         });
+        filter.refetch();
         handleClose();
         success();
-        filter.refetch();
       } else if (response.isError && response.status === "rejected") {
         failer(response?.error?.data?.message);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
-
+  console.log(formData)
   return (
     <Modal size="lg" show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
@@ -176,8 +178,8 @@ function CitasModal({ show, handleClose, id, filter }) {
             <Col>
               <Form.Group className="mb-3">
                 <Form.Label>Propietario</Form.Label>
-                <Form.Select aria-label="Default select example" name="owner" onChange={handleOwnerChange} value={formData.ownerId}>
-                  <option>Seleccione Propietario</option>
+                <Form.Select name="owner" onChange={handleOwnerChange} value={formData.ownerId}>
+                  <option value={""} disabled="true" selected="true">Seleccione Propietario</option>
                   {owners?.data?.ownersList.map((owner) => (
                     <option key={owner.id} value={owner.id}>
                       {owner.name + " " + owner.surname}
@@ -189,8 +191,8 @@ function CitasModal({ show, handleClose, id, filter }) {
             <Col>
               <Form.Group className="mb-3">
                 <Form.Label>Mascota</Form.Label>
-                <Form.Select aria-label="Default select example" name="pet" onChange={handlePetChange} value={formData.petId}>
-                  <option>Seleccione Mascota</option>
+                <Form.Select name="pet" onChange={handlePetChange} value={formData.petId}>
+                  <option value={""} disabled="true" selected="true">Seleccione Mascota</option>
                   {pets?.data?.pets.map((pet) => (
                     <option key={pet.id} value={pet.id}>
                       {pet.name}

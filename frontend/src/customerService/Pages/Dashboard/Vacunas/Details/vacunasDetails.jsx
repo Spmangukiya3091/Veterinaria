@@ -1,9 +1,8 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import "./vacunasDetail.scss";
-import { ButtonGroup, Col, Collapse, Dropdown, Row, Spinner } from "react-bootstrap";
+import { Col, Collapse, Row, } from "react-bootstrap";
 import MainTab from "./Tabs/MainTab";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import VacunasModal from "../Modal/VacunasModal";
 import Alert from "../../../../Components/alert/Alert";
 import { useGetSingleVaccineQuery } from "../../../../../services/ApiServices";

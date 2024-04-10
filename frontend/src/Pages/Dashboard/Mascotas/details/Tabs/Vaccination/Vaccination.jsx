@@ -156,8 +156,8 @@ const Vaccination = ({ id, email }) => {
                               status === "vaccinated"
                                 ? "badge badge-light-primary text-primary"
                                 : status === "rejected"
-                                ? "badge badge-light-danger text-danger"
-                                : "badge badge-light-warning text-warning "
+                                  ? "badge badge-light-danger text-danger"
+                                  : "badge badge-light-warning text-warning "
                             }
                           >
                             <p className="status-p mb-0">

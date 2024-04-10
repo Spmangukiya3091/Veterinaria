@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Dropdown, ButtonGroup, Form, Spinner } from "react-bootstrap";
+import { Dropdown, ButtonGroup, Form } from "react-bootstrap";
 import "./historical.scss";
 
 import SingleInputDateRangePicker from "../../../../../../Components/date-picker/DatePicker";
@@ -85,10 +85,10 @@ const Historical = ({ id }) => {
       searchData.status === ""
         ? `${id}?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}`
-        : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `${id}?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? `${id}`
+            : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // historyList.refetch();
     setDropdownOpen(false);
@@ -150,7 +150,7 @@ const Historical = ({ id }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
+
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./mascotas.scss";
-import { Button, ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
@@ -367,7 +367,7 @@ const Mascotas = ({ email }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {currentPosts?.length !== 0 ? (
+                      {currentPosts?.length > 0 ? (
                         currentPosts.map(({ id, name, owner, ownerId, species, sex, age, rating }, i) => (
                           <tr key={i}>
                             <td className="text-start pe-0">

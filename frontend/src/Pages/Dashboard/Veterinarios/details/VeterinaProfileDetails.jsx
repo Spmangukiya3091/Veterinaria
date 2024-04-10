@@ -14,6 +14,7 @@ import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVe
 import { failer, success } from "../../../../Components/alert/success";
 import { showToast } from "../../../../store/tostify";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 import Loader from "../../../../Components/loader/Loader";
 
 const VeterinaProfileDetails = ({ email }) => {
@@ -100,6 +101,38 @@ const VeterinaProfileDetails = ({ email }) => {
       await dltMascotas(body);
     } else {
       failer("Invalid Password ");
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      const cookies = document.cookie.split(";");
+      let jwtCookie = null;
+
+      cookies.forEach((cookie) => {
+        if (cookie.includes("authToken=")) {
+          jwtCookie = "Bearer " + cookie.split("authToken=")[1].trim();
+        }
+      });
+
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/veterinarian/veterinariansExcelSheet/${id}`, {
+        headers: {
+          Authorization: jwtCookie,
+        },
+        responseType: "blob", // Specify the response type as blob
+      });
+
+      // Create a Blob URL and initiate download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `DoctorData_${id}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      // Handle errors
+      console.error("Error exporting data:", error);
     }
   };
   useEffect(() => {
@@ -231,7 +264,7 @@ const VeterinaProfileDetails = ({ email }) => {
                       </Link>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link to={"#"} href="#" className="menu-link px-3">
+                      <Link to={"#"} href="#" className="menu-link px-3" onClick={() => { handleExportData() }}>
                         Exportar datos
                       </Link>
                     </Dropdown.Item>
@@ -250,7 +283,7 @@ const VeterinaProfileDetails = ({ email }) => {
           </Row>
           <CitaModal show={shown} onHide={handleCloseMascota} />
 
-          <VeterinaUserModal show={open} onHide={handleCloseCitas} id={data.veterinarianData.id} />
+          <VeterinaUserModal show={open} onHide={handleCloseCitas} id={data.veterinarianData.id} filter={veterinDetail} />
           <Alert
             show={modalShow}
             onHide={() => setModalShow(false)}

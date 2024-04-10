@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const vaccineController = require("../../../controllers/Vaccine/vaccineController");
+const vaccineController = require("../../../controllers/Veterinaria/Vaccine/vaccineController");
 const Secure = require("../../../middlewares/secure/secure");
 
 router.get("/vaccineList",Secure(['masterAdmin','customerService']), vaccineController.getAllVaccines)

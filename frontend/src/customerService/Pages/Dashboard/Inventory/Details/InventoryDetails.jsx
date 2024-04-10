@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./inventoryDetail.scss";
-import { Button, ButtonGroup, Col, Collapse, Dropdown, Row, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Col, Collapse, Dropdown, Row } from "react-bootstrap";
 import MainTab from "../Tabs/MainTab";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -10,14 +10,12 @@ import InventoryModal from "../modal/InventoryModal";
 import { useGetProductHistoryQuery, useGetSingleProductQuery, useRemoveProductMutation } from "../../../../../services/ApiServices";
 import moment from "moment";
 import { failer, success } from "../../../../Components/alert/success";
-import { useDispatch } from "react-redux";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import Loader from "../../../../Components/loader/Loader";
 
 const InventoryDetails = ({ email }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [show, setShow] = useState(true);
   const [modalShow, setModalShow] = useState(false);

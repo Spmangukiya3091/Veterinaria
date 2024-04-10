@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ButtonGroup, Dropdown, Form, Spinner } from "react-bootstrap";
+import { ButtonGroup, Dropdown, Form } from "react-bootstrap";
 import "./historical.scss";
 import SingleInputDateRangePicker from "../../../../../../Components/date-picker/DatePicker";
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
@@ -232,7 +232,7 @@ const Historical = ({ id }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length !== 0 ? (
+                    {currentPosts.length > 0 ? (
                       currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, date, status, ACCIONES }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -255,8 +255,8 @@ const Historical = ({ id }) => {
                                   status === "pending"
                                     ? "badge badge-light-warning text-warning"
                                     : status === "complete"
-                                    ? "badge badge-light-success text-success"
-                                    : "badge badge-secondary text-dark"
+                                      ? "badge badge-light-success text-success"
+                                      : "badge badge-secondary text-dark"
                                 }
                               >
                                 <p className="status-p mb-0">

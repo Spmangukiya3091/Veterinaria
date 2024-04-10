@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "./modal.scss";
-import { success } from "../../../../Components/alert/success";
+import { failer, success } from "../../../../Components/alert/success";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import Loader from "../../../../Components/loader/Loader";
 
 const UserModal = (props) => {
   const [cookies] = useCookies(["authToken"]);
-
   const [userId, setUserId] = useState();
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const [userData, setUserData] = useState({
     email: "",
     id: "",
@@ -26,26 +28,32 @@ const UserModal = (props) => {
   useEffect(() => {
     if (props.id !== undefined) {
       setUserId(props.id);
+      setLoading(true)
       fetchUserData(props.id);
+    } else {
+      setLoading(false)
     }
-  }, [props.id]);
+  }, [props.id, props.show]);
+
   const fetchUserData = async (userId) => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/loginUserDetail/${userId}`);
       if (response.status === 200) {
         const data = response.data;
+        setLoading(false)
         if (data.user) {
           setUserData({
-            email: data.user.email,
-            id: data.user.id,
-            identification: data.user.identification,
-            name: data.user.name,
-            password: data.user.password,
-            confirmPassword: data.user.password,
-            phone: data.user.phone,
-            profile: data.user.profile,
-            role: data.user.role,
+            email: data?.user?.email,
+            id: data?.user?.id,
+            identification: data?.user?.identification,
+            name: data?.user?.name,
+            password: data?.user?.password,
+            confirmPassword: data?.user?.password,
+            phone: data?.user?.phone,
+            profile: data?.user?.profile,
+            role: data?.user?.role,
           });
+          setSelectedFile(null);
         }
       } else {
         console.error("Error fetching user data");
@@ -54,12 +62,11 @@ const UserModal = (props) => {
       console.error("Error fetching user data", error);
     }
   };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
   };
-
+  console.log(props.id)
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -89,7 +96,7 @@ const UserModal = (props) => {
             Authorization: "Bearer " + cookies.authToken,
           },
         });
-
+        // console.log(editUserResponse)
         if (editUserResponse.status === 200) {
           // Handle success
           success();
@@ -105,12 +112,15 @@ const UserModal = (props) => {
             profile: "",
             role: "",
           });
+          setSelectedFile(null);
         } else {
           // Handle error
+          failer(editUserResponse.error.message)
           console.error("Error editing user");
         }
       } catch (error) {
         // Handle error
+        failer(error.message)
         console.error("Error editing user", error);
       }
     } else {
@@ -151,17 +161,21 @@ const UserModal = (props) => {
             profile: "",
             role: "",
           });
+          setSelectedFile(null);
         } else {
           // Handle error
+          failer(createUserResponse.error.message)
           console.error("Error creating user");
         }
       } catch (error) {
         // Handle error
+        failer(error.message)
         console.error("Error creating user", error);
       }
     }
   };
   return (
+
     <Modal
       show={props.show}
       onHide={() => {
@@ -182,161 +196,167 @@ const UserModal = (props) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">{userId ? "Editar Usuario" : "Crear Nuevo Usuario"}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Row>
-            <Col>
-              <Form.Group className="mb-3" controlId="formBasicSelect">
-                <div className="d-flex gap-10">
-                  <div className="image mx-4">
-                    <img
-                      className="round-image"
-                      src={selectedFile ? URL.createObjectURL(selectedFile) : userData.profile || "/images/avatarImg.png"}
-                      alt="Profile"
-                    />
-                  </div>
-                  <div className="form-field">
-                    <Form.Control type="file" onChange={handleImageChange} ref={fileInputRef} style={{ display: "none" }} />
-                    <div className="info">
-                      <p>Adjunta una foto de perfil para completar datos adicionales.</p>
-                      {selectedFile && <p className="mt-3 filename">{selectedFile !== null ? selectedFile.name : "No file found"}</p>}
-                    </div>
-                    <Button onClick={handleUploadButtonClick}>Adjuntar</Button>
-                  </div>
-                </div>
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="formBasicDate">
-                <Form.Label>Nombre completo</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Apellidos y Nombres"
-                  value={userData.name || ""}
-                  onChange={(e) => {
-                    setUserData({ ...userData, name: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Tipo de usuario</Form.Label>
-                <Form.Select
-                  aria-label="Default select example"
-                  value={userData.role || ""}
-                  onChange={(e) => {
-                    setUserData({ ...userData, role: e.target.value });
-                  }}
-                >
-                  <option value="">Tipo de usuario</option>
-                  <option value="masterAdmin">Administrador Estándar</option>
-                  <option value="customerService">Servicio al Cliente</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="formBasicSelect">
-                <Form.Label>Correo electrónico</Form.Label>
-                <Form.Control
-                  aria-label="Default"
-                  placeholder="Correo electrónico"
-                  value={userData.email || ""}
-                  onChange={(e) => {
-                    setUserData({ ...userData, email: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Group className="mb-3" controlId="formBasicSelect">
-                <Form.Label>Doc. de Identificación</Form.Label>
-                <Form.Control
-                  aria-label="Default"
-                  placeholder="Doc. de Identificación"
-                  value={userData.identification || ""}
-                  onChange={(e) => {
-                    setUserData({ ...userData, identification: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="formBasicSelect">
-                <Form.Label>Nro. de Teléfono</Form.Label>
-                <Form.Control
-                  aria-label="Default"
-                  placeholder="Nro. de Teléfono"
-                  value={userData.phone || ""}
-                  onChange={(e) => {
-                    setUserData({ ...userData, phone: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form.Group className="mb-3" controlId="formBasicSelect">
-                <Form.Label>Crear contraseña</Form.Label>
-                <Form.Control
-                  type="text"
-                  aria-label="Default"
-                  placeholder="Crear contraseña"
-                  value={userData.password}
-                  onChange={(e) => {
-                    setUserData({ ...userData, password: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group className="mb-3" controlId="formBasicSelect">
-                <Form.Label>Confirmar contraseña</Form.Label>
-                <Form.Control
-                  aria-label="Default"
-                  placeholder="Confirmar contraseña"
-                  value={userData.confirmPassword}
-                  onChange={(e) => {
-                    setUserData({ ...userData, confirmPassword: e.target.value });
-                  }}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          onClick={() => {
-            setUserData({
-              email: "",
-              id: "",
-              identification: "",
-              name: "",
-              password: "",
-              confirmPassword: "",
-              phone: "",
-              profile: "",
-              role: "",
-            });
-            props.onHide();
-          }}
-          className="footer-btn btn btn-secondary"
-        >
-          Cancelar
-        </Button>
-        <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary">
-          {userId ? "Guardar Cambios" : "Crear Usuario"}
-        </Button>
-      </Modal.Footer>
+      {
+        loading ? <Loader /> :
+          <>
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title-vcenter">{userId ? "Editar Usuario" : "Crear Nuevo Usuario"}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Row>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formBasicSelect">
+                      <div className="d-flex gap-10">
+                        <div className="image mx-4">
+                          <img
+                            className="round-image"
+                            src={selectedFile ? URL.createObjectURL(selectedFile) : userData.profile || "/images/avatarImg.png"}
+                            alt="Profile"
+                          />
+                        </div>
+                        <div className="form-field">
+                          <Form.Control type="file" onChange={handleImageChange} ref={fileInputRef} style={{ display: "none" }} />
+                          <div className="info">
+                            <p>Adjunta una foto de perfil para completar datos adicionales.</p>
+                            {selectedFile && <p className="mt-3 filename">{selectedFile !== null ? selectedFile.name : "No file found"}</p>}
+                          </div>
+                          <Button onClick={handleUploadButtonClick}>Adjuntar</Button>
+                        </div>
+                      </div>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formBasicDate">
+                      <Form.Label>Nombre completo</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Apellidos y Nombres"
+                        value={userData.name || ""}
+                        onChange={(e) => {
+                          setUserData({ ...userData, name: e.target.value });
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formBasicPassword">
+                      <Form.Label>Tipo de usuario</Form.Label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        value={userData.role || ""}
+                        onChange={(e) => {
+                          setUserData({ ...userData, role: e.target.value });
+                        }}
+                      >
+                        <option value="">Tipo de usuario</option>
+                        <option value="masterAdmin">Administrador Estándar</option>
+                        <option value="customerService">Servicio al Cliente</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formBasicSelect">
+                      <Form.Label>Correo electrónico</Form.Label>
+                      <Form.Control
+                        aria-label="Default"
+                        placeholder="Correo electrónico"
+                        value={userData.email || ""}
+                        onChange={(e) => {
+                          setUserData({ ...userData, email: e.target.value });
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formBasicSelect">
+                      <Form.Label>Doc. de Identificación</Form.Label>
+                      <Form.Control
+                        aria-label="Default"
+                        placeholder="Doc. de Identificación"
+                        value={userData.identification || ""}
+                        onChange={(e) => {
+                          setUserData({ ...userData, identification: e.target.value });
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formBasicSelect">
+                      <Form.Label>Nro. de Teléfono</Form.Label>
+                      <Form.Control
+                        aria-label="Default"
+                        placeholder="Nro. de Teléfono"
+                        value={userData.phone || ""}
+                        onChange={(e) => {
+                          setUserData({ ...userData, phone: e.target.value });
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formBasicSelect">
+                      <Form.Label>Crear contraseña</Form.Label>
+                      <Form.Control
+                        type="text"
+                        aria-label="Default"
+                        placeholder="Crear contraseña"
+                        value={userData.password}
+                        onChange={(e) => {
+                          setUserData({ ...userData, password: e.target.value });
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3" controlId="formBasicSelect">
+                      <Form.Label>Confirmar contraseña</Form.Label>
+                      <Form.Control
+                        aria-label="Default"
+                        placeholder="Confirmar contraseña"
+                        value={userData.confirmPassword}
+                        onChange={(e) => {
+                          setUserData({ ...userData, confirmPassword: e.target.value });
+                        }}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                onClick={() => {
+                  setUserData({
+                    email: "",
+                    id: "",
+                    identification: "",
+                    name: "",
+                    password: "",
+                    confirmPassword: "",
+                    phone: "",
+                    profile: "",
+                    role: "",
+                  });
+                  setSelectedFile(null);
+                  props.onHide();
+                }}
+                className="footer-btn btn btn-secondary"
+              >
+                Cancelar
+              </Button>
+              <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary">
+                {userId ? "Guardar Cambios" : "Crear Usuario"}
+              </Button>
+            </Modal.Footer>
+          </>
+      }
     </Modal>
   );
 };

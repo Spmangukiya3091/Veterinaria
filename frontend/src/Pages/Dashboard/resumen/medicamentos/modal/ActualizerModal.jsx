@@ -22,7 +22,7 @@ function ActualizerModal({ show, handleClose }) {
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Estado</Form.Label>
                   <Form.Select aria-label="Default select example">
-                    <option disabled>Estado</option>
+                    <option disabled="true" value={""} selected="true">Estado</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
