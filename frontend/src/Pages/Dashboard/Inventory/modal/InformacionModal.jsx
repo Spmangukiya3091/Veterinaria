@@ -63,6 +63,7 @@ function InformacionModal({ show, handleClose, id }) {
     } else if (response.isError || response2.isError) {
       failer(response?.error?.data?.message || response2?.error?.data?.message);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (

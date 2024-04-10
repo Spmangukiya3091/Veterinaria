@@ -18,6 +18,7 @@ const CitaModal = ({ show, onHide }) => {
     scheduleEnd: "",
     observation: "",
   });
+  // eslint-disable-next-line no-unused-vars
   const [validated, setValidated] = useState(false); // State for form validation
 
   const owners = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });

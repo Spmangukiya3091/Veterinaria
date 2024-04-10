@@ -82,6 +82,7 @@ const PropietarioModal = (props) => {
       // console.log("error");
       failer(response?.error?.data?.message);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
 
   return (

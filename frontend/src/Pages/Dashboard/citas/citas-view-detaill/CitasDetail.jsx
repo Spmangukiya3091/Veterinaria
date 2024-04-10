@@ -10,14 +10,11 @@ import { useGetSingleAppointmentQuery, useRemoveAppointmentMutation } from "../.
 import moment from "moment";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../Components/alert/success";
-import { useDispatch } from "react-redux";
-import { showToast } from "../../../../store/tostify";
 import Loader from "../../../../Components/loader/Loader";
 
 function CitasDetail({ email }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const id = location.pathname.split("/")[3];
   const [show, setShow] = useState(true);
   const [open, setOpen] = useState(false);
@@ -110,7 +107,7 @@ function CitasDetail({ email }) {
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, response]);
+  }, [response]);
 
   return (
     <>

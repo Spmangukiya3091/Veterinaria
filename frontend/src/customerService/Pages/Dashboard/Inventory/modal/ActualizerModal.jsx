@@ -9,7 +9,7 @@ function ActualizerModal({ show, handleClose, id, status }) {
     reason: "",
   });
 
-  const [updateStock, { isLoading, data, error }] = useUpdateStockMutation();
+  const [updateStock, { isLoading, error }] = useUpdateStockMutation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;

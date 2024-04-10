@@ -10,7 +10,7 @@ const UserModal = (props) => {
   const [cookies] = useCookies(["authToken"]);
   const [userId, setUserId] = useState();
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  // const [error, setError] = useState(false)
   const [userData, setUserData] = useState({
     email: "",
     id: "",

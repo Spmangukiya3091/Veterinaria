@@ -31,7 +31,6 @@ const VacunasDetails = () => {
     }
   }, [vaccineDetail]);
 
-  const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   const handleHide = () => {
     setModalShow(false);

@@ -10,6 +10,7 @@ import { showToast } from "../../../../store/tostify";
 const UpdPwdModal = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // eslint-disable-next-line no-unused-vars
   const [cookie, , removeCookie] = useCookies(["user"]);
 
   const [formData, setFormData] = useState({

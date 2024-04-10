@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, ButtonGroup, Dropdown, Form,} from "react-bootstrap";
+import { Button, ButtonGroup, Dropdown, Form, } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { pagosData } from "./data";
 import SingleInputDateRangePicker from "../../../Components/date-picker/DatePicker";
@@ -11,13 +11,11 @@ import { useGetAllPaymentFilterQuery, useRemovePaymentMutation } from "../../../
 import moment from "moment";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../Components/alert/success";
-import { showToast } from "../../../store/tostify";
-import { useDispatch } from "react-redux";
+
 import axios from "axios";
 import Loader from "../../../Components/loader/Loader";
 
 const Pagos = ({ email }) => {
-  const dispatch = useDispatch();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);

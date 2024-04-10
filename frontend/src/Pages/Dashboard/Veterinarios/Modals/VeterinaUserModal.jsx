@@ -6,7 +6,6 @@ import { failer, success } from "../../../../Components/alert/success";
 import departamentoData from "../../../../Department.json";
 import { useGetSingleVeterinQuery, useGetSpecialitiesQuery } from "../../../../services/ApiServices";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import moment from "moment";
 import { useCookies } from "react-cookie";
 
@@ -40,7 +39,6 @@ const VeterinaUserModal = (props) => {
   const [selectedDepartamento, setSelectedDepartamento] = useState("");
   const [distritos, setDistritos] = useState([]);
   const fileInputRef = useRef(null);
-  const dispatch = useDispatch();
 
   const getVeterinDetails = useGetSingleVeterinQuery(props.id, { refetchOnMountOrArgChange: true });
 
