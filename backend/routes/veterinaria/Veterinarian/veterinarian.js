@@ -35,7 +35,7 @@ router.get(
   "/veterinariansExcelSheet/:id", Secure(['masterAdmin']),
   veterinarianController.veterinarianExcelFile
 );
-router.get("/veterinariansFilter", Secure(['masterAdmin']), veterinarianController.veterinarianFilter);
+router.get("/veterinariansFilter", veterinarianController.veterinarianFilter);
 router.post(
   "/createVeterinarian", Secure(['masterAdmin']),
   uploadAvatar.single("avatar"),

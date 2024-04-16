@@ -28,14 +28,14 @@ const SubMascotas = ({ data }) => {
                 </tr>
               </thead>
               <tbody>
-                {data.pets.length > 0 ? (
-                  data.pets.map(({ id, name, Species, sex, age }, i) => (
+                {data?.pets.length > 0 ? (
+                  data?.pets.map(({ id, name, Species, sex, age }, i) => (
                     <tr key={i}>
                       <td>{i + 1}</td>
-                      <td>{name}</td>
-                      <td>{Species}</td>
-                      <td>{sex}</td>
-                      <td>{age}</td>
+                      <td>{name ? name : "-"}</td>
+                      <td>{Species ? Species : "-"}</td>
+                      <td>{sex ? sex : "-"}</td>
+                      <td>{age ? age : "-"}</td>
 
                       <td>
                         <Link

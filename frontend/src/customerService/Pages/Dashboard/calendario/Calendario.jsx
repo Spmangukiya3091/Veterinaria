@@ -9,17 +9,20 @@ import { Button, Form, } from "react-bootstrap";
 import CitasModal from "../citas/modal/CitasModal";
 import { useGetVeterinariansAppointmentQuery, useGetVeterinariansQuery } from "../../../../services/ApiServices";
 import Loader from "../../../Components/loader/Loader";
+import { useLocation } from "react-router-dom";
+import moment from "moment";
 
 function Calendario() {
+  const location = useLocation()
+  const veterineId = location?.search ? location.search.split("?veterine=")[1] : undefined
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [veteId, setVeteId] = useState();
+  const [veteId, setVeteId] = useState(veterineId);
   const [appointmentData, setAppointmentData] = useState([]);
-  const veterines = useGetVeterinariansQuery(null, { refetchOnMountOrArgChange: true });
-  const appointments = useGetVeterinariansAppointmentQuery(veteId ? veteId : "", { refetchOnMountOrArgChange: true });
-
+  const veterines = useGetVeterinariansQuery( { refetchOnMountOrArgChange: true });
+  const appointments = useGetVeterinariansAppointmentQuery(veteId ? veteId : "", { refetchOnMountOrArgChange: true, skip: veteId === undefined });
   useEffect(() => {
     if (!veterines.isLoading && !appointments.isLoading) {
       setLoading(false);
@@ -34,10 +37,21 @@ function Calendario() {
       setLoading(false);
     }
   }, [appointments, veteId, veterines]);
-
-  const handleClose = () => {
+  const newData = appointmentData.map(appointment => ({
+    ...appointment,
+    start: moment.utc(appointment.start).format('YYYY-MM-DDTHH:mm:ss'), // Using 'HH:mm:ss' for 24-hour format
+    end: moment.utc(appointment.end).format('YYYY-MM-DDTHH:mm:ss')
+  }));
+  const handleClose = async () => {
     setShow(false);
-    appointments.refetch();
+
+    // Check if the queries are not loading and there is some data available
+    if (!appointments.isLoading && appointments.data) {
+      await appointments.refetch();
+    }
+    if (!veterines.isLoading && veterines.data) {
+      await veterines.refetch();
+    }
   };
 
   return (
@@ -56,6 +70,7 @@ function Calendario() {
                   <Form.Group controlId="formBasicPassword">
                     <Form.Select
                       aria-label="Default select example"
+                      value={veteId}
                       onChange={(e) => {
                         setVeteId(e.target.value);
                       }}
@@ -82,7 +97,7 @@ function Calendario() {
                     center: "title",
                     right: "dayGridMonth,timeGridWeek,timeGridDay",
                   }}
-                  events={appointmentData}
+                  events={newData}
                   locales={[esLocale]}
                   locale="es"
                   dayHeaderFormat={{ weekday: "short", day: "numeric" }}
@@ -92,9 +107,14 @@ function Calendario() {
                     hour12: true,
                   }}
                   slotLabelContent={(arg) => {
-                    const hour = new Date(arg.date).getHours();
-                    const minute = new Date(arg.date).getMinutes();
-                    return `${hour === 0 ? "12" : hour > 12 ? hour - 12 : hour}:${minute === 0 ? "00" : minute} ${hour < 12 ? "AM" : "PM"};`;
+                    const date = new Date(arg.date);
+                    let hour = date.getHours();
+                    const minute = date.getMinutes();
+                    const meridiem = hour >= 12 ? 'PM' : 'AM';
+                    hour = hour % 12 || 12; // Convert hour to 12-hour format
+                    const formattedHour = hour < 10 ? '0' + hour : hour;
+                    const formattedMinute = minute < 10 ? '0' + minute : minute;
+                    return `${formattedHour}:${formattedMinute} ${meridiem}`;
                   }}
                   views={{
                     dayGridMonth: { buttonText: "Mes", dayHeaderFormat: { weekday: "short" } },
@@ -121,9 +141,14 @@ function Calendario() {
                     hour12: true,
                   }}
                   slotLabelContent={(arg) => {
-                    const hour = new Date(arg.date).getHours();
-                    const minute = new Date(arg.date).getMinutes();
-                    return `${hour === 0 ? "12" : hour > 12 ? hour - 12 : hour}:${minute === 0 ? "00" : minute} ${hour < 12 ? "AM" : "PM"};`;
+                    const date = new Date(arg.date);
+                    let hour = date.getHours();
+                    const minute = date.getMinutes();
+                    const meridiem = hour >= 12 ? 'PM' : 'AM';
+                    hour = hour % 12 || 12; // Convert hour to 12-hour format
+                    const formattedHour = hour < 10 ? '0' + hour : hour;
+                    const formattedMinute = minute < 10 ? '0' + minute : minute;
+                    return `${formattedHour}:${formattedMinute} ${meridiem}`;
                   }}
                   views={{
                     dayGridMonth: { buttonText: "Mes", dayHeaderFormat: { weekday: "short" } },

@@ -82,11 +82,11 @@ const Propietarios = ({ email }) => {
     const formattedPhone = String(phone_1);
 
     return (
-      name.toLowerCase().includes(searchString) ||
-      surname.toLowerCase().includes(searchString) ||
-      address.toLowerCase().includes(searchString) ||
+      name?.toLowerCase().includes(searchString) ||
+      surname?.toLowerCase().includes(searchString) ||
+      address?.toLowerCase().includes(searchString) ||
       formattedPhone.includes(searchString) ||
-      doc_identity.toLowerCase().includes(searchString)
+      doc_identity?.toLowerCase().includes(searchString)
     );
   });
 
@@ -287,23 +287,6 @@ const Propietarios = ({ email }) => {
                   </div>
                 </div>
                 <div className="header-right">
-                  {/* <Link className="export-btn btn btn-primary" to={`${process.env.REACT_APP_SERVER_URL}/owner/ownerExcelFile`}>
-                    {" "}
-                    <svg className="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <defs>
-                        <clipPath id="a">
-                          <path data-name="Rectángulo 11046" fill="#1d2328" stroke="#707070" d="M17 15h16v16H17z" />
-                        </clipPath>
-                      </defs>
-                      <g data-name="Enmascarar grupo 57952" transform="translate(-17 -15)" clipPath="url(#a)">
-                        <path
-                          d="M26.6 15h-6.4a1.6 1.6 0 0 0-1.6 1.6v12.8a1.6 1.6 0 0 0 1.6 1.6h9.6a1.6 1.6 0 0 0 1.6-1.6v-9.6L26.6 15m3.2 14.4h-9.6V16.6h5.6v4h4v8.8m-1.6-7.2v5.68l-1.68-1.68-2.24 2.24-2.24-2.24 2.24-2.24-1.76-1.76Z"
-                          fill="#1d2328"
-                        />
-                      </g>
-                    </svg>{" "}
-                    Exportar datos
-                  </Link> */}
                   <Button onClick={() => handleShow()} className="new-btn">
                     + Nuevo Propietario
                   </Button>
@@ -325,21 +308,21 @@ const Propietarios = ({ email }) => {
                   </thead>
                   <tbody>
                     {currentPosts.length > 0 ? (
-                      currentPosts.map(({ id, name, surname, address, phone_1, doc_identity, ACCIONES }, i) => (
+                      currentPosts.map(({ id, name, surname, address, phone_1, doc_identity }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {name + " " + surname}
+                            {name && surname ? name + " " + surname : "-"}
                           </td>
-                          <td className="text-start pe-0">{address}</td>
+                          <td className="text-start pe-0">{address ? address : "-"}</td>
                           <td className="text-start pe-0" data-order="estado">
-                            {phone_1}
+                            {phone_1 ? phone_1 : "-"}
                           </td>
                           <td className="text-start pe-0" data-order="estado">
-                            {doc_identity}
+                            {doc_identity ? doc_identity : '-'}
                           </td>
                           <td className="text-end">
                             <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>

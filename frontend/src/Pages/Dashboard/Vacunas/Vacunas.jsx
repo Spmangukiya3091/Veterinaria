@@ -53,6 +53,8 @@ const Vacunas = ({ email }) => {
 
   const handleClose = () => {
     setShow(false);
+    setVaccineId(undefined)
+    vaccineList.refetch()
   };
   const handleShow = (e, id) => {
     setShow(true);
@@ -84,7 +86,7 @@ const Vacunas = ({ email }) => {
 
   const filteredData = data.filter(({ name }) => {
     const searchString = searchValue;
-    return name.toLowerCase().includes(searchString);
+    return name?.toLowerCase().includes(searchString);
   });
 
   const handleSearchFilter = () => {
@@ -347,14 +349,14 @@ const Vacunas = ({ email }) => {
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{name}</td>
+                          <td className="text-start pe-0">{name ? name : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {stock}
+                            {stock ? name : "-"}
                           </td>
-                          <td className="text-start pe-0">{moment(creation).format("DD MMM YYYY")}</td>
-                          <td className="text-start pe-0">{validity + " meses"}</td>
-                          <td className="text-start pe-0">{aptos}</td>
+                          <td className="text-start pe-0">{creation ? moment(creation).format("DD MMM YYYY") : "-"}</td>
+                          <td className="text-start pe-0">{validity ? validity + " meses" : "-"}</td>
+                          <td className="text-start pe-0">{aptos ? aptos : "-"}</td>
                           <td className="text-end">
                             <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
                               <Dropdown.Toggle
@@ -428,7 +430,7 @@ const Vacunas = ({ email }) => {
             }}
             onDelete={handleDeleteVerify}
           />
-          <VacunasModal show={show} onHide={handleClose} id={vaccineId} filter={vaccineList} />
+          <VacunasModal show={show} onHide={handleClose} id={vaccineId} />
           <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}

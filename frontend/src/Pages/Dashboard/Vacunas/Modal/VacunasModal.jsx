@@ -9,9 +9,11 @@ const VacunasModal = ({ id, onHide, filter, show }) => {
     stock: "",
     validity: "",
   });
+  const [validated, setValidated] = useState(false); // State for form validation
+
   const [addVaccine, response] = useAddVaccineMutation();
   const [updateVaccine, response2] = useUpdateVaccineMutation();
-  const vaccineDetails = useGetSingleVaccineQuery(id !== undefined ? id : "", { refetchOnMountOrArgChange: true });
+  const vaccineDetails = useGetSingleVaccineQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
 
   useEffect(() => {
     if (!vaccineDetails.isLoading && id !== undefined) {
@@ -21,9 +23,19 @@ const VacunasModal = ({ id, onHide, filter, show }) => {
         stock: stock,
         validity: validity,
       });
+    } else {
+      clearForm()
     }
-  }, [id, vaccineDetails]);
+  }, [id, show, vaccineDetails]);
 
+  const clearForm = () => {
+    setFormData({
+      name: "",
+      stock: "",
+      validity: "",
+    });
+    setValidated(false); // Reset validated state
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -32,32 +44,36 @@ const VacunasModal = ({ id, onHide, filter, show }) => {
     });
   };
 
-  const handleSubmit = async () => {
-    if (id !== undefined) {
-      // Update existing pet
-      const body = { id: id, ...formData };
-      await updateVaccine(body);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
     } else {
-      await addVaccine(formData);
+      if (id !== undefined) {
+        // Update existing pet
+        const body = { id: id, ...formData };
+        await updateVaccine(body);
+      } else {
+        await addVaccine(formData);
+      }
     }
   };
 
   useEffect(() => {
     if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
-      setFormData({
-        name: "",
-        stock: "",
-        validity: "",
-      });
-      filter.refetch();
+      clearForm()
       onHide();
       success();
-    } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
+    } else if ((id !== undefined && response2.isError && response2?.error.status !== 400) || (id === undefined && response.isError && response?.error.status !== 400)) {
+      // console.error("Error occured: ", response?.error || response2?.error);
+      // console.log(response?.error)
       failer(response?.error?.data?.message || response2?.error?.data?.message);
-      console.error("Error occured: ", response?.error || response2?.error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2, id]);
+
   return (
     <>
       <Modal show={show} onHide={onHide} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -65,39 +81,46 @@ const VacunasModal = ({ id, onHide, filter, show }) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Vacuna</Modal.Title>
         </Modal.Header>
         <Modal.Body className="px-9">
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicSelect">
               <Form.Label>Nombre (Tipo)</Form.Label>
-              <Form.Control placeholder="Nombre (Tipo)" name="name" value={formData.name} onChange={handleChange} />
+              <Form.Control placeholder="Nombre (Tipo)" name="name" value={formData.name} onChange={handleChange} required />
+              <Form.Control.Feedback type="invalid">
+                Por favor proporcione un Nombre.
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Stock</Form.Label>
-              <Form.Control type="number" placeholder="Stock" name="stock" value={formData.stock} onChange={handleChange} />
+              <Form.Control type="number" placeholder="Stock" name="stock" value={formData.stock} onChange={handleChange} required />
+              <Form.Control.Feedback type="invalid">
+                Por favor proporcione un stock.
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Tiempo validez (Meses)</Form.Label>
-              <Form.Control type="number" placeholder="Tiempo validez (Meses)" name="validity" value={formData.validity} onChange={handleChange} />
+              <Form.Control type="number" placeholder="Tiempo validez (Meses)" name="validity" value={formData.validity} onChange={handleChange} required />
+              <Form.Control.Feedback type="invalid">
+                Por favor proporcione un Tiempo validez.
+              </Form.Control.Feedback>
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={() => { onHide(); clearForm() }} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button
             variant="primary"
             type="submit"
-            onClick={() => {
-              handleSubmit();
-            }}
+            onClick={handleSubmit}
             className="footer-btn btn btn-primary"
           >
             Guardar Cambios
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
     </>
   );
 };

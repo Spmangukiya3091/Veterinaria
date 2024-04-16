@@ -47,9 +47,9 @@ function Historical({ id }) {
     setSearchQuery(`${id}`);
   };
 
-  const filteredData = data.filter(({ pet }) => {
-    const searchString = searchValue;
-    return pet.toLowerCase().includes(searchString);
+  const filteredData = data?.filter(({ pet }) => {
+    const searchString = searchValue.toLowerCase();
+    return pet?.toLowerCase().includes(searchString);
   });
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;

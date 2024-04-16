@@ -90,10 +90,33 @@ const updateProduct = async (req, res) => {
     };
 
     if (productExist) {
-      await Product.update(product, { where: { id: id } });
-      res.status(200).send({
-        message: "product updated successfully",
-      });
+      if (product.product === "" || product.product === null) {
+        res.status(400).send({
+          message: "product is required",
+        });
+      } else if (product.brand === "" || product.brand === null) {
+        res.status(400).send({
+          message: "brand is required",
+        });
+      } else if (product.stock === "" || product.stock === null) {
+        res.status(400).send({
+          message: "stock is required",
+        });
+      } else if (product.sku === "" || product.sku === null) {
+        res.status(400).send({
+          message: "sku is required",
+        });
+      } else if (product.status === "" || product.status === null) {
+        res.status(400).send({
+          message: "status is required",
+        });
+      } else {
+        await Product.update(product, { where: { id: id } });
+        res.status(200).send({
+          message: "product updated successfully",
+        });
+      }
+
     } else {
       res.status(404).send({
         message: "product not found",
@@ -106,6 +129,7 @@ const updateProduct = async (req, res) => {
     });
   }
 };
+
 const deleteProduct = async (req, res) => {
   const id = req.params.id;
   const product = await Product.findOne({ where: { id: id } });
@@ -123,13 +147,13 @@ const deleteProduct = async (req, res) => {
   }
   if (decoded.role !== user.role) {
     return res.status(400).send({
-     message: "Not authorized",
-     success: false,
-   });
- }
+      message: "Not authorized",
+      success: false,
+    });
+  }
   if (product?.id === id) {
     await Product.destroy({ where: { id: id } });
-    await History.destroy({where:{productId : id}})
+    await History.destroy({ where: { productId: id } })
     return res.status(200).send({
       message: "product deleted successfully",
       success: true,
@@ -162,22 +186,35 @@ const updateProductStock = async (req, res) => {
   const products = await Product.findOne({
     where: { id: id },
   });
+
   const product = {
     stock: products.stock + req.body.stock,
     reason: req.body.reason,
-   status:products.stock === 0 && req.body.stock > 0 ? "active" : "inactive"
+    status: products.stock + req.body.stock > 0 ? "active" : "inactive"
   };
+
   const history = {
-    productId :products.id,
-    stock:req.body.stock,
+    productId: products.id,
+    stock: req.body.stock,
     reason: req.body.reason,
   }
+  
   if (products) {
-    await History.create(history)
-    await Product.update(product, { where: { id: id } });
-    res.status(200).send({
-      message: "stock updated successfully",
-    });
+    if (product.stock === "" || product.stock === null) {
+      res.status(400).send({
+        message: "stock is required",
+      });
+    } else if (product.reason === "" || product.reason === null) {
+      res.status(400).send({
+        message: "reason is required",
+      });
+    } else {
+      await History.create(history)
+      await Product.update(product, { where: { id: id } });
+      res.status(200).send({
+        message: "stock updated successfully",
+      });
+    }
   } else {
     res.status(404).send({
       message: "product not found",
@@ -185,7 +222,7 @@ const updateProductStock = async (req, res) => {
   }
 };
 
-const getProductHistory = async (req,res) => {
+const getProductHistory = async (req, res) => {
   const id = req.params.id;
   const productHistory = await History.findAll({ where: { productId: id }, order: [['createdAt', 'DESC']], });
   res.status(200).send({
@@ -337,14 +374,14 @@ function formatDate(dateString) {
 }
 const updateProductStatus = async () => {
   try {
-  
+
 
     await Product.update(
       { status: "inactive" },
       {
         where: {
           stock: 0,
-        
+
         },
       }
     );
@@ -352,11 +389,6 @@ const updateProductStatus = async () => {
     console.error("Error updating appointments:", error);
   }
 };
-
-
-
-
-
 
 module.exports = {
   createProduct,

@@ -4,7 +4,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { failer, success } from "../../../../../../Components/alert/success";
 import { useAddVaccinationRecordMutation, useGetOwnersListQuery, useGetPetByOwnerQuery, useUpdateVaccinationMutation } from "../../../../../../services/ApiServices";
 
-const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId, id, petName, ownerName }) => {
+const AptosModal = ({ show, onHide, vaccineId, vaccineName, owner, petId, id, petName, ownerName }) => {
   const [formData, setFormData] = useState({
     vaccine: vaccineName,
     vaccineId: vaccineId,
@@ -73,13 +73,14 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId
     });
   };
   // console.log(formData.pet)
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     if (id !== undefined && id !== "") {
       const body = {
         id: id,
         ...formData
       }
-      updateVaccinationRecord(body);
+      await updateVaccinationRecord(body);
     } else if (id === undefined || id === "") {
 
       const body = {
@@ -87,12 +88,13 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId
         vaccine: formData.vaccineName,
         vaccineId: formData.vaccineId
       }
-      addVaccinationRecord(body);
+      console.log(formData)
+      await addVaccinationRecord(body);
     }
   };
 
   useEffect(() => {
-    if (id !== undefined && id !== " ") {
+    if (id !== undefined && id !== "") {
       if (!response2.isLoading && response2.isSuccess) {
         setFormData({
           ownerId: "",
@@ -101,28 +103,25 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId
           petId: "",
         });
         onHide();
-        filter.refetch();
         success();
       } else if (response2.isError && response2.status === "rejected") {
         failer(response2?.error?.data?.message);
       }
-    } else if (id === undefined || id === " ") {
+    } else {
       if (!response.isLoading && response.isSuccess) {
+        onHide();
         setFormData({
+          ...formData,
           vaccine: vaccineName,
           vaccineId: id,
         });
-        onHide();
         success();
-        filter.refetch();
-      } else if (response.isError && response.status === "rejected") {
+      } else if (response?.isError && response?.status === "rejected") {
         failer(response?.error?.data?.message);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
-
-  console.log(formData.pet)
 
   return (
     <>
@@ -132,7 +131,7 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3">
               <Form.Label>Propietario</Form.Label>
               <Form.Select name="owner" onChange={handleOwnerChange} value={formData.ownerId}>
                 <option value={""} disabled="true" selected="true">Seleccione Propietario</option>
@@ -144,7 +143,7 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId
               </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3">
               <Form.Label>Nombre de mascota</Form.Label>
               <Form.Select name="pet" onChange={handlePetChange} value={formData.petId}>
                 <option value={""} disabled="true" selected="true">Seleccione Mascota</option>
@@ -170,9 +169,7 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId
           <Button
             variant="primary"
             type="submit"
-            onClick={() => {
-              handleSubmit()
-            }}
+            onClick={handleSubmit}
             className="footer-btn btn btn-primary"
           >
             Guardar Cambios

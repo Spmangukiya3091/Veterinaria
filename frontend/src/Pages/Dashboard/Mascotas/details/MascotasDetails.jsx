@@ -155,18 +155,18 @@ const MascotasDetails = ({ email }) => {
                 <div className="img mb-7">
                   <img src="/images/DogIcon.svg" alt="mascota" height={"50px"} />
                 </div>
-                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.pet?.name}</p>
+                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.pet?.name || "-"}</p>
                 <div className="information">
                   <div className="time  text-center d-flex flex-wrap justify-content-center mb-3">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-2 ">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px fs-4">{data?.totalAppointments} citas</span>
+                        <span className="w-75px fs-4">{data?.totalAppointments || "0"} citas</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Agendadas</div>
                     </div>
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-2">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px fs-4">{data?.completeAppointments} citas</span>
+                        <span className="w-75px fs-4">{data?.completeAppointments || "0"} citas</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Completadas</div>
                     </div>
@@ -202,7 +202,7 @@ const MascotasDetails = ({ email }) => {
                   <Collapse in={show}>
                     <div id="kt_user_view_details" className="pb-5 fs-6">
                       <div className="fw-bold mt-5">Edad</div>
-                      <div className="text-gray-600">{data?.pet?.age}</div>
+                      <div className="text-gray-600">{data?.pet?.age || "-"}</div>
                       <div className="fw-bold mt-5">Calificación</div>
                       <div className="text-gray-600 fw-bold fs-4">
                         <i className="bi bi-star-fill grey fs-2 text-primary me-2"></i>
@@ -212,14 +212,14 @@ const MascotasDetails = ({ email }) => {
                       <div className="fw-bold mt-5">Propietario</div>
                       <Link to="/dashboard/propietarios/details">
                         {" "}
-                        <div className="text-gray-600"> {data?.pet?.owner}</div>
+                        <div className="text-gray-600"> {data?.pet?.owner || "-"}</div>
                       </Link>
 
                       <div className="fw-bold mt-5">Fecha creación</div>
-                      <div className="text-gray-600">{moment(data?.pet?.dob).format("DD MMM YYYY, HH:MM A")}</div>
+                      <div className="text-gray-600">{data?.pet?.dob ? moment(data?.pet?.dob).format("DD MMM YYYY, HH:MM A") : "-"}</div>
 
                       <div className="fw-bold mt-5">Última Cita</div>
-                      <div className="text-gray-600">{moment(data?.lastAppointment?.date).format("DD MMM YYYY, HH:MM A")}</div>
+                      <div className="text-gray-600">{data?.lastAppointment?.date ? moment(data?.lastAppointment?.date).format("DD MMM YYYY, HH:MM A") : "-"}</div>
                     </div>
                   </Collapse>
                 </div>

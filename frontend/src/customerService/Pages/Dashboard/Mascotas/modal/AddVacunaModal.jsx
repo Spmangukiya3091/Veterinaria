@@ -11,7 +11,7 @@ function AddVacunaModal({ show, handleClose }) {
     vaccine: "",
     vaccineId: "",
   });
-  const vaccines = useGetAllVaccinesQuery(null, { refetchOnMountOrArgChange: true });
+  const vaccines = useGetAllVaccinesQuery({ refetchOnMountOrArgChange: true });
   const [addVaccineRecord, response] = useAddVaccinationRecordMutation();
   const petId = location.pathname.split("/")[4];
 
@@ -29,7 +29,7 @@ function AddVacunaModal({ show, handleClose }) {
   };
 
   const handleSubmit = async () => {
-    // console.log(formData);
+    console.log(formData);
     await addVaccineRecord(formData);
   };
 
@@ -41,7 +41,7 @@ function AddVacunaModal({ show, handleClose }) {
       // console.log("error", response.error);
       failer(response?.error?.data?.message);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
 
   return (
@@ -72,16 +72,14 @@ function AddVacunaModal({ show, handleClose }) {
           <Button
             variant="primary"
             type="submit"
-            onClick={() => {
-              handleSubmit();
-            }}
+            onClick={handleSubmit}
             className="footer-btn btn btn-primary"
           >
             Guardar Cambios
           </Button>
         </Modal.Footer>
       </Modal>
-    </div>
+    </div >
   );
 }
 

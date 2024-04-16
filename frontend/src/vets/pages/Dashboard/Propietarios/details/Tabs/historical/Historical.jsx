@@ -49,7 +49,7 @@ const Historical = ({ id }) => {
 
   const filteredData = data?.filter(({ pet }) => {
     const searchString = searchValue;
-    return pet.toLowerCase().includes(searchString);
+    return pet?.toLowerCase().includes(searchString);
   });
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
@@ -252,7 +252,7 @@ const Historical = ({ id }) => {
                                 className={
                                   status === "pending"
                                     ? "badge badge-light-warning text-warning"
-                                    : (status = "complete" ? "badge badge-light-success text-success" : "badge badge-light-secondary text-dark")
+                                    : (status === "complete" ? "badge badge-light-success text-success" : "badge badge-light-secondary text-dark")
                                 }
                               >
                                 <p className="status-p mb-0">

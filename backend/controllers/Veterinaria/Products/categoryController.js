@@ -45,6 +45,7 @@ const updateCategory = async (req, res) => {
 
     if (categoryExist) {
       await Category.update({ category }, { where: { id: id } });
+      await Product.update({category:category},{where:{categoryId:id}})
       res.status(200).send({
         message: "category updated successfully",
       });

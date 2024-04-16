@@ -55,6 +55,7 @@ const Inventory = ({ email }) => {
 
   const handleClose = () => {
     setShow(false);
+    setPID(undefined)
     products.refetch();
   };
 
@@ -89,9 +90,9 @@ const Inventory = ({ email }) => {
   const filteredData = data.filter(({ product, category, presentation, sku }) => {
     const searchString = searchValue;
     return (
-      product.toLowerCase().includes(searchString) ||
-      category.toLowerCase().includes(searchString) ||
-      presentation.toLowerCase().includes(searchString) ||
+      product?.toLowerCase().includes(searchString) ||
+      category?.toLowerCase().includes(searchString) ||
+      presentation?.toLowerCase().includes(searchString) ||
       sku.includes(searchString)
     );
   });
@@ -296,23 +297,6 @@ const Inventory = ({ email }) => {
                   </div>
                 </div>
                 <div className="header-right">
-                  {/* <Link className="export-btn btn btn-primary" to={`${process.env.REACT_APP_SERVER_URL}/product/productExcelSheet`}>
-                    {" "}
-                    <svg className="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <defs>
-                        <clipPath id="a">
-                          <path data-name="Rectángulo 11046" fill="#1d2328" stroke="#707070" d="M17 15h16v16H17z" />
-                        </clipPath>
-                      </defs>
-                      <g data-name="Enmascarar grupo 57952" transform="translate(-17 -15)" clipPath="url(#a)">
-                        <path
-                          d="M26.6 15h-6.4a1.6 1.6 0 0 0-1.6 1.6v12.8a1.6 1.6 0 0 0 1.6 1.6h9.6a1.6 1.6 0 0 0 1.6-1.6v-9.6L26.6 15m3.2 14.4h-9.6V16.6h5.6v4h4v8.8m-1.6-7.2v5.68l-1.68-1.68-2.24 2.24-2.24-2.24 2.24-2.24-1.76-1.76Z"
-                          fill="#1d2328"
-                        />
-                      </g>
-                    </svg>{" "}
-                    Exportar datos
-                  </Link> */}
                   <Button onClick={handleShowCategory} className="export-btn">
                     Ver Categorías
                   </Button>
@@ -340,16 +324,16 @@ const Inventory = ({ email }) => {
                       currentPosts.map(({ id, sku, product, presentation, price, category, stock, status }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{sku}</span>
+                            <span className=" text-gray-600 ">{sku ? sku : "-"}</span>
                           </td>
-                          <td className="text-start pe-0">{product}</td>
+                          <td className="text-start pe-0">{product ? product : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {presentation}
+                            {presentation ? presentation : "-"}
                           </td>
-                          <td className="text-start pe-0">{price}</td>
-                          <td className="text-start pe-0">{category}</td>
-                          <td className="text-start pe-0">{stock}</td>
+                          <td className="text-start pe-0">{price ? price : "-"}</td>
+                          <td className="text-start pe-0">{category ? category : "-"}</td>
+                          <td className="text-start pe-0">{stock ? stock : "-"}</td>
                           <td className="text-start pe-0" data-order="status">
                             <div
                               className={`${status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "

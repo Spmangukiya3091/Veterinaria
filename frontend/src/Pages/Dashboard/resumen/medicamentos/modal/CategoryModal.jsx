@@ -25,7 +25,7 @@ function CategoryModal({ show, handleClose, email }) {
     email: email,
   });
 
-  const categoryList = useGetAllCategoriesQuery(null, { refetchOnMountOrArgChange: true });
+  const categoryList = useGetAllCategoriesQuery( { refetchOnMountOrArgChange: true });
   useEffect(() => {
     if (!categoryList.isLoading) {
       setLoading(false);

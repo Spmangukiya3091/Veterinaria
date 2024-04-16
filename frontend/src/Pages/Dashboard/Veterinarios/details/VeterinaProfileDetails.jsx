@@ -90,8 +90,8 @@ const VeterinaProfileDetails = ({ email }) => {
 
       // Use the callback function provided by setDltData
       const body = {
-        id: dltData.id,
-        email: dltData.email,
+        id: dltData?.id,
+        email: dltData?.email,
         pass: enteredPassword,
       };
 
@@ -160,8 +160,8 @@ const VeterinaProfileDetails = ({ email }) => {
       ) : (
         <section className="mascotasdetails-section">
           <div className="heading">
-            <p className="p-head">DR. {data.veterinarianData.name + " " + data.veterinarianData.surname}</p>
-            <p>Veterinarios » DR. {data.veterinarianData.name + " " + data.veterinarianData.surname}</p>
+            <p className="p-head">DR. {data?.veterinarianData?.name + " " + data?.veterinarianData?.surname || "-"}</p>
+            <p>Veterinarios » DR. {data?.veterinarianData?.name + " " + data?.veterinarianData?.surname || "-"}</p>
           </div>
 
           <Row className="flex-column flex-lg-row">
@@ -171,20 +171,20 @@ const VeterinaProfileDetails = ({ email }) => {
                   <Image src={data?.veterinarianData?.avatar || "/images/doctor1.png"} className="object-fit-cover" alt="image" />
                 </div>
                 <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">
-                  DR. {data.veterinarianData.name + " " + data.veterinarianData.surname}
+                  DR. {data?.veterinarianData?.name + " " + data?.veterinarianData?.surname || "-"}
                 </p>
                 <div className="information">
                   <div className="d-flex  text-start flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px">{data?.totalAppointments} citas</span>
+                        <span className="w-75px">{data?.totalAppointments || 0} citas</span>
                       </div>
                       <div className="fw-semibold text-muted">Citas totales</div>
                     </div>
 
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-50px">{data?.pendingAppointments} citas</span>
+                        <span className="w-50px">{data?.pendingAppointments || 0} citas</span>
                       </div>
                       <div className="fw-semibold text-muted">Citas pendientes</div>
                     </div>
@@ -213,13 +213,13 @@ const VeterinaProfileDetails = ({ email }) => {
                   <Collapse in={show}>
                     <div id="kt_user_view_details" className="pb-5 fs-6">
                       <div className="fw-bold mt-5">Especialidad</div>
-                      <div className="text-gray-600">{data?.veterinarianData?.speciality}</div>
+                      <div className="text-gray-600">{data?.veterinarianData?.speciality || "-"}</div>
 
                       <div className="fw-bold mt-5">Doc. Identidad</div>
-                      <div className="text-gray-600">{data?.veterinarianData?.identity}</div>
+                      <div className="text-gray-600">{data?.veterinarianData?.identity || "-"}</div>
 
                       <div className="fw-bold mt-5">Fecha creación</div>
-                      <div className="text-gray-600">{moment(data?.veterinarianData?.createdAt).format("DD MMM YYYY, HH:mm A")}</div>
+                      <div className="text-gray-600">{moment(data?.veterinarianData?.createdAt).format("DD MMM YYYY, HH:mm A") || "-"}</div>
 
                       <div className="fw-bold mt-5">Última Cita</div>
                       <div className="text-gray-600">
@@ -283,7 +283,7 @@ const VeterinaProfileDetails = ({ email }) => {
           </Row>
           <CitaModal show={shown} onHide={handleCloseMascota} />
 
-          <VeterinaUserModal show={open} onHide={handleCloseCitas} id={data.veterinarianData.id} filter={veterinDetail} />
+          <VeterinaUserModal show={open} onHide={handleCloseCitas} id={data?.veterinarianData?.id} filter={veterinDetail} />
           <Alert
             show={modalShow}
             onHide={() => setModalShow(false)}

@@ -89,6 +89,7 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId
         vaccine: formData.vaccineName,
         vaccineId: formData.vaccineId
       }
+      console.log(formData)
       addVaccinationRecord(body);
     }
   };
@@ -108,7 +109,7 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, filter, owner, petId
       } else if (response2.isError && response2.status === "rejected") {
         failer(response2?.error?.data?.message);
       }
-    } else if (id === undefined || id === " ") {
+    } else {
       if (!response.isLoading && response.isSuccess) {
         setFormData({
           vaccine: vaccineName,

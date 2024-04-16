@@ -89,7 +89,7 @@ const VeterinaModal = (props) => {
       // Refetch or update data if needed
       specialityList.refetch();
     } else if (response.isError) {
-      console.log(response.error);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

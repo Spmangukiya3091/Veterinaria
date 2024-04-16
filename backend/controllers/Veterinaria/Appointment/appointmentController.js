@@ -93,6 +93,7 @@ const registerDiagnostic = async (req, res) => {
       status: "complete",
       rating: req.body.rating,
     };
+    console.log(appointment?.medication)
     if (appointmentExist) {
       if (appointment.condition_name === "" || appointment.condition_name === null) {
         res.status(400).send({

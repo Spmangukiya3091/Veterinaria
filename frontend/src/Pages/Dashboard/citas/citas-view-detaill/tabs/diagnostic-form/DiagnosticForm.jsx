@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { showToast } from "../../../../../../store/tostify";
 import { useCookies } from "react-cookie";
 
-function DiagnosticForm({ data, refetch }) {
+function DiagnosticForm({ data, refetch, historyRefetch }) {
   const [cookies] = useCookies(["authToken"]);
   const [list, setList] = useState({ intake: "", Name: "", frequency: "" });
   const [lists, setLists] = useState([]);
@@ -111,14 +111,13 @@ function DiagnosticForm({ data, refetch }) {
         // API call successful
         // You can show a success message or perform any other actions
         refetch();
+        historyRefetch()
         dispatch(showToast("Diagnóstico guardado exitosamente!", "SUCCESS_TOAST"));
-      } else {
-        // API call failed
-        dispatch(showToast("Error al guardar el diagnóstico. Inténtelo de nuevo.", "FAIL_TOAST"));
       }
     } catch (error) {
       // console.log(error);
-      dispatch(showToast(error?.response?.data?.message, "FAIL_TOAST"));
+      // failer(error?.response?.message)
+      dispatch(showToast(error?.response?.message, "FAIL_TOAST"));
     }
   };
 

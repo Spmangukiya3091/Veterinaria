@@ -17,7 +17,9 @@ const sequelize = new Sequelize(
       acquire: connect.pool.acquire,
       idle: connect.pool.idle,
     },
+    logging: false
   }
+
 );
 try {
   sequelize.authenticate();

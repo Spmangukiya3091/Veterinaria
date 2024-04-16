@@ -29,7 +29,7 @@ const VacunasDetails = ({ email }) => {
   useEffect(() => {
     if (!vaccineDetail.isLoading) {
       setLoading(false);
-      setData(vaccineDetail.data);
+      setData(vaccineDetail?.data);
     } else if (vaccineDetail.isError) {
       setLoading(false);
       setError(true);
@@ -81,6 +81,7 @@ const VacunasDetails = ({ email }) => {
       failer("Invalid Password ");
     }
   };
+  console.log(data)
   useEffect(() => {
     if (!response.isLoading && response.status === "fulfilled") {
       setDltData({
@@ -115,7 +116,6 @@ const VacunasDetails = ({ email }) => {
             <Col lg={2} xl={3} className="w-lg-250px w-xl-350px">
               <div className="head container-sm">
                 <div className="img mb-7">
-                  {/* <i className="fa-solid fa-syringe fs-3x"></i> */}
                   <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 32 32" className="fs-5x">
                     <defs>
                       <clipPath id="a">
@@ -131,23 +131,19 @@ const VacunasDetails = ({ email }) => {
                     </g>
                   </svg>
                 </div>
-                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.vaccine?.name}</p>
-                {/* <div className="badge badge-light-primary mb-9 fs-6">
-                Activo
-              </div> */}
-
+                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.vaccine?.name || "-"}</p>
                 <div className="information">
                   <div className="d-flex  text-center flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px">{data?.apto}</span>
+                        <span className="w-75px">{data?.apto || "-"}</span>
                       </div>
                       <div className="fw-semibold text-muted">N. de Aptos</div>
                     </div>
 
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-50px">{data?.vaccinated}</span>
+                        <span className="w-50px">{data?.vaccinated || "-"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Vacunados</div>
                     </div>
@@ -176,14 +172,11 @@ const VacunasDetails = ({ email }) => {
                       <div className="separator"></div>
                       <Collapse in={showDropdown}>
                         <div id="kt_user_view_details" className="pb-5 fs-6">
-                          {/* <div className="fw-bold mt-5">Presentación</div>
-                        <div className="text-gray-600">Hachiko</div> */}
-
                           <div className="fw-bold mt-5">Fecha creación</div>
-                          <div className="text-gray-600">{moment(data?.vaccine?.creation).format("DD MMM YYYY, hh:mm A")}</div>
+                          <div className="text-gray-600">{moment(data?.vaccine?.creation).format("DD MMM YYYY, hh:mm A") || "-"}</div>
 
                           <div className="fw-bold mt-5">Tiempo validez</div>
-                          <div className="text-gray-600">{data?.vaccine?.validity} meses</div>
+                          <div className="text-gray-600">{data?.vaccine?.validity || "-"} meses</div>
                         </div>
                       </Collapse>
                     </div>
@@ -236,7 +229,7 @@ const VacunasDetails = ({ email }) => {
             }}
             onDelete={handleDeleteVerify}
           />
-          <VacunasModal show={show} onHide={handleClose} />
+          <VacunasModal show={show} onHide={handleClose} id={id} name={data?.vaccine?.name} />
         </section>
       )}
     </>

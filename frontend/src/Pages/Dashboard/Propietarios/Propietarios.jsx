@@ -83,11 +83,11 @@ const Propietarios = ({ email }) => {
     const formattedPhone = String(phone_1);
 
     return (
-      name.toLowerCase().includes(searchString) ||
-      surname.toLowerCase().includes(searchString) ||
-      address.toLowerCase().includes(searchString) ||
+      name?.toLowerCase().includes(searchString) ||
+      surname?.toLowerCase().includes(searchString) ||
+      address?.toLowerCase().includes(searchString) ||
       formattedPhone.includes(searchString) ||
-      doc_identity.toLowerCase().includes(searchString)
+      doc_identity?.toLowerCase().includes(searchString)
     );
   });
 
@@ -358,21 +358,21 @@ const Propietarios = ({ email }) => {
                   </thead>
                   <tbody>
                     {currentPosts.length > 0 ? (
-                      currentPosts.map(({ id, name, surname, address, phone_1, doc_identity, ACCIONES }, i) => (
+                      currentPosts.map(({ id, name, surname, address, phone_1, doc_identity }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {name + " " + surname}
+                            {name && surname ? name + " " + surname : "-"}
                           </td>
-                          <td className="text-start pe-0">{address}</td>
+                          <td className="text-start pe-0">{address ? address : "-"}</td>
                           <td className="text-start pe-0" data-order="estado">
-                            {phone_1}
+                            {phone_1 ? phone_1 : "-"}
                           </td>
                           <td className="text-start pe-0" data-order="estado">
-                            {doc_identity}
+                            {doc_identity ? doc_identity : '-'}
                           </td>
                           <td className="text-end">
                             <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>

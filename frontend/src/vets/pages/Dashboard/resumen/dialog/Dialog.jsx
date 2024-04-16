@@ -7,8 +7,9 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 function Dialog() {
-  const cookies = useCookies(["user"]);
-  const id = cookies.user;
+  // eslint-disable-next-line no-unused-vars
+  const [cookie, , setCookie] = useCookies(["user"]);
+  const id = cookie.user;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./pagosdetails.scss";
-import { ButtonGroup, Col, Collapse, Dropdown, Row,} from "react-bootstrap";
+import { ButtonGroup, Col, Collapse, Dropdown, Row, } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import MainTab from "./tabs/MainTab";
 import Alert from "../../../../Components/alert/Alert";
@@ -37,7 +37,10 @@ const PagosDetails = ({ email }) => {
   }, [paymentDetails]);
 
   const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false)
+    paymentDetails.refetch()
+  };
   const [openform, setOpenform] = useState(false);
   const [dltPagos, response] = useRemovePaymentMutation();
   const [dltData, setDltData] = useState({
@@ -124,7 +127,7 @@ const PagosDetails = ({ email }) => {
                   <div className="d-flex  text-center flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px">$ {data?.final_amount}</span>
+                        <span className="w-75px">$ {data?.final_amount || "-"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Monto Final</div>
                     </div>
@@ -154,13 +157,13 @@ const PagosDetails = ({ email }) => {
                       <Collapse in={showDropdown}>
                         <div id="kt_user_view_details" className="pb-5 fs-6">
                           <div className="fw-bold mt-5">Servicio</div>
-                          <div className="text-gray-600">{data?.service}</div>
+                          <div className="text-gray-600">{data?.service || "-"}</div>
 
                           <div className="fw-bold mt-5">Tipo de Pago</div>
-                          <div className="text-gray-600">{data?.payment_method}</div>
+                          <div className="text-gray-600">{data?.payment_method || "-"}</div>
 
                           <div className="fw-bold mt-5">Fecha creación</div>
-                          <div className="text-gray-600">{moment(data?.created_at).format("DD MMM YYYY, hh:mm A")}</div>
+                          <div className="text-gray-600">{data ? moment(data?.created_at).format("DD MMM YYYY, hh:mm A") : "-"}</div>
                         </div>
                       </Collapse>
                     </div>

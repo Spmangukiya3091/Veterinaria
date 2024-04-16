@@ -8,7 +8,6 @@ import Loader from "../../../../Components/loader/Loader";
 
 const UserModal = (props) => {
   const [cookies] = useCookies(["authToken"]);
-  const [userId, setUserId] = useState();
   const [loading, setLoading] = useState(true)
   // const [error, setError] = useState(false)
   const [userData, setUserData] = useState({
@@ -22,12 +21,13 @@ const UserModal = (props) => {
     profile: "",
     role: "",
   });
+
+  const [validated, setValidated] = useState(false); // State for form validation
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (props.id !== undefined) {
-      setUserId(props.id);
       setLoading(true)
       fetchUserData(props.id);
     } else {
@@ -62,115 +62,115 @@ const UserModal = (props) => {
       console.error("Error fetching user data", error);
     }
   };
+
+
+  const clearForm = () => {
+    setUserData({
+      email: "",
+      id: "",
+      identification: "",
+      name: "",
+      password: "",
+      confirmPassword: "",
+      phone: "",
+      profile: "",
+      role: "",
+    });
+    setValidated(false); // Reset validated state
+    setSelectedFile(null);
+  };
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
   };
-  console.log(props.id)
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
   };
 
-  const handleSubmit = async () => {
-    if (userId !== undefined) {
-      // Edit user API endpoint
-      try {
-        const formData = new FormData();
-        formData.append("name", userData.name);
-        formData.append("email", userData.email);
-        formData.append("password", userData.password);
-        formData.append("confirmPassword", userData.confirmPassword);
-        formData.append("role", userData.role);
-        formData.append("identification", userData.identification);
-        formData.append("phone", userData.phone);
+  const handleSubmit = async (e) => {
 
-        if (selectedFile) {
-          formData.append("profile", selectedFile);
-        } else {
-          formData.append("profile", userData.profile);
-        }
-
-        const editUserResponse = await axios.put(`${process.env.REACT_APP_SERVER_URL}/users/updateProfile/${userId}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + cookies.authToken,
-          },
-        });
-        // console.log(editUserResponse)
-        if (editUserResponse.status === 200) {
-          // Handle success
-          success();
-          props.onHide();
-          setUserData({
-            email: "",
-            id: "",
-            identification: "",
-            name: "",
-            password: "",
-            confirmPassword: "",
-            phone: "",
-            profile: "",
-            role: "",
-          });
-          setSelectedFile(null);
-        } else {
-          // Handle error
-          failer(editUserResponse.error.message)
-          console.error("Error editing user");
-        }
-      } catch (error) {
-        // Handle error
-        failer(error.message)
-        console.error("Error editing user", error);
-      }
+    e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
     } else {
-      // Create user API endpoint
-      try {
-        const formData = new FormData();
-        formData.append("name", userData.name);
-        formData.append("email", userData.email);
-        formData.append("password", userData.password);
-        formData.append("confirmPassword", userData.confirmPassword);
-        formData.append("role", userData.role);
-        formData.append("identification", userData.identification);
-        formData.append("phone", userData.phone);
+      if (props.id !== undefined) {
+        // Edit user API endpoint
+        try {
+          const formData = new FormData();
+          formData.append("name", userData.name);
+          formData.append("email", userData.email);
+          formData.append("password", userData.password);
+          formData.append("confirmPassword", userData.confirmPassword);
+          formData.append("role", userData.role);
+          formData.append("identification", userData.identification);
+          formData.append("phone", userData.phone);
 
-        if (selectedFile) {
-          formData.append("profile", selectedFile);
-        }
+          if (selectedFile) {
+            formData.append("profile", selectedFile);
+          } else {
+            formData.append("profile", userData.profile);
+          }
 
-        const createUserResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/users/userRegistration`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + cookies.authToken,
-          },
-        });
-
-        if (createUserResponse.status === 201) {
-          // Handle success
-          success();
-          props.onHide();
-          setUserData({
-            email: "",
-            id: "",
-            identification: "",
-            name: "",
-            password: "",
-            confirmPassword: "",
-            phone: "",
-            profile: "",
-            role: "",
+          const editUserResponse = await axios.put(`${process.env.REACT_APP_SERVER_URL}/users/updateProfile/${props.id}`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + cookies.authToken,
+            },
           });
-          setSelectedFile(null);
-        } else {
+          // console.log(editUserResponse)
+          if (editUserResponse.status === 200) {
+            // Handle success
+            clearForm()
+            success();
+            props.onHide();
+          }
+        } catch (error) {
           // Handle error
-          failer(createUserResponse.error.message)
-          console.error("Error creating user");
+          if (error.response.status !== 400) {
+            failer(error)
+            console.error("Error creating user", error);
+          }
+          console.error("Error creating user", error);
         }
-      } catch (error) {
-        // Handle error
-        failer(error.message)
-        console.error("Error creating user", error);
+      } else {
+        // Create user API endpoint
+        try {
+          const formData = new FormData();
+          formData.append("name", userData.name);
+          formData.append("email", userData.email);
+          formData.append("password", userData.password);
+          formData.append("confirmPassword", userData.confirmPassword);
+          formData.append("role", userData.role);
+          formData.append("identification", userData.identification);
+          formData.append("phone", userData.phone);
+
+          if (selectedFile) {
+            formData.append("profile", selectedFile);
+          }
+
+          const createUserResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/users/userRegistration`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + cookies.authToken,
+            },
+          });
+
+          if (createUserResponse.status === 201) {
+            // Handle success
+            success();
+            props.onHide();
+            clearForm()
+          }
+        } catch (error) {
+          // Handle error
+          if (error.response.status !== 400) {
+            failer(error)
+            console.error("Error creating user", error);
+          }
+          console.error("Error creating user", error);
+        }
       }
     }
   };
@@ -180,17 +180,7 @@ const UserModal = (props) => {
       show={props.show}
       onHide={() => {
         props.onHide();
-        setUserData({
-          email: "",
-          id: "",
-          identification: "",
-          name: "",
-          password: "",
-          confirmPassword: "",
-          phone: "",
-          profile: "",
-          role: "",
-        });
+        clearForm()
       }}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
@@ -200,10 +190,10 @@ const UserModal = (props) => {
         loading ? <Loader /> :
           <>
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title-vcenter">{userId ? "Editar Usuario" : "Crear Nuevo Usuario"}</Modal.Title>
+              <Modal.Title id="contained-modal-title-vcenter">{props.id ? "Editar Usuario" : "Crear Nuevo Usuario"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Form>
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Row>
                   <Col>
                     <Form.Group className="mb-3" controlId="formBasicSelect">
@@ -216,7 +206,7 @@ const UserModal = (props) => {
                           />
                         </div>
                         <div className="form-field">
-                          <Form.Control type="file" onChange={handleImageChange} ref={fileInputRef} style={{ display: "none" }} />
+                          <Form.Control type="file" onChange={handleImageChange} ref={fileInputRef} style={{ display: "none" }} required />
                           <div className="info">
                             <p>Adjunta una foto de perfil para completar datos adicionales.</p>
                             {selectedFile && <p className="mt-3 filename">{selectedFile !== null ? selectedFile.name : "No file found"}</p>}
@@ -224,6 +214,9 @@ const UserModal = (props) => {
                           <Button onClick={handleUploadButtonClick}>Adjuntar</Button>
                         </div>
                       </div>
+                      <Form.Control.Feedback type="invalid">
+                        Por favor proporcione un perfil
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -236,7 +229,11 @@ const UserModal = (props) => {
                         onChange={(e) => {
                           setUserData({ ...userData, name: e.target.value });
                         }}
+                        required
                       />
+                      <Form.Control.Feedback type="invalid">
+                        Por favor proporcione un Nombre completo.
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -247,14 +244,18 @@ const UserModal = (props) => {
                       <Form.Select
                         aria-label="Default select example"
                         value={userData.role || ""}
+                        required
                         onChange={(e) => {
                           setUserData({ ...userData, role: e.target.value });
                         }}
                       >
                         <option value="">Tipo de usuario</option>
-                        <option value="masterAdmin">Administrador Estándar</option>
+                        <option value="standardAdmin">Administrador Estándar</option>
                         <option value="customerService">Servicio al Cliente</option>
                       </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        Por favor proporcione un Tipo de usuario.
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -267,7 +268,11 @@ const UserModal = (props) => {
                         onChange={(e) => {
                           setUserData({ ...userData, email: e.target.value });
                         }}
+                        required
                       />
+                      <Form.Control.Feedback type="invalid">
+                        Por favor proporcione un Correo electrónico.
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -290,6 +295,8 @@ const UserModal = (props) => {
                       <Form.Label>Nro. de Teléfono</Form.Label>
                       <Form.Control
                         aria-label="Default"
+                        type="tel"
+                        max={10}
                         placeholder="Nro. de Teléfono"
                         value={userData.phone || ""}
                         onChange={(e) => {
@@ -311,7 +318,11 @@ const UserModal = (props) => {
                         onChange={(e) => {
                           setUserData({ ...userData, password: e.target.value });
                         }}
+                        required
                       />
+                      <Form.Control.Feedback type="invalid">
+                        Por favor proporcione un contraseña.
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col>
@@ -324,7 +335,11 @@ const UserModal = (props) => {
                         onChange={(e) => {
                           setUserData({ ...userData, confirmPassword: e.target.value });
                         }}
+                        required
                       />
+                      <Form.Control.Feedback type="invalid">
+                        Por favor proporcione un Confirmar contraseña.
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -333,18 +348,7 @@ const UserModal = (props) => {
             <Modal.Footer>
               <Button
                 onClick={() => {
-                  setUserData({
-                    email: "",
-                    id: "",
-                    identification: "",
-                    name: "",
-                    password: "",
-                    confirmPassword: "",
-                    phone: "",
-                    profile: "",
-                    role: "",
-                  });
-                  setSelectedFile(null);
+                  clearForm()
                   props.onHide();
                 }}
                 className="footer-btn btn btn-secondary"
@@ -352,7 +356,7 @@ const UserModal = (props) => {
                 Cancelar
               </Button>
               <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary">
-                {userId ? "Guardar Cambios" : "Crear Usuario"}
+                {props.id ? "Guardar Cambios" : "Crear Usuario"}
               </Button>
             </Modal.Footer>
           </>

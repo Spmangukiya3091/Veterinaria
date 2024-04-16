@@ -4,7 +4,7 @@ import { failer, success } from "../../alert/success";
 import { useAddPetMutation, useGetOwnersListQuery } from "../../../services/ApiServices";
 import moment from "moment";
 
-const MascotaModal = (props) => {
+const MascotaModal = ({ onHide, show }) => {
   const [formData, setFormData] = useState({
     name: "",
     owner: "",
@@ -16,14 +16,36 @@ const MascotaModal = (props) => {
     hair: "",
     color: "",
   });
+
+  const [validated, setValidated] = useState(false); // State for form validation
+
   const [addPet, response] = useAddPetMutation();
-  const ownersList = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });
+  const ownersList = useGetOwnersListQuery({ refetchOnMountOrArgChange: true });
+
+  useEffect(() => {
+
+    clearForm()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show]);
+  const clearForm = () => {
+    setFormData({
+      name: "",
+      owner: "",
+      ownerId: "",
+      sex: "",
+      dob: "",
+      Species: "",
+      breed: "",
+      hair: "",
+      color: "",
+    });
+    setValidated(false); // Reset validated state
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "ownerId") {
-      const ownerText = name === "ownerId" ? e.target.options[e.target.selectedIndex].text : "";
-      // console.log(ownerText);
+      const ownerText = e.target.options[e.target.selectedIndex].text;
       setFormData({
         ...formData,
         [name]: value,
@@ -37,53 +59,54 @@ const MascotaModal = (props) => {
     }
   };
 
-  const handleSubmit = async () => {
-    // Add new pet
-    // console.log(formData);
-    await addPet(formData);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+      await addPet(formData);
+
+    }
   };
 
   useEffect(() => {
+
     if (!response.isLoading && response.status === "fulfilled") {
-      props.onHide();
+      // console.log(response);
+      clearForm()
       success();
-      setFormData({
-        name: "",
-        owner: "",
-        ownerId: "",
-        sex: "",
-        dob: "",
-        Species: "",
-        breed: "",
-        hair: "",
-        color: "",
-      });
-      // filter.refetch();
-    } else if (response.isError && response.status === "rejected") {
+      onHide();
+    } else if (response.isError && response.status === "rejected" && response?.error?.status !== 400) {
+      // console.log(response.error);
       failer(response?.error?.data?.message);
-      console.error("Error occured: ", response?.error);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
   return (
     <>
-      <Modal size="lg" show={props.show} onHide={props.onHide} centered>
+      <Modal size="lg" show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Información de Mascota</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <Form.Label>Nombre</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Nombre" name="name" onChange={handleChange} value={formData.name} />
+                  <Form.Control aria-label="Default" placeholder="Nombre" name="name" onChange={handleChange} value={formData.name} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Nombre.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Propietario</Form.Label>
-                  <Form.Select aria-label="Default select" name="ownerId" onChange={handleChange} value={formData.ownerId}>
+                  <Form.Select aria-label="Default select" name="ownerId" onChange={handleChange} value={formData.ownerId} required>
                     <option disabled="true" value={""} selected="true">Propietario</option>
                     {ownersList?.data?.ownersList.map((owner) => (
                       <option key={owner.id} value={owner.id}>
@@ -91,6 +114,9 @@ const MascotaModal = (props) => {
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Propietario.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -98,11 +124,14 @@ const MascotaModal = (props) => {
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Sexo</Form.Label>
-                  <Form.Select aria-label="Default select example" name="sex" onChange={handleChange} value={formData.sex}>
-                    <option disabled="true" value={""} selected="true">Sexo</option>
+                  <Form.Select aria-label="Default select example" name="sex" onChange={handleChange} value={formData.sex} required>
+                    <option disabled="true" value={""} selected="true" >Sexo</option>
                     <option value="Macho">Macho</option>
                     <option value="Hembra">Hembra</option>
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Sexo.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
 
@@ -150,21 +179,22 @@ const MascotaModal = (props) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            className="footer-btn btn btn-secondary"
-            onClick={() => {
-              props.onHide();
-            }}
-          >
+          <Button onClick={onHide} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
-          <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary" disabled={response.isLoading}>
+          <Button
+            variant="primary"
+            type="submit"
+            className="footer-btn btn btn-primary"
+            onClick={handleSubmit}
+            disabled={response.isLoading}
+          >
             Guardar Cambios
           </Button>
         </Modal.Footer>
       </Modal>
     </>
   );
-};
+}
 
 export default MascotaModal;

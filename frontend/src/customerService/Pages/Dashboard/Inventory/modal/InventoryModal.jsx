@@ -24,8 +24,8 @@ function InventoryModal(props) {
     price: "", // Initialize as an empty string
     presentation: "",
   });
-
-  const categoryList = useGetAllCategoriesQuery(null, { refetchOnMountOrArgChange: true });
+  const [validated, setValidated] = useState(false); // State for form validation
+  const categoryList = useGetAllCategoriesQuery( { refetchOnMountOrArgChange: true });
   const productDetails = useGetSingleProductQuery(props.id, { refetchOnMountOrArgChange: true });
   const [addProduct, response] = useAddProductMutation();
   const [updateProduct, response2] = useUpdateProductMutation();
@@ -48,8 +48,29 @@ function InventoryModal(props) {
         price: price.toString(),
         presentation,
       });
+    } else if (props.id === undefined) {
+      clearForm(); // Clear form fields when there is no owner ID
     }
-  }, [productDetails, props.id]);
+  }, [productDetails, props.id, props.show]);
+
+  const clearForm = () => {
+    setFormData({
+      product: "",
+      categoryId: "",
+      category: "",
+      composition: "",
+      stock: "",
+      sku: "",
+      status: "",
+      laboratory: "",
+      description: "",
+      brand: "",
+      price: "", // Initialize as an empty string
+      presentation: "",
+    });
+    setValidated(false); // Reset validated state
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -81,39 +102,32 @@ function InventoryModal(props) {
     }
   };
 
-  const handleSubmit = async () => {
-    if (props.id) {
-      const body = {
-        id: props.id,
-        ...formData,
-      };
-      await updateProduct(body);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
     } else {
-      await addProduct(formData);
+      if (props.id) {
+        const body = {
+          id: props.id,
+          ...formData,
+        };
+        await updateProduct(body);
+      } else {
+        await addProduct(formData);
+      }
     }
   };
 
   useEffect(() => {
     if (props.id !== undefined) {
       if (!response2.isLoading && response2.status === "fulfilled") {
+        clearForm()
         props.onHide();
         success();
-        setFormData({
-          product: "",
-          categoryId: "",
-          category: "",
-          composition: "",
-          stock: "",
-          sku: "",
-          status: "",
-          laboratory: "",
-          description: "",
-          brand: "",
-          price: "", // Initialize as an empty string
-          presentation: "",
-        });
-        props.filter.refetch();
-      } else if (response2.isError && response2.status === "rejected") {
+      } else if (response2.isError && response2.status === "rejected" && response2?.error?.status !== 400) {
         // console.log(response2.error);
         failer(response2?.error?.data?.message);
       }
@@ -121,28 +135,14 @@ function InventoryModal(props) {
       if (!response.isLoading && response.status === "fulfilled") {
         // console.log(response);
         success();
-        setFormData({
-          product: "",
-          categoryId: "",
-          category: "",
-          composition: "",
-          stock: "",
-          sku: "",
-          status: "",
-          laboratory: "",
-          description: "",
-          brand: "",
-          price: "", // Initialize as an empty string
-          presentation: "",
-        });
+        clearForm()
         props.onHide();
-        props.filter.refetch();
-      } else if (response.isError && response.status === "rejected") {
+      } else if (response.isError && response.status === "rejected" && response?.error?.status !== 400) {
         // console.log(response.error);
         failer(response?.error?.data?.message);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (
@@ -152,12 +152,15 @@ function InventoryModal(props) {
           <Modal.Title id="contained-modal-title-vcenter">Información de Producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Producto</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Producto" value={formData.product} name="product" onChange={handleChange} />
+                  <Form.Control aria-label="Default" placeholder="Producto" value={formData.product} name="product" onChange={handleChange} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Producto.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -173,12 +176,18 @@ function InventoryModal(props) {
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Categoría.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Marca</Form.Label>
-                  <Form.Control type="text" placeholder="Marca" value={formData.brand} name="brand" onChange={handleChange} />
+                  <Form.Control type="text" placeholder="Marca" value={formData.brand} name="brand" onChange={handleChange} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Marca.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -201,17 +210,24 @@ function InventoryModal(props) {
                         value={formData.stock}
                         name="stock"
                         onChange={handleChange}
+                        required
                       />
+                      <Form.Control.Feedback type="invalid">
+                        Por favor proporcione un Stock.
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group className="mb-3">
                       <Form.Label>Estado</Form.Label>
-                      <Form.Select aria-label="Default select example" value={formData.status} name="status" onChange={handleChange}>
+                      <Form.Select aria-label="Default select example" value={formData.status} name="status" onChange={handleChange} required>
                         <option disabled="true" value={""} selected="true">Estado</option>
                         <option value="active">Activo</option>
                         <option value="inactive">InActivo</option>
                       </Form.Select>
+                      <Form.Control.Feedback type="invalid">
+                        Por favor proporcione un Estado.
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -221,7 +237,10 @@ function InventoryModal(props) {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>SKU</Form.Label>
-                  <Form.Control aria-label="Default " placeholder="SKU" value={formData.sku} name="sku" onChange={handleChange} />
+                  <Form.Control aria-label="Default " placeholder="SKU" value={formData.sku} name="sku" onChange={handleChange} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un SKU.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
@@ -247,8 +266,12 @@ function InventoryModal(props) {
                     placeholder="PRESENTACIÓN"
                     value={formData.presentation}
                     name="presentation"
+                    required
                     onChange={handleChange}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un PRESENTACIÓN.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
@@ -259,8 +282,12 @@ function InventoryModal(props) {
                     id="price"
                     name="price"
                     value={formData.price === 0 ? "0.00" : formData.price} // Show 0.00 if price is 0, otherwise show the formatted price
+                    required
                     onChange={handlePriceChange}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un PRECIO.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -284,21 +311,8 @@ function InventoryModal(props) {
         <Modal.Footer>
           <Button
             onClick={() => {
+              clearForm()
               props.onHide();
-              setFormData({
-                product: "",
-                categoryId: "",
-                category: "",
-                composition: "",
-                stock: "",
-                sku: "",
-                status: "",
-                laboratory: "",
-                description: "",
-                brand: "",
-                price: "",
-                presentation: "",
-              });
             }}
             className="footer-btn btn btn-secondary"
           >

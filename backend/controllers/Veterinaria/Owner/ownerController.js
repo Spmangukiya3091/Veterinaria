@@ -78,7 +78,7 @@ const updateOwner = async (req, res) => {
       doc_identity: req.body.doc_identity,
       email: req.body.email,
       address: req.body.address,
-
+      dob: req.body.dob === "" || !req.body.dob ? null : new Date(req.body.dob),
       department: req.body.department,
       district: req.body.district,
     };
@@ -117,15 +117,15 @@ const deleteOwnerRecord = async (req, res) => {
   }
   if (decoded.role !== user.role) {
     return res.status(400).send({
-     message: "Not authorized",
-     success: false,
-   });
- }
+      message: "Not authorized",
+      success: false,
+    });
+  }
   if (owner_record?.id === id) {
     await Owner.destroy({ where: { id: id } });
-    await Pet.destroy({where:{ownerId:id}})
-    await Appointment.destroy({where:{ownerId:id}})
-    await Vaccination.destroy({where:{ownerId:id}})
+    await Pet.destroy({ where: { ownerId: id } })
+    await Appointment.destroy({ where: { ownerId: id } })
+    await Vaccination.destroy({ where: { ownerId: id } })
     res.status(200).send({
       message: "owner deleted successfully",
       success: true,
@@ -405,7 +405,7 @@ const petAppointmentDataOfOwner = async (req, res) => {
       owner: owner,
       appointments: appointments,
     });
-  }else if (!req.query.startDate && !req.query.endDate && !req.query.status) {
+  } else if (!req.query.startDate && !req.query.endDate && !req.query.status) {
     const owners = await Owner.findOne({
       include: [
         {

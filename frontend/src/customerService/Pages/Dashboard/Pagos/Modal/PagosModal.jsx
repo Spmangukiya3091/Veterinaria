@@ -10,26 +10,27 @@ import {
   useUpdatePaymentMutation,
 } from "../../../../../services/ApiServices";
 
-const PagosModal = (props) => {
+const PagosModal = ({ id, show, onHide }) => {
   const [formData, setFormData] = useState({
-    payment_no: 0,
-    transfer_no: 0,
+    payment_no: null,
+    transfer_no: null,
     owner: "",
     doctor: "",
     service: "",
-    amount: 0,
-    discount: 0,
+    amount: null,
+    discount: null,
     payment_method: "",
-    final_amount: 0,
+    final_amount: null,
     description: "",
   });
+  const [validated, setValidated] = useState(false); // State for form validation
 
-  const owners = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });
-  const doctors = useGetVeterinariansQuery(null, { refetchOnMountOrArgChange: true });
-  const paymentDetails = useGetSinglePaymentQuery(props.id, { refetchOnMountOrArgChange: true });
+  const owners = useGetOwnersListQuery( { refetchOnMountOrArgChange: true });
+  const doctors = useGetVeterinariansQuery( { refetchOnMountOrArgChange: true });
+  const paymentDetails = useGetSinglePaymentQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
 
   useEffect(() => {
-    if (paymentDetails.isSuccess && paymentDetails.data && paymentDetails.data.payment && props.id !== undefined) {
+    if (paymentDetails.isSuccess && paymentDetails.data && paymentDetails.data.payment && id !== undefined) {
       const { payment_no, transfer_no, owner, doctor, service, amount, discount, payment_method, final_amount, description } =
         paymentDetails.data.payment;
       setFormData({
@@ -44,8 +45,27 @@ const PagosModal = (props) => {
         final_amount,
         description,
       });
+    } else {
+      clearForm()
     }
-  }, [paymentDetails, props.id]);
+  }, [paymentDetails, id, show]);
+
+  const clearForm = () => {
+    setFormData({
+      payment_no: null,
+      transfer_no: null,
+      owner: "",
+      doctor: "",
+      service: "",
+      amount: null,
+      discount: null,
+      payment_method: "",
+      final_amount: null,
+      description: "",
+    });
+    setValidated(false); // Reset validated state
+  };
+
 
   const [addPayment, response] = useAddPaymentMutation();
   const [updatePayment, response2] = useUpdatePaymentMutation();
@@ -73,74 +93,58 @@ const PagosModal = (props) => {
     });
   };
 
-  const handleSubmit = () => {
-    if (props.id !== undefined) {
-      const body = {
-        id: props.id,
-        ...formData,
-      };
-      updatePayment(body);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
     } else {
-      addPayment(formData);
+      if (id !== undefined) {
+        const body = {
+          id: id,
+          ...formData,
+        };
+        await updatePayment(body);
+      } else {
+        await addPayment(formData);
+      }
     }
   };
 
   useEffect(() => {
-    if (props.id !== undefined) {
-      if (!response2.isLoading && response2.status === "fulfilled") {
-        props.onHide();
+    if (id !== undefined) {
+      if (!response2.isLoading && response2.isSuccess) {
+        onHide();
         success();
-        props.filter.refetch();
-        setFormData({
-          payment_no: 0,
-          transfer_no: 0,
-          owner: "",
-          doctor: "",
-          service: "",
-          amount: 0,
-          discount: 0,
-          payment_method: "",
-          final_amount: 0,
-          description: "",
-        });
-      } else if (response2.isError && response2.status === "rejected") {
-        // console.log(response2.error);
+        clearForm()
+      } else if (response2.isError && response2.status === "rejected" && response2?.error?.status !== 400) {
+        // console.log(response2.error.status);
         failer(response2?.error?.data?.message);
       }
     } else {
-      if (!response.isLoading && response.status === "fulfilled") {
+      if (!response.isLoading && response.isSuccess) {
         // console.log(response);
         success();
-        setFormData({
-          payment_no: 0,
-          transfer_no: 0,
-          owner: "",
-          doctor: "",
-          service: "",
-          amount: 0,
-          discount: 0,
-          payment_method: "",
-          final_amount: 0,
-          description: "",
-        });
-        props.onHide();
-        props.filter.refetch();
-      } else if (response.isError && response.status === "rejected") {
+        clearForm()
+        onHide();
+      } else if (response.isError && response.status === "rejected" && response.error.status !== 400) {
+        // console.log(response);
         // console.log(response.error);
         failer(response?.error?.data?.message);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (
     <>
-      <Modal show={props.show} onHide={props.onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Información de Pagos</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3">
@@ -152,7 +156,11 @@ const PagosModal = (props) => {
                     name="payment_no"
                     onChange={handleChange}
                     value={parseInt(formData.payment_no)}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Nro. de Pago.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
@@ -172,14 +180,17 @@ const PagosModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Propietario</Form.Label>
-                  <Form.Select aria-label="Default select example" name="owner" onChange={handleChange} value={formData.owner}>
-                    <option disabled="true" value={""} selected="true">Propietario</option>
+                  <Form.Select aria-label="Default select example" name="owner" onChange={handleChange} value={formData.owner} required>
+                    <option disabled="true" value={""} selected="true"  >Propietario</option>
                     {owners?.data?.ownersList.map(({ id, name, surname }) => (
                       <option key={id} value={name + " " + surname}>
                         {name + " " + surname}
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Propietario.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -187,20 +198,26 @@ const PagosModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Doctor</Form.Label>
-                  <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor}>
-                    <option disabled="true" value={""} selected="true">Doctor</option>
+                  <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor} required>
+                    <option disabled="true" value={""} selected="true"  >Doctor</option>
                     {doctors?.data?.veterinarianList.map(({ id, name, surname }) => (
                       <option key={id} value={name + " " + surname}>
                         {name + " " + surname}
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Doctor.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Servicio</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Servicio" name="service" onChange={handleChange} value={formData.service} />
+                  <Form.Control aria-label="Default" placeholder="Servicio" name="service" onChange={handleChange} value={formData.service} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Servicio.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -208,7 +225,10 @@ const PagosModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Monto</Form.Label>
-                  <Form.Control type="number" aria-label="Default" placeholder="Monto" name="amount" onChange={totalAmount} value={formData.amount} />
+                  <Form.Control type="number" aria-label="Default" placeholder="Monto" name="amount" onChange={totalAmount} required value={formData.amount} />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Monto.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
@@ -221,7 +241,11 @@ const PagosModal = (props) => {
                     name="discount"
                     onChange={totalAmount}
                     value={formData.discount}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Descuento.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -236,18 +260,25 @@ const PagosModal = (props) => {
                     placeholder="Monto Final"
                     name="final_amount"
                     value={formData.final_amount}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Monto Final.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Método de Pago</Form.Label>
-                  <Form.Select name="payment_method" onChange={handleChange} value={formData.payment_method}>
+                  <Form.Select name="payment_method" onChange={handleChange} value={formData.payment_method} required>
                     <option disabled="true" value={""} selected="true">Método de Pago</option>
                     <option value="cash">Efectivo</option>
                     <option value="credit card">Tarjeta de Crédito</option>
                     <option value="debit card">Tarjeta de Débito</option>
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Método de Pago.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -269,21 +300,22 @@ const PagosModal = (props) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={() => {
+            onHide()
+            clearForm()
+          }} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button
             variant="primary"
             type="submit"
-            onClick={() => {
-              handleSubmit();
-            }}
+            onClick={handleSubmit}
             className="footer-btn btn btn-primary"
           >
             Guardar Cambios
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
     </>
   );
 };

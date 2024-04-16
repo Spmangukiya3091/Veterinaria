@@ -32,21 +32,21 @@ const VeterinaUserModal = (props) => {
     end_time: "",
     specialityId: "",
   });
-
-  const specialityList = useGetSpecialitiesQuery(null, { refetchOnMountOrArgChange: true });
+  const [validated, setValidated] = useState(false); // State for form validation
+  const specialityList = useGetSpecialitiesQuery({ refetchOnMountOrArgChange: true });
   const [specialities, setSpecialities] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedDepartamento, setSelectedDepartamento] = useState("");
   const [distritos, setDistritos] = useState([]);
   const fileInputRef = useRef(null);
 
-  const getVeterinDetails = useGetSingleVeterinQuery(props.id, { refetchOnMountOrArgChange: true });
+  const getVeterinDetails = useGetSingleVeterinQuery(props.id, { refetchOnMountOrArgChange: true, skip: props.id === undefined });
 
   useEffect(() => {
     if (!specialityList.isLoading) {
       setSpecialities(specialityList.data?.specialityList || []);
     }
-  }, [specialityList]);
+  }, [specialityList, props.show]);
 
   useEffect(() => {
     if (props.id !== undefined && !getVeterinDetails.isLoading && getVeterinDetails?.data) {
@@ -91,30 +91,34 @@ const VeterinaUserModal = (props) => {
         specialityId,
       });
     } else {
-      setFormData({
-        name: "",
-        surname: "",
-        avatar: "",
-        speciality: "",
-        identity: "",
-        dob: "",
-        phone: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        sex: "",
-        address: "",
-        department: "",
-        district: "",
-        workingDays: "",
-        start_time: "",
-        end_time: "",
-        specialityId: "",
-      });
-
-
+      clearForm()
     }
   }, [props.id, getVeterinDetails, props.show]);
+
+  const clearForm = () => {
+    setFormData({
+      name: "",
+      surname: "",
+      avatar: "",
+      speciality: "",
+      identity: "",
+      dob: "",
+      phone: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      sex: "",
+      address: "",
+      department: "",
+      district: "",
+      workingDays: "",
+      start_time: "",
+      end_time: "",
+      specialityId: "",
+    });
+    setValidated(false); // Reset validated state
+  };
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -129,6 +133,7 @@ const VeterinaUserModal = (props) => {
     const { name, value } = e.target;
     if (name === "specialityId") {
       const specialityText = e.target.options[e.target.selectedIndex]?.text || "";
+      // console.log(speciality)
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
@@ -188,67 +193,56 @@ const VeterinaUserModal = (props) => {
   };
 
   const handleModalHide = () => {
-    setFormData({
-      name: "",
-      surname: "",
-      avatar: "",
-      speciality: "",
-      identity: "",
-      dob: "",
-      phone: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      sex: "",
-      address: "",
-      department: "",
-      district: "",
-      workingDays: "",
-      start_time: "",
-      end_time: "",
-      specialityId: "",
-    });
+    clearForm()
     props.onHide();
     props.filter.refetch()
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (props.id !== undefined) {
-        // Handle update logic
-        const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/veterinarian/UpdateVeterinarian/${props.id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + cookies.authToken,
-          },
-        });
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+      try {
 
-        if (response.status === 200) {
-          // Handle success
-          success();
-          handleModalHide();
+        if (props.id !== undefined) {
+          // Handle update logic
+          const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/veterinarian/UpdateVeterinarian/${props.id}`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + cookies.authToken,
+            },
+          });
+
+          if (response.status === 200) {
+            // Handle success
+            success();
+            handleModalHide();
+          }
+        } else {
+          // Handle create logic
+          const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/veterinarian/createVeterinarian`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "Bearer " + cookies.authToken,
+            },
+          });
+
+          if (response.status === 201) {
+            // Handle success
+            success();
+            handleModalHide();
+          }
         }
-      } else {
-        // Handle create logic
-        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/veterinarian/createVeterinarian`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + cookies.authToken,
-          },
-        });
-
-        if (response.status === 201) {
-          // Handle success
-          success();
-
-          handleModalHide();
+      } catch (error) {
+        // console.log(error);
+        if (error?.response?.status !== 400) {
+          failer(error?.response?.data?.message);
         }
+        // dispatch(showToast("Internal Server Error", "FAIL_TOAST"));
       }
-    } catch (error) {
-      console.log(error);
-      failer(error?.response?.data?.message);
-      // dispatch(showToast("Internal Server Error", "FAIL_TOAST"));
     }
   };
   return (
@@ -258,7 +252,7 @@ const VeterinaUserModal = (props) => {
           <Modal.Title id="contained-modal-title-vcenter">{props.id !== undefined ? "Editar" : "Crear"} Información de Doctor</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
@@ -286,13 +280,13 @@ const VeterinaUserModal = (props) => {
                   <Col>
                     <Form.Group className="mb-3" controlId="formBasicDate">
                       <Form.Label>Nombres</Form.Label>
-                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="name" placeholder="Nombres" value={formData.name} />
+                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="name" placeholder="Nombres" value={formData.name} required />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="formBasicDate">
                       <Form.Label>Apellidos</Form.Label>
-                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="surname" placeholder="Apellidos" value={formData.surname} />
+                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="surname" placeholder="Apellidos" value={formData.surname} required />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -331,6 +325,7 @@ const VeterinaUserModal = (props) => {
                         name="dob"
                         className="text-gray-400"
                         placeholder="F. de Nacimiento"
+                        required
                       />
                     </Form.Group>
                   </Col>
@@ -343,6 +338,7 @@ const VeterinaUserModal = (props) => {
                         name="identity"
                         aria-label="Default"
                         placeholder="Doc. Identidad"
+                        required
                       />
                     </Form.Group>
                   </Col>
@@ -356,10 +352,12 @@ const VeterinaUserModal = (props) => {
                   <Form.Control
                     aria-label="Default"
                     value={formData.phone}
-                    type="number"
+                    type="tel" // Change type to 'tel' to support max length attribute
+                    maxLength={10} // Set maxLength attribute to 10
                     onChange={(e) => handleChange(e)}
                     name="phone"
                     placeholder="Teléfono"
+                    required
                   />
                 </Form.Group>
               </Col>
@@ -372,6 +370,7 @@ const VeterinaUserModal = (props) => {
                     value={formData.email}
                     name="email"
                     placeholder="Correo electrónico"
+                    required
                   />
                 </Form.Group>
               </Col>
@@ -380,7 +379,7 @@ const VeterinaUserModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Sexo</Form.Label>
-                  <Form.Select aria-label="Default select example" value={formData.sex} onChange={(e) => handleChange(e)} name="sex">
+                  <Form.Select aria-label="Default select example" value={formData.sex} onChange={(e) => handleChange(e)} name="sex" required>
                     <option disabled selected="true" value={""}>Sexo</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
@@ -411,6 +410,7 @@ const VeterinaUserModal = (props) => {
                     }}
                     name="department"
                     value={selectedDepartamento || formData.department}
+                    required
                   >
                     <option selected="true" value={""} disabled>Select Departamento</option>
                     {departamentoData.map((departamento, i) => (
@@ -424,7 +424,7 @@ const VeterinaUserModal = (props) => {
               <Col>
                 <Form.Group className="mb-3" controlId="distritoSelect">
                   <Form.Label>Distrito</Form.Label>
-                  <Form.Select aria-label="Distrito" onChange={(e) => handleChange(e)} name="district" value={formData.district}>
+                  <Form.Select aria-label="Distrito" onChange={(e) => handleChange(e)} name="district" value={formData.district} >
                     <option selected="true" value={""} disabled>Select Distrito</option>
                     {distritos.map((distrito, i) => (
                       <option key={i} value={distrito}>
@@ -447,6 +447,7 @@ const VeterinaUserModal = (props) => {
                         checked={formData.workingDays.includes("Lunes")}
                         label="Lunes"
                         onChange={() => handleCheckboxChange("Lunes")}
+
                       />
                       <Form.Check
                         className="my-2"
@@ -508,6 +509,7 @@ const VeterinaUserModal = (props) => {
                         onChange={(e) => handleChange(e)}
                         name="start_time"
                         placeholder="Ingreso"
+                        required
                       />
                     </Form.Group>
                   </Col>
@@ -521,6 +523,7 @@ const VeterinaUserModal = (props) => {
                         onChange={(e) => handleChange(e)}
                         name="end_time"
                         placeholder="Salida"
+                        required
                       />
                     </Form.Group>
                   </Col>
@@ -537,6 +540,7 @@ const VeterinaUserModal = (props) => {
                     value={formData.password}
                     name="password"
                     placeholder="Crear contraseña"
+                    required
                   />
                 </Form.Group>
               </Col>
@@ -549,6 +553,7 @@ const VeterinaUserModal = (props) => {
                     value={formData.confirmPassword}
                     name="confirmPassword"
                     placeholder="Confirmar contraseña"
+                    required
                   />
                 </Form.Group>
               </Col>

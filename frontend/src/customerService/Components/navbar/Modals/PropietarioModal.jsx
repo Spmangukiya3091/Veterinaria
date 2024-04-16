@@ -21,26 +21,51 @@ const PropietarioModal = (props) => {
     district: "",
     dob: "",
   });
+  const [validated, setValidated] = useState(false); // State for form validation
+  const [emailError, setEmailError] = useState("");
 
   const [addPropritario, response] = useAddOwnerMutation();
+  useEffect(() => {
+    clearForm(); // Clear form fields when the modal is opened
+  }, [props.show]);
+
+  useEffect(() => {
+
+    clearForm(); // Clear form fields when there is no owner ID
+
+  }, [props.show]);
+
+  const clearForm = () => {
+    setFormData({
+      name: "",
+      surname: "",
+      phone_1: "",
+      phone_2: "",
+      doc_identity: "",
+      email: "",
+      address: "",
+      department: "",
+      district: "",
+      dob: "",
+    });
+    setValidated(false); // Reset validated state
+  };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value !== undefined && value !== null ? String(value) : null,
+      [name]: value.trim(), // Trim whitespace from the input value
     }));
+    // Reset email error when user starts typing again
+    setEmailError("");
   };
 
   const handleDepartamentoChange = (e) => {
     const selectedValue = e.target.value;
-
-    // Only proceed if a department is selected
     if (selectedValue) {
       setSelectedDepartamento(selectedValue);
-
       const selectedDepartamentoData = departamentoData.find((departamento) => departamento.Department === selectedValue);
-
       if (selectedDepartamentoData) {
         setDistritos(selectedDepartamentoData.DISTRITOS);
         setFormData((prevFormData) => ({
@@ -58,30 +83,29 @@ const PropietarioModal = (props) => {
     }
   };
 
-  const handleSubmit = async () => {
-    await addPropritario(formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+      await addPropritario(formData);
+    }
   };
+
   useEffect(() => {
+
     if (!response.isLoading && response.isSuccess) {
-      setFormData({
-        name: "",
-        surname: "",
-        phone_1: "",
-        phone_2: "",
-        doc_identity: "",
-        email: "",
-        address: "",
-        department: "",
-        district: "",
-        dob: "",
-      });
+      clearForm(); // Clear form fields on successful submission
       props.onHide();
       success();
-    } else if (response.isError) {
+    } else if (response.isError && response.status === "rejected" && response?.error?.status !== 400) {
+      console.log(response?.error)
       failer(response?.error?.data?.message);
-      // console.log("error");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
 
   return (
@@ -91,18 +115,24 @@ const PropietarioModal = (props) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Propietario</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <Form.Label>Nombres</Form.Label>
-                  <Form.Control name="name" onChange={(e) => handleOnChange(e)} aria-label="Default" placeholder="Nombres" value={formData.name} />
+                  <Form.Control name="name" onChange={(e) => handleOnChange(e)} aria-label="Default" placeholder="Nombres" value={formData.name} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un nombre.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicDate">
                   <Form.Label>Apellidos</Form.Label>
-                  <Form.Control type="text" placeholder="Apellidos" name="surname" onChange={(e) => handleOnChange(e)} value={formData.surname} />
+                  <Form.Control type="text" placeholder="Apellidos" name="surname" onChange={(e) => handleOnChange(e)} value={formData.surname} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Apellidos.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -112,11 +142,18 @@ const PropietarioModal = (props) => {
                   <Form.Label>Teléfono 1</Form.Label>
                   <Form.Control
                     aria-label="Default "
+                    type="tel"
                     placeholder="Teléfono"
                     name="phone_1"
+                    maxLength={10} // Set maxLength attribute to 10
                     onChange={(e) => handleOnChange(e)}
                     value={formData.phone_1}
+                    required
+
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Teléfono.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
@@ -124,6 +161,8 @@ const PropietarioModal = (props) => {
                   <Form.Label>Teléfono 2</Form.Label>
                   <Form.Control
                     aria-label="Default "
+                    type="tel" // Change type to 'tel' to support max length attribute
+                    maxLength={10} // Set maxLength attribute to 10
                     placeholder="Teléfono"
                     name="phone_2"
                     onChange={(e) => handleOnChange(e)}
@@ -142,7 +181,12 @@ const PropietarioModal = (props) => {
                     name="email"
                     onChange={(e) => handleOnChange(e)}
                     value={formData.email}
+                    isInvalid={!!emailError}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Correo electrónico
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
@@ -150,11 +194,16 @@ const PropietarioModal = (props) => {
                   <Form.Label>Doc. Identidad</Form.Label>
                   <Form.Control
                     aria-label="Default"
+                    type="number"
                     placeholder="Doc. Identidad"
                     name="doc_identity"
                     onChange={(e) => handleOnChange(e)}
                     value={formData.doc_identity}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Doc. Identidad
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -230,10 +279,8 @@ const PropietarioModal = (props) => {
           <Button
             variant="primary"
             type="submit"
-            onClick={() => {
-              handleSubmit();
-            }}
             className="footer-btn btn btn-primary"
+            onClick={handleSubmit}
           >
             Guardar Cambios
           </Button>

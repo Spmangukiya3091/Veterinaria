@@ -13,7 +13,7 @@ const Detalles = ({ data }) => {
               Nro. de Pago
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.payment_no}
+              {data?.payment_no || "-"}
             </Col>
           </Row>
 
@@ -22,7 +22,7 @@ const Detalles = ({ data }) => {
               Nro. de Transferencia
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.transfer_no}
+              {data?.transfer_no || "-"}
             </Col>
           </Row>
           <Row>
@@ -30,7 +30,7 @@ const Detalles = ({ data }) => {
               Propietarios
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.owner}
+              {data?.owner || "-"}
             </Col>
           </Row>
           <Row>
@@ -38,7 +38,7 @@ const Detalles = ({ data }) => {
               Doctor
             </Col>
             <Col className="info-details" lg={8}>
-              DR. {data?.doctor}
+              DR. {data?.doctor || "-"}
             </Col>
           </Row>
           <Row>
@@ -46,7 +46,7 @@ const Detalles = ({ data }) => {
               Servicio
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.service}
+              {data?.service || "-"}
             </Col>
           </Row>
           <Row>
@@ -54,7 +54,7 @@ const Detalles = ({ data }) => {
               Monto
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.amount}
+              {data?.amount || "-"}
             </Col>
           </Row>
           <Row>
@@ -62,7 +62,7 @@ const Detalles = ({ data }) => {
               DCTO.
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.discount}%
+              {data?.discount || "-"}%
             </Col>
           </Row>
           <Row>
@@ -70,7 +70,7 @@ const Detalles = ({ data }) => {
               Monto Final
             </Col>
             <Col className="info-details" lg={8}>
-              $ {data?.final_amount}
+              $ {data?.final_amount || "-"}
             </Col>
           </Row>
           <Row>
@@ -78,7 +78,7 @@ const Detalles = ({ data }) => {
               Método de Pago
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.payment_method}
+              {data?.payment_method || "-"}
             </Col>
           </Row>
           <Row>
@@ -86,7 +86,7 @@ const Detalles = ({ data }) => {
               Descripción
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.description}
+              {data?.description || "-"}
             </Col>
           </Row>
         </div>

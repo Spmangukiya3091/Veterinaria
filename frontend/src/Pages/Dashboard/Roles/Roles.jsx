@@ -58,7 +58,7 @@ const Roles = ({ email }) => {
 
   const handleClose = () => {
     setShow(false);
-    setUserID()
+    setUserID(undefined)
     userList.refetch();
     userDetails.refetch();
   };
@@ -93,7 +93,7 @@ const Roles = ({ email }) => {
 
   const filteredData = data.filter(({ name, email }) => {
     const searchString = searchValue;
-    return name.toLowerCase().includes(searchString) || email.toLowerCase().includes(searchString);
+    return name?.toLowerCase().includes(searchString) || email?.toLowerCase().includes(searchString);
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -445,13 +445,13 @@ const Roles = ({ email }) => {
                                 <td className="text-start pe-0">
                                   <span className=" text-gray-600 ">{i + 1}</span>
                                 </td>
-                                <td className="text-start pe-0">{name}</td>
+                                <td className="text-start pe-0">{name ? name : "-"}</td>
 
                                 <td className="text-start pe-0" data-order="16">
                                   {role === "masterAdmin" ? "Administrador Estandar" : "Servicio al Cliente"}
                                 </td>
-                                <td className="text-start pe-0">{email}</td>
-                                <td className="text-start pe-0">{formatCreatedAtDate(createdAt)}</td>
+                                <td className="text-start pe-0">{email ? email : "-"}</td>
+                                <td className="text-start pe-0">{createdAt ? formatCreatedAtDate(createdAt) : "-"}</td>
                                 <td className="text-end">
                                   <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
                                     <Dropdown.Toggle

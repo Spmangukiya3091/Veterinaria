@@ -3,7 +3,7 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { failer, success } from "../../../../Components/alert/success";
 import { useUpdateVaccinationValidityMutation } from "../../../../services/ApiServices";
 
-function EditVaccinModal({ show, handleClose, vaccineId, filter }) {
+function EditVaccinModal({ show, handleClose, vaccineId }) {
   const [formState, setFormState] = useState({
     F_vaccination: "",
     validity: "",
@@ -29,7 +29,6 @@ function EditVaccinModal({ show, handleClose, vaccineId, filter }) {
     if (!response.isLoading && response.isSuccess) {
       handleClose();
       success();
-      filter.refetch();
     } else if (response.isError && response.status === "rejected") {
       // console.log("error", response.error);
       failer(response?.error?.data?.message);

@@ -5,6 +5,7 @@ const Appointment = Database.appointment;
 const Owner = Database.owner;
 const Pet = Database.pet;
 const ExcelJS = require("exceljs");
+const moment = require('moment');
 const Admin = Database.user;
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -330,71 +331,7 @@ const veterinarianFilter = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-// const veterinarianExcelFile = async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const veterinarian = await Veterinarian.findByPk(id, {
-//       include: [
-//         {
-//           model: Appointment,
-//           as: "vetsAppointment",
-//         },
-//       ],
-//     });
 
-//     if (!veterinarian) {
-//       return res.status(404).send({ message: "Veterinarian not found" });
-//     }
-
-//     if (veterinarian.vetsAppointment.length > 0) {
-//       veterinarian.vetsAppointment.sort((a, b) => {
-//         return new Date(b.date) - new Date(a.date);
-//       });
-//     }
-
-//     const veterinarianData = {
-//       workingDays: veterinarian.workingDays,
-//       id: veterinarian.id,
-//       specialityId: veterinarian.specialityId,
-//       avatar: veterinarian.avatar,
-//       name: veterinarian.name,
-//       surname: veterinarian.surname,
-//       speciality: veterinarian.speciality,
-//       identity: veterinarian.identity,
-//       dob: veterinarian.dob,
-//       phone: veterinarian.phone,
-//       email: veterinarian.email,
-//       password: veterinarian.password,
-//       sex: veterinarian.sex,
-//       address: veterinarian.address,
-//       department: veterinarian.department,
-//       district: veterinarian.district,
-//       start_time: veterinarian.start_time,
-//       end_time: veterinarian.end_time,
-
-//       createdAt: veterinarian.createdAt,
-//     };
-
-//     const rows = Object.entries(veterinarianData); // Convert object into array of [key, value] pairs
-
-//     const workbook = new ExcelJS.Workbook();
-//     const worksheet = workbook.addWorksheet("Table Data");
-
-//     worksheet.addRows(rows); // Add rows to worksheet
-
-//     res.setHeader(
-//       "Content-Type",
-//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-//     );
-//     res.setHeader("Content-Disposition", "attachment; filename=veterinarian.xlsx");
-
-//     await workbook.xlsx.write(res);
-
-//   } catch (error) {
-//     console.error("Error exporting Excel file:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-// };
 
 const veterinarianExcelFile = async (req, res) => {
   try {
@@ -531,19 +468,32 @@ const appointmentDataBySingleVeterinarian = async (req, res) => {
       if (!veterinarian) {
         return res.status(404).send({ message: "Veterinarian not found" });
       }
+
       const data = [];
 
       veterinarian.vetsAppointment.forEach((appointment) => {
+       const actualDate = new Date(appointment.date);
+        const startHour = parseInt(appointment.scheduleStart.split(":")[0]);
+        const startMinute  = parseInt(appointment.scheduleStart.split(":")[1]);
+        const startDate = moment(actualDate)
+        .hours(startHour)
+        .minutes(startMinute);
+      
+console.log("startDate",startDate)
+        const actualendDate = new Date(appointment.date);
+        const endHour = parseInt(appointment.scheduleEnd.split(":")[0]);
+        console.log("endHour",endHour)
+       
+        const endMinute = parseInt(appointment.scheduleEnd.split(":")[1]);
+        console.log("endMinute",endMinute)
+       
+        const endDate = moment(actualendDate)
+        .hours(endHour)
+        .minutes(endMinute);
         data.push({
           title: appointment.observation,
-          start: new Date(
-            `${appointment.date.toISOString().split("T")[0]} ${appointment.scheduleStart
-            }`
-          ),
-          end: new Date(
-            `${appointment.date.toISOString().split("T")[0]} ${appointment.scheduleEnd
-            }`
-          ),
+          start: startDate,
+          end: endDate,
         });
       });
 
@@ -562,6 +512,7 @@ const appointmentDataBySingleVeterinarian = async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 };
+
 
 const getSingleVeterinarians = async (req, res) => {
   try {

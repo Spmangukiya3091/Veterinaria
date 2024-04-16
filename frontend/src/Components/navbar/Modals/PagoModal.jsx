@@ -3,22 +3,44 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { failer, success } from "../../alert/success";
 import { useAddPaymentMutation, useGetOwnersListQuery, useGetVeterinariansQuery } from "../../../services/ApiServices";
 
-const PagoModal = (props) => {
+const PagoModal = ({ id, show, onHide }) => {
   const [formData, setFormData] = useState({
-    payment_no: 0,
-    transfer_no: 0,
+    payment_no: null,
+    transfer_no: null,
     owner: "",
     doctor: "",
     service: "",
-    amount: 0,
-    discount: 0,
+    amount: null,
+    discount: null,
     payment_method: "",
-    final_amount: 0,
+    final_amount: null,
     description: "",
   });
+  const [validated, setValidated] = useState(false); // State for form validation
 
-  const owners = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });
-  const doctors = useGetVeterinariansQuery(null, { refetchOnMountOrArgChange: true });
+  const owners = useGetOwnersListQuery( { refetchOnMountOrArgChange: true });
+  const doctors = useGetVeterinariansQuery( { refetchOnMountOrArgChange: true });
+
+  useEffect(() => {
+    clearForm()
+  }, [show]);
+
+  const clearForm = () => {
+    setFormData({
+      payment_no: null,
+      transfer_no: null,
+      owner: "",
+      doctor: "",
+      service: "",
+      amount: null,
+      discount: null,
+      payment_method: "",
+      final_amount: null,
+      description: "",
+    });
+    setValidated(false); // Reset validated state
+  };
+
 
   const [addPayment, response] = useAddPaymentMutation();
 
@@ -45,29 +67,42 @@ const PagoModal = (props) => {
     });
   };
 
-  const handleSubmit = async () => {
-    // console.log(formData);
-    await addPayment(formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+
+      await addPayment(formData);
+    }
   };
 
   useEffect(() => {
+
     if (!response.isLoading && response.isSuccess) {
-      props.onHide();
+      // console.log(response);
       success();
-    } else if (response.isError && response.status === "rejected") {
+      clearForm()
+      onHide();
+    } else if (response.isError && response.status === "rejected" && response.error.status !== 400) {
+      console.log(response);
+      // console.log(response.error);
       failer(response?.error?.data?.message);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
 
   return (
     <>
-      <Modal show={props.show} onHide={props.onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal show={show} onHide={onHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Información de Pagos</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3">
@@ -79,7 +114,11 @@ const PagoModal = (props) => {
                     name="payment_no"
                     onChange={handleChange}
                     value={parseInt(formData.payment_no)}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Nro. de Pago.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
@@ -99,14 +138,17 @@ const PagoModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Propietario</Form.Label>
-                  <Form.Select aria-label="Default select example" name="owner" onChange={handleChange} value={formData.owner}>
-                    <option disabled="true" value={""} selected="true">Propietario</option>
+                  <Form.Select aria-label="Default select example" name="owner" onChange={handleChange} value={formData.owner} required>
+                    <option disabled="true" value={""} selected="true"  >Propietario</option>
                     {owners?.data?.ownersList.map(({ id, name, surname }) => (
                       <option key={id} value={name + " " + surname}>
                         {name + " " + surname}
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Propietario.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -114,20 +156,26 @@ const PagoModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Doctor</Form.Label>
-                  <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor}>
-                    <option disabled="true" value={""} selected="true">Doctor</option>
+                  <Form.Select aria-label="Default select example" name="doctor" onChange={handleChange} value={formData.doctor} required>
+                    <option disabled="true" value={""} selected="true"  >Doctor</option>
                     {doctors?.data?.veterinarianList.map(({ id, name, surname }) => (
                       <option key={id} value={name + " " + surname}>
                         {name + " " + surname}
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Doctor.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Servicio</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Servicio" name="service" onChange={handleChange} value={formData.service} />
+                  <Form.Control aria-label="Default" placeholder="Servicio" name="service" onChange={handleChange} value={formData.service} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Servicio.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -135,7 +183,10 @@ const PagoModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Monto</Form.Label>
-                  <Form.Control type="number" aria-label="Default" placeholder="Monto" name="amount" onChange={totalAmount} value={formData.amount} />
+                  <Form.Control type="number" aria-label="Default" placeholder="Monto" name="amount" onChange={totalAmount} required value={formData.amount} />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Monto.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
@@ -148,7 +199,11 @@ const PagoModal = (props) => {
                     name="discount"
                     onChange={totalAmount}
                     value={formData.discount}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Descuento.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -163,18 +218,25 @@ const PagoModal = (props) => {
                     placeholder="Monto Final"
                     name="final_amount"
                     value={formData.final_amount}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Monto Final.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Método de Pago</Form.Label>
-                  <Form.Select name="payment_method" onChange={handleChange} value={formData.payment_method}>
+                  <Form.Select name="payment_method" onChange={handleChange} value={formData.payment_method} required>
                     <option disabled="true" value={""} selected="true">Método de Pago</option>
                     <option value="cash">Efectivo</option>
                     <option value="credit card">Tarjeta de Crédito</option>
                     <option value="debit card">Tarjeta de Débito</option>
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Método de Pago.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -196,21 +258,22 @@ const PagoModal = (props) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={() => {
+            onHide()
+            clearForm()
+          }} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button
             variant="primary"
             type="submit"
-            onClick={() => {
-              handleSubmit();
-            }}
+            onClick={handleSubmit}
             className="footer-btn btn btn-primary"
           >
             Guardar Cambios
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
     </>
   );
 };

@@ -81,7 +81,7 @@ function Citas({ id }) {
 
   const filteredData = data.filter(({ pet, veterinarian }) => {
     const searchString = searchValue;
-    return pet.toLowerCase().includes(searchString) || veterinarian.toLowerCase().includes(searchString);
+    return pet?.toLowerCase().includes(searchString) || veterinarian?.toLowerCase().includes(searchString);
   });
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
@@ -226,7 +226,7 @@ function Citas({ id }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts > 0 ? (
+                    {currentPosts.length > 0 ? (
                       currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, createdAt, status, rating }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -251,10 +251,10 @@ function Citas({ id }) {
                           <td className="text-start pe-0" data-order="status">
                             <div
                               className={`${status === "pending"
-                                  ? "badge badge-light-warning text-warning"
-                                  : status === "no attempt"
-                                    ? "badge badge-light-dark"
-                                    : "badge badge-light-success text-success "
+                                ? "badge badge-light-warning text-warning"
+                                : status === "no attempt"
+                                  ? "badge badge-light-dark"
+                                  : "badge badge-light-success text-success "
                                 } `}
                             >
                               <p className="mb-0">{status === "pending" ? "Pendiente" : status === "no attempt" ? "No asistió" : "Completado"}</p>

@@ -35,7 +35,7 @@ const PropietariosDetails = ({ email }) => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
 
-  const response = useGetSingleOwnerQuery(id, { refetchOnMountOrArgChange: true });
+  const response = useGetSingleOwnerQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
   const petsByOwner = useGetPetByOwnerQuery(id, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
@@ -79,8 +79,8 @@ const PropietariosDetails = ({ email }) => {
 
       // Use the callback function provided by setDltData
       const body = {
-        id: dltData.id,
-        email: dltData.email,
+        id: dltData?.id,
+        email: dltData?.email,
         pass: enteredPassword,
       };
 
@@ -122,8 +122,8 @@ const PropietariosDetails = ({ email }) => {
       ) : (
         <section className="propietariosdetails-section">
           <div className="heading">
-            <p className="p-head">{data.ownerData.name + " " + data.ownerData.surname}</p>
-            <p>Propietarios » {data.ownerData.name + " " + data.ownerData.surname}</p>
+            <p className="p-head">{data?.ownerData?.name + " " + data?.ownerData?.surname}</p>
+            <p>Propietarios » {data?.ownerData?.name + " " + data?.ownerData?.surname}</p>
           </div>
 
           <Row className="flex-column flex-lg-row">
@@ -133,25 +133,25 @@ const PropietariosDetails = ({ email }) => {
                   <i className="bi bi-person"></i>
                 </div>
 
-                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data.ownerData.name + " " + data.ownerData.surname}</p>
+                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.ownerData?.name + " " + data?.ownerData?.surname}</p>
 
                 <div className="information">
                   <div className="time  text-center d-flex flex-wrap justify-content-between mb-3">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3  ">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px fs-4">{data.totalAppointments}</span>
+                        <span className="w-75px fs-4">{data?.totalAppointments || 0}</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Agendadas</div>
                     </div>
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 ">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px fs-4">{data.completeAppointments}</span>
+                        <span className="w-75px fs-4">{data?.completeAppointments || 0}</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Completadas</div>
                     </div>
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3  ">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px fs-4">{data.totalPets}</span>
+                        <span className="w-75px fs-4">{data?.totalPets || 0}</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Animales</div>
                     </div>
@@ -180,14 +180,14 @@ const PropietariosDetails = ({ email }) => {
                   <Collapse in={show}>
                     <div id="kt_user_view_details" className="pb-5 fs-6">
                       <div className="fw-bold mt-5">Doc. Identidad</div>
-                      <div className="text-gray-600">{data.ownerData.doc_identity}</div>
+                      <div className="text-gray-600">{data?.ownerData?.doc_identity || "-"}</div>
 
                       <div className="fw-bold mt-5">Fecha creación</div>
-                      <div className="text-gray-600">{moment(data.ownerData.createdAt).format("DD MMM YYYY, HH:MM A")}</div>
+                      <div className="text-gray-600">{data?.ownerData?.createdAt ? moment(data?.ownerData?.createdAt).format("DD MMM YYYY, HH:MM A") : "-"}</div>
 
                       <div className="fw-bold mt-5">Última Cita</div>
                       <div className="text-gray-600">
-                        {data.lastAppointment !== null ? moment(data.lastAppointment.date).format("DD MMM YYYY, HH:MM A") : "Sin última cita"}
+                        {data?.lastAppointment !== null ? moment(data?.lastAppointment.date).format("DD MMM YYYY, HH:MM A") : "Sin última cita"}
                       </div>
                     </div>
                   </Collapse>

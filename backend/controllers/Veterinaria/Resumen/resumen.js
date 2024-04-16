@@ -541,7 +541,7 @@ const appointmentsByDate = async (req, res) => {
         appointments: filteredAppointments,
       });
     } else {
-      res.status(404).json({
+      res.status(200).json({
         message: "No matching appointments found",
         appointments: []
       });

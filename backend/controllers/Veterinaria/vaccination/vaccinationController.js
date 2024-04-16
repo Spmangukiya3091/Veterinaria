@@ -21,6 +21,9 @@ const petVaccination = async (req, res) => {
       order: [["createdAt", "DESC"]],
       where: { petId: id },
     });
+
+    console.log(vaccinations)
+
     const formattedVaccinations = vaccinations.map((vaccination) => ({
       id: vaccination.id,
       petId: vaccination.petId,
@@ -51,6 +54,7 @@ const petVaccination = async (req, res) => {
 const createVaccineRecord = async (req, res) => {
   try {
     const id = req.params.id;
+    console.log(req.body, '=============req.body')
     const pet = await Pet.findByPk(id, {
       include: [
         {
@@ -105,7 +109,6 @@ const createVaccination = async (req, res) => {
       status: "pending",
       vaccine: req.body.vaccine,
       exploration: "APTO",
-      validity: new Date(req.body.validity),
       F_vaccination: new Date(req.body.F_vaccination),
       validity: req.body.validity,
     };

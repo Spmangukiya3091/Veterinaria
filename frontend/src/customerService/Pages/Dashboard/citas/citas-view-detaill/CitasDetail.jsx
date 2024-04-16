@@ -150,9 +150,13 @@ function CitasDetail({ email }) {
                   <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                     <div className="fs-5 fw-bold text-gray-700">
                       <span className="w-75px">
-                        {moment(`2023-01-01 ${data?.scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm ") +
-                          " - " +
-                          moment(`2023-01-01 ${data?.scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm ")}
+                        {
+                          data?.scheduleStart && data?.scheduleEnd ?
+                            moment(`2023-01-01 ${data?.scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm ") +
+                            " - " +
+                            moment(`2023-01-01 ${data?.scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm ")
+                            : "-"
+                        }
                       </span>
                     </div>
                     <div className="fw-semibold text-muted ">Horario</div>
@@ -160,7 +164,7 @@ function CitasDetail({ email }) {
 
                   <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
                     <div className="fs-5 fw-bold text-gray-700">
-                      <span className="w-50px">{moment(data?.date).format("DD MMM YYYY")}</span>
+                      <span className="w-50px">{moment(data?.date).format("DD MMM YYYY") || "-"}</span>
                     </div>
                     <div className="fw-semibold text-muted ">Fecha</div>
                   </div>
@@ -195,16 +199,16 @@ function CitasDetail({ email }) {
                   <Collapse in={show}>
                     <div id="kt_user_view_details" className="pb-5 fs-6">
                       <div className="fw-bold mt-5">Mascota</div>
-                      <div className="text-gray-600">{data?.pet}</div>
+                      <div className="text-gray-600">{data?.pet || "-"}</div>
 
                       <div className="fw-bold mt-5">Propietario</div>
-                      <div className="text-gray-600">{data?.owner}</div>
+                      <div className="text-gray-600">{data?.owner || "-"}</div>
 
                       <div className="fw-bold mt-5">Doctor</div>
-                      <div className="text-gray-600">{data?.veterinarian}</div>
+                      <div className="text-gray-600">{data?.veterinarian || "-"}</div>
 
                       <div className="fw-bold mt-5">Fecha creación</div>
-                      <div className="text-gray-600">{moment(data?.createdAt).format("DD MMM YYYY, h:mm a")}</div>
+                      <div className="text-gray-600">{moment(data?.createdAt).format("DD MMM YYYY, h:mm a") || "-"}</div>
                     </div>
                   </Collapse>
                 </div>

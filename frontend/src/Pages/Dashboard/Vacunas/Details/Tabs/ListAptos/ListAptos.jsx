@@ -8,7 +8,7 @@ import { useGetVaccinationbyVaccineIdQuery } from "../../../../../../services/Ap
 import Loader from "../../../../../../Components/loader/Loader";
 
 const ListAptos = ({ id, vaccineData }) => {
-
+  console.log(vaccineData)
   const [currentPage, setCurrentPage] = useState(1);
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
@@ -35,6 +35,7 @@ const ListAptos = ({ id, vaccineData }) => {
   const postsPerPage = 10;
   const handleClose = () => {
     setShow(false);
+    // console.log("function called")
     setOwnerId("")
     setPetId("")
     setRecordId("")
@@ -130,7 +131,7 @@ const ListAptos = ({ id, vaccineData }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7">No data available</td>
+                        <td colSpan="7" className="text-center">No data available</td>
                       </tr>
                     )}
                   </tbody>
@@ -138,7 +139,7 @@ const ListAptos = ({ id, vaccineData }) => {
               </div>
             </div>
           </div>
-          <AptosModal show={show} onHide={handleClose} vaccineName={vaccineData.vaccine.name} ownerName={ownerName} petName={petName} id={recordId} vaccineId={id} filter={vaccinationList} owner={ownerId} petId={petId} />
+          <AptosModal show={show} onHide={handleClose} vaccineData={vaccineData} vaccineName={vaccineData.vaccine.name} ownerName={ownerName} petName={petName} id={recordId} vaccineId={id} filter={vaccinationList} owner={ownerId} petId={petId} />
           <CitasPagination current={currentPage} total={Math.ceil(data.length / postsPerPage)} onPageChange={setCurrentPage} />
         </>
       )}

@@ -9,7 +9,7 @@ router.get("/allAppointments",Secure(['customerService','masterAdmin']) ,appoint
 router.get("/singleAppointment/:id",Secure(['customerService','masterAdmin','user']) ,appointmentController.getSingleAppointment )
 router.get("/dateWiseAppointments",Secure(['customerService','masterAdmin']) , appointmentController.dateWiseAppointment)
 router.get("/appointmentFilter",Secure(['customerService','masterAdmin']) , appointmentController.appointmentFilter)
-router.get("/appointmentsOfDoctor/:veterinarianId",Secure(['customerService','masterAdmin']) , appointmentController.AppointmentsOfDoctor)
+router.get("/appointmentsOfDoctor/:veterinarianId",Secure(['customerService','masterAdmin', 'user']) , appointmentController.AppointmentsOfDoctor)
 router.post("/scheduleAppointment",Secure(['customerService','masterAdmin']) , appointmentController.createAppointment);
 router.put("/updateAppointment/:id",Secure(['customerService','masterAdmin','user']) , appointmentController.updateAppointment);
 router.put("/registerDiagnostic/:id",uploadDoc.array('documentation', 10),Secure(['customerService','masterAdmin']) , appointmentController.registerDiagnostic);

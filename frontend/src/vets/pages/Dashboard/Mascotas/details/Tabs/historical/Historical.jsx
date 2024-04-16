@@ -49,7 +49,7 @@ const Historical = ({ id }) => {
 
   const filteredData = data.filter(({ pet }) => {
     const searchString = searchValue;
-    return pet.toLowerCase().includes(searchString);
+    return pet?.toLowerCase().includes(searchString);
   });
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
@@ -266,7 +266,7 @@ const Historical = ({ id }) => {
                           </td>
                           <td className="text-end">
                             <a
-                              href={`/dashboard/citas-view/${id}`}
+                              href={`/veterine/citas-view/${id}`}
                               className="btn btn-sm btn-light btn-active-light-primary"
                               data-kt-menu-trigger="click"
                               data-kt-menu-placement="bottom-end"

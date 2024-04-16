@@ -18,10 +18,10 @@ function EspecialidadModal({ show, handleClose, id, filter }) {
 
   useEffect(() => {
     if (id !== undefined && !singleSpecialty.isLoading) {
-      
+
       setFormData({ speciality: singleSpecialty?.data?.speciality?.speciality });
     }
-  }, [id, singleSpecialty]);
+  }, [id, singleSpecialty, show]);
 
   const handleSubmit = async () => {
     if (id !== undefined) {
@@ -47,7 +47,7 @@ function EspecialidadModal({ show, handleClose, id, filter }) {
         success();
       } else if (response2.isError) {
         failer(response2?.error?.data?.message);
-        console.log("error");
+        // console.log("error");
       }
     } else {
       if (!response.isLoading && response.isSuccess) {
@@ -59,7 +59,7 @@ function EspecialidadModal({ show, handleClose, id, filter }) {
         filter.refetch();
       } else if (response.isError) {
         failer(response?.error?.data?.message);
-        console.log("error");
+        // console.log("error");
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

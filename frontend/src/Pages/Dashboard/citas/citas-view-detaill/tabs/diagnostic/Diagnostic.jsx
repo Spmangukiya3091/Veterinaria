@@ -36,7 +36,7 @@ function Diagnostic({ data }) {
             <Row>
               <Col lg={3}>Descripción</Col>
               <Col lg={9}>
-                <b>{data?.description ? parse(data?.description) : ""}</b>
+                <b>{data?.description ? parse(data?.description) : "no Descripción"}</b>
               </Col>
             </Row>
           </div>

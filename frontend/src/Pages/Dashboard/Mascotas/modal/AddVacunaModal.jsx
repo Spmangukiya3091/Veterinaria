@@ -11,7 +11,7 @@ function AddVacunaModal({ show, handleClose, filter }) {
     vaccine: "",
     vaccineId: "",
   });
-  const vaccines = useGetAllVaccinesQuery(null, { refetchOnMountOrArgChange: true });
+  const vaccines = useGetAllVaccinesQuery( { refetchOnMountOrArgChange: true });
   const [addVaccineRecord, response] = useAddVaccinationRecordMutation();
   const petId = location.pathname.split("/")[4];
 
@@ -29,7 +29,7 @@ function AddVacunaModal({ show, handleClose, filter }) {
   };
 
   const handleSubmit = async () => {
-    // console.log(formData);
+    console.log(formData);
     await addVaccineRecord(formData);
   };
   useEffect(() => {

@@ -53,6 +53,7 @@ const Pagos = ({ email }) => {
 
   const handleClose = () => {
     setShow(false);
+    setPId(undefined)
     paymentList.refetch();
   };
 
@@ -372,17 +373,17 @@ const Pagos = ({ email }) => {
                       currentPosts.map(({ id, payment_no, owner, payment_method, service, createdAt, final_amount }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{payment_no}</span>
+                            <span className=" text-gray-600 ">{payment_no ? payment_no : "-"}</span>
                           </td>
-                          <td className="text-start pe-0">{owner}</td>
+                          <td className="text-start pe-0">{owner ? owner : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
                             {payment_method === "cash" ? "Efectivo" : payment_method === "credit card" ? "Tarjeta de crédito" : "Tarjeta de Débito"}
                             {/* {payment_method} */}
                           </td>
-                          <td className="text-start pe-0">{service}</td>
+                          <td className="text-start pe-0">{service ? service : "-"}</td>
                           <td className="text-start pe-0">{moment(createdAt).format("DD MMM YYYY")}</td>
-                          <td className="text-start pe-0">{final_amount}</td>
+                          <td className="text-start pe-0">{final_amount ? final_amount : "-"}</td>
                           <td className="text-end">
                             <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
                               <Dropdown.Toggle
@@ -457,7 +458,7 @@ const Pagos = ({ email }) => {
             }}
             onDelete={handleDeleteVerify}
           />
-          <PagosModal show={show} onHide={handleClose} id={pId} filter={paymentList} />
+          <PagosModal show={show} onHide={handleClose} id={pId} />
           <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}

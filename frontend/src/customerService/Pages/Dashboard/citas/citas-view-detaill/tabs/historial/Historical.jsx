@@ -49,7 +49,7 @@ function Historical({ id }) {
 
   const filteredData = data.filter(({ pet }) => {
     const searchString = searchValue;
-    return pet.toLowerCase().includes(searchString);
+    return pet?.toLowerCase().includes(searchString);
   });
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
@@ -236,15 +236,17 @@ function Historical({ id }) {
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{pet}</td>
+                          <td className="text-start pe-0">{pet ? pet : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
-                              " - " +
-                              moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A")}
+                            {
+                              scheduleStart ?
+                                moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
+                                " - " +
+                                moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") : "-"}
                           </td>
                           <td className="text-start pe-0">
-                            <div className=" fecha">{moment(date).format("DD MMM YYYY")}</div>
+                            <div className="fecha">{date ? moment(date).format("DD MMM YYYY") : "-"}</div>
                           </td>
                           <td>
                             <div className="status-wrapper">

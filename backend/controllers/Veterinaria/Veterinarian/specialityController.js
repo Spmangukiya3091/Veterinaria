@@ -46,6 +46,7 @@ const updateSpeciality = async (req, res) => {
 
     if (specialityExist) {
       await Speciality.update({ speciality }, { where: { id: id } });
+      await Veterinarian.update({speciality:speciality},{where:{specialityId:id}});
       res.status(200).send({
         message: "speciality updated successfully",
       });

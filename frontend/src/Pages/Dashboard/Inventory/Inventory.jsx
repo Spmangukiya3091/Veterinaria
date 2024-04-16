@@ -61,7 +61,10 @@ const Inventory = ({ email }) => {
     products.refetch();
   };
 
-  const handleCloseCategory = () => setShowCategory(false);
+  const handleCloseCategory = () => {
+    setShowCategory(false)
+    products.refetch()
+  };
   const handleShowCategory = () => setShowCategory(true);
   const toggleDropdowns = (i) => {
     const updatedDropdowns = [...dropdowns];
@@ -89,13 +92,13 @@ const Inventory = ({ email }) => {
     setSearchQuery("");
   };
 
-  const filteredData = data.filter(({ product, category, presentation, sku }) => {
-    const searchString = searchValue;
+  const filteredData = data?.filter(({ product, category, presentation, sku }) => {
+    const searchString = searchValue.toLowerCase();
     return (
-      product.toLowerCase().includes(searchString) ||
-      category.toLowerCase().includes(searchString) ||
-      presentation.toLowerCase().includes(searchString) ||
-      sku.includes(searchString)
+      product?.toLowerCase().includes(searchString) ||
+      category?.toLowerCase().includes(searchString) ||
+      presentation?.toLowerCase().includes(searchString) ||
+      sku?.includes(searchString)
     );
   });
 
@@ -380,16 +383,16 @@ const Inventory = ({ email }) => {
                       currentPosts.map(({ id, sku, product, presentation, price, category, stock, status }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{sku}</span>
+                            <span className=" text-gray-600 ">{sku ? sku : "-"}</span>
                           </td>
-                          <td className="text-start pe-0">{product}</td>
+                          <td className="text-start pe-0">{product ? product : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {presentation}
+                            {presentation ? presentation : "-"}
                           </td>
-                          <td className="text-start pe-0">{price}</td>
-                          <td className="text-start pe-0">{category}</td>
-                          <td className="text-start pe-0">{stock}</td>
+                          <td className="text-start pe-0">{price ? price : "-"}</td>
+                          <td className="text-start pe-0">{category ? category : "-"}</td>
+                          <td className="text-start pe-0">{stock ? stock : "-"}</td>
                           <td className="text-start pe-0" data-order="status">
                             <div
                               className={`${status === "inactive" ? "badge badge-light-danger text-danger" : "badge badge-light-primary text-primary "

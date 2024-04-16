@@ -13,7 +13,7 @@ const Vaccination = ({ id }) => {
 
   useEffect(() => {
     if (!vaccinationList.isLoading) {
-      setData(vaccinationList.data?.vaccinations);
+      setData(vaccinationList?.data?.vaccinations);
       setLoading(false);
     } else if (vaccinationList.isError) {
       setLoading(false);
@@ -52,19 +52,19 @@ const Vaccination = ({ id }) => {
                   {data.length > 0 ? (
                     data.map(({ id, vaccine, exploration, F_vaccination, validity, status }, i) => (
                       <tr key={i}>
-                        <td className="text-start">{i + 1}</td>
-                        <td className="text-start">{vaccine}</td>
-                        <td className={`text-start ${exploration === "APTO" ? "textSuccess" : "textDanger"}`}>{exploration}</td>
-                        <td className="text-start">{F_vaccination === null ? "-" : moment(F_vaccination).format("DD MMM YYYY")}</td>
-                        <td className="text-start">{validity === null ? "-" : moment(validity).format("DD MMM YYYY")}</td>
-                        <td className="text-end">
+                        <td>{i + 1}</td>
+                        <td>{vaccine ? vaccine : "-"}</td>
+                        <td className={`${exploration === "APTO" ? "textSuccess" : "textDanger"}`}>{exploration}</td>
+                        <td>{F_vaccination !== null ? moment(F_vaccination).format("DD MMM YYYY") : "-"}</td>
+                        <td>{validity !== null ? moment(validity).format("DD MMM YYYY") : "-"}</td>
+                        <td>
                           <div
                             className={
                               status === "vaccinated"
                                 ? "badge badge-light-primary text-primary"
                                 : status === "rejected"
-                                ? "badge badge-light-danger text-danger"
-                                : "badge badge-light-warning text-warning "
+                                  ? "badge badge-light-danger text-danger"
+                                  : "badge badge-light-warning text-warning "
                             }
                           >
                             <p className="status-p mb-0">

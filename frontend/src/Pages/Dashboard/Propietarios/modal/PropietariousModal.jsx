@@ -27,7 +27,7 @@ const PropietarioModal = (props) => {
 
   const [addPropritario, response] = useAddOwnerMutation();
   const [editPropritario, response2] = useEditOwnerMutation();
-  const getOwner = useGetSingleOwnerQuery(props.id, { refetchOnMountOrArgChange: true });
+  const getOwner = useGetSingleOwnerQuery(props.id, { refetchOnMountOrArgChange: true, skip: props.id === undefined });
 
   useEffect(() => {
     clearForm(); // Clear form fields when the modal is opened
@@ -101,30 +101,22 @@ const PropietarioModal = (props) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     setValidated(true); // Set validated to true only when the submit button is clicked
     if (form.checkValidity() === false) {
       e.stopPropagation();
     } else {
-      const emailRegex = /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/;
-
-      // Check if the email matches the regex pattern
-      if (!formData.email.match(emailRegex)) {
-        // Email is invalid, set the error message
-        setEmailError("Invalid email address");
-        return; // Exit the function early if email is invalid
-      }
 
       if (props.id !== undefined) {
         const body = {
           id: props.id,
           ...formData,
         };
-        editPropritario(body);
+        await editPropritario(body);
       } else {
-        addPropritario(formData);
+        await addPropritario(formData);
       }
     }
   };
@@ -135,8 +127,8 @@ const PropietarioModal = (props) => {
         clearForm(); // Clear form fields on successful submission
         props.onHide();
         success();
-      } else if (response2.isError && response2.status === "rejected" && response?.error?.status !== 400) {
-        console.log(response2.error)
+      } else if (response2.isError && response2.status === "rejected" && response2?.error?.status !== 400) {
+        // console.log(response2.error)
         failer(response2?.error?.data?.message);
       }
     } else {
@@ -145,11 +137,11 @@ const PropietarioModal = (props) => {
         props.onHide();
         success();
       } else if (response.isError && response.status === "rejected" && response?.error?.status !== 400) {
-        console.log(response?.error)
+        // console.log(response?.error)
         failer(response?.error?.data?.message);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, response2]);
 
   return (

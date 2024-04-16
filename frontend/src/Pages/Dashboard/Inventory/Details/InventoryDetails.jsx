@@ -44,6 +44,7 @@ const InventoryDetails = ({ email }) => {
   const handleClose = () => {
     setOpen(false);
     productDetails.refetch();
+    productHistory.refetch()
   };
   const handleShow = () => setOpen(true);
   const [openform, setOpenform] = useState(false);
@@ -115,8 +116,8 @@ const InventoryDetails = ({ email }) => {
       ) : (
         <section className="inventorydetails-section">
           <div className="heading">
-            <h1>{data.product}</h1>
-            <p>Inventario Productos » {data.product}</p>
+            <h1>{data?.product}</h1>
+            <p>Inventario Productos » {data?.product}</p>
           </div>
 
           <Row className="flex-column flex-lg-row">
@@ -125,23 +126,23 @@ const InventoryDetails = ({ email }) => {
                 <div className="img mb-7">
                   <i className="bi bi-capsule-pill"></i>
                 </div>
-                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data.product}</p>
-                <div className={`mb-9 fs-6 ${data.status === "active" ? "badge badge-light-primary" : "badge badge-light-danger"}`}>
-                  {data.status === "active" ? "Activo" : "Inactivo"}
+                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.product || "-"}</p>
+                <div className={`mb-9 fs-6 ${data?.status === "active" ? "badge badge-light-primary" : "badge badge-light-danger"}`}>
+                  {data?.status === "active" ? "Activo" : "Inactivo"}
                 </div>
 
                 <div className="information">
                   <div className="d-flex  text-center flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px">$ {data.price + ".00"}</span>
+                        <span className="w-75px">$ {data?.price + ".00" || "-"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Precio</div>
                     </div>
 
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-50px">{data.stock}</span>
+                        <span className="w-50px">{data?.stock || "-"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Stock</div>
                     </div>
@@ -171,13 +172,13 @@ const InventoryDetails = ({ email }) => {
                       <Collapse in={show}>
                         <div id="kt_user_view_details" className="pb-5 fs-6">
                           <div className="fw-bold mt-5">Presentación</div>
-                          <div className="text-gray-600">{data.presentation}</div>
+                          <div className="text-gray-600">{data?.presentation || "-"}</div>
 
                           <div className="fw-bold mt-5">Fecha creación</div>
-                          <div className="text-gray-600">{moment(data.createdAt).format("DD MMM YYYY, hh:mm A")}</div>
+                          <div className="text-gray-600">{moment(data?.createdAt).format("DD MMM YYYY, hh:mm A") || "-"}</div>
 
                           <div className="fw-bold mt-5">Última actualización</div>
-                          <div className="text-gray-600">{moment(data.updatedAt).format("DD MMM YYYY, hh:mm A")}</div>
+                          <div className="text-gray-600">{moment(data?.updatedAt).format("DD MMM YYYY, hh:mm A") || "-"}</div>
                         </div>
                       </Collapse>
                     </div>
@@ -220,8 +221,8 @@ const InventoryDetails = ({ email }) => {
               </div>
             </Col>
           </Row>
-          <InventoryModal show={prodShow} onHide={handleProdClose} id={data.id} />
-          <ActualizerModal show={open} handleClose={handleClose} id={data.id} status={data.status} />
+          <InventoryModal show={prodShow} onHide={handleProdClose} id={data?.id} />
+          <ActualizerModal show={open} handleClose={handleClose} id={data?.id} status={data?.status} />
           <Alert
             show={modalShow}
             onHide={() => setModalShow(false)}

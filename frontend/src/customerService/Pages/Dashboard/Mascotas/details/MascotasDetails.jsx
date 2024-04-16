@@ -9,18 +9,17 @@ import MascotasModal from "../modal/MascotasModal";
 import Alert from "../../../../Components/alert/Alert";
 import ExportModal from "../modal/ExportModal";
 import moment from "moment";
-import { useGetSinglePetQuery, useRemovePetMutation } from "../../../../../services/ApiServices";
+import { useGetSinglePetQuery, usePetSummaryPdfQuery, useRemovePetMutation } from "../../../../../services/ApiServices";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 // import { showToast } from "../../../../../store/tostify";
 import { failer, success } from "../../../../Components/alert/success";
-import { useDispatch } from "react-redux";
 import Loader from "../../../../Components/loader/Loader";
 
 const MascotasDetails = ({ email }) => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [show, setShow] = useState(true);
   const [shown, setShown] = useState(false);
   const [modalShow, setModalShow] = useState(false);
@@ -29,7 +28,6 @@ const MascotasDetails = ({ email }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [open, setOpen] = useState(false);
-  const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true });
   const [openform, setOpenform] = useState(false);
   const [dltData, setDltData] = useState({
     id: "",
@@ -37,6 +35,9 @@ const MascotasDetails = ({ email }) => {
     email: email,
   });
   const [dltMascotas, response] = useRemovePetMutation();
+
+  const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true });
+  const generatePdf = usePetSummaryPdfQuery(id, { refetchOnMountOrArgChange: true })
 
   useEffect(() => {
     if (!petDetails.isLoading) {
@@ -74,6 +75,11 @@ const MascotasDetails = ({ email }) => {
     setOpenform(true);
   };
 
+  const handleOpenPdfModal = async () => {
+    setExport(true)
+    await generatePdf.refetch()
+  }
+
   const handleDeleteVerify = async (enteredPassword) => {
     if (enteredPassword !== "" || null) {
       // Close the DeleteVerifyModal
@@ -102,15 +108,14 @@ const MascotasDetails = ({ email }) => {
         pass: "",
         email: "",
       });
-      navigate("/customerservice/mascotas");
-    } else if (response.isError) {
+      navigate("/dashboard/mascotas");
+    } else if (response.isError && response.status === "rejected") {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
+      failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, response]);
-
+  }, [response]);
   return (
     <>
       {loading === true ? (
@@ -125,7 +130,7 @@ const MascotasDetails = ({ email }) => {
               <p>Mascotas » {data?.pet?.name}</p>
             </div>
             <div className="">
-              <Button onClick={() => setExport(true)}>
+              <Button onClick={() => handleOpenPdfModal()}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" className="me-4">
                   <defs>
                     <clipPath id="a">
@@ -150,18 +155,18 @@ const MascotasDetails = ({ email }) => {
                 <div className="img mb-7">
                   <img src="/images/DogIcon.svg" alt="mascota" height={"50px"} />
                 </div>
-                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.pet?.name}</p>
+                <p className="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{data?.pet?.name || "-"}</p>
                 <div className="information">
                   <div className="time  text-center d-flex flex-wrap justify-content-center mb-3">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-2 ">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px fs-4">{data?.totalAppointments} citas</span>
+                        <span className="w-75px fs-4">{data?.totalAppointments || "0"} citas</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Agendadas</div>
                     </div>
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mx-2">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px fs-4">{data?.completeAppointments} citas</span>
+                        <span className="w-75px fs-4">{data?.completeAppointments || "0"} citas</span>
                       </div>
                       <div className="fw-semibold text-muted text-start fs-8">Completadas</div>
                     </div>
@@ -197,7 +202,7 @@ const MascotasDetails = ({ email }) => {
                   <Collapse in={show}>
                     <div id="kt_user_view_details" className="pb-5 fs-6">
                       <div className="fw-bold mt-5">Edad</div>
-                      <div className="text-gray-600">{data?.pet?.age}</div>
+                      <div className="text-gray-600">{data?.pet?.age || "-"}</div>
                       <div className="fw-bold mt-5">Calificación</div>
                       <div className="text-gray-600 fw-bold fs-4">
                         <i className="bi bi-star-fill grey fs-2 text-primary me-2"></i>
@@ -205,16 +210,16 @@ const MascotasDetails = ({ email }) => {
                       </div>
 
                       <div className="fw-bold mt-5">Propietario</div>
-                      <Link to="/customerservice/propietarios/details">
+                      <Link to="/dashboard/propietarios/details">
                         {" "}
-                        <div className="text-gray-600"> {data?.pet?.owner}</div>
+                        <div className="text-gray-600"> {data?.pet?.owner || "-"}</div>
                       </Link>
 
                       <div className="fw-bold mt-5">Fecha creación</div>
-                      <div className="text-gray-600">{moment(data?.pet?.dob).format("DD MMM YYYY, HH:MM A")}</div>
+                      <div className="text-gray-600">{data?.pet?.dob ? moment(data?.pet?.dob).format("DD MMM YYYY, HH:MM A") : "-"}</div>
 
                       <div className="fw-bold mt-5">Última Cita</div>
-                      <div className="text-gray-600">{moment(data?.lastAppointment?.date).format("DD MMM YYYY, HH:MM A")}</div>
+                      <div className="text-gray-600">{data?.lastAppointment?.date ? moment(data?.lastAppointment?.date).format("DD MMM YYYY, HH:MM A") : "-"}</div>
                     </div>
                   </Collapse>
                 </div>
@@ -248,7 +253,7 @@ const MascotasDetails = ({ email }) => {
                 </Dropdown>
               </div>
               <div className="second ">
-                <MainTab data={data?.pet} appointmentId={id} />
+                <MainTab data={data?.pet} appointmentId={id} email={email} />
               </div>
             </Col>
           </Row>

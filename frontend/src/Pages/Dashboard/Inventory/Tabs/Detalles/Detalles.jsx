@@ -14,7 +14,7 @@ const Detalles = ({ data, historyData }) => {
               Nombre
             </Col>
             <Col className="info-details" lg={8}>
-              {data.product}
+              {data?.product || "-"}
             </Col>
           </Row>
 
@@ -23,7 +23,7 @@ const Detalles = ({ data, historyData }) => {
               SKU
             </Col>
             <Col className="info-details" lg={8}>
-              {data.sku}
+              {data?.sku || "-"}
             </Col>
           </Row>
           <Row>
@@ -31,7 +31,7 @@ const Detalles = ({ data, historyData }) => {
               Categoría
             </Col>
             <Col className="info-details" lg={8}>
-              {data.category}
+              {data?.category || "-"}
             </Col>
           </Row>
           <Row>
@@ -39,7 +39,7 @@ const Detalles = ({ data, historyData }) => {
               Marca
             </Col>
             <Col className="info-details" lg={8}>
-              {data.brand}
+              {data?.brand || "-"}
             </Col>
           </Row>
           <Row>
@@ -47,7 +47,7 @@ const Detalles = ({ data, historyData }) => {
               Laboratorio
             </Col>
             <Col className="info-details" lg={8}>
-              {data.laboratory}
+              {data?.laboratory || "-"}
             </Col>
           </Row>
           <Row>
@@ -55,7 +55,7 @@ const Detalles = ({ data, historyData }) => {
               Composición
             </Col>
             <Col className="info-details" lg={8}>
-              {data.composition}
+              {data?.composition || "-"}
             </Col>
           </Row>
           <Row>
@@ -63,7 +63,7 @@ const Detalles = ({ data, historyData }) => {
               Descripción
             </Col>
             <Col className="info-details" lg={8}>
-              {data.description}
+              {data?.description || "-"}
             </Col>
           </Row>
         </div>
@@ -74,8 +74,8 @@ const Detalles = ({ data, historyData }) => {
           historyData?.productHistory.map(({ id, reason, createdAt }) => (
             <div className="detail-wrapper" key={id}>
               <div className="detail-title-box">
-                <p className="detail-title-main">{reason}</p>
-                <p className="detail-title-sub">{moment(createdAt).format("DD MMM YYYY, hh:mm A")}</p>
+                <p className="detail-title-main">{reason ? reason : "-"}</p>
+                <p className="detail-title-sub">{createdAt ? moment(createdAt).format("DD MMM YYYY, hh:mm A") : "-"}</p>
               </div>
             </div>
           ))

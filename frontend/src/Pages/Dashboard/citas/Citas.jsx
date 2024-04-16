@@ -55,6 +55,7 @@ function Citas({ email }) {
   const handleClose = () => {
     setShow(false);
     setAppId("")
+    appointmentsByFilter.refetch()
   };
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -86,7 +87,7 @@ function Citas({ email }) {
 
   const filteredData = data.filter(({ pet, veterinarian }) => {
     const searchString = searchValue;
-    return pet.toLowerCase().includes(searchString) || veterinarian.toLowerCase().includes(searchString);
+    return pet?.toLowerCase().includes(searchString) || veterinarian?.toLowerCase().includes(searchString);
   });
 
   const indexOfLastPost = currentPage * postsPerPage;
@@ -376,16 +377,16 @@ function Citas({ email }) {
                           <td className="text-start pe-0">
                             <span className="fw-bold text-gray-600 fw-bolder">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{pet}</td>
-                          <td className="text-start pe-0">{veterinarian}</td>
+                          <td className="text-start pe-0">{pet ? pet : "-"}</td>
+                          <td className="text-start pe-0">{veterinarian ? veterinarian : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
+                            {scheduleStart ? moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
                               " - " +
-                              moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A")}
+                              moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") : "-"}
                           </td>
                           <td className="text-start pe-0">
-                            <div className=" fecha">{moment(date).format("DD MMM YYYY")}</div>
+                            <div className=" fecha">{date ? moment(date).format("DD MMM YYYY") : "-"}</div>
                           </td>
                           <td className="text-start pe-0" data-order="rating-5">
                             <div className="rating justify-content-start">

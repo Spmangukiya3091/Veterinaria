@@ -23,7 +23,7 @@ const MascotasDetails = () => {
     } else if (petDetails.isError) {
       setLoading(false);
       setError(true);
-      console.log("error", petDetails.error);
+      // console.log("error", petDetails.error);
     }
   }, [id, petDetails]);
 

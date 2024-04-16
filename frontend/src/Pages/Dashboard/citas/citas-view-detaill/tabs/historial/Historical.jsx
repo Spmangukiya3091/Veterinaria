@@ -7,7 +7,7 @@ import { useGetPetAppoinmentQuery } from "../../../../../../services/ApiServices
 import moment from "moment";
 import Loader from "../../../../../../Components/loader/Loader";
 
-function Historical({ id }) {
+function Historical({ id, count }) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ function Historical({ id }) {
       setError(true);
       setLoading(false);
     }
-  }, [historyList, id]);
+  }, [historyList, id, count]);
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -50,7 +50,7 @@ function Historical({ id }) {
 
   const filteredData = data.filter(({ pet }) => {
     const searchString = searchValue.toLowerCase();
-    return pet.toLowerCase().includes(searchString);
+    return pet?.toLowerCase().includes(searchString);
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -239,15 +239,17 @@ function Historical({ id }) {
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{pet}</td>
+                          <td className="text-start pe-0">{pet ? pet : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
-                              " - " +
-                              moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A")}
+                            {
+                              scheduleStart ?
+                                moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
+                                " - " +
+                                moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") : "-"}
                           </td>
                           <td className="text-start pe-0">
-                            <div className=" fecha">{moment(date).format("DD MMM YYYY")}</div>
+                            <div className="fecha">{date ? moment(date).format("DD MMM YYYY") : "-"}</div>
                           </td>
                           <td>
                             <div className="status-wrapper">

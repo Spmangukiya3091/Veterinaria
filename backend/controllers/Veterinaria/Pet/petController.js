@@ -198,7 +198,7 @@ const petExcelFile = async (req, res) => {
         "petAppointmentData"
       ];
       unwantedFields.forEach((field) => delete formattedPet[field]);
-     
+
       return formattedPet;
     });
 
@@ -565,14 +565,13 @@ const appointmentDataOfPet = async (req, res) => {
 
 };
 
-const generatePdfAndQrCode = async (pet, vaccinations, petInfos, req, rootDir) => {
-  const qrCodeData = req.protocol + "://" + req.get("host") + `/profile/pets/pdf/pet_summary_${pet.id}.pdf`;
+const generatePdfAndQrCode = async (pet, vaccinations, petInfos, req) => {
+  const qrCodeData = req.protocol + "://" + req.get("host") + `/profile/pets/pdfs/pet_summary_${pet.id}.pdf`;
   const qrCodeBuffer = await QRCode.toBuffer(qrCodeData);
   const qrCodeImagePath = path.join(
-    rootDir, "public", "pets", "images",
-    `qr_code_${pet.id}.png`
-  );
+    __dirname, "../../../public/pets/images", `qr_code_${pet.id}.png`);
   await fs.promises.writeFile(qrCodeImagePath, qrCodeBuffer);
+
 
   let doc = new PDFDocument({ margin: 30, size: "A4" });
 
@@ -659,16 +658,8 @@ const generatePdfAndQrCode = async (pet, vaccinations, petInfos, req, rootDir) =
     }
   );
 
-  const pdfPath = path.join(
-    __dirname,
-    "../../public/pets/pdfs",
-    `pet_summary_${pet.id}.pdf`
-  );
-  const imagePath = path.join(
-    __dirname,
-    "../../public/pets/images",
-    `pet_summary_${pet.id}.png`
-  );
+  const pdfPath = path.join(__dirname, "../../../public/pets/pdfs", `pet_summary_${pet.id}.pdf`);
+  const imagePath = path.join(__dirname, "../../../public/pets/images", `pet_summary_${pet.id}.png`);
 
   const fileStream = fs.createWriteStream(pdfPath);
   doc.pipe(fileStream);
@@ -707,17 +698,8 @@ const petSummaryPdf = async (req, res) => {
       const pdfName = path.basename(petInfos.pdf);
       const qrCodeName = path.basename(petInfos.qrImage);
 
-      const oldPdfPath = path.join(
-        __dirname,
-        "../../public/pets/pdfs",
-        // "../../../public/pets/pdfs"
-        pdfName
-      );
-      const oldImagePath = path.join(
-        __dirname,
-        "../../public/pets/images",
-        qrCodeName
-      );
+      const oldPdfPath = path.join(__dirname, "../../../public/pets/pdfs", pdfName);
+      const oldImagePath = path.join(__dirname, "../../../public/pets/images", qrCodeName);
 
       if (fs.existsSync(oldPdfPath)) {
         await fs.promises.unlink(oldPdfPath);
@@ -727,9 +709,9 @@ const petSummaryPdf = async (req, res) => {
       }
     }
 
-    await generatePdfAndQrCode(pet, vaccinations, petInfos, req, __dirname);
+    await generatePdfAndQrCode(pet, vaccinations, petInfos, req);
 
-    res.status(200).send(`QR code and PDF regenerated successfully`);
+    res.status(200).send("QR code and PDF regenerated successfully");
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");

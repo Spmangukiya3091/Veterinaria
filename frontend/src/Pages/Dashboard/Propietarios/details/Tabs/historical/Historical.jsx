@@ -49,7 +49,7 @@ const Historical = ({ id }) => {
 
   const filteredData = data?.filter(({ pet }) => {
     const searchString = searchValue;
-    return pet.toLowerCase().includes(searchString);
+    return pet?.toLowerCase().includes(searchString);
   });
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 10;
@@ -232,20 +232,24 @@ const Historical = ({ id }) => {
                   </thead>
                   <tbody>
                     {currentPosts.length > 0 ? (
-                      currentPosts.map(({ id, pet, HORARIO, scheduleStart, scheduleEnd, date, status, ACCIONES }, i) => (
+                      currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, date, status, ACCIONES }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{pet}</td>
+                          <td className="text-start pe-0">{pet ? pet : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
-                              " - " +
-                              moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A")}
+                            {
+                              scheduleStart && scheduleEnd ?
+                                moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
+                                " - " +
+                                moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A")
+                                : "-"
+                            }
                           </td>
                           <td className="text-start pe-0">
-                            <div className="fecha">{moment(date).format("DD MMM YYYY")}</div>
+                            <div className="fecha">{date ? moment(date).format("DD MMM YYYY") : "-"}</div>
                           </td>
                           <td>
                             <div className="status-wrapper text-start">
@@ -253,7 +257,7 @@ const Historical = ({ id }) => {
                                 className={
                                   status === "pending"
                                     ? "badge badge-light-warning text-warning"
-                                    : (status = "complete" ? "badge badge-light-success text-success" : "badge badge-light-secondary text-dark")
+                                    : status === "complete" ? "badge badge-light-success text-success" : "badge badge-light-secondary text-dark"
                                 }
                               >
                                 <p className="status-p mb-0">

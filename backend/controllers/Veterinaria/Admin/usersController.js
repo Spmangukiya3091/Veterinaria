@@ -55,6 +55,10 @@ const userRegister = async (req, res) => {
         return res.status(400).send({ message: "role is required" });
       } else if (userData.profile === "" || userData.profile === null) {
         return res.status(400).send({ message: "profile is required" });
+      } else if (userData.password === "" || userData.password === null) {
+        return res.status(400).send({ message: "password is required" });
+      } else if (userData.confirmPassword === "" || userData.confirmPassword === null) {
+        return res.status(400).send({ message: "confirmPassword is required" });
       } else {
         Auth.create(userData).then((result) => {
           console.log(result);
@@ -347,42 +351,64 @@ const updateUserProfile = async (req, res) => {
     phone,
   } = req.body;
 
-  const profile =
-    req.protocol + "://" + req.get("host") + `/profile/profile/${req.file.filename}`;
   const id = req.params.id;
   const user = await Auth.findOne({ where: { id: id } });
-  const existingFilename = user?.profile ? user?.profile?.split("/").pop() : "";
 
-  const imagePath = `./public/profile/${existingFilename}`;
-  if (password !== "") {
-    if (password !== confirmPassword) {
-      res.status(400).send({
-        message: "password and confirm password is not match",
-      });
-    }
+  if (!user) {
+    return res.status(404).send({ message: "User not found" });
   }
-  if (user?.id === id && password === confirmPassword) {
-    await Auth.update(
-      { name, email, password, role, profile, phone, identification },
-      { where: { id: id } }
-    );
-    if (req.file && req.file.filename !== "" && existingFilename !== "") {
-      fs.unlink(imagePath, (err) => {
-        if (err) {
-          res.status(400).send({
-            message: "profile not updated",
-          });
-        } else {
-          res.status(200).send({
-            message: "profile updated successfully",
-          });
-        }
-      });
+
+  if (password !== confirmPassword) {
+    return res
+      .status(400)
+      .send({ message: "Password and confirm password do not match" });
+  }
+
+  let profile = user.profile;
+  if (req.file) {
+    const profileImageUrl =
+      req.protocol +
+      "://" +
+      req.get("host") +
+      `/profile/profile/${req.file.filename}`;
+    profile = profileImageUrl;
+  }
+
+  try {
+    if (email === "" || email === null) {
+      return res.status(400).send({ message: "email is required" });
+    } else if (name === "" || name === null) {
+      return res.status(400).send({ message: "name is required" });
+    } else if (role === "" || role === null) {
+      return res.status(400).send({ message: "role is required" });
+    } else if (profile === "" || profile === null) {
+      return res.status(400).send({ message: "profile is required" });
+    } else if (password === "" || password === null) {
+      return res.status(400).send({ message: "password is required" });
+    } else if (
+      confirmPassword === "" ||
+      confirmPassword === null
+    ) {
+      return res.status(400).send({ message: "confirmPassword is required" });
     } else {
-      res.status(200).send({
-        message: "profile updated successfully",
-      });
+      await Auth.update(
+        { name, email, password, role, profile, phone, identification },
+        { where: { id: id } }
+      );
+      if (req.file && user.profile) {
+        const existingFilename = user.profile.split("/").pop();
+        const imagePath = `./public/profile/${existingFilename}`;
+        fs.unlink(imagePath, (err) => {
+          if (err) {
+            console.error("Error deleting old profile image:", err);
+          }
+        });
+      }
+      return res.status(200).send({ message: "Profile updated successfully" });
     }
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    return res.status(500).send({ message: "Internal server error" });
   }
 };
 
@@ -529,11 +555,7 @@ const sendForgetPasswordLink = async (req, res) => {
       from: "ankitpansheriya123@gmail.com",
       to: user.email,
       subject: "ods - verify your email",
-      html: `
-       
-        
-        
-<html>
+      html: `<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ODS</title>

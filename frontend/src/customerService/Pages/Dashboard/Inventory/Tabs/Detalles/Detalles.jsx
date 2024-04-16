@@ -8,64 +8,67 @@ const Detalles = ({ data, historyData }) => {
     <>
       <div className="details">
         <h4>Detalles</h4>
-        <div className="info-details" lg={8}>
-          <Row>
-            <Col className="info-head" lg={4}>
-              Nombre
-            </Col>
-            <Col className="info-details" lg={8}>
-              {data.product}
-            </Col>
-          </Row>
+        <div className="details">
+          <h4>Detalles</h4>
+          <div className="info-details" lg={8}>
+            <Row>
+              <Col className="info-head" lg={4}>
+                Nombre
+              </Col>
+              <Col className="info-details" lg={8}>
+                {data?.product || "-"}
+              </Col>
+            </Row>
 
-          <Row>
-            <Col className="info-head" lg={4}>
-              SKU
-            </Col>
-            <Col className="info-details" lg={8}>
-              {data.sku}
-            </Col>
-          </Row>
-          <Row>
-            <Col className="info-head" lg={4}>
-              Categoría
-            </Col>
-            <Col className="info-details" lg={8}>
-              {data.category}
-            </Col>
-          </Row>
-          <Row>
-            <Col className="info-head" lg={4}>
-              Marca
-            </Col>
-            <Col className="info-details" lg={8}>
-              {data.brand}
-            </Col>
-          </Row>
-          <Row>
-            <Col className="info-head" lg={4}>
-              Laboratorio
-            </Col>
-            <Col className="info-details" lg={8}>
-              {data.laboratory}
-            </Col>
-          </Row>
-          <Row>
-            <Col className="info-head" lg={4}>
-              Composición
-            </Col>
-            <Col className="info-details" lg={8}>
-              {data.composition}
-            </Col>
-          </Row>
-          <Row>
-            <Col className="info-head" lg={4}>
-              Descripción
-            </Col>
-            <Col className="info-details" lg={8}>
-              {data.description}
-            </Col>
-          </Row>
+            <Row>
+              <Col className="info-head" lg={4}>
+                SKU
+              </Col>
+              <Col className="info-details" lg={8}>
+                {data?.sku || "-"}
+              </Col>
+            </Row>
+            <Row>
+              <Col className="info-head" lg={4}>
+                Categoría
+              </Col>
+              <Col className="info-details" lg={8}>
+                {data?.category || "-"}
+              </Col>
+            </Row>
+            <Row>
+              <Col className="info-head" lg={4}>
+                Marca
+              </Col>
+              <Col className="info-details" lg={8}>
+                {data?.brand || "-"}
+              </Col>
+            </Row>
+            <Row>
+              <Col className="info-head" lg={4}>
+                Laboratorio
+              </Col>
+              <Col className="info-details" lg={8}>
+                {data?.laboratory || "-"}
+              </Col>
+            </Row>
+            <Row>
+              <Col className="info-head" lg={4}>
+                Composición
+              </Col>
+              <Col className="info-details" lg={8}>
+                {data?.composition || "-"}
+              </Col>
+            </Row>
+            <Row>
+              <Col className="info-head" lg={4}>
+                Descripción
+              </Col>
+              <Col className="info-details" lg={8}>
+                {data?.description || "-"}
+              </Col>
+            </Row>
+          </div>
         </div>
       </div>
       <div className="details my-3">
@@ -74,8 +77,8 @@ const Detalles = ({ data, historyData }) => {
           historyData?.productHistory.map(({ id, reason, createdAt }) => (
             <div className="detail-wrapper" key={id}>
               <div className="detail-title-box">
-                <p className="detail-title-main">{reason}</p>
-                <p className="detail-title-sub">{moment(createdAt).format("DD MMM YYYY, hh:mm A")}</p>
+                <p className="detail-title-main">{reason ? reason : "-"}</p>
+                <p className="detail-title-sub">{createdAt ? moment(createdAt).format("DD MMM YYYY, hh:mm A") : "-"}</p>
               </div>
             </div>
           ))

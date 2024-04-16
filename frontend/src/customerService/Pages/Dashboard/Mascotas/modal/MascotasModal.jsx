@@ -4,6 +4,7 @@ import { failer, success } from "../../../../Components/alert/success";
 import moment from "moment";
 import { useAddPetMutation, useGetOwnersListQuery, useGetSinglePetQuery, useUpdatePetMutation } from "../../../../../services/ApiServices";
 
+
 function MascotasModal({ show, handleClose, id }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -16,10 +17,13 @@ function MascotasModal({ show, handleClose, id }) {
     hair: "",
     color: "",
   });
+
+  const [validated, setValidated] = useState(false); // State for form validation
+
   const [addPet, response] = useAddPetMutation();
   const [editPet, response2] = useUpdatePetMutation();
   const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
-  const ownersList = useGetOwnersListQuery(null, { refetchOnMountOrArgChange: true });
+  const ownersList = useGetOwnersListQuery( { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (id !== undefined && !petDetails.isLoading && petDetails.data) {
@@ -36,19 +40,26 @@ function MascotasModal({ show, handleClose, id }) {
         color,
       });
     } else if (id === undefined) {
-      setFormData({
-        name: "",
-        owner: "",
-        ownerId: "",
-        sex: "",
-        dob: "",
-        Species: "",
-        breed: "",
-        hair: "",
-        color: "",
-      });
+      clearForm(); // Clear form fields when there is no owner ID
+
     }
-  }, [id, petDetails]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, show]);
+
+  const clearForm = () => {
+    setFormData({
+      name: "",
+      owner: "",
+      ownerId: "",
+      sex: "",
+      dob: "",
+      Species: "",
+      breed: "",
+      hair: "",
+      color: "",
+    });
+    setValidated(false); // Reset validated state
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,39 +78,50 @@ function MascotasModal({ show, handleClose, id }) {
     }
   };
 
-  const handleSubmit = async () => {
-    if (id !== undefined) {
-      // Update existing pet
-      const body = { id: id, ...formData };
-      await editPet(body);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
     } else {
-      // Add new pet
-      await addPet(formData);
+
+      if (id !== undefined) {
+        // Update existing pet
+        const body = { id: id, ...formData };
+        await editPet(body);
+      } else {
+        // Add new pet
+        await addPet(formData);
+      }
     }
   };
 
   useEffect(() => {
-    if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
-      handleClose();
-      success();
-      setFormData({
-        name: "",
-        owner: "",
-        ownerId: "",
-        sex: "",
-        dob: "",
-        Species: "",
-        breed: "",
-        hair: "",
-        color: "",
-      });
-    } else if ((id !== undefined && response2.isError) || (id === undefined && response.isError)) {
-      failer(response?.error?.data?.message || response2?.error?.data?.message);
-      console.error("Error occured: ", response?.error || response2?.error);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response, response2, id]);
+    if (id !== undefined) {
+      if (!response2.isLoading && response2.status === "fulfilled") {
+        clearForm()
+        handleClose();
+        success();
 
+      } else if (response2.isError && response2.status === "rejected" && response2?.error?.status !== 400) {
+        // console.log(response2.error);
+        failer(response2?.error?.data?.message);
+      }
+    } else {
+      if (!response.isLoading && response.status === "fulfilled") {
+        // console.log(response);
+        clearForm()
+        success();
+        handleClose();
+      } else if (response.isError && response.status === "rejected" && response?.error?.status !== 400) {
+        // console.log(response.error);
+        failer(response?.error?.data?.message);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response, response2]);
   return (
     <>
       <Modal size="lg" show={show} onHide={handleClose} centered>
@@ -107,18 +129,21 @@ function MascotasModal({ show, handleClose, id }) {
           <Modal.Title id="contained-modal-title-vcenter">Información de Mascota</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <Form.Label>Nombre</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Nombre" name="name" onChange={handleChange} value={formData.name} />
+                  <Form.Control aria-label="Default" placeholder="Nombre" name="name" onChange={handleChange} value={formData.name} required />
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Nombre.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Propietario</Form.Label>
-                  <Form.Select aria-label="Default select" name="ownerId" onChange={handleChange} value={formData.ownerId}>
+                  <Form.Select aria-label="Default select" name="ownerId" onChange={handleChange} value={formData.ownerId} required>
                     <option disabled="true" value={""} selected="true">Propietario</option>
                     {ownersList?.data?.ownersList.map((owner) => (
                       <option key={owner.id} value={owner.id}>
@@ -126,6 +151,9 @@ function MascotasModal({ show, handleClose, id }) {
                       </option>
                     ))}
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Propietario.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -133,11 +161,14 @@ function MascotasModal({ show, handleClose, id }) {
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Sexo</Form.Label>
-                  <Form.Select aria-label="Default select example" name="sex" onChange={handleChange} value={formData.sex}>
-                    <option disabled="true" value={""} selected="true">Sexo</option>
+                  <Form.Select aria-label="Default select example" name="sex" onChange={handleChange} value={formData.sex} required>
+                    <option disabled="true" value={""} selected="true" >Sexo</option>
                     <option value="Macho">Macho</option>
                     <option value="Hembra">Hembra</option>
                   </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Por favor proporcione un Sexo.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
 
@@ -185,19 +216,14 @@ function MascotasModal({ show, handleClose, id }) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            className="footer-btn btn btn-secondary"
-            onClick={() => {
-              handleClose();
-            }}
-          >
+          <Button onClick={handleClose} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button
             variant="primary"
             type="submit"
-            onClick={handleSubmit}
             className="footer-btn btn btn-primary"
+            onClick={handleSubmit}
             disabled={response.isLoading || response2.isLoading}
           >
             Guardar Cambios
@@ -207,5 +233,6 @@ function MascotasModal({ show, handleClose, id }) {
     </>
   );
 }
+
 
 export default MascotasModal;

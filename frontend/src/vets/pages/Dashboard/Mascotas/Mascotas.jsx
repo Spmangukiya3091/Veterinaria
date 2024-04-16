@@ -46,10 +46,10 @@ const Mascotas = ({ id }) => {
   const filteredData = data.filter(({ name, owner, Species, sex }) => {
     const searchString = searchValue;
     return (
-      name.toLowerCase().includes(searchString) ||
-      owner.toLowerCase().includes(searchString) ||
-      Species.toLowerCase().includes(searchString) ||
-      sex.toLowerCase().includes(searchString)
+      name?.toLowerCase().includes(searchString) ||
+      owner?.toLowerCase().includes(searchString) ||
+      Species?.toLowerCase().includes(searchString) ||
+      sex?.toLowerCase().includes(searchString)
     );
   });
 
@@ -242,7 +242,7 @@ const Mascotas = ({ id }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8">No data available</td>
+                        <td colSpan="8" className="text-center">No data available</td>
                       </tr>
                     )}
                   </tbody>

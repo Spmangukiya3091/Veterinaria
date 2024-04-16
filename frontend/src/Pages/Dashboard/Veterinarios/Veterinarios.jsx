@@ -27,7 +27,7 @@ const Veterinarios = ({ email }) => {
     endDate: "",
   });
   const veterinList = useGetVeterinariansFilterQuery(searchQuery, { refetchOnMountOrArgChange: true });
-  const specialities = useGetSpecialitiesQuery(null, { refetchOnMountOrArgChange: true });
+  const specialities = useGetSpecialitiesQuery({ refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (!veterinList.isLoading && !specialities.isLoading) {
@@ -41,7 +41,11 @@ const Veterinarios = ({ email }) => {
     }
   }, [specialities, veterinList]);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false)
+    veterinList.refetch();
+    specialities.refetch()
+  };
 
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -58,7 +62,7 @@ const Veterinarios = ({ email }) => {
   const filteredData = data.filter(({ name, surname }) => {
     const searchString = searchValue.toLowerCase();
     return (
-      name.toLowerCase().includes(searchString) || surname.toLowerCase().includes(searchString)
+      name?.toLowerCase().includes(searchString) || surname?.toLowerCase().includes(searchString)
     );
   });
   const handleHide = () => {
@@ -68,6 +72,7 @@ const Veterinarios = ({ email }) => {
   const handleModalHide = () => {
     setOpenModal(false);
     veterinList.refetch();
+    specialities.refetch()
   };
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 12;
@@ -255,7 +260,7 @@ const Veterinarios = ({ email }) => {
                             <Card.Title>DR. {name + " " + surname}</Card.Title>
                             <Card.Text>{speciality}</Card.Text>
                             <div className="d-flex justify-content-center">
-                              <Button variant="primary" onClick={() => navigate("/dashboard/calendario")} className="me-4">
+                              <Button variant="primary" onClick={() => navigate(`/dashboard/calendario?veterine=${id}`)} className="me-4">
                                 {"Ver Calendario"}
                               </Button>
                               <Button variant="secondary" onClick={() => navigate(`/dashboard/veterinarios/details/${id}`)}>

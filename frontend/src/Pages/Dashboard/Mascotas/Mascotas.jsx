@@ -49,6 +49,7 @@ const Mascotas = ({ email }) => {
   const [dropdowns, setDropdown] = useState(new Array(data?.length).fill(false));
 
   const petList = usePetFilterQuery(searchQuery, { refetchOnMountOrArgChange: true });
+  // console.log(searchQuery)
   useEffect(() => {
     if (!petList.isLoading) {
       setLoading(false);
@@ -65,6 +66,7 @@ const Mascotas = ({ email }) => {
 
   const handleClose = () => {
     setShow(false);
+    setPetId(undefined)
     petList.refetch();
   };
   const handleShow = () => {
@@ -83,13 +85,13 @@ const Mascotas = ({ email }) => {
     setSearchQuery("");
   };
 
-  const filteredData = data.filter(({ name, owner, species, sex }) => {
+  const filteredData = data?.filter(({ name, owner, species, sex }) => {
     const searchString = searchValue.toLowerCase();
     return (
-      name.toLowerCase().includes(searchString) ||
-      owner.toLowerCase().includes(searchString) ||
-      species.toLowerCase().includes(searchString) ||
-      sex.toLowerCase().includes(searchString)
+      name?.toLowerCase().includes(searchString) ||
+      owner?.toLowerCase().includes(searchString) ||
+      species?.toLowerCase().includes(searchString) ||
+      sex?.toLowerCase().includes(searchString)
     );
   });
 
@@ -373,19 +375,19 @@ const Mascotas = ({ email }) => {
                             <td className="text-start pe-0">
                               <span className=" text-gray-600 ">{i + 1}</span>
                             </td>
-                            <td className="text-start pe-0">{name}</td>
+                            <td className="text-start pe-0">{name ? name : "-"}</td>
 
                             <td className="text-start pe-0" data-order="16">
-                              {owner}
+                              {owner ? owner : "-"}
                             </td>
                             <td className="text-start pe-0">
-                              <div className=" fecha">{species}</div>
+                              <div className=" fecha">{species ? species : "-"}</div>
                             </td>
                             <td className="text-start pe-0" data-order="estado">
-                              {sex}
+                              {sex ? sex : "-"}
                             </td>
                             <td className="text-start pe-0" data-order="estado">
-                              {age}
+                              {age ? age : "-"}
                             </td>
                             <td className="text-start pe-0" data-order="rating-5">
                               <div className="star-icon-wrapper">

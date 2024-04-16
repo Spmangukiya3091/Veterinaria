@@ -17,7 +17,7 @@ function CategoryModal({ show, handleClose, email }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const categories = useGetCategoryWithProductsQuery(null, { refetchOnMountOrArgChange: true });
+  const categories = useGetCategoryWithProductsQuery( { refetchOnMountOrArgChange: true });
   const [openform, setOpenform] = useState(false);
   const [dltData, setDltData] = useState({
     id: "",

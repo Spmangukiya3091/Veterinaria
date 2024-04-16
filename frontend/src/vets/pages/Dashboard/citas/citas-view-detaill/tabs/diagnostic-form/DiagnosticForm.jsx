@@ -116,7 +116,7 @@ function DiagnosticForm({ data, refetch }) {
         dispatch(showToast("Error al guardar el diagnóstico. Inténtelo de nuevo.", "FAIL_TOAST"));
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       dispatch(showToast(error?.response?.data?.message, "FAIL_TOAST"));
     }
   };

@@ -51,11 +51,11 @@ const Propietarios = ({ id }) => {
     const formattedPhone = String(phone_1);
 
     return (
-      name.toLowerCase().includes(searchString) ||
-      surname.toLowerCase().includes(searchString) ||
-      address.toLowerCase().includes(searchString) ||
+      name?.toLowerCase().includes(searchString) ||
+      surname?.toLowerCase().includes(searchString) ||
+      address?.toLowerCase().includes(searchString) ||
       formattedPhone.includes(searchString) ||
-      doc_identity.toLowerCase().includes(searchString)
+      doc_identity?.toLowerCase().includes(searchString)
     );
   });
 
@@ -208,7 +208,7 @@ const Propietarios = ({ id }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts > 0 ? (
+                    {currentPosts.length > 0 ? (
                       currentPosts.map(({ id, name, surname, address, phone_1, doc_identity }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -239,7 +239,7 @@ const Propietarios = ({ id }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7">No data available</td>
+                        <td colSpan="6" className="text-center">No data available</td>
                       </tr>
                     )}
                   </tbody>

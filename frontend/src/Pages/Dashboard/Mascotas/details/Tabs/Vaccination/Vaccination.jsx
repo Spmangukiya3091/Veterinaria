@@ -43,9 +43,13 @@ const Vaccination = ({ id, email }) => {
 
   const handleUpdStatclose = () => {
     setUpdStat(false);
+    setVaccineId(undefined)
+    vaccinationList.refetch()
   };
   const handleCloseEdit = () => {
     setShow(false);
+    setVaccineId(undefined)
+    vaccinationList.refetch()
   };
   const handleCloseVacuna = () => {
     setAddVacuna(false);
@@ -146,10 +150,10 @@ const Vaccination = ({ id, email }) => {
                     data.map(({ id, vaccine, exploration, F_vaccination, validity, status }, i) => (
                       <tr key={i}>
                         <td>{i + 1}</td>
-                        <td>{vaccine}</td>
+                        <td>{vaccine ? vaccine : "-"}</td>
                         <td className={`${exploration === "APTO" ? "textSuccess" : "textDanger"}`}>{exploration}</td>
-                        <td>{F_vaccination === null ? "-" : moment(F_vaccination).format("DD MMM YYYY")}</td>
-                        <td>{validity === null ? "-" : moment(validity).format("DD MMM YYYY")}</td>
+                        <td>{F_vaccination !== null ? moment(F_vaccination).format("DD MMM YYYY") : "-"}</td>
+                        <td>{validity !== null ? moment(validity).format("DD MMM YYYY") : "-"}</td>
                         <td>
                           <div
                             className={

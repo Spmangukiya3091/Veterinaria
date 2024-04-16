@@ -35,7 +35,7 @@ function UpdatePassword() {
       navigate("/");
       // dispatch(showToast("Password Updated Successfully", "SUCCESS_TOAST"));
     } else if (response.isError && response.status === "rejected") {
-      console.log(response)
+      // console.log(response)
       failer(response?.error?.data?.message)
     }
   }, [dispatch, navigate, response]);

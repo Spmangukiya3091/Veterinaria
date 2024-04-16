@@ -7,7 +7,8 @@ function UpdVacunaStat({ show, handleClose, vaccineId }) {
   const [status, setStatus] = useState();
   const [statusUpdate, response] = useUpdateVaccinationStatusMutation();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     const body = {
       id: vaccineId,
       status: status,
@@ -27,7 +28,7 @@ function UpdVacunaStat({ show, handleClose, vaccineId }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
-  
+
   return (
     <>
       <Modal size="md" show={show} onHide={handleClose} centered>
@@ -35,7 +36,7 @@ function UpdVacunaStat({ show, handleClose, vaccineId }) {
           <Modal.Title id="contained-modal-title-vcenter">Estado de Vacuna</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form >
             <Form.Group className="mb-3" controlId="formBasicSelect">
               <Form.Label>Estado</Form.Label>
               <Form.Select
@@ -55,8 +56,8 @@ function UpdVacunaStat({ show, handleClose, vaccineId }) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button className="footer-btn btn btn-secondary">Cancelar</Button>
-          <Button variant="primary" type="submit" onClick={() => handleSubmit()} className="footer-btn btn btn-primary">
+          <Button className="footer-btn btn btn-secondary" onClick={handleClose}>Cancelar</Button>
+          <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary">
             Guardar Cambios
           </Button>
         </Modal.Footer>

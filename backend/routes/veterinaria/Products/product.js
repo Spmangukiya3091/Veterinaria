@@ -10,7 +10,7 @@ const Secure = require("../../../middlewares/secure/secure");
 router.get("/categoriesList",Secure(['masterAdmin','customerService']), categoryController.getAllCategories)
 
 router.get("/singleCategory/:id",Secure(['masterAdmin','customerService']), categoryController.getSingleCategory)
-router.get("/productCount",Secure(['masterAdmin','customerService']), categoryController.getTotalProductsByCategory)
+router.get("/productCount",Secure(['masterAdmin','customerService', 'user']), categoryController.getTotalProductsByCategory)
 router.post("/createCategory",Secure(['masterAdmin','customerService']), categoryController.createCategory);
 router.put("/UpdateCategory/:id",Secure(['masterAdmin','customerService']), categoryController.updateCategory);
 router.delete("/categoryRemove/:id",Secure(['masterAdmin','customerService']), categoryController.deleteCategory);

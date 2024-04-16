@@ -67,6 +67,7 @@ const Mascotas = ({ email }) => {
 
   const handleClose = () => {
     setShow(false);
+    setPetId(undefined)
     petList.refetch();
   };
   const handleShow = () => {
@@ -88,10 +89,10 @@ const Mascotas = ({ email }) => {
   const filteredData = data.filter(({ name, owner, species, sex }) => {
     const searchString = searchValue;
     return (
-      name.toLowerCase().includes(searchString) ||
-      owner.toLowerCase().includes(searchString) ||
-      species.toLowerCase().includes(searchString) ||
-      sex.toLowerCase().includes(searchString)
+      name?.toLowerCase().includes(searchString) ||
+      owner?.toLowerCase().includes(searchString) ||
+      species?.toLowerCase().includes(searchString) ||
+      sex?.toLowerCase().includes(searchString)
     );
   });
 
@@ -342,24 +343,23 @@ const Mascotas = ({ email }) => {
                             <td className="text-start pe-0">
                               <span className=" text-gray-600 ">{i + 1}</span>
                             </td>
-                            <td className="text-start pe-0">{name}</td>
+                            <td className="text-start pe-0">{name ? name : "-"}</td>
 
                             <td className="text-start pe-0" data-order="16">
-                              {owner}
+                              {owner ? owner : "-"}
                             </td>
                             <td className="text-start pe-0">
-                              <div className=" fecha">{species}</div>
+                              <div className=" fecha">{species ? species : "-"}</div>
                             </td>
                             <td className="text-start pe-0" data-order="estado">
-                              {sex}
+                              {sex ? sex : "-"}
                             </td>
                             <td className="text-start pe-0" data-order="estado">
-                              {age}
+                              {age ? age : "-"}
                             </td>
                             <td className="text-start pe-0" data-order="rating-5">
                               <div className="star-icon-wrapper">
-                                <i className={"bi bi-star-fill grey"}></i>
-                                {rating === "NaN" || rating === null ? "0.0" : rating}
+                                <i className={"bi bi-star-fill grey"}></i> {rating === "NaN" || rating === null ? "0.0" : rating}
                               </div>
                             </td>
                             <td className="text-end">

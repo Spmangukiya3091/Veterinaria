@@ -7,6 +7,7 @@ import "./calendario.scss";
 import esLocale from "@fullcalendar/core/locales/es";
 import { useGetVeterinariansAppointmentQuery } from "../../../../services/ApiServices";
 import Loader from "../../../components/loader/Loader";
+import moment from "moment";
 
 function Calendario({ id }) {
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,11 @@ function Calendario({ id }) {
       setLoading(false);
     }
   }, [appointments]);
-
+  const newData = appointmentData.map(appointment => ({
+    ...appointment,
+    start: moment.utc(appointment.start).format('YYYY-MM-DDTHH:mm:ss'), // Using 'HH:mm:ss' for 24-hour format
+    end: moment.utc(appointment.end).format('YYYY-MM-DDTHH:mm:ss')
+  }));
   return (
     <>
       {loading === true ? (
@@ -48,7 +53,7 @@ function Calendario({ id }) {
                 center: "title",
                 right: "dayGridMonth,timeGridWeek,timeGridDay",
               }}
-              events={appointmentData}
+              events={newData}
               locales={[esLocale]}
               locale="es"
               dayHeaderFormat={{ weekday: "short", day: "numeric" }}
@@ -57,10 +62,16 @@ function Calendario({ id }) {
                 minute: "2-digit",
                 hour12: true,
               }}
+              timeZone="UTC" // Set the time zone here
               slotLabelContent={(arg) => {
-                const hour = new Date(arg.date).getHours();
-                const minute = new Date(arg.date).getMinutes();
-                return `${hour === 0 ? "12" : hour > 12 ? hour - 12 : hour}:${minute === 0 ? "00" : minute} ${hour < 12 ? "AM" : "PM"};`;
+                const date = new Date(arg.date);
+                let hour = date.getHours();
+                const minute = date.getMinutes();
+                const meridiem = hour >= 12 ? 'PM' : 'AM';
+                hour = hour % 12 || 12; // Convert hour to 12-hour format
+                const formattedHour = hour < 10 ? '0' + hour : hour;
+                const formattedMinute = minute < 10 ? '0' + minute : minute;
+                return `${formattedHour}:${formattedMinute} ${meridiem}`;
               }}
               views={{
                 dayGridMonth: {

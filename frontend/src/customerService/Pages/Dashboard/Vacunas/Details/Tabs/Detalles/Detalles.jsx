@@ -22,7 +22,7 @@ const Detalles = ({ data }) => {
               Tipo
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.vaccine?.name}
+              {data?.vaccine?.name || "-"}
             </Col>
           </Row>
           <Row>
@@ -30,7 +30,7 @@ const Detalles = ({ data }) => {
               Stock
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.vaccine?.stock}
+              {data?.vaccine?.stock || "-"}
             </Col>
           </Row>
           <Row>
@@ -38,7 +38,7 @@ const Detalles = ({ data }) => {
               Tiempo validez
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.vaccine?.validity} meses
+              {data?.vaccine?.validity || "-"} meses
             </Col>
           </Row>
           <Row>
@@ -46,7 +46,7 @@ const Detalles = ({ data }) => {
               N. de Aptos
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.apto}
+              {data?.apto || "-"}
             </Col>
           </Row>
         </div>

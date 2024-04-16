@@ -77,7 +77,7 @@ const Vacunas = () => {
 
   const filteredData = data.filter(({ name }) => {
     const searchString = searchValue;
-    return name.toLowerCase().includes(searchString);
+    return name?.toLowerCase().includes(searchString);
   });
 
   const handleSearchFilter = () => {
@@ -210,28 +210,6 @@ const Vacunas = () => {
                     </Dropdown>
                   </div>
                 </div>
-                {/* <div className="header-right">
-                  <Link className="export-btn btn btn-primary" to={`${process.env.REACT_APP_SERVER_URL}/vaccine/vaccineExcelSheet`}>
-                    {" "}
-                    <svg className="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                      <defs>
-                        <clipPath id="a">
-                          <path data-name="Rectángulo 11046" fill="#1d2328" stroke="#707070" d="M17 15h16v16H17z" />
-                        </clipPath>
-                      </defs>
-                      <g data-name="Enmascarar grupo 57952" transform="translate(-17 -15)" clipPath="url(#a)">
-                        <path
-                          d="M26.6 15h-6.4a1.6 1.6 0 0 0-1.6 1.6v12.8a1.6 1.6 0 0 0 1.6 1.6h9.6a1.6 1.6 0 0 0 1.6-1.6v-9.6L26.6 15m3.2 14.4h-9.6V16.6h5.6v4h4v8.8m-1.6-7.2v5.68l-1.68-1.68-2.24 2.24-2.24-2.24 2.24-2.24-1.76-1.76Z"
-                          fill="#1d2328"
-                        />
-                      </g>
-                    </svg>{" "}
-                    Exportar datos
-                  </Link>
-                  <Button onClick={handleShow} className="new-btn">
-                    + Nueva vacuna
-                  </Button>
-                </div> */}
               </div>
               <div className="card-body pt-0">
                 <table className="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
@@ -253,14 +231,14 @@ const Vacunas = () => {
                           <td className="text-start pe-0">
                             <span className=" text-gray-600 ">{i + 1}</span>
                           </td>
-                          <td className="text-start pe-0">{name}</td>
+                          <td className="text-start pe-0">{name ? name : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {stock}
+                            {stock ? name : "-"}
                           </td>
-                          <td className="text-start pe-0">{moment(creation).format("DD MMM YYYY")}</td>
-                          <td className="text-start pe-0">{validity + " meses"}</td>
-                          <td className="text-start pe-0">{aptos}</td>
+                          <td className="text-start pe-0">{creation ? moment(creation).format("DD MMM YYYY") : "-"}</td>
+                          <td className="text-start pe-0">{validity ? validity + " meses" : "-"}</td>
+                          <td className="text-start pe-0">{aptos ? aptos : "-"}</td>
                           <td className="text-end">
                             <Link
                               to={`/customerservice/vacunas/vacunas-details/${id}`}
@@ -269,52 +247,7 @@ const Vacunas = () => {
                               Ver detalles
                             </Link>
                           </td>
-                          {/* <td className="text-end">
-                            <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
-                              <Dropdown.Toggle
-                                className={`dropdown-toggle btn btn-sm  btn-flex btn-center  ${dropdowns[i] === true ? "active" : ""}`}
-                                id="dropdown-basic"
-                              >
-                                {"Acción"}
-                                <i className="fa-solid fa-chevron-down"></i>
-                              </Dropdown.Toggle>
-                              {dropdowns[i] && (
-                                <Dropdown.Menu
-                                  className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
-                                  
-                                  
-                                >
-                                  <Dropdown.Item className="menu-item px-3">
-                                    <Link to={`/customerservice/vacunas/vacunas-details/${id}`} className="menu-link px-3">
-                                      Ver detalles
-                                    </Link>
-                                  </Dropdown.Item>
-                                  <Dropdown.Item className="menu-item px-3">
-                                    <Link
-                                      to="#"
-                                      className="menu-link px-3"
-                                      onClick={(e) => {
-                                        handleShow(e, id);
-                                      }}
-                                      
-                                    >
-                                      Editar
-                                    </Link>
-                                  </Dropdown.Item>
-                                  <Dropdown.Item className="menu-item px-3">
-                                    <Link
-                                      to="#"
-                                      className="menu-link px-3 delete"
-                                      onClick={() => setModalShow(true)}
-                                      
-                                    >
-                                      Eliminar vacuna
-                                    </Link>
-                                  </Dropdown.Item>
-                                </Dropdown.Menu>
-                              )}
-                            </Dropdown>
-                          </td> */}
+
                         </tr>
                       ))
                     ) : (
@@ -330,7 +263,6 @@ const Vacunas = () => {
             </div>
           </div>
           <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
-          <VacunasModal show={show} onHide={handleClose} id={vaccineId} />
           <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}
