@@ -8,6 +8,7 @@ import { useGetSingleVeterinQuery, useGetSpecialitiesQuery } from "../../../../s
 import axios from "axios";
 import moment from "moment";
 import { useCookies } from "react-cookie";
+import validator from "validator";
 
 const VeterinaUserModal = (props) => {
   const [cookies] = useCookies(["authToken"]);
@@ -39,6 +40,8 @@ const VeterinaUserModal = (props) => {
   const [selectedDepartamento, setSelectedDepartamento] = useState("");
   const [distritos, setDistritos] = useState([]);
   const fileInputRef = useRef(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const getVeterinDetails = useGetSingleVeterinQuery(props.id, { refetchOnMountOrArgChange: true, skip: props.id === undefined });
 
@@ -85,7 +88,7 @@ const VeterinaUserModal = (props) => {
         address,
         department,
         district,
-        workingDays,
+        workingDays: workingDays !== null ? workingDays : [],
         start_time,
         end_time,
         specialityId,
@@ -149,10 +152,10 @@ const VeterinaUserModal = (props) => {
 
   const handleCheckboxChange = useCallback(
     (label) => {
-      const isChecked = formData.workingDays.includes(label);
+      const isChecked = formData?.workingDays.includes(label);
 
       if (isChecked) {
-        const updatedWorkingDays = formData.workingDays.filter((day) => day !== label);
+        const updatedWorkingDays = formData?.workingDays.filter((day) => day !== label);
         setFormData((prevData) => ({
           ...prevData,
           workingDays: updatedWorkingDays,
@@ -164,10 +167,17 @@ const VeterinaUserModal = (props) => {
         }));
       }
     },
-    [formData.workingDays],
+    [formData?.workingDays],
   );
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
+  };
+  const validatePassword = (password) => {
+    return password.length >= 6 && /^(?=.*[a-zA-Z])(?=.*\d).*$/.test(password);
+  };
+
+  const validateConfirmPassword = () => {
+    return formData?.confirmPassword === formData?.password;
   };
 
   const handleDepartamentoChange = (e) => {
@@ -197,12 +207,36 @@ const VeterinaUserModal = (props) => {
     props.onHide();
     props.filter.refetch()
   };
+  const validateEmail = () => {
+    // Check if the email field is not empty
+    if (formData?.email !== "") {
+      // Implement custom email validation logic
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regular expression for basic email validation
+      return emailPattern.test(formData?.email);
+    }
+    // If the email field is empty, return true
+    return true;
+  };
+  const validateIdentification = (identification) => {
+    if (identification !== "") {
+      return validator.isMobilePhone(identification.toString(), 'any', { strictMode: false }) && identification.length === 8;
+    }
+    return true; // Return true if identification is empty
+  };
+
+  const validatePhone = (phone) => {
+    if (phone !== "") {
+      return validator.isMobilePhone(phone.toString(), 'any', { strictMode: false }) && phone.length === 9;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
+    const allUnchecked = formData?.workingDays.length === 0;
     setValidated(true); // Set validated to true only when the submit button is clicked
-    if (form.checkValidity() === false) {
+    if (form.checkValidity() === false && validateIdentification(formData.identity) && validatePhone(formData.phone) && validateConfirmPassword() && validatePassword() && validateEmail() && !allUnchecked) {
       e.stopPropagation();
     } else {
       try {
@@ -260,7 +294,7 @@ const VeterinaUserModal = (props) => {
                     <div className="image mx-4">
                       <img
                         className="round-image"
-                        src={selectedFile ? URL.createObjectURL(selectedFile) : formData.avatar || "/images/avatarImg.png"}
+                        src={selectedFile ? URL.createObjectURL(selectedFile) : formData?.avatar || "/images/avatarImg.png"}
                         alt=""
                       />
                     </div>
@@ -280,13 +314,13 @@ const VeterinaUserModal = (props) => {
                   <Col>
                     <Form.Group className="mb-3" controlId="formBasicDate">
                       <Form.Label>Nombres</Form.Label>
-                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="name" placeholder="Nombres" value={formData.name} required />
+                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="name" placeholder="Nombres" value={formData?.name} required />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group className="mb-3" controlId="formBasicDate">
                       <Form.Label>Apellidos</Form.Label>
-                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="surname" placeholder="Apellidos" value={formData.surname} required />
+                      <Form.Control type="text" onChange={(e) => handleChange(e)} name="surname" placeholder="Apellidos" value={formData?.surname} required />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -296,21 +330,25 @@ const VeterinaUserModal = (props) => {
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Especialidad</Form.Label>
+
                   <Form.Select
                     aria-label="Default select example"
-                    value={formData.specialityId}
+                    value={formData?.specialityId}
                     onChange={(e) => handleChange(e)}
                     name="specialityId"
                   >
                     <option disabled="true" selected="true" value={""} >Seleccionar</option>
-                    {specialities
+                    {specialities.length > 0
                       ? specialities.map((speciality, i) => (
                         <option key={i} value={speciality.id}>
                           {speciality.speciality}
                         </option>
                       ))
-                      : ""}
+                      :
+                      ""
+                    }
                   </Form.Select>
+                  {specialities.length === 0 && <div style={{ color: 'red' }}>por favor agregue especialidad para ver aquí</div>}
                 </Form.Group>
               </Col>
               <Col>
@@ -320,7 +358,7 @@ const VeterinaUserModal = (props) => {
                       <Form.Label>F. de Nacimiento</Form.Label>
                       <Form.Control
                         type="date"
-                        value={formData.dob ? moment(formData.dob).format("YYYY-MM-DD") : ""}
+                        value={formData?.dob ? moment(formData?.dob).format("YYYY-MM-DD") : ""}
                         onChange={(e) => handleChange(e)}
                         name="dob"
                         className="text-gray-400"
@@ -333,13 +371,20 @@ const VeterinaUserModal = (props) => {
                     <Form.Group className="mb-3">
                       <Form.Label>Doc. Identidad</Form.Label>
                       <Form.Control
-                        onChange={(e) => handleChange(e)}
-                        value={formData.identity}
-                        name="identity"
                         aria-label="Default"
-                        placeholder="Doc. Identidad"
-                        required
+                        placeholder="Doc. de Identificación"
+                        value={formData.identity || ""}
+                        pattern="[0-9]{8}"
+                        maxLength={8}
+                        type="tel"
+                        onChange={(e) => {
+                          setFormData({ ...formData, identity: e.target.value });
+                        }}
+                        isInvalid={validated && formData.identity !== "" && !validateIdentification(formData.identity)}
                       />
+                      <Form.Control.Feedback type="invalid">
+                        {formData.identity !== "" && !validateIdentification(formData.identity) && "El número de identificación debe ser de 8 dígitos."}
+                      </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -351,27 +396,39 @@ const VeterinaUserModal = (props) => {
                   <Form.Label>Teléfono</Form.Label>
                   <Form.Control
                     aria-label="Default"
-                    value={formData.phone}
+                    value={formData?.phone}
                     type="tel" // Change type to 'tel' to support max length attribute
-                    maxLength={10} // Set maxLength attribute to 10
+                    pattern="[0-9]{9}"
+                    maxLength={9} // Set maxLength attribute to 10
                     onChange={(e) => handleChange(e)}
                     name="phone"
                     placeholder="Teléfono"
                     required
+                    isInvalid={validated && formData.phone !== "" && !validatePhone(formData.phone)}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {formData.phone !== "" && !validatePhone(formData.phone) && "Proporcione un número de teléfono válido en formato de 9 dígitos."}
+                  </Form.Control.Feedback>
                 </Form.Group>
+
               </Col>
               <Col>
-                <Form.Group className="mb-3">
+                <Form.Group controlId="email" className="mb-3">
                   <Form.Label>Correo electrónico</Form.Label>
                   <Form.Control
-                    aria-label="Default"
-                    onChange={(e) => handleChange(e)}
-                    value={formData.email}
+                    type="email"
                     name="email"
                     placeholder="Correo electrónico"
+                    value={formData.email}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                    }}
                     required
+                    isInvalid={validated && formData.email !== "" && !validateEmail(formData.email)}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {formData.email !== "" && !validateEmail(formData.email) && "Por favor proporcione un Correo electrónico válido."}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
@@ -379,7 +436,7 @@ const VeterinaUserModal = (props) => {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Sexo</Form.Label>
-                  <Form.Select aria-label="Default select example" value={formData.sex} onChange={(e) => handleChange(e)} name="sex" required>
+                  <Form.Select aria-label="Default select example" value={formData?.sex} onChange={(e) => handleChange(e)} name="sex" required>
                     <option disabled selected="true" value={""}>Sexo</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
@@ -391,7 +448,7 @@ const VeterinaUserModal = (props) => {
                   <Form.Label>Dirección</Form.Label>
                   <Form.Control
                     aria-label="Default"
-                    value={formData.address}
+                    value={formData?.address}
                     onChange={(e) => handleChange(e)}
                     name="address"
                     placeholder="Dirección"
@@ -409,11 +466,10 @@ const VeterinaUserModal = (props) => {
                       handleDepartamentoChange(e);
                     }}
                     name="department"
-                    value={selectedDepartamento || formData.department}
-                    required
+                    value={selectedDepartamento || formData?.department}
                   >
                     <option selected="true" value={""} disabled>Select Departamento</option>
-                    {departamentoData.map((departamento, i) => (
+                    {departamentoData.sort().map((departamento, i) => (
                       <option key={i} value={departamento.Department}>
                         {departamento.Department}
                       </option>
@@ -424,9 +480,9 @@ const VeterinaUserModal = (props) => {
               <Col>
                 <Form.Group className="mb-3" controlId="distritoSelect">
                   <Form.Label>Distrito</Form.Label>
-                  <Form.Select aria-label="Distrito" onChange={(e) => handleChange(e)} name="district" value={formData.district} >
-                    <option selected="true" value={""} disabled>Select Distrito</option>
-                    {distritos.map((distrito, i) => (
+                  <Form.Select aria-label="Distrito" onChange={(e) => handleChange(e)} name="district" value={formData?.district} >
+                    <option disabled>Select Distrito</option>
+                    {distritos.sort().map((distrito, i) => (
                       <option key={i} value={distrito}>
                         {distrito}
                       </option>
@@ -444,56 +500,72 @@ const VeterinaUserModal = (props) => {
                       <Form.Check
                         className="my-2"
                         type="checkbox"
-                        checked={formData.workingDays.includes("Lunes")}
+                        checked={formData?.workingDays?.includes("Lunes")}
                         label="Lunes"
+                        isInvalid={!formData?.workingDays.length === 0}
                         onChange={() => handleCheckboxChange("Lunes")}
-
+                        required={formData?.workingDays?.length !== 0 ? false : true}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
-                        checked={formData.workingDays.includes("Martes")}
+                        checked={formData?.workingDays?.includes("Martes")}
                         label="Martes"
+                        isInvalid={!formData?.workingDays.length === 0}
                         onChange={() => handleCheckboxChange("Martes")}
+                        required={formData?.workingDays?.length !== 0 ? false : true}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
-                        checked={formData.workingDays.includes("Miércoles")}
+                        checked={formData?.workingDays?.includes("Miércoles")}
                         label="Miércoles"
+                        isInvalid={!formData?.workingDays.length === 0}
                         onChange={() => handleCheckboxChange("Miércoles")}
+                        required={formData?.workingDays?.length !== 0 ? false : true}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
-                        checked={formData.workingDays.includes("Jueves")}
+                        checked={formData?.workingDays?.includes("Jueves")}
                         label="Jueves"
+                        isInvalid={!formData?.workingDays.length === 0}
                         onChange={() => handleCheckboxChange("Jueves")}
+                        required={formData?.workingDays?.length !== 0 ? false : true}
                       />
                     </Col>
                     <Col>
                       <Form.Check
                         className="my-2"
                         type="checkbox"
-                        checked={formData.workingDays.includes("Viernes")}
+                        checked={formData?.workingDays?.includes("Viernes")}
                         label="Viernes"
+                        isInvalid={!formData?.workingDays.length === 0}
                         onChange={() => handleCheckboxChange("Viernes")}
+                        required={formData?.workingDays?.length !== 0 ? false : true}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
-                        checked={formData.workingDays.includes("Sábado")}
+                        checked={formData?.workingDays?.includes("Sábado")}
                         label="Sábado"
+                        isInvalid={!formData?.workingDays.length === 0}
                         onChange={() => handleCheckboxChange("Sábado")}
+                        required={formData?.workingDays?.length !== 0 ? false : true}
                       />
                       <Form.Check
                         className="my-2"
                         type="checkbox"
-                        checked={formData.workingDays.includes("Domingo")}
+                        checked={formData?.workingDays?.includes("Domingo")}
                         label="Domingo"
+                        isInvalid={!formData?.workingDays.length === 0}
                         onChange={() => handleCheckboxChange("Domingo")}
+                        required={formData?.workingDays?.length !== 0 ? false : true}
                       />
                     </Col>
+                    <div style={{ color: "red", width: "100%" }}>
+                      {formData?.workingDays.length === 0 && "Por favor seleccione días laborables"}
+                    </div>
                   </Row>
                 </Form.Group>
               </Col>
@@ -505,7 +577,7 @@ const VeterinaUserModal = (props) => {
                       <Form.Control
                         type="time"
                         aria-label="Default"
-                        value={formData.start_time}
+                        value={formData?.start_time}
                         onChange={(e) => handleChange(e)}
                         name="start_time"
                         placeholder="Ingreso"
@@ -519,7 +591,7 @@ const VeterinaUserModal = (props) => {
                       <Form.Control
                         type="time"
                         aria-label="Default"
-                        value={formData.end_time}
+                        value={formData?.end_time}
                         onChange={(e) => handleChange(e)}
                         name="end_time"
                         placeholder="Salida"
@@ -532,29 +604,59 @@ const VeterinaUserModal = (props) => {
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="formBasicSelect">
-                  <Form.Label>Crear contraseña</Form.Label>
-                  <Form.Control
-                    aria-label="Default"
-                    onChange={(e) => handleChange(e)}
-                    value={formData.password}
-                    name="password"
-                    placeholder="Crear contraseña"
-                    required
-                  />
+                <Form.Group className="mb-3">
+                  <Form.Label>Contraseña</Form.Label>
+                  <div className="input-group">
+                    <Form.Control
+                      type={showPassword ? "text" : "password"} // Update type attribute based on showPassword state
+                      placeholder="Ingrese su contraseña"
+                      value={formData?.password}
+                      onChange={(e) => {
+                        setFormData({ ...formData, password: e.target.value });
+                      }}
+                      pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$"
+                      required
+                      isInvalid={validated && formData.password !== "" && !validatePassword(formData.password)}
+                    />
+                    <button
+                      className="btn btn-secondary btn-outline-secondary border-secondary border-1 rounded-end"
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      <i className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
+                    </button>
+                    <Form.Control.Feedback type="invalid">
+                      {formData.password !== "" && !validatePassword(formData.password) && "La contraseña debe contener al menos una letra y un número, y tener una longitud mínima de 6 caracteres."}
+                    </Form.Control.Feedback>
+                  </div>
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formBasicSelect">
+                <Form.Group className="mb-3">
                   <Form.Label>Confirmar contraseña</Form.Label>
-                  <Form.Control
-                    aria-label="Default"
-                    onChange={(e) => handleChange(e)}
-                    value={formData.confirmPassword}
-                    name="confirmPassword"
-                    placeholder="Confirmar contraseña"
-                    required
-                  />
+                  <div className="input-group">
+                    <Form.Control
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirmar contraseña"
+                      value={formData?.confirmPassword}
+                      onChange={(e) => {
+                        setFormData({ ...formData, confirmPassword: e.target.value });
+                      }}
+                      required
+                      pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$"
+                      isInvalid={formData.confirmPassword !== "" && !validateConfirmPassword(formData.password, formData.confirmPassword)}
+                    />
+                    <button
+                      className="btn btn-secondary btn-outline-secondary border-secondary border-1  rounded-end"
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      <i className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
+                    </button>
+                    <Form.Control.Feedback type="invalid">
+                      {formData.confirmPassword !== "" && !validateConfirmPassword(formData.password, formData.confirmPassword) && "Las contraseñas no coinciden."}
+                    </Form.Control.Feedback>
+                  </div>
                 </Form.Group>
               </Col>
             </Row>
@@ -568,7 +670,7 @@ const VeterinaUserModal = (props) => {
             Guardar Cambios
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
     </>
   );
 };

@@ -12,11 +12,12 @@ const UpdPwdModal = (props) => {
   const navigate = useNavigate();
   // eslint-disable-next-line no-unused-vars
   const [cookie, , removeCookie] = useCookies(["user"]);
+  const [validated, setValidated] = useState(false); // State for form validation
 
   const [formData, setFormData] = useState({
     id: props.id,
-    currentPassword: "",
     password: "",
+    currentPassword: "",
     confirmPassword: "",
   });
   const [updPwd, response] = useChangePasswordMutation();
@@ -28,40 +29,76 @@ const UpdPwdModal = (props) => {
     });
   };
 
+  const clearForm = () => {
+    setFormData({
+      id: props.id,
+      password: "",
+      currentPassword: "",
+      confirmPassword: "",
+    });
+    setValidated(false); // Reset validated state
+  };
+
+  const validateCurrentPassword = () => {
+    return formData.currentPassword !== "";
+  };
+
+  const validatePassword = () => {
+    // Check if the password field is not empty
+    if (formData.password !== "") {
+      // Implement custom password validation logic
+      // Password must contain at least one capital letter, one special character, one numeric digit, and have a minimum length of 6 characters
+      const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,}$/;
+      return passwordPattern.test(formData.password);
+    }
+    // If the password field is empty, return false
+    return false;
+  };
+
+  const validateConfirmPassword = () => {
+    return formData.confirmPassword === formData.password;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    setValidated(true); // Set validated to true only when the submit button is clicked
 
     if (
-      formData.password === formData.confirmPassword &&
-      formData.password !== "" &&
-      formData.confirmPassword !== "" &&
-      formData.currentPassword !== ""
+      validatePassword() &&
+      validateCurrentPassword() &&
+      validateConfirmPassword() // Validate confirm password field
     ) {
       await updPwd(formData);
     } else {
       dispatch(showToast("Password does not match", "FAIL_TOAST"));
     }
   };
+
+  useEffect(() => {
+    clearForm(); // Clear the form fields when the component mounts
+  }, []);
+
   useEffect(() => {
     if (!response.isLoading && response.status === "fulfilled") {
       props.onHide();
       success();
       navigate("/");
       removeCookie("user");
-    } else if (response.isError) {
-      // console.log(response.error);
+    } else if (response.isError && response.status === "rejected" && response.error.status !== 400) {
+      console.log(response.error);
       dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
   }, [dispatch, navigate, props, removeCookie, response]);
 
   return (
     <>
-      <Modal show={props.show} onHide={props.onHide} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal show={props.show} onHide={() => { props.onHide(); clearForm() }} size="md" aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Actualizar contraseña</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicSelect">
               <Form.Label>Contraseña actual</Form.Label>
               <Form.Control
@@ -70,12 +107,20 @@ const UpdPwdModal = (props) => {
                 name="currentPassword"
                 onChange={handleChange}
                 value={formData.currentPassword}
+                required
+                isInvalid={!validateCurrentPassword()}
               />
+              <Form.Control.Feedback type="invalid">
+                {!validateCurrentPassword() && " Por favor proporcione un Contraseña actual."}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicSelect">
               <Form.Label>Nueva contraseña</Form.Label>
-              <Form.Control aria-label="Default" placeholder="Nueva contraseña" onChange={handleChange} value={formData.password} name="password" />
+              <Form.Control aria-label="Default" placeholder="Nueva contraseña" onChange={handleChange} value={formData.password} name="password" required isInvalid={!validatePassword()} />
+              <Form.Control.Feedback type="invalid">
+                {!validatePassword() && "La contraseña debe contener al menos una letra mayúscula, un carácter especial, un dígito numérico y tener una longitud mínima de 6 caracteres."}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicSelect">
@@ -86,20 +131,23 @@ const UpdPwdModal = (props) => {
                 onChange={handleChange}
                 value={formData.confirmPassword}
                 name="confirmPassword"
+                required
+                isInvalid={!validateConfirmPassword()}
               />
+              <Form.Control.Feedback type="invalid">
+                {!validateConfirmPassword() && "Las contraseñas no coinciden."}
+              </Form.Control.Feedback>
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={() => { props.onHide(); clearForm() }} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button
             variant="primary"
             type="submit"
-            onClick={() => {
-              handleSubmit();
-            }}
+            onClick={handleSubmit}
             className="footer-btn btn btn-primary"
           >
             Guardar Cambios

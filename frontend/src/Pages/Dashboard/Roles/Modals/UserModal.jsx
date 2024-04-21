@@ -5,11 +5,11 @@ import { failer, success } from "../../../../Components/alert/success";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import Loader from "../../../../Components/loader/Loader";
+import validator from 'validator';
 
 const UserModal = (props) => {
   const [cookies] = useCookies(["authToken"]);
-  const [loading, setLoading] = useState(true)
-  // const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({
     email: "",
     id: "",
@@ -21,6 +21,8 @@ const UserModal = (props) => {
     profile: "",
     role: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [validated, setValidated] = useState(false); // State for form validation
   const [selectedFile, setSelectedFile] = useState(null);
@@ -28,10 +30,10 @@ const UserModal = (props) => {
 
   useEffect(() => {
     if (props.id !== undefined) {
-      setLoading(true)
+      setLoading(true);
       fetchUserData(props.id);
     } else {
-      setLoading(false)
+      setLoading(false);
     }
   }, [props.id, props.show]);
 
@@ -40,7 +42,7 @@ const UserModal = (props) => {
       const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/users/loginUserDetail/${userId}`);
       if (response.status === 200) {
         const data = response.data;
-        setLoading(false)
+        setLoading(false);
         if (data.user) {
           setUserData({
             email: data?.user?.email,
@@ -63,7 +65,6 @@ const UserModal = (props) => {
     }
   };
 
-
   const clearForm = () => {
     setUserData({
       email: "",
@@ -83,21 +84,68 @@ const UserModal = (props) => {
     const file = e.target.files[0];
     setSelectedFile(file);
   };
+
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
   };
 
-  const handleSubmit = async (e) => {
+  const validateRole = (role) => {
+    return role !== "";
+  };
+  const validateEmail = (email) => {
+    return validator.isEmail(email);
+  };
 
+  // Validation function for full name (at least two words)
+  const validateName = (name) => {
+    const words = name.trim().split(/\s+/);
+    return words.length >= 2;
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 6 && /^(?=.*[a-zA-Z])(?=.*\d).*$/.test(password);
+  };
+  // Validation function for confirming password (matches password)
+  const validateConfirmPassword = (password, confirmPassword) => {
+    return password === confirmPassword;
+  };
+
+  // Validation function for identification document (maximum length of 8 characters)
+  const validateIdentification = (identification) => {
+    if (identification !== "") {
+      return validator.isMobilePhone(identification.toString(), 'any', { strictMode: false }) && identification.length === 8;
+    }
+    return true; // Return true if identification is empty
+  };
+
+
+  // Validation function for phone number (9-digit number)
+  const validatePhone = (phone) => {
+    if (phone !== "") {
+      return validator.isMobilePhone(phone.toString(), 'any', { strictMode: false }) && phone.length === 9;
+    }
+    return true;
+  };
+
+  // Updated handleSubmit function
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     setValidated(true); // Set validated to true only when the submit button is clicked
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-    } else {
-      if (props.id !== undefined) {
-        // Edit user API endpoint
-        try {
+
+    if (
+      validateRole(userData.role) &&
+      validateName(userData.name) &&
+      validateEmail(userData.email) &&
+      validatePassword(userData.password) &&
+      validateConfirmPassword(userData.password, userData.confirmPassword) &&
+      validatePhone(userData.phone) &&
+      validateIdentification(userData.identification)
+    ) {
+      // If all validations pass, proceed with the API call
+      try {
+        if (props.id !== undefined) {
+          // Edit user API endpoint
           const formData = new FormData();
           formData.append("name", userData.name);
           formData.append("email", userData.email);
@@ -119,24 +167,15 @@ const UserModal = (props) => {
               Authorization: "Bearer " + cookies.authToken,
             },
           });
-          // console.log(editUserResponse)
+
           if (editUserResponse.status === 200) {
             // Handle success
-            clearForm()
+            clearForm();
             success();
             props.onHide();
           }
-        } catch (error) {
-          // Handle error
-          if (error.response.status !== 400) {
-            failer(error)
-            console.error("Error creating user", error);
-          }
-          console.error("Error creating user", error);
-        }
-      } else {
-        // Create user API endpoint
-        try {
+        } else {
+          // Create user API endpoint
           const formData = new FormData();
           formData.append("name", userData.name);
           formData.append("email", userData.email);
@@ -148,6 +187,8 @@ const UserModal = (props) => {
 
           if (selectedFile) {
             formData.append("profile", selectedFile);
+          } else {
+            formData.append("profile", userData.profile);
           }
 
           const createUserResponse = await axios.post(`${process.env.REACT_APP_SERVER_URL}/users/userRegistration`, formData, {
@@ -161,206 +202,258 @@ const UserModal = (props) => {
             // Handle success
             success();
             props.onHide();
-            clearForm()
+            clearForm();
           }
-        } catch (error) {
-          // Handle error
-          if (error.response.status !== 400) {
-            failer(error)
-            console.error("Error creating user", error);
-          }
+        }
+      } catch (error) {
+        // Handle error
+        if (error.response.status !== 400) {
+          failer(error);
           console.error("Error creating user", error);
         }
+        console.error("Error creating user", error);
       }
+    } else {
+      // If any validation fails, prevent form submission
+      console.log('Validation failed', "role" + validateRole(userData.role),
+        "name" + validateName(userData.name),
+        "email" + validateEmail(userData.email),
+        "phone" + validatePhone(userData.phone),
+        "inden" + validateIdentification(userData.identification),
+        "pass" + validatePassword(userData.password),
+        "conf" + validateConfirmPassword(userData.password, userData.confirmPassword))
     }
   };
-  return (
 
+  return (
     <Modal
       show={props.show}
       onHide={() => {
         props.onHide();
-        clearForm()
+        clearForm();
       }}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      {
-        loading ? <Loader /> :
-          <>
-            <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title-vcenter">{props.id ? "Editar Usuario" : "Crear Nuevo Usuario"}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Row>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="formBasicSelect">
-                      <div className="d-flex gap-10">
-                        <div className="image mx-4">
-                          <img
-                            className="round-image"
-                            src={selectedFile ? URL.createObjectURL(selectedFile) : userData.profile || "/images/avatarImg.png"}
-                            alt="Profile"
-                          />
-                        </div>
-                        <div className="form-field">
-                          <Form.Control type="file" onChange={handleImageChange} ref={fileInputRef} style={{ display: "none" }} required />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">{props.id ? "Editar Usuario" : "Crear Nuevo Usuario"}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+              <Row>
+                <Col>
+                  <Form.Group className="mb-3" controlId="profilePic">
+                    <div className="d-flex gap-10">
+                      <div className="image mx-4">
+                        <img
+                          className="round-image"
+                          src={selectedFile ? URL.createObjectURL(selectedFile) : userData.profile || "/images/avatarImg.png"}
+                          alt="Profile"
+                        />
+                      </div>
+                      <div className="form-field">
+                        {(!selectedFile && !userData.profile) && (
+                          <>
+                            <Form.Control type="file" onChange={handleImageChange} ref={fileInputRef} style={{ display: "none" }} />
+                            <div className="info">
+                              <p>Adjunta una foto de perfil para completar datos adicionales.</p>
+                            </div>
+                          </>
+                        )}
+                        {selectedFile && (
                           <div className="info">
                             <p>Adjunta una foto de perfil para completar datos adicionales.</p>
-                            {selectedFile && <p className="mt-3 filename">{selectedFile !== null ? selectedFile.name : "No file found"}</p>}
+                            <p className="mt-3 filename">{selectedFile.name}</p>
                           </div>
-                          <Button onClick={handleUploadButtonClick}>Adjuntar</Button>
-                        </div>
+                        )}
+                        {userData.profile && (
+                          <div className="info">
+                            <p>Ya has adjuntado una foto de perfil.</p>
+                          </div>
+                        )}
+                        <Button onClick={handleUploadButtonClick}>Adjuntar</Button>
                       </div>
-                      <Form.Control.Feedback type="invalid">
-                        Por favor proporcione un perfil
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="formBasicDate">
-                      <Form.Label>Nombre completo</Form.Label>
+                    </div>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group className="mb-3" controlId="formBasicDate">
+                    <Form.Label>Nombre completo</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Nombre completo"
+                      value={userData.name || ""}
+                      pattern="^\w+\s+\w+.*$"
+                      onChange={(e) => {
+                        setUserData({ ...userData, name: e.target.value });
+                      }}
+                      required
+                      isInvalid={validated && userData.name !== "" && !validateName(userData.name)}
+                    />
+
+                    <Form.Control.Feedback type="invalid">
+                      {userData.name !== "" && !validateName(userData.name) && "Por favor proporcione un Nombre completo con al menos dos palabras."}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Tipo de usuario</Form.Label>
+                    <Form.Select
+                      aria-label="Default select example"
+                      value={userData.role || ""}
+                      required
+                      onChange={(e) => {
+                        setUserData({ ...userData, role: e.target.value });
+                      }}
+                    >
+                      <option value="">Tipo de usuario</option>
+                      <option value="standardAdmin">Administrador Estándar</option>
+                      <option value="customerService">Servicio al Cliente</option>
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">
+                      {userData.role === "" && "Por favor proporcione un Tipo de usuario."}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+
+                <Col>
+                  <Form.Group controlId="email" className="mb-3">
+                    <Form.Label>Correo electrónico</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="Correo electrónico"
+                      value={userData.email}
+                      onChange={(e) => {
+                        setUserData({ ...userData, email: e.target.value });
+                      }}
+                      required
+                      isInvalid={validated && userData.email !== "" && !validateEmail(userData.email)}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {userData.email !== "" && !validateEmail(userData.email) && "Por favor proporcione un Correo electrónico válido."}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Doc. de Identificación</Form.Label>
+                    <Form.Control
+                      aria-label="Default"
+                      placeholder="Doc. de Identificación"
+                      value={userData.identification || ""}
+                      pattern="[0-9]{8}"
+                      maxLength={8}
+                      type="tel"
+                      onChange={(e) => {
+                        setUserData({ ...userData, identification: e.target.value });
+                      }}
+                      isInvalid={validated && userData.identification !== "" && !validateIdentification(userData.identification)}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {userData.identification !== "" && !validateIdentification(userData.identification) && "El número de identificación debe ser de 8 dígitos."}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group className="mb-3" controlId="formBasicSelect">
+                    <Form.Label>Nro. de Teléfono</Form.Label>
+                    <Form.Control
+                      aria-label="Default"
+                      type="text"
+                      maxLength={9}
+                      placeholder="Nro. de Teléfono"
+                      value={userData.phone || ""}
+                      onChange={(e) => {
+                        setUserData({ ...userData, phone: e.target.value });
+                      }}
+                      isInvalid={validated && userData.phone !== "" && !validatePhone(userData.phone)}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {userData.phone !== "" && !validatePhone(userData.phone) && "Proporcione un número de teléfono válido en formato de 9 dígitos."}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Contraseña</Form.Label>
+                    <div className="input-group">
                       <Form.Control
-                        type="text"
-                        placeholder="Apellidos y Nombres"
-                        value={userData.name || ""}
-                        onChange={(e) => {
-                          setUserData({ ...userData, name: e.target.value });
-                        }}
-                        required
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Por favor proporcione un Nombre completo.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                      <Form.Label>Tipo de usuario</Form.Label>
-                      <Form.Select
-                        aria-label="Default select example"
-                        value={userData.role || ""}
-                        required
-                        onChange={(e) => {
-                          setUserData({ ...userData, role: e.target.value });
-                        }}
-                      >
-                        <option value="">Tipo de usuario</option>
-                        <option value="standardAdmin">Administrador Estándar</option>
-                        <option value="customerService">Servicio al Cliente</option>
-                      </Form.Select>
-                      <Form.Control.Feedback type="invalid">
-                        Por favor proporcione un Tipo de usuario.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="formBasicSelect">
-                      <Form.Label>Correo electrónico</Form.Label>
-                      <Form.Control
-                        aria-label="Default"
-                        placeholder="Correo electrónico"
-                        value={userData.email || ""}
-                        onChange={(e) => {
-                          setUserData({ ...userData, email: e.target.value });
-                        }}
-                        required
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        Por favor proporcione un Correo electrónico.
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="formBasicSelect">
-                      <Form.Label>Doc. de Identificación</Form.Label>
-                      <Form.Control
-                        aria-label="Default"
-                        placeholder="Doc. de Identificación"
-                        value={userData.identification || ""}
-                        onChange={(e) => {
-                          setUserData({ ...userData, identification: e.target.value });
-                        }}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="formBasicSelect">
-                      <Form.Label>Nro. de Teléfono</Form.Label>
-                      <Form.Control
-                        aria-label="Default"
-                        type="tel"
-                        max={10}
-                        placeholder="Nro. de Teléfono"
-                        value={userData.phone || ""}
-                        onChange={(e) => {
-                          setUserData({ ...userData, phone: e.target.value });
-                        }}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="formBasicSelect">
-                      <Form.Label>Crear contraseña</Form.Label>
-                      <Form.Control
-                        type="text"
-                        aria-label="Default"
-                        placeholder="Crear contraseña"
-                        value={userData.password}
+                        type={showPassword ? "text" : "password"} // Update type attribute based on showPassword state
+                        placeholder="Ingrese su contraseña"
+                        value={userData?.password}
                         onChange={(e) => {
                           setUserData({ ...userData, password: e.target.value });
                         }}
+                        pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$"
                         required
+                        isInvalid={validated && userData.password !== "" && !validatePassword(userData.password)}
                       />
+                      <button
+                        className="btn btn-secondary btn-outline-secondary border-secondary border-1 rounded-end"
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        <i className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
+                      </button>
                       <Form.Control.Feedback type="invalid">
-                        Por favor proporcione un contraseña.
+                        {userData.password !== "" && !validatePassword(userData.password) && "La contraseña debe contener al menos una letra y un número, y tener una longitud mínima de 6 caracteres."}
                       </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group className="mb-3" controlId="formBasicSelect">
-                      <Form.Label>Confirmar contraseña</Form.Label>
+                    </div>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Confirmar contraseña</Form.Label>
+                    <div className="input-group">
                       <Form.Control
-                        aria-label="Default"
+                        type={showConfirmPassword ? "text" : "password"}
                         placeholder="Confirmar contraseña"
-                        value={userData.confirmPassword}
+                        value={userData?.confirmPassword}
                         onChange={(e) => {
                           setUserData({ ...userData, confirmPassword: e.target.value });
                         }}
                         required
+                        pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$"
+                        isInvalid={userData.confirmPassword !== "" && !validateConfirmPassword(userData.password, userData.confirmPassword)}
                       />
+                      <button
+                        className="btn btn-secondary btn-outline-secondary border-secondary border-1  rounded-end"
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      >
+                        <i className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
+                      </button>
                       <Form.Control.Feedback type="invalid">
-                        Por favor proporcione un Confirmar contraseña.
+                        {userData.confirmPassword !== "" && !validateConfirmPassword(userData.password, userData.confirmPassword) && "Las contraseñas no coinciden."}
                       </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                onClick={() => {
-                  clearForm()
-                  props.onHide();
-                }}
-                className="footer-btn btn btn-secondary"
-              >
-                Cancelar
-              </Button>
-              <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary">
-                {props.id ? "Guardar Cambios" : "Crear Usuario"}
-              </Button>
-            </Modal.Footer>
-          </>
-      }
+                    </div>
+                  </Form.Group>
+                </Col>
+              </Row>
+
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => { clearForm(); props.onHide(); }} className="footer-btn btn btn-secondary">Cancelar</Button>
+            <Button variant="primary" type="submit" onClick={handleSubmit} className="footer-btn btn btn-primary">
+              {props.id ? "Guardar Cambios" : "Crear Usuario"}
+            </Button>
+          </Modal.Footer>
+        </>
+      )}
     </Modal>
   );
 };

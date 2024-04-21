@@ -14,7 +14,6 @@ function MascotasModal({ show, handleClose, id }) {
     dob: "",
     Species: "",
     breed: "",
-    hair: "",
     color: "",
   });
 
@@ -23,11 +22,11 @@ function MascotasModal({ show, handleClose, id }) {
   const [addPet, response] = useAddPetMutation();
   const [editPet, response2] = useUpdatePetMutation();
   const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
-  const ownersList = useGetOwnersListQuery( { refetchOnMountOrArgChange: true });
+  const ownersList = useGetOwnersListQuery({ refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (id !== undefined && !petDetails.isLoading && petDetails.data) {
-      const { name, owner, ownerId, sex, dob, Species, breed, hair, color } = petDetails?.data?.pet;
+      const { name, owner, ownerId, sex, dob, Species, breed, color } = petDetails?.data?.pet;
       setFormData({
         name,
         owner,
@@ -36,7 +35,6 @@ function MascotasModal({ show, handleClose, id }) {
         dob,
         Species,
         breed,
-        hair,
         color,
       });
     } else if (id === undefined) {
@@ -55,7 +53,6 @@ function MascotasModal({ show, handleClose, id }) {
       dob: "",
       Species: "",
       breed: "",
-      hair: "",
       color: "",
     });
     setValidated(false); // Reset validated state
@@ -200,12 +197,6 @@ function MascotasModal({ show, handleClose, id }) {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <Form.Group className="mb-3" controlId="formBasicSelect">
-                  <Form.Label>Pelo</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Pelo" name="hair" onChange={handleChange} value={formData.hair} />
-                </Form.Group>
-              </Col>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <Form.Label>Color</Form.Label>

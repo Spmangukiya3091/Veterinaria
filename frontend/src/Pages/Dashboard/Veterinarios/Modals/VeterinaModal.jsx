@@ -34,11 +34,12 @@ const VeterinaModal = (props) => {
       setError(true);
       setLoading(false);
     }
-  }, [specialityList]);
+  }, [specialityList, openform, modalShow]);
 
   const handleOpen = () => setOpen(true);
   const handleCloses = () => {
     setOpen(false);
+    setSpid(undefined)
     specialityList.refetch();
   };
 
@@ -187,7 +188,15 @@ const VeterinaModal = (props) => {
         </Modal.Footer>
       </Modal>
       <EspecialidadModal show={open} id={spid} handleClose={handleCloses} filter={specialityList} />
-      <Alert show={modalShow} onHide={() => setModalShow(false)} msg={"¿Seguro de completar esta operación?"} opendltModal={handleConfirmDelete} />
+      <Alert show={modalShow} onHide={() => {
+        setModalShow(false)
+        specialityList.refetch();
+        setDltData({
+          id: "",
+          pass: "",
+          email: "",
+        });
+      }} msg={"¿Seguro de completar esta operación?"} opendltModal={handleConfirmDelete} />
       <DeleteVerifyModal
         show={openform}
         onHide={() => {
@@ -197,6 +206,7 @@ const VeterinaModal = (props) => {
             pass: "",
             email: "",
           });
+          specialityList.refetch();
         }}
         onDelete={handleDeleteVerify}
       />

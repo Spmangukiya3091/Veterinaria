@@ -47,7 +47,7 @@ function Navbars({ user }) {
     <>
       <div className="navbars bg-white">
         <Navbar>
-          <p className="nav-title">Bienvenido, Nombre de Administrador</p>
+          <p className="nav-title">Bienvenido, {user?.user?.name || "Administrator"}</p>
           <div className="notification-box d-flex align-content-center">
             <Dropdown as={ButtonGroup} show={isDropdownOpen} onClose={closeDropdown} onToggle={toggleDropdown} align={"end"}>
               <Dropdown.Toggle id="dropdown-basic" className="nueva-btn btn btn-primary">

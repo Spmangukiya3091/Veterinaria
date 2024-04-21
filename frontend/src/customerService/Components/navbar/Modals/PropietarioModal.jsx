@@ -22,7 +22,6 @@ const PropietarioModal = (props) => {
     dob: "",
   });
   const [validated, setValidated] = useState(false); // State for form validation
-  const [emailError, setEmailError] = useState("");
 
   const [addPropritario, response] = useAddOwnerMutation();
   useEffect(() => {
@@ -50,6 +49,16 @@ const PropietarioModal = (props) => {
     });
     setValidated(false); // Reset validated state
   };
+  const validateEmail = () => {
+    // Check if the email field is not empty
+    if (formData.email !== "") {
+      // Implement custom email validation logic
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regular expression for basic email validation
+      return emailPattern.test(formData.email);
+    }
+    // If the email field is empty, return true
+    return true;
+  };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -57,8 +66,6 @@ const PropietarioModal = (props) => {
       ...prevFormData,
       [name]: value.trim(), // Trim whitespace from the input value
     }));
-    // Reset email error when user starts typing again
-    setEmailError("");
   };
 
   const handleDepartamentoChange = (e) => {
@@ -87,7 +94,7 @@ const PropietarioModal = (props) => {
     e.preventDefault();
     const form = e.currentTarget;
     setValidated(true); // Set validated to true only when the submit button is clicked
-    if (form.checkValidity() === false) {
+    if (form.checkValidity() === false && validateEmail()) {
       e.stopPropagation();
     } else {
       await addPropritario(formData);
@@ -145,7 +152,7 @@ const PropietarioModal = (props) => {
                     type="tel"
                     placeholder="Teléfono"
                     name="phone_1"
-                    maxLength={10} // Set maxLength attribute to 10
+                    maxLength={9} // Set maxLength attribute to 10
                     onChange={(e) => handleOnChange(e)}
                     value={formData.phone_1}
                     required
@@ -162,7 +169,7 @@ const PropietarioModal = (props) => {
                   <Form.Control
                     aria-label="Default "
                     type="tel" // Change type to 'tel' to support max length attribute
-                    maxLength={10} // Set maxLength attribute to 10
+                    maxLength={9} // Set maxLength attribute to 10
                     placeholder="Teléfono"
                     name="phone_2"
                     onChange={(e) => handleOnChange(e)}
@@ -173,19 +180,20 @@ const PropietarioModal = (props) => {
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="formBasicSelect">
+                <Form.Group className="mb-3">
                   <Form.Label>Correo electrónico</Form.Label>
                   <Form.Control
                     aria-label="Default"
                     placeholder="Correo electrónico"
-                    name="email"
-                    onChange={(e) => handleOnChange(e)}
-                    value={formData.email}
-                    isInvalid={!!emailError}
+                    value={formData.email || ""}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                    }}
                     required
+                    isInvalid={!validateEmail()}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Por favor proporcione un Correo electrónico
+                    {!validateEmail() && "Por favor proporcione un Correo electrónico válido."}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>

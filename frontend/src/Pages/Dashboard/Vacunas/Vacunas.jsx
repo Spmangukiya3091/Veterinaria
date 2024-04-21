@@ -85,7 +85,7 @@ const Vacunas = ({ email }) => {
   };
 
   const filteredData = data.filter(({ name }) => {
-    const searchString = searchValue;
+    const searchString = searchValue.toLowerCase();
     return name?.toLowerCase().includes(searchString);
   });
 

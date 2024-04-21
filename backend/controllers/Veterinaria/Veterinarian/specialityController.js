@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, where } = require("sequelize");
 const Database = require("../../../config/connection");
 const Speciality = Database.speciality;
 const Admin = Database.user;
@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken")
 
 const createSpeciality = async (req, res) => {
   try {
-    const exist = await Speciality.findOne({});
+    const exist = await Speciality.findOne({ where: { speciality: req.body.speciality } });
 
     if (req.body.speciality === "" || req.body.speciality === null) {
       return res.status(400).json({
@@ -46,7 +46,7 @@ const updateSpeciality = async (req, res) => {
 
     if (specialityExist) {
       await Speciality.update({ speciality }, { where: { id: id } });
-      await Veterinarian.update({speciality:speciality},{where:{specialityId:id}});
+      await Veterinarian.update({ speciality: speciality }, { where: { specialityId: id } });
       res.status(200).send({
         message: "speciality updated successfully",
       });
@@ -79,14 +79,14 @@ const deleteSpeciality = async (req, res) => {
   }
   if (decoded.role !== user.role) {
     return res.status(400).send({
-     message: "Not authorized",
-     success: false,
-   });
- }
+      message: "Not authorized",
+      success: false,
+    });
+  }
   if (speciality?.id === id) {
     await Speciality.destroy({ where: { id: id } });
-    await Veterinarian.destroy({where:{specialityId:id}})
-    const vets = await Veterinarian.findAll({where:{veterinarianId:id}})
+    await Veterinarian.destroy({ where: { specialityId: id } })
+    const vets = await Veterinarian.findAll({ where: { specialityId: id } });
     const veterinarianIds = vets.map((vet) => vet.id);
     await Appointment.destroy({
       where: {

@@ -238,7 +238,7 @@ const Veterinarios = ({ email }) => {
                   Ver Especialidades
                 </Button>
                 <Button onClick={() => setOpenModal(true)} className="new-btn">
-                  + Nueva Doctor
+                  + Agregar Doctor
                 </Button>
               </div>
             </div>
@@ -251,10 +251,10 @@ const Veterinarios = ({ email }) => {
                 <Row>
                   {currentPosts.length > 0 ? (
                     currentPosts.map(({ id, avatar, name, surname, speciality }, i) => (
-                      <Col sm={6} md={4} lg={3} key={i}>
+                      <Col sm= {6} md={4} lg={3} key={i}>
                         <Card className="doctor-card">
                           <div className="image-container">
-                            <Card.Img variant="top" src={avatar} />
+                            <Card.Img variant="top" src={avatar ? avatar : "/images/image.png"} />
                           </div>
                           <Card.Body>
                             <Card.Title>DR. {name + " " + surname}</Card.Title>

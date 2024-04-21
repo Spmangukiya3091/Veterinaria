@@ -13,7 +13,6 @@ const MascotaModal = ({ onHide, show }) => {
     dob: "",
     Species: "",
     breed: "",
-    hair: "",
     color: "",
   });
 
@@ -36,7 +35,6 @@ const MascotaModal = ({ onHide, show }) => {
       dob: "",
       Species: "",
       breed: "",
-      hair: "",
       color: "",
     });
     setValidated(false); // Reset validated state
@@ -163,12 +161,6 @@ const MascotaModal = ({ onHide, show }) => {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <Form.Group className="mb-3" controlId="formBasicSelect">
-                  <Form.Label>Pelo</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Pelo" name="hair" onChange={handleChange} value={formData.hair} />
-                </Form.Group>
-              </Col>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <Form.Label>Color</Form.Label>

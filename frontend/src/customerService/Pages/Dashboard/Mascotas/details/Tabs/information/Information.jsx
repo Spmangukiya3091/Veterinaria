@@ -36,10 +36,6 @@ const Information = ({ data }) => {
                 <td className="info-details">{data?.sex || "-"}</td>
               </tr>
               <tr>
-                <td className="info-head">Pelo</td>
-                <td className="info-details">{data?.hair || "-"}</td>
-              </tr>
-              <tr>
                 <td className="info-head">Color</td>
                 <td className="info-details">{data?.color || "-"}</td>
               </tr>

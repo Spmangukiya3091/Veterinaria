@@ -4,7 +4,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { failer, success } from "../../../../Components/alert/success";
 import { useAddSpecialityMutation, useEditSpecialtyMutation, useGetSingleSpecialityQuery } from "../../../../services/ApiServices";
 
-function EspecialidadModal({ show, handleClose, id, filter }) {
+function EspecialidadModal({ show, handleClose, id }) {
   const [formData, setFormData] = useState({
     speciality: "",
   });
@@ -20,6 +20,10 @@ function EspecialidadModal({ show, handleClose, id, filter }) {
     if (id !== undefined && !singleSpecialty.isLoading) {
 
       setFormData({ speciality: singleSpecialty?.data?.speciality?.speciality });
+    } else {
+      setFormData({
+        speciality: ""
+      })
     }
   }, [id, singleSpecialty, show]);
 
@@ -43,7 +47,6 @@ function EspecialidadModal({ show, handleClose, id, filter }) {
           speciality: "",
         });
         handleClose();
-        filter.refetch();
         success();
       } else if (response2.isError) {
         failer(response2?.error?.data?.message);
@@ -56,7 +59,6 @@ function EspecialidadModal({ show, handleClose, id, filter }) {
         });
         handleClose();
         success();
-        filter.refetch();
       } else if (response.isError) {
         failer(response?.error?.data?.message);
         // console.log("error");
@@ -66,7 +68,11 @@ function EspecialidadModal({ show, handleClose, id, filter }) {
   }, [response, response2]);
   return (
     <div>
-      <Modal show={show} onHide={handleClose} centered>
+      <Modal show={show} onHide={() => {
+        handleClose(); setFormData({
+          speciality: "",
+        });
+      }} centered>
         <Modal.Header closeButton>
           <Modal.Title>Información de Especialidad</Modal.Title>
         </Modal.Header>

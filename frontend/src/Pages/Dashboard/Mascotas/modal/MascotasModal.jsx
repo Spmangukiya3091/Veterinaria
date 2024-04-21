@@ -7,6 +7,15 @@ import moment from "moment";
 
 function MascotasModal({ show, handleClose, id }) {
   // console.log(id)
+  const currentYear = new Date().getFullYear();
+  const startYear = currentYear - 100; // Change the range as needed
+  const endYear = currentYear;
+
+  const yearOptions = [];
+  for (let year = startYear; year <= endYear; year++) {
+    yearOptions.push(year);
+  }
+
   const [formData, setFormData] = useState({
     name: "",
     owner: "",
@@ -15,7 +24,6 @@ function MascotasModal({ show, handleClose, id }) {
     dob: "",
     Species: "",
     breed: "",
-    hair: "",
     color: "",
   });
 
@@ -24,11 +32,11 @@ function MascotasModal({ show, handleClose, id }) {
   const [addPet, response] = useAddPetMutation();
   const [editPet, response2] = useUpdatePetMutation();
   const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
-  const ownersList = useGetOwnersListQuery( { refetchOnMountOrArgChange: true });
+  const ownersList = useGetOwnersListQuery({ refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (id !== undefined && !petDetails.isLoading && petDetails?.data) {
-      const { name, owner, ownerId, sex, dob, Species, breed, hair, color } = petDetails?.data?.pet;
+      const { name, owner, ownerId, sex, dob, Species, breed, color } = petDetails?.data?.pet;
       setFormData({
         name,
         owner,
@@ -37,7 +45,6 @@ function MascotasModal({ show, handleClose, id }) {
         dob,
         Species,
         breed,
-        hair,
         color,
       });
     } else if (id === undefined) {
@@ -55,7 +62,6 @@ function MascotasModal({ show, handleClose, id }) {
       dob: "",
       Species: "",
       breed: "",
-      hair: "",
       color: "",
     });
     setValidated(false); // Reset validated state
@@ -174,14 +180,19 @@ function MascotasModal({ show, handleClose, id }) {
 
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicDate">
-                  <Form.Label>F. de Nacimiento</Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="DD/MM/YYYY"
-                    name="dob"
+                  <Form.Label>Año de Nacimiento</Form.Label>
+                  <Form.Select
                     onChange={handleChange}
-                    value={formData.dob ? moment(formData.dob).format("YYYY-MM-DD") : ""}
-                  />
+                    value={formData.dob ? moment(formData.dob).format("YYYY") : ""}
+                    name="dob"
+                  >
+                    <option value="">Año</option>
+                    {yearOptions.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
               </Col>
             </Row>
@@ -200,12 +211,6 @@ function MascotasModal({ show, handleClose, id }) {
               </Col>
             </Row>
             <Row>
-              <Col>
-                <Form.Group className="mb-3" controlId="formBasicSelect">
-                  <Form.Label>Pelo</Form.Label>
-                  <Form.Control aria-label="Default" placeholder="Pelo" name="hair" onChange={handleChange} value={formData.hair} />
-                </Form.Group>
-              </Col>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <Form.Label>Color</Form.Label>
