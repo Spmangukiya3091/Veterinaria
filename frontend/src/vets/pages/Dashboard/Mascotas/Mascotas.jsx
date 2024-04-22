@@ -186,7 +186,7 @@ const Mascotas = ({ id }) => {
                     </Dropdown>
                   </div>
                 </div>
-                <p className="text-gray-400 fw-bolder fs-5">{data.length} mascotas</p>
+                <p className="text-gray-400 fw-bolder fs-5">{data?.length} mascotas</p>
               </div>
               <div className="card-body pt-0">
                 <table className="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
@@ -203,7 +203,7 @@ const Mascotas = ({ id }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, name, owner, ownerId, Species, sex, age, rating }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -250,7 +250,7 @@ const Mascotas = ({ id }) => {
               </div>
             </div>
           </div>
-          <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}
     </>

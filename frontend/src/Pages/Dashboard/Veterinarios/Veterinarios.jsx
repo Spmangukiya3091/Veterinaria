@@ -249,7 +249,7 @@ const Veterinarios = ({ email }) => {
             ) : (
               <div className="card-body">
                 <Row>
-                  {currentPosts.length > 0 ? (
+                  {currentPosts?.length > 0 ? (
                     currentPosts.map(({ id, avatar, name, surname, speciality }, i) => (
                       <Col sm= {6} md={4} lg={3} key={i}>
                         <Card className="doctor-card">
@@ -283,7 +283,7 @@ const Veterinarios = ({ email }) => {
         </div>
         <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
         <VeterinaModal show={show} onHide={handleClose} email={email} />
-        <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+        <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         <VeterinaUserModal show={openModal} onHide={handleModalHide} filter={veterinList} />
       </div>
     </>

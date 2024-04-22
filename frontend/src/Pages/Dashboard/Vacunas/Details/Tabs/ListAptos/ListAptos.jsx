@@ -81,7 +81,7 @@ const ListAptos = ({ id, vaccineData }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, owner, petId, petVaccinationData, status, ownerId }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -140,7 +140,7 @@ const ListAptos = ({ id, vaccineData }) => {
             </div>
           </div>
           <AptosModal show={show} onHide={handleClose} vaccineData={vaccineData} vaccineName={vaccineData.vaccine.name} ownerName={ownerName} petName={petName} id={recordId} vaccineId={id} filter={vaccinationList} owner={ownerId} petId={petId} />
-          <CitasPagination current={currentPage} total={Math.ceil(data.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(data?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </>
       )}
     </>

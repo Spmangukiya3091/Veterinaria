@@ -134,7 +134,7 @@ function CategoryModal({ show, handleClose, email }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {data?.categories.length > 0 ? (
+                      {data?.categories?.length > 0 ? (
                         data?.categories.map(({ id, category, productCount, createdAt }, i) => (
                           <tr key={i}>
                             <td>{category}</td>

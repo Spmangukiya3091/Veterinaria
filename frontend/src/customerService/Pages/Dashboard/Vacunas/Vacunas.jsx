@@ -20,7 +20,7 @@ const Vacunas = () => {
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [vaccineId, setVaccineId] = useState();
-  const [dropdowns, setDropdown] = useState(new Array(vacunasData.length).fill(false));
+  const [dropdowns, setDropdown] = useState(new Array(vacunasData?.length).fill(false));
   const [searchValue, setSearchValue] = useState("");
   const [searchData, setSearchData] = useState({
     startDate: "",
@@ -225,7 +225,7 @@ const Vacunas = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, name, stock, creation, validity, aptos }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">

@@ -116,7 +116,7 @@ const Mascotas = ({ email }) => {
   };
 
   const handleChangeDate = (selectedDates) => {
-    if (selectedDates && selectedDates.length === 2) {
+    if (selectedDates && selectedDates?.length === 2) {
       setSearchData({
         startDate: selectedDates[0] || "",
         endDate: selectedDates[1] || "",

@@ -307,7 +307,7 @@ const Propietarios = ({ email }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, name, surname, address, phone_1, doc_identity }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -393,7 +393,7 @@ const Propietarios = ({ email }) => {
             onDelete={handleDeleteVerify}
           />
           <PropietariousModal show={show} onHide={handleClose} id={id} />
-          <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}
     </>

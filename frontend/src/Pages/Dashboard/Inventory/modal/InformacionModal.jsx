@@ -40,7 +40,7 @@ function InformacionModal({ show, handleClose, id }) {
   }, [categoryData]);
 
   const handleSaveChanges = () => {
-    if (formData.category.trim().length === 0) {
+    if (formData?.category.trim()?.length === 0) {
       setCategoryError("Category is required.");
       return;
     }

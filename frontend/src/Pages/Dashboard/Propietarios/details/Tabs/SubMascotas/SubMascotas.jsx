@@ -12,7 +12,7 @@ const SubMascotas = ({ data }) => {
               <div className="filter-box">
                 <h1>Mascotas</h1>
               </div>
-              <p className="text-gray-400 fw-bolder fs-5">{data.pets.length} Pacientes</p>
+              <p className="text-gray-400 fw-bolder fs-5">{data?.pets?.length} Pacientes</p>
             </div>
           </div>
           <div className="submascotas-table">

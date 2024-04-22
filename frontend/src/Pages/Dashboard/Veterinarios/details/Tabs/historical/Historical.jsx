@@ -232,7 +232,7 @@ const Historical = ({ id }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, date, status, ACCIONES }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -293,7 +293,7 @@ const Historical = ({ id }) => {
               </div>
             </div>
           </div>
-          <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </>
       )}
     </>

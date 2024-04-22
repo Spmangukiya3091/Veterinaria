@@ -20,8 +20,8 @@ function ProximasCitas({ data }) {
             </tr>
           </thead>
           <tbody>
-            {data.appointments.length > 0 ? (
-              data.appointments.map(({ id, pet, veterinarian, scheduleStart, scheduleEnd, date }, i) => (
+            {data?.appointments?.length > 0 ? (
+              data?.appointments.map(({ id, pet, veterinarian, scheduleStart, scheduleEnd, date }, i) => (
                 <tr key={i}>
                   <td>{i + 1}</td>
                   <td>{pet}</td>

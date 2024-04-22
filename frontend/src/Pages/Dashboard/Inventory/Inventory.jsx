@@ -20,7 +20,7 @@ const Inventory = ({ email }) => {
   // const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
-  const [dropdowns, setDropdown] = useState(new Array(inventoryData.length).fill(false));
+  const [dropdowns, setDropdown] = useState(new Array(inventoryData?.length).fill(false));
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [data, setData] = useState([]);
@@ -117,7 +117,7 @@ const Inventory = ({ email }) => {
   };
 
   const handleChangeDate = (selectedDates) => {
-    if (selectedDates && selectedDates.length === 2) {
+    if (selectedDates && selectedDates?.length === 2) {
       setSearchData({
         ...searchData,
         startDate: selectedDates[0] || "",
@@ -379,7 +379,7 @@ const Inventory = ({ email }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, sku, product, presentation, price, category, stock, status }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -478,7 +478,7 @@ const Inventory = ({ email }) => {
             }}
             onDelete={handleDeleteVerify}
           />
-          <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}
     </>

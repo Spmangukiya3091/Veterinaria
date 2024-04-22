@@ -21,7 +21,7 @@ const Pagos = ({ email }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [pId, setPId] = useState();
-  const [dropdowns, setDropdown] = useState(new Array(pagosData.length).fill(false));
+  const [dropdowns, setDropdown] = useState(new Array(pagosData?.length).fill(false));
   const [searchValue, setSearchValue] = useState("");
   const [searchData, setSearchData] = useState({
     status: "",
@@ -334,7 +334,7 @@ const Pagos = ({ email }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, payment_no, owner, payment_method, service, createdAt, final_amount }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -424,7 +424,7 @@ const Pagos = ({ email }) => {
             onDelete={handleDeleteVerify}
           />
           <PagosModal show={show} onHide={handleClose} id={pId} filter={paymentList} />
-          <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}
     </>

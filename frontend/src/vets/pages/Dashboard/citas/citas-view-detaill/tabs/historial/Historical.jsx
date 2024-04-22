@@ -70,7 +70,7 @@ function Historical({ id }) {
     });
   };
   const handleChangeDate = (selectedDates) => {
-    if (selectedDates && selectedDates.length === 2) {
+    if (selectedDates && selectedDates?.length === 2) {
       setSearchData({
         ...searchData,
         startDate: selectedDates[0] || "",
@@ -216,7 +216,7 @@ function Historical({ id }) {
                     </Dropdown>
                   </div>
                 </div>
-                <p className="text-gray-400 fw-bolder fs-5">{data.length} citas agendadas</p>
+                <p className="text-gray-400 fw-bolder fs-5">{data?.length} citas agendadas</p>
               </div>
               <div className="card-body pt-0">
                 <table className="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
@@ -231,7 +231,7 @@ function Historical({ id }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, date, status }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -288,7 +288,7 @@ function Historical({ id }) {
               </div>
             </div>
           </div>
-          <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </>
       )}
     </>

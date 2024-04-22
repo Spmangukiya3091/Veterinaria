@@ -34,7 +34,7 @@ const Vaccination = ({ id }) => {
               <div className="card-title">
                 <h1>Vacunación</h1>
               </div>
-              <p className="text-gray-400 fw-bolder fs-5">{data.length} Vacunas</p>
+              <p className="text-gray-400 fw-bolder fs-5">{data?.length} Vacunas</p>
             </div>
             <div className="card-body pt-0">
               <table className="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_products_table">
@@ -49,7 +49,7 @@ const Vaccination = ({ id }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.length > 0 ? (
+                  {data?.length > 0 ? (
                     data.map(({ id, vaccine, exploration, F_vaccination, validity, status }, i) => (
                       <tr key={i}>
                         <td>{i + 1}</td>

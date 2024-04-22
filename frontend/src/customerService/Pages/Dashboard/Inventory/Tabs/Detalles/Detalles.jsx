@@ -73,7 +73,7 @@ const Detalles = ({ data, historyData }) => {
       </div>
       <div className="details my-3">
         <h4>Actualizaciones</h4>
-        {historyData?.productHistory.length > 0 ? (
+        {historyData?.productHistory?.length > 0 ? (
           historyData?.productHistory.map(({ id, reason, createdAt }) => (
             <div className="detail-wrapper" key={id}>
               <div className="detail-title-box">

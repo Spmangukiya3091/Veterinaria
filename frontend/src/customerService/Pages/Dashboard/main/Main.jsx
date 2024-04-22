@@ -37,7 +37,7 @@ const CustomerServiceMain = () => {
   const location = useLocation();
 
   const paths = location.pathname.split("/").filter((path) => path !== "");
-  const totalpaths = paths.length;
+  const totalpaths = paths?.length;
   const title =
     paths[totalpaths - 1] === undefined
       ? "Dashboard"

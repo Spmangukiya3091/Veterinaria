@@ -76,7 +76,7 @@ function Navbars({ user }) {
                 <Avatars name={user?.user?.name} />
                 <div className="avatar-title-box">
                   <p className="avatar-main-title">{user?.user?.name}</p>
-                  <p className="avatar-sub-title">{user?.user?.role}</p>
+                  <p className="avatar-sub-title">{user?.user?.role === "masterAdmin" ? "administrador maestro" : "administrador estándar"}</p>
                 </div>
                 <i className="fa-solid fa-chevron-down"></i>
               </div>

@@ -99,11 +99,11 @@ const UserModal = (props) => {
   // Validation function for full name (at least two words)
   const validateName = (name) => {
     const words = name.trim().split(/\s+/);
-    return words.length >= 2;
+    return words?.length >= 2;
   };
 
   const validatePassword = (password) => {
-    return password.length >= 6 && /^(?=.*[a-zA-Z])(?=.*\d).*$/.test(password);
+    return password?.length >= 6 && /^(?=.*[a-zA-Z])(?=.*\d).*$/.test(password);
   };
   // Validation function for confirming password (matches password)
   const validateConfirmPassword = (password, confirmPassword) => {
@@ -315,7 +315,7 @@ const UserModal = (props) => {
                       }}
                     >
                       <option value="">Tipo de usuario</option>
-                      <option value="standardAdmin">Administrador Estándar</option>
+                      <option value="admin">Administrador Estándar</option>
                       <option value="customerService">Servicio al Cliente</option>
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">

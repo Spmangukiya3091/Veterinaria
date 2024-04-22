@@ -18,7 +18,7 @@ import Loader from "../../../Components/loader/Loader";
 function Citas({ email }) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [show, setShow] = useState(false);
-  const [dropdowns, setDropdown] = useState(new Array(citasData.length).fill(false));
+  const [dropdowns, setDropdown] = useState(new Array(citasData?.length).fill(false));
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -103,7 +103,7 @@ function Citas({ email }) {
     });
   };
   const handleChangeDate = (selectedDates) => {
-    if (selectedDates && selectedDates.length === 2) {
+    if (selectedDates && selectedDates?.length === 2) {
       setSearchData({
         ...searchData,
         startDate: selectedDates[0] || "",
@@ -321,7 +321,7 @@ function Citas({ email }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, pet, veterinarian, scheduleStart, scheduleEnd, date, status, rating }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -432,7 +432,7 @@ function Citas({ email }) {
               onDelete={handleDeleteVerify}
             />
           </div>
-          <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}
     </>

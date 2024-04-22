@@ -29,7 +29,7 @@ const Roles = ({ email }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [show, setShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [dropdowns, setDropdown] = useState(new Array(data.length).fill(false));
+  const [dropdowns, setDropdown] = useState(new Array(data?.length).fill(false));
   const [searchValue, setSearchValue] = useState("");
   const [searchData, setSearchData] = useState({
     role: "",
@@ -113,7 +113,7 @@ const Roles = ({ email }) => {
 
   // console.log(userID)
   const handleChangeDate = (selectedDates) => {
-    if (selectedDates && selectedDates.length === 2) {
+    if (selectedDates && selectedDates?.length === 2) {
       setSearchData({
         ...searchData,
         startDate: selectedDates[0] || "",
@@ -439,7 +439,7 @@ const Roles = ({ email }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {currentPosts.length > 0 ? (
+                          {currentPosts?.length > 0 ? (
                             currentPosts.map(({ id, name, role, email, createdAt }, i) => (
                               <tr key={i}>
                                 <td className="text-start pe-0">
@@ -513,7 +513,7 @@ const Roles = ({ email }) => {
                   </div>
                 </div>
                 <UserModal show={show} onHide={handleClose} id={userID} />
-                <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+                <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
                 <UpdPwdModal show={showPwd} onHide={handlePwdClose} id={loginuserDetails?.id} />
                 <Alert
                   show={modalShow}

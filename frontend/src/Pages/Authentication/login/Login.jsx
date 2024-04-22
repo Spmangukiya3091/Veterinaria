@@ -31,6 +31,8 @@ function Login() {
         navigate("/veterine/resumen");
       } else if (data.user.role === "masterAdmin") {
         navigate("/dashboard/resumen");
+      } else if (data.user.role === "admin") {
+        navigate("/dashboard/resumen");
       } else if (data.user.role === "customerService") {
         navigate("/customerservice/resumen");
       }
@@ -59,6 +61,62 @@ function Login() {
         maxAge: expiresIn,
         path: "/",
         domain: "app.olivosdatasolutions.com",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "develop.olivosdatasolutions.com",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "develop.olivosdatasolutions.com",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "develop.olivosdatasolutions.com",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "develop.olivosdatasolutions.com",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "olivosdatasolutions.com",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "olivosdatasolutions.com",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        domain: "olivosdatasolutions.com",
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/",
+        domain: "olivosdatasolutions.com",
         sameSite: "Lax",
         secure: false,
       });

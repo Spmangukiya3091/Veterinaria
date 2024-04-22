@@ -34,7 +34,7 @@ const AdminMain = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const paths = location.pathname.split("/").filter((path) => path !== "");
-  const totalpaths = paths.length;
+  const totalpaths = paths?.length;
   const title =
     paths[totalpaths - 1] === undefined
       ? "Dashboard"

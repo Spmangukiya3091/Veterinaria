@@ -85,7 +85,7 @@ function ProximasCitas({ id }) {
                   ))}
                 </ul>
                 <div id={`kt_schedule_day_${selectedDate}`} className="tab-panel fade show active" role="tabpanel">
-                  {data.length > 0 ? (
+                  {data?.length > 0 ? (
                     data.map((appointment) => (
                       <div key={appointment.id} className="d-flex flex-stack position-relative mt-8">
                         <div className="position-absolute h-100 w-4px bg-secondary rounded top-0 start-0"></div>

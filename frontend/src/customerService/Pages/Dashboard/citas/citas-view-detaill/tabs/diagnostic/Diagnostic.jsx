@@ -44,7 +44,7 @@ function Diagnostic({ data }) {
         <div className="third container">
           <h4>Documentación</h4>
           {data && data?.documentation !== null ? (
-            data?.documentation.length > 0 ? (
+            data?.documentation?.length > 0 ? (
               data?.documentation.map((document, index) => (
                 <div key={index} className="files mb-2">
                   {Object.entries(document).map(([key, value]) => (

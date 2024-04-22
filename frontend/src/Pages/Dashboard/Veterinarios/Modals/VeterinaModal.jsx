@@ -132,7 +132,7 @@ const VeterinaModal = (props) => {
                 ) : (
                   <>
                     {
-                      data.length > 0 ?
+                      data?.length > 0 ?
                         data.map((data, i) => (
                           <tr key={i}>
                             <td className="text-start">{data.speciality}</td>

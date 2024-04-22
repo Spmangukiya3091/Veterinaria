@@ -118,7 +118,7 @@ const Propietarios = ({ email }) => {
   };
 
   const handleChangeDate = (selectedDates) => {
-    if (selectedDates && selectedDates.length === 2) {
+    if (selectedDates && selectedDates?.length === 2) {
       setSearchData({
         startDate: selectedDates[0] || "",
         endDate: selectedDates[1] || "",
@@ -357,7 +357,7 @@ const Propietarios = ({ email }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPosts.length > 0 ? (
+                    {currentPosts?.length > 0 ? (
                       currentPosts.map(({ id, name, surname, address, phone_1, doc_identity }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
@@ -443,7 +443,7 @@ const Propietarios = ({ email }) => {
             onDelete={handleDeleteVerify}
           />
           <PropietariousModal show={show} onHide={handleClose} id={id} />
-          <CitasPagination current={currentPage} total={Math.ceil(filteredData.length / postsPerPage)} onPageChange={setCurrentPage} />
+          <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}
     </>

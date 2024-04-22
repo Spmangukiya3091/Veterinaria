@@ -63,7 +63,7 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
   };
 
   const handleAddTodo = () => {
-    if (list.intake.trim() !== "" && selectedOption.length > 0) {
+    if (list.intake.trim() !== "" && selectedOption?.length > 0) {
       setLists([...lists, { ...list, Name: selectedOption[0] }]);
       setList({ intake: "", Name: "", frequency: "" });
     }
