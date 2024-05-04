@@ -8,6 +8,7 @@ import SingleInputDateRangePicker from "./date-picker/DatePicker";
 import { useGetAppoinmentByDoctorQuery } from "../../../../services/ApiServices";
 import StarRating from "../../../components/star/StarRating";
 import Loader from "../../../components/loader/Loader";
+import Error from "../../../components/error/Error";
 
 function Citas({ id }) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -95,10 +96,10 @@ function Citas({ id }) {
   const currentPosts = filteredData.slice(adjustedIndexOfFirstPost, indexOfLastPost);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={appointmentsByFilter?.isError ? appointmentsByFilter?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="citas">
           <div className="main-title-box">

@@ -12,6 +12,7 @@ import { failer, success } from "../../../../Components/alert/success";
 // import { showToast } from "../../../../store/tostify";
 // import { useDispatch } from "react-redux";
 import Loader from "../../../../Components/loader/Loader";
+import Error from "../../../../Components/error/Error";
 
 const VacunasDetails = ({ email }) => {
   const location = useLocation();
@@ -27,10 +28,10 @@ const VacunasDetails = ({ email }) => {
   const vaccineDetail = useGetSingleVaccineQuery(id, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
-    if (!vaccineDetail.isLoading) {
+    if (!vaccineDetail?.isLoading) {
       setLoading(false);
       setData(vaccineDetail?.data);
-    } else if (vaccineDetail.isError) {
+    } else if (vaccineDetail?.isError) {
       setLoading(false);
       setError(true);
     }
@@ -78,7 +79,7 @@ const VacunasDetails = ({ email }) => {
       // console.log(body);
       await dltVaccine(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   console.log(data)
@@ -101,10 +102,10 @@ const VacunasDetails = ({ email }) => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccineDetail?.isError ? vaccineDetail?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <section className="vacunasDetails-section">
           <div className="heading">

@@ -14,6 +14,7 @@ import { showToast } from "../../../store/tostify";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../Components/alert/success";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 const Roles = ({ email }) => {
   const cookies = useCookies();
@@ -194,7 +195,7 @@ const Roles = ({ email }) => {
       // console.log(body);
       await dltUser(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
@@ -216,10 +217,10 @@ const Roles = ({ email }) => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        " <Error error={errmsg} />"
+      ) : error ? (
+        <Error message={userList?.isError ? userList?.error?.data?.message : userDetails.isError ? userDetails.error?.data.message : "Error Interno del Servidor"} />
       ) : (
         <div className="roles">
           <div className="main-title-box">
@@ -333,6 +334,7 @@ const Roles = ({ email }) => {
                             data-kt-ecommerce-product-filter="search"
                             className="form-control form-control-solid ps-12 w-250px"
                             placeholder="Buscar"
+                            autoComplete="false"
                             value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                           />

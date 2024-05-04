@@ -498,7 +498,7 @@ const getSingleAppointment = async (req, res) => {
     if (appointment.medication !== null && appointment.documentation !== null) {
       const documentationArray = JSON.parse(appointment?.documentation || "[]");
       const medications = JSON.parse(appointment?.medication || "[]");
-      const jsoneMedication = JSON.parse(medications)
+      // const jsoneMedication = JSON.parse(medications)
       // const medications = appointment?.medication || []
       // console.log(typeof jsoneMedication, "============medication")
       // console.log(typeof documentationArray, "============documentationArray")
@@ -506,7 +506,8 @@ const getSingleAppointment = async (req, res) => {
       const updatedAppointment = {
         ...appointment.toJSON(),
         documentation: documentationArray,
-        medication: jsoneMedication,
+        medication: medications
+        ,
       };
 
       return res.status(200).json({

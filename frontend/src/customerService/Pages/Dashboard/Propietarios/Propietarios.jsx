@@ -11,6 +11,7 @@ import { useOwnerFilterQuery, useRemoveOwnerMutation } from "../../../../service
 import { failer, success } from "../../../Components/alert/success";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 const Propietarios = ({ email }) => {
   const navigate = useNavigate();
@@ -157,7 +158,7 @@ const Propietarios = ({ email }) => {
       // Call the dltOwner API
       await dltOwner(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
@@ -182,10 +183,10 @@ const Propietarios = ({ email }) => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={allOwnersList?.isError ? allOwnersList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="propietarios">
           <div className="main-title-box">

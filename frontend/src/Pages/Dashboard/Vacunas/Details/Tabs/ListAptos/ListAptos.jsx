@@ -6,6 +6,7 @@ import AptosModal from "../AptosModal/AptosModal";
 import CitasPagination from "../../../../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useGetVaccinationbyVaccineIdQuery } from "../../../../../../services/ApiServices";
 import Loader from "../../../../../../Components/loader/Loader";
+import Error from "../../../../../../Components/error/Error";
 
 const ListAptos = ({ id, vaccineData }) => {
   console.log(vaccineData)
@@ -53,10 +54,10 @@ const ListAptos = ({ id, vaccineData }) => {
   const currentPosts = data.slice(adjustedIndexOfFirstPost, indexOfLastPost);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccinationList?.isError ? vaccinationList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <>
           <div className="listaptos-table-container">

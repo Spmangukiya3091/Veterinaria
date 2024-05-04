@@ -6,6 +6,7 @@ import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
 import CitasPagination from "../../../components/pagination/citas-pagination/Citas-Pagination";
 import { useGetPetsByVeterinarianQuery } from "../../../../services/ApiServices";
 import Loader from "../../../components/loader/Loader";
+import Error from "../../../components/error/Error";
 
 const Mascotas = ({ id }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -82,10 +83,10 @@ const Mascotas = ({ id }) => {
   const currentPosts = filteredData.slice(adjustedIndexOfFirstPost, indexOfLastPost);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={petList?.isError ? petList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="mascotas">
           <div className="main-title-box">

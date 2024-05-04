@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import { useGetProductHistoryQuery, useGetSingleProductQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
 import Loader from "../../../../components/loader/Loader";
+import Error from "../../../../components/error/Error";
 const InventoryDetails = () => {
   const location = useLocation();
   const [show, setShow] = useState(true);
@@ -29,10 +30,10 @@ const InventoryDetails = () => {
   }, [productDetails, productHistory]);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={productDetails?.isError ? productDetails?.error?.data?.message : productHistory.isError ? productHistory.error?.data.message : "Error Interno del Servidor"} />
       ) : (
         <section className="inventorydetails-section">
           <div className="heading">
@@ -54,7 +55,7 @@ const InventoryDetails = () => {
                   <div className="d-flex  text-center flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px">$ {data.price + ".00"}</span>
+                        <span className="w-75px">S/  {data.price + ".00"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Precio</div>
                     </div>

@@ -8,6 +8,7 @@ import esLocale from "@fullcalendar/core/locales/es";
 import { useGetVeterinariansAppointmentQuery } from "../../../../services/ApiServices";
 import Loader from "../../../components/loader/Loader";
 import moment from "moment";
+import Error from "../../../components/error/Error";
 
 function Calendario({ id }) {
   const [loading, setLoading] = useState(true);
@@ -31,10 +32,10 @@ function Calendario({ id }) {
   }));
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={appointments.isError ? appointments.error?.data.message : "Error Interno del Servidor"} />
       ) : (
         <div className="calendario">
           <div className="main-title-box">

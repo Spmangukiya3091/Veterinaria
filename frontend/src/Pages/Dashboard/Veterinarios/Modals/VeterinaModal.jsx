@@ -11,12 +11,12 @@ import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVe
 import { Link } from "react-router-dom";
 
 const VeterinaModal = (props) => {
+
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [spid, setSpid] = useState();
-  const specialityList = useGetSpecialityListQuery("", { refetchOnMountOrArgChange: true });
   const [modalShow, setModalShow] = useState(false);
   const [openform, setOpenform] = useState(false);
   const [dltSpeciality, response] = useRemoveSpecialityMutation();
@@ -25,16 +25,18 @@ const VeterinaModal = (props) => {
     pass: "",
     email: props.email,
   });
+  const specialityList = useGetSpecialityListQuery({ refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (!specialityList.isLoading) {
+      console.log(specialityList)
       setLoading(false);
       setData(specialityList?.data?.specialities);
     } else if (specialityList.isError) {
       setError(true);
       setLoading(false);
     }
-  }, [specialityList, openform, modalShow]);
+  }, [specialityList, props.show, props.openModal]);
 
   const handleOpen = () => setOpen(true);
   const handleCloses = () => {
@@ -46,7 +48,6 @@ const VeterinaModal = (props) => {
   const handleConfirmDelete = () => {
     // Close the alert modal
     setModalShow(false);
-
     // Set the appointment ID in dltData
     setDltData({
       ...dltData,
@@ -75,12 +76,12 @@ const VeterinaModal = (props) => {
       // Call the dltVaccine API
       await dltSpeciality(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
 
   useEffect(() => {
-    if (!response.isLoading && response.status === "fulfilled") {
+    if (!response.isLoading && response.isSuccess) {
       success();
       setDltData({
         id: "",

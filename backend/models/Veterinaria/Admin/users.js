@@ -6,26 +6,26 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-name:{
-  type: DataTypes.STRING,
-  allowNULL: false,
-},
+    name: {
+      type: DataTypes.STRING,
+      allowNULL: false,
+    },
     role: {
       type: DataTypes.STRING,
       allowNULL: false,
     },
     profile: {
       type: DataTypes.STRING,
-    
+
     },
-   identification:{
-    type: DataTypes.STRING,
-    
-   },
-   phone:{
-    type: DataTypes.INTEGER,
-   
-   },
+    identification: {
+      type: DataTypes.STRING,
+
+    },
+    phone: {
+      type: DataTypes.INTEGER,
+
+    },
     email: {
       type: DataTypes.STRING,
       allowNULL: false,
@@ -46,7 +46,7 @@ name:{
     isCustomerService: {
       type: DataTypes.BOOLEAN,
     },
-    emailToken:{
+    emailToken: {
       type: DataTypes.STRING,
     }
   });

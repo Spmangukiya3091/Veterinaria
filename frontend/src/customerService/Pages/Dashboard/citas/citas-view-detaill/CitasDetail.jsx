@@ -88,7 +88,7 @@ function CitasDetail({ email }) {
       success();
       navigate("/customerservice/citas");
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
 

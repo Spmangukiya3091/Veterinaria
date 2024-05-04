@@ -12,6 +12,7 @@ import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVe
 import { failer, success } from "../../../../Components/alert/success";
 
 import Loader from "../../../../Components/loader/Loader";
+import Error from "../../../../Components/error/Error";
 
 const InventoryDetails = ({ email }) => {
   const location = useLocation();
@@ -87,7 +88,7 @@ const InventoryDetails = ({ email }) => {
       // console.log(body);
       await dltProduct(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
@@ -109,10 +110,11 @@ const InventoryDetails = ({ email }) => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={productDetails?.isError ? productDetails?.error?.data?.message : productHistory.isError ? productHistory.error?.data.message : "Error Interno del Servidor"} />
+
       ) : (
         <section className="inventorydetails-section">
           <div className="heading">
@@ -135,7 +137,7 @@ const InventoryDetails = ({ email }) => {
                   <div className="d-flex  text-center flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px">$ {data?.price + ".00" || "-"}</span>
+                        <span className="w-75px">S/  {data?.price + ".00" || "-"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Precio</div>
                     </div>

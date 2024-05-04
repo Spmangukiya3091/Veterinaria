@@ -11,6 +11,7 @@ import PagosModal from "../Modal/PagosModal";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../Components/alert/success";
 import Loader from "../../../../Components/loader/Loader";
+import Error from "../../../../Components/error/Error";
 // import { showToast } from "../../../../store/tostify";
 // import { useDispatch } from "react-redux";
 
@@ -103,10 +104,11 @@ const PagosDetails = ({ email }) => {
   }, [response]);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={paymentDetails?.isError ? paymentDetails?.error?.data?.message : "Error Interno del Servidor"} />
+
       ) : (
         <section className="pagosdetails-section">
           <div className="heading">
@@ -128,7 +130,7 @@ const PagosDetails = ({ email }) => {
                   <div className="d-flex  text-center flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px">$ {data?.final_amount || "-"}</span>
+                        <span className="w-75px">S/  {data?.final_amount || "-"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Monto Final</div>
                     </div>

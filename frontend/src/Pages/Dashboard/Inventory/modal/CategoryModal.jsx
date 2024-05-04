@@ -9,6 +9,7 @@ import moment from "moment";
 import Alert from "../../../../Components/alert/Alert";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../Components/alert/success";
+import Error from "../../../../Components/error/Error";
 
 function CategoryModal({ show, handleClose, email }) {
   const [open, setOpen] = useState(false);
@@ -57,14 +58,14 @@ function CategoryModal({ show, handleClose, email }) {
       // Call the dltCategory API
       await dltCategory(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
-    if (!categories.isLoading) {
+    if (!categories?.isLoading) {
       setLoading(false);
-      setData(categories.data);
-    } else if (categories.isError) {
+      setData(categories?.data);
+    } else if (categories?.isError) {
       setLoading(false);
       setError(true);
     }
@@ -78,7 +79,7 @@ function CategoryModal({ show, handleClose, email }) {
   const handleOpen = () => setOpen(true);
 
   useEffect(() => {
-    if (!response.isLoading && response.status === "fulfilled") {
+    if (!response?.isLoading && response?.status === "fulfilled") {
       success();
       setDltData({
         id: "",
@@ -88,7 +89,7 @@ function CategoryModal({ show, handleClose, email }) {
       // Refetch or update data if needed
       categories.refetch();
       handleClose();
-    } else if (response.isError) {
+    } else if (response?.isError) {
       // console.log(response.error);
       failer(response?.error?.data?.message);
 
@@ -100,10 +101,10 @@ function CategoryModal({ show, handleClose, email }) {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Spinner animation="border" variant="primary" />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={categories?.isError ? categories?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <>
           <Modal className="category-modal" show={show} onHide={handleClose} centered size="lg">

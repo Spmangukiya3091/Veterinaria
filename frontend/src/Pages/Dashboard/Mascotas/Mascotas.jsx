@@ -15,6 +15,7 @@ import { failer, success } from "../../../Components/alert/success";
 // import { showToast } from "../../../store/tostify";
 import axios from "axios";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 const Mascotas = ({ email }) => {
   const navigate = useNavigate();
@@ -163,7 +164,7 @@ const Mascotas = ({ email }) => {
       // Call the dltMascotas API
       await dltMascotas(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
@@ -220,10 +221,10 @@ const Mascotas = ({ email }) => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={petList?.isError ? petList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <>
           <div className="mascotas ">
@@ -260,6 +261,7 @@ const Mascotas = ({ email }) => {
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
+                        autocomplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </div>

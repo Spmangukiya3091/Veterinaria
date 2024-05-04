@@ -3,6 +3,7 @@ import "./vaccination.scss";
 import { useGetSinglePetVaccinationDetailsQuery } from "../../../../../../../services/ApiServices";
 import moment from "moment";
 import Loader from "../../../../../../components/loader/Loader";
+import Error from "../../../../../../components/error/Error";
 
 const Vaccination = ({ id }) => {
   const [data, setData] = useState();
@@ -23,10 +24,10 @@ const Vaccination = ({ id }) => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccinationList?.isError ? vaccinationList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="historical-table-container">
           <div className="card card-flush">

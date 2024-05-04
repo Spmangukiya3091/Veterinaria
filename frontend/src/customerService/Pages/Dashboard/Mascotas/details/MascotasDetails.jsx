@@ -14,6 +14,7 @@ import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVe
 // import { showToast } from "../../../../../store/tostify";
 import { failer, success } from "../../../../Components/alert/success";
 import Loader from "../../../../Components/loader/Loader";
+import Error from "../../../../Components/error/Error";
 
 const MascotasDetails = ({ email }) => {
   const location = useLocation();
@@ -97,7 +98,7 @@ const MascotasDetails = ({ email }) => {
       // Call the dltMascotas API
       await dltMascotas(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
@@ -118,10 +119,10 @@ const MascotasDetails = ({ email }) => {
   }, [response]);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={petDetails?.isError ? petDetails?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <section className="mascotasdetails-section">
           <div className="heading d-flex justify-content-between align-items-center">

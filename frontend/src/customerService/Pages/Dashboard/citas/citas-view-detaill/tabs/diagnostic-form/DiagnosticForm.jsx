@@ -108,7 +108,7 @@ function DiagnosticForm({ data, refetch }) {
       if (response.status === 200) {
         // API call successful
         // You can show a success message or perform any other actions
-        refetch();
+        refetch.refetch();
         dispatch(showToast("Diagnóstico guardado exitosamente!", "SUCCESS_TOAST"));
       } else {
         // API call failed
@@ -121,7 +121,7 @@ function DiagnosticForm({ data, refetch }) {
   };
 
   const modules = {
-    toolbar: [[{ header: [1, 2, 3, 4, 5, 6, false] }], ["bold", "italic", "underline", "image", "code"]],
+    toolbar: [[{ header: [1, 2, 3, 5, 6, false] }], ["bold", "italic", "underline", "code"]],
   };
   return (
     <div className="diagnostic-container">
@@ -222,17 +222,17 @@ function DiagnosticForm({ data, refetch }) {
             <p>Medicación Recetado</p>
             {lists
               ? lists.map((ele, ind) => (
-                  <div className="files mb-2" key={ind}>
-                    <div className="files-inner">
-                      {ele.Name}
-                      <ul>
-                        <li>{ele.intake} unidades</li>
-                        <li>{ele.frequency} veces al día</li>
-                      </ul>
-                    </div>
-                    <img onClick={() => handleDeleteTodo(ind)} src="/images/delete.png" alt="delete" />
+                <div className="files mb-2" key={ind}>
+                  <div className="files-inner">
+                    {ele.Name}
+                    <ul>
+                      <li>{ele.intake} unidades</li>
+                      <li>{ele.frequency} veces al día</li>
+                    </ul>
                   </div>
-                ))
+                  <img onClick={() => handleDeleteTodo(ind)} src="/images/delete.png" alt="delete" />
+                </div>
+              ))
               : ""}
           </div>
           <div className="third container">

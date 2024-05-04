@@ -14,6 +14,7 @@ import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerif
 import { useGetAppointmentFilterQuery, useRemoveAppointmentMutation } from "../../../../services/ApiServices";
 import { failer, success } from "../../../Components/alert/success";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 function Citas({ email }) {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -55,7 +56,7 @@ function Citas({ email }) {
     setAppId("")
     appointmentsByFilter.refetch()
   };
-  
+
   const toggleDropdown = () => {
     setDropdownOpen(!isDropdownOpen);
   };
@@ -161,7 +162,7 @@ function Citas({ email }) {
       // Call the dltCitas API
       await dltCitas(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
 
@@ -185,10 +186,10 @@ function Citas({ email }) {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={appointmentsByFilter?.isError ? appointmentsByFilter?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="citas">
           <div className="main-title-box">

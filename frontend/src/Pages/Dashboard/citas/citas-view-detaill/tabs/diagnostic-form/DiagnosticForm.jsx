@@ -63,7 +63,7 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
   };
 
   const handleAddTodo = () => {
-    if (list.intake.trim() !== "" && selectedOption?.length > 0) {
+    if (list.intake.trim() !== "" && selectedOption.length > 0) {
       setLists([...lists, { ...list, Name: selectedOption[0] }]);
       setList({ intake: "", Name: "", frequency: "" });
     }
@@ -110,7 +110,7 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
       if (response.status === 200) {
         // API call successful
         // You can show a success message or perform any other actions
-        refetch();
+        refetch.refetch();
         historyRefetch()
         dispatch(showToast("Diagnóstico guardado exitosamente!", "SUCCESS_TOAST"));
       }
@@ -122,7 +122,7 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
   };
 
   const modules = {
-    toolbar: [[{ header: [1, 2, 3, 4, 5, 6, false] }], ["bold", "italic", "underline", "image", "code"]],
+    toolbar: [[{ header: [1, 2, 3, 5, 6, false] }], ["bold", "italic", "underline", "code"]],
   };
   return (
     <div className="diagnostic-container">

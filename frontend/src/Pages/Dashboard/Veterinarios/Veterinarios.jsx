@@ -7,7 +7,7 @@ import VeterinaUserModal from "./Modals/VeterinaUserModal";
 import SingleInputDateRangePicker from "../../../Components/date-picker/DatePicker";
 import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
-import { useGetSpecialitiesQuery, useGetVeterinariansFilterQuery } from "../../../services/ApiServices";
+import { useGetSpecialitiesQuery, useGetSpecialityListQuery, useGetVeterinariansFilterQuery } from "../../../services/ApiServices";
 import Loader from "../../../Components/loader/Loader";
 
 const Veterinarios = ({ email }) => {
@@ -18,6 +18,7 @@ const Veterinarios = ({ email }) => {
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
   const [specialityData, setSpecialityData] = useState([]);
+  const [specialityListData, setSpecialityListData] = useState([]);
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,18 +29,21 @@ const Veterinarios = ({ email }) => {
   });
   const veterinList = useGetVeterinariansFilterQuery(searchQuery, { refetchOnMountOrArgChange: true });
   const specialities = useGetSpecialitiesQuery({ refetchOnMountOrArgChange: true });
+  const specialityList = useGetSpecialityListQuery({ refetchOnMountOrArgChange: true });
+
 
   useEffect(() => {
-    if (!veterinList.isLoading && !specialities.isLoading) {
+    if (!veterinList.isLoading && !specialities.isLoading && !specialityList.isLoading) {
       setLoading(false);
       setData(veterinList?.data?.veterinarianList);
       setSpecialityData(specialities?.data?.specialityList);
+      setSpecialityListData(specialityList?.data?.specialities)
     } else if (veterinList.isError || specialities.isError) {
       setError(true);
       setLoading(false);
       console.error("error occured", veterinList.error);
     }
-  }, [specialities, veterinList]);
+  }, [specialities, specialityList, veterinList]);
 
   const handleClose = () => {
     setShow(false)
@@ -251,7 +255,7 @@ const Veterinarios = ({ email }) => {
                 <Row>
                   {currentPosts?.length > 0 ? (
                     currentPosts.map(({ id, avatar, name, surname, speciality }, i) => (
-                      <Col sm= {6} md={4} lg={3} key={i}>
+                      <Col sm={6} md={4} lg={3} key={i}>
                         <Card className="doctor-card">
                           <div className="image-container">
                             <Card.Img variant="top" src={avatar ? avatar : "/images/image.png"} />
@@ -282,7 +286,7 @@ const Veterinarios = ({ email }) => {
           </div>
         </div>
         <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
-        <VeterinaModal show={show} onHide={handleClose} email={email} />
+        <VeterinaModal show={show} onHide={handleClose} email={email} openModal={openModal} />
         <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         <VeterinaUserModal show={openModal} onHide={handleModalHide} filter={veterinList} />
       </div>

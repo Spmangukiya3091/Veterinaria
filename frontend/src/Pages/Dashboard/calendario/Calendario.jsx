@@ -11,6 +11,8 @@ import { useGetVeterinariansAppointmentQuery, useGetVeterinariansQuery } from ".
 import Loader from "../../../Components/loader/Loader";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
+import Error from "../../../Components/error/Error";
+
 
 function Calendario() {
   const location = useLocation()
@@ -59,10 +61,11 @@ function Calendario() {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={veterines?.isError ? veterines?.error?.data?.message : appointmentData.isError ? appointmentData.error?.data.message : "Error Interno del Servidor"} />
+
       ) : (
         <div className="calendario">
           {/* ... (existing code) */}

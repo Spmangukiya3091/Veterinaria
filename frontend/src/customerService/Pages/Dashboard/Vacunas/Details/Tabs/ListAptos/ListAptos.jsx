@@ -7,6 +7,7 @@ import CitasPagination from "../../../../../../Components/pagination/citas-pagin
 
 import Loader from "../../../../../../Components/loader/Loader";
 import { useGetVaccinationbyVaccineIdQuery } from "../../../../../../../services/ApiServices";
+import Error from "../../../../../../Components/error/Error";
 
 const ListAptos = ({ id, vaccineData }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,10 +52,11 @@ const ListAptos = ({ id, vaccineData }) => {
   const currentPosts = data.slice(adjustedIndexOfFirstPost, indexOfLastPost);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccinationList?.isError ? vaccinationList?.error?.data?.message : "Error Interno del Servidor"} />
+
       ) : (
         <>
           <div className="listaptos-table-container">

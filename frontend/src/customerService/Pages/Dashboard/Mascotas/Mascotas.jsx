@@ -14,6 +14,7 @@ import { showToast } from "../../../../store/tostify";
 import { useDispatch } from "react-redux";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 const Mascotas = ({ email }) => {
   const navigate = useNavigate();
@@ -188,10 +189,10 @@ const Mascotas = ({ email }) => {
   }, [dispatch, response]);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={petList?.isError ? petList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <>
           <div className="mascotas ">
@@ -224,9 +225,10 @@ const Mascotas = ({ email }) => {
                       </span>
                       <input
                         type="text"
-                        data-kt-ecommerce-product-filter="search"
+                        name="search"
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
+                        autoComplete="new-password" // Add this attribute
                         value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                       />

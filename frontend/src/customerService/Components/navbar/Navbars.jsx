@@ -36,8 +36,14 @@ function Navbars({ user }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleLogout = () => {
+    // Remove cookies
     removeCookie("user");
+    removeCookie("authToken");
+
+    // Navigate to the home page
     navigate("/");
+
+    // Show logout success toast
     dispatch(showToast("Cerrar sesión exitosamente", "INFO_TOAST"));
   };
 

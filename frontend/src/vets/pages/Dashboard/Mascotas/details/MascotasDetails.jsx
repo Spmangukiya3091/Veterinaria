@@ -6,6 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useGetSinglePetQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
 import Loader from "../../../../components/loader/Loader";
+import Error from "../../../../components/error/Error";
 
 const MascotasDetails = () => {
   const location = useLocation();
@@ -29,10 +30,10 @@ const MascotasDetails = () => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={petDetails?.isError ? petDetails?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <section className="mascotasdetails-section">
           <div className="heading d-flex justify-content-between align-items-center">

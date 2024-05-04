@@ -12,6 +12,7 @@ import { useGetALlProductListQuery, useRemoveProductMutation } from "../../../..
 import { failer, success } from "../../../Components/alert/success";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 const Inventory = ({ email }) => {
   const [show, setShow] = useState(false);
@@ -167,7 +168,7 @@ const Inventory = ({ email }) => {
       // Call the dltInventory API
       await dltInventory(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
 
@@ -191,10 +192,10 @@ const Inventory = ({ email }) => {
   }, [response]);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={products?.isError ? products?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="inventory">
           <div className="main-title-box">
@@ -331,7 +332,7 @@ const Inventory = ({ email }) => {
                           <td className="text-start pe-0" data-order="16">
                             {presentation ? presentation : "-"}
                           </td>
-                          <td className="text-start pe-0">{price ? price : "-"}</td>
+                          <td className="text-start pe-0">{price ? "S/ " + price : "-"}</td>
                           <td className="text-start pe-0">{category ? category : "-"}</td>
                           <td className="text-start pe-0">{stock ? stock : "-"}</td>
                           <td className="text-start pe-0" data-order="status">

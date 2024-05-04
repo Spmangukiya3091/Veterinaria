@@ -135,11 +135,11 @@ function Column({ data }) {
       <p className="graph-title">Ingresos según Pagos</p>
       <div className="line-chart-container">
         <div className="line-chart-info text-start">
-          <p className="line-main-title">${data?.currentMonthData || 0}</p>
+          <p className="line-main-title">S/ {data?.currentMonthData || 0}</p>
           <p className="line-sub-title">Mes actual</p>
         </div>
         <div className="line-chart-info text-end">
-          <p className="line-main-title">${data?.currentYearData || 0}</p>
+          <p className="line-main-title">S/ {data?.currentYearData || 0}</p>
           <p className="line-sub-title">Año 2023</p>
         </div>
       </div>

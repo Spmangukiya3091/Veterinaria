@@ -7,6 +7,7 @@ import CitasPagination from "../../../components/pagination/citas-pagination/Cit
 import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
 import { useGetOwnersByVeterinarianQuery } from "../../../../services/ApiServices";
 import Loader from "../../../components/loader/Loader";
+import Error from "../../../components/error/Error";
 
 const Propietarios = ({ id }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -89,10 +90,10 @@ const Propietarios = ({ id }) => {
   };
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={allOwnersList?.isError ? allOwnersList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="propietarios">
           <div className="main-title-box">

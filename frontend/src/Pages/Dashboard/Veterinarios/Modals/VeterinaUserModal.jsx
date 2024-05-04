@@ -123,6 +123,7 @@ const VeterinaUserModal = (props) => {
   };
 
 
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setSelectedFile(file);
@@ -135,6 +136,7 @@ const VeterinaUserModal = (props) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "specialityId") {
+      console.log(name)
       const specialityText = e.target.options[e.target.selectedIndex]?.text || "";
       // console.log(speciality)
       setFormData((prevData) => ({
@@ -252,6 +254,7 @@ const VeterinaUserModal = (props) => {
 
           if (response.status === 200) {
             // Handle success
+            clearForm()
             success();
             handleModalHide();
           }
@@ -268,6 +271,7 @@ const VeterinaUserModal = (props) => {
             // Handle success
             success();
             handleModalHide();
+            clearForm()
           }
         }
       } catch (error) {
@@ -275,10 +279,12 @@ const VeterinaUserModal = (props) => {
         if (error?.response?.status !== 400) {
           failer(error?.response?.data?.message);
         }
-        // dispatch(showToast("Internal Server Error", "FAIL_TOAST"));
+        // dispatch(showToast("Error Interno del Servidor", "FAIL_TOAST"));
       }
     }
   };
+
+  console.log(formData.specialityId)
   return (
     <>
       <Modal show={props.show} onHide={handleModalHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -289,7 +295,7 @@ const VeterinaUserModal = (props) => {
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="formBasicSelect">
+                <Form.Group className="mb-3" >
                   <div className="d-flex gap-10">
                     <div className="image mx-4">
                       <img
@@ -328,7 +334,7 @@ const VeterinaUserModal = (props) => {
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
+                <Form.Group className="mb-3" >
                   <Form.Label>Especialidad</Form.Label>
 
                   <Form.Select

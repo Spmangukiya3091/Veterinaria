@@ -10,6 +10,7 @@ import { useGetPetByOwnerQuery, useGetSingleOwnerQuery, useRemoveOwnerMutation }
 import { failer, success } from "../../../../Components/alert/success";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import Loader from "../../../../Components/loader/Loader";
+import Error from "../../../../Components/error/Error";
 
 const PropietariosDetails = ({ email }) => {
   const navigate = useNavigate();
@@ -32,22 +33,22 @@ const PropietariosDetails = ({ email }) => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
 
-  const response = useGetSingleOwnerQuery(id, { refetchOnMountOrArgChange: true });
+  const singleOwner = useGetSingleOwnerQuery(id, { refetchOnMountOrArgChange: true });
   const petsByOwner = useGetPetByOwnerQuery(id, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
-    if (!response.isLoading && !petsByOwner.isLoading) {
+    if (!singleOwner.isLoading && !petsByOwner.isLoading) {
       setLoading(false);
-      setData(response.data);
+      setData(singleOwner.data);
       setPetsData(petsByOwner.data);
-    } else if (response.isError || petsByOwner.isError) {
+    } else if (singleOwner.isError || petsByOwner.isError) {
       setError(true);
     }
-  }, [response, id, petsByOwner]);
+  }, [singleOwner, id, petsByOwner]);
 
   const handleClose = () => {
     setOpen(false);
-    response.refetch();
+    singleOwner.refetch();
   };
   const handleShow = () => {
     setOpen(true);
@@ -88,7 +89,7 @@ const PropietariosDetails = ({ email }) => {
 
       navigate("/customerservice/propietarios");
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
@@ -106,16 +107,16 @@ const PropietariosDetails = ({ email }) => {
       failer(dltResponse?.error?.data?.message);
       // dispatch(showToast(dltResponse.error.message, "FAIL_TOAST"));
     }
-    // }, [dispatch, response]);
+    // }, [dispatch, singleOwner]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response]);
+  }, [singleOwner]);
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={singleOwner?.isError ? singleOwner?.error?.data?.message : petsByOwner.isError ? petsByOwner.error?.data.message : "Error Interno del Servidor"} />
       ) : (
         <section className="propietariosdetails-section">
           <div className="heading">

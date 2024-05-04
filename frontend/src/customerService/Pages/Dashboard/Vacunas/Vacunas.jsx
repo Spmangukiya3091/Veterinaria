@@ -11,6 +11,7 @@ import CitasPagination from "../../../Components/pagination/citas-pagination/Cit
 import moment from "moment";
 import { useGetAllVaccinesByFilterQuery } from "../../../../services/ApiServices";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 const Vacunas = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -106,10 +107,10 @@ const Vacunas = () => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccineList?.isError ? vaccineList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="vacunas">
           <div className="main-title-box">

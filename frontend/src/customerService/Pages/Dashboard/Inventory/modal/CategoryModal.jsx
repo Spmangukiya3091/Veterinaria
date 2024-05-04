@@ -9,6 +9,7 @@ import moment from "moment";
 import Alert from "../../../../Components/alert/Alert";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../Components/alert/success";
+import Error from "../../../../Components/error/Error";
 
 function CategoryModal({ show, handleClose, email }) {
   const [open, setOpen] = useState(false);
@@ -17,7 +18,7 @@ function CategoryModal({ show, handleClose, email }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const categories = useGetCategoryWithProductsQuery( { refetchOnMountOrArgChange: true });
+  const categories = useGetCategoryWithProductsQuery({ refetchOnMountOrArgChange: true });
   const [openform, setOpenform] = useState(false);
   const [dltData, setDltData] = useState({
     id: "",
@@ -58,7 +59,7 @@ function CategoryModal({ show, handleClose, email }) {
       // Call the dltCategory API
       await dltCategory(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
@@ -100,10 +101,11 @@ function CategoryModal({ show, handleClose, email }) {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Spinner animation="border" variant="primary" />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={categories?.isError ? categories?.error?.data?.message : "Error Interno del Servidor"} />
+
       ) : (
         <>
           <Modal className="category-modal" show={show} onHide={handleClose} centered size="lg">

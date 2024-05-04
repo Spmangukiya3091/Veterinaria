@@ -23,6 +23,7 @@ const UserModal = (props) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [emailError, setEmailError] = useState(false)
 
   const [validated, setValidated] = useState(false); // State for form validation
   const [selectedFile, setSelectedFile] = useState(null);
@@ -51,7 +52,7 @@ const UserModal = (props) => {
             name: data?.user?.name,
             password: data?.user?.password,
             confirmPassword: data?.user?.password,
-            phone: data?.user?.phone,
+            phone: data?.user?.phone.toString(),
             profile: data?.user?.profile,
             role: data?.user?.role,
           });
@@ -107,6 +108,7 @@ const UserModal = (props) => {
   };
   // Validation function for confirming password (matches password)
   const validateConfirmPassword = (password, confirmPassword) => {
+    console.log(password, confirmPassword)
     return password === confirmPassword;
   };
 
@@ -208,8 +210,13 @@ const UserModal = (props) => {
       } catch (error) {
         // Handle error
         if (error.response.status !== 400) {
-          failer(error);
-          console.error("Error creating user", error);
+          if (error.response.status === 409) {
+            setEmailError(true)
+            failer(error.response.data.message);
+          } else {
+            failer(error);
+            console.error("Error creating user", error);
+          }
         }
         console.error("Error creating user", error);
       }
@@ -224,7 +231,6 @@ const UserModal = (props) => {
         "conf" + validateConfirmPassword(userData.password, userData.confirmPassword))
     }
   };
-
   return (
     <Modal
       show={props.show}
@@ -336,7 +342,8 @@ const UserModal = (props) => {
                         setUserData({ ...userData, email: e.target.value });
                       }}
                       required
-                      isInvalid={validated && userData.email !== "" && !validateEmail(userData.email)}
+                      // Check emailError state along with other email validation
+                      isInvalid={validated && userData.email !== "" && (!validateEmail(userData.email) || emailError)}
                     />
                     <Form.Control.Feedback type="invalid">
                       {userData.email !== "" && !validateEmail(userData.email) && "Por favor proporcione un Correo electrónico válido."}
@@ -355,6 +362,7 @@ const UserModal = (props) => {
                       pattern="[0-9]{8}"
                       maxLength={8}
                       type="tel"
+                      required
                       onChange={(e) => {
                         setUserData({ ...userData, identification: e.target.value });
                       }}
@@ -370,9 +378,11 @@ const UserModal = (props) => {
                     <Form.Label>Nro. de Teléfono</Form.Label>
                     <Form.Control
                       aria-label="Default"
-                      type="text"
+                      type="tel"
                       maxLength={9}
                       placeholder="Nro. de Teléfono"
+                      required
+                      pattern="[0-9]{9}"
                       value={userData.phone || ""}
                       onChange={(e) => {
                         setUserData({ ...userData, phone: e.target.value });

@@ -70,7 +70,7 @@ const Detalles = ({ data }) => {
               Monto Final
             </Col>
             <Col className="info-details" lg={8}>
-              $ {data?.final_amount || "-"}
+              S/ {data?.final_amount || "-"}
             </Col>
           </Row>
           <Row>

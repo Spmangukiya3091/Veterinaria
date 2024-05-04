@@ -100,7 +100,7 @@ const VeterinaProfileDetails = ({ email }) => {
       // Call the dltMascotas API
       await dltMascotas(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
 

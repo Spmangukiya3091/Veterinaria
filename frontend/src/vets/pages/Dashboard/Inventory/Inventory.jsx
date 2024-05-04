@@ -7,6 +7,7 @@ import CitasPagination from "../../../components/pagination/citas-pagination/Cit
 import { useGetALlProductListQuery } from "../../../../services/ApiServices";
 import SingleInputDateRangePicker from "../citas/date-picker/DatePicker";
 import Loader from "../../../components/loader/Loader";
+import Error from "../../../components/error/Error";
 
 const Inventory = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -103,10 +104,10 @@ const Inventory = () => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={products?.isError ? products?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="inventory">
           <div className="main-title-box">
@@ -236,7 +237,7 @@ const Inventory = () => {
                           <td className="text-start pe-0" data-order="16">
                             {presentation ? presentation : "-"}
                           </td>
-                          <td className="text-start pe-0">{price ? price : "-"}</td>
+                          <td className="text-start pe-0">{price ? "S/ " + price : "-"}</td>
                           <td className="text-start pe-0">{category ? category : "-"}</td>
                           <td className="text-start pe-0">{stock ? stock : "-"}</td>
                           <td className="text-start pe-0" data-order="status">

@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import { useGetPetByOwnerQuery, useGetSingleOwnerQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
 import Loader from "../../../../components/loader/Loader";
+import Error from "../../../../components/error/Error";
 
 const PropietariosDetails = () => {
   const [show, setShow] = useState(true);
@@ -17,25 +18,25 @@ const PropietariosDetails = () => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
 
-  const response = useGetSingleOwnerQuery(id, { refetchOnMountOrArgChange: true });
+  const singleOwner = useGetSingleOwnerQuery(id, { refetchOnMountOrArgChange: true });
   const petsByOwner = useGetPetByOwnerQuery(id, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
-    if (!response.isLoading && !petsByOwner.isLoading) {
+    if (!singleOwner.isLoading && !petsByOwner.isLoading) {
       setLoading(false);
-      setData(response.data);
+      setData(singleOwner.data);
       setPetsData(petsByOwner.data);
-    } else if (response.isError || petsByOwner.isError) {
+    } else if (singleOwner.isError || petsByOwner.isError) {
       setError(true);
     }
-  }, [response, id, petsByOwner]);
+  }, [singleOwner, id, petsByOwner]);
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={singleOwner?.isError ? singleOwner?.error?.data?.message : petsByOwner.isError ? petsByOwner.error?.data.message : "Error Interno del Servidor"} />
       ) : (
         <section className="propietariosdetails-section">
           <div className="heading">

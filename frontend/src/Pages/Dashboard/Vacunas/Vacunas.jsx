@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import axios from "axios";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 const Vacunas = ({ email }) => {
   const dispatch = useDispatch();
@@ -145,7 +146,7 @@ const Vacunas = ({ email }) => {
       // Call the dltVaccine API
       await dltVaccine(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
 
@@ -202,10 +203,10 @@ const Vacunas = ({ email }) => {
   const exportLink = "#";
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccineList?.isError ? vaccineList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <div className="vacunas">
           <div className="main-title-box">

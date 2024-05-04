@@ -8,6 +8,7 @@ import Alert from "../../../../Components/alert/Alert";
 import { useGetSingleVaccineQuery } from "../../../../../services/ApiServices";
 import moment from "moment";
 import Loader from "../../../../Components/loader/Loader";
+import Error from "../../../../Components/error/Error";
 
 const VacunasDetails = () => {
   const location = useLocation();
@@ -37,10 +38,11 @@ const VacunasDetails = () => {
   };
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccineDetail?.isError ? vaccineDetail?.error?.data?.message : "Error Interno del Servidor"} />
+
       ) : (
         <section className="vacunasDetails-section">
           <div className="heading">

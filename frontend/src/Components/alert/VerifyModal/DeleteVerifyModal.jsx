@@ -13,15 +13,16 @@ const DeleteVerifyModal = (props) => {
     if (password.trim() !== "") {
       props.onHide();
       props.onDelete(password);
+      setPassword("")
     } else {
       // You can display an error message or prevent submission
-      failer("Password can not be empty");
+      failer("La contraseña no puede estar vacía");
     }
   };
 
   return (
     <>
-      <Modal show={props.show} onHide={props.onHide} aria-labelledby="contained-modal-title-vcenter" centered>
+      <Modal show={props.show} onHide={() => { props.onHide(); setPassword("") }} aria-labelledby="contained-modal-title-vcenter" centered>
         <Modal.Header closeButton>
           <Modal.Title>Verificación de identidad</Modal.Title>
         </Modal.Header>
@@ -29,7 +30,7 @@ const DeleteVerifyModal = (props) => {
           Por motivos de seguridad, ingresa tu contraseña actual y completaremos la operación.
           <Form.Group className="form-group">
             <Form.Label>Contraseña actual</Form.Label>
-            <Form.Control required type="password" placeholder="Contraseña actual" value={password} onChange={handlePasswordChange} />
+            <Form.Control required type="password" placeholder="Contraseña actual" value={password} onChange={handlePasswordChange} autocomplete="disabled" />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
@@ -37,6 +38,7 @@ const DeleteVerifyModal = (props) => {
             className="btn btn-secondary"
             onClick={() => {
               props.onHide();
+              setPassword("")
             }}
           >
             Cancelar

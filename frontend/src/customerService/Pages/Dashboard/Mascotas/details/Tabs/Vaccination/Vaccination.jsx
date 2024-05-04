@@ -9,6 +9,7 @@ import UpdVacunaStat from "../../../modal/UpdVacunaStat";
 import moment from "moment";
 import { useGetSinglePetVaccinationDetailsQuery } from "../../../../../../../services/ApiServices";
 import Loader from "../../../../../../Components/loader/Loader";
+import Error from "../../../../../../Components/error/Error";
 
 const Vaccination = ({ id }) => {
   const [show, setShow] = useState(false);
@@ -52,10 +53,11 @@ const Vaccination = ({ id }) => {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccinationList?.isError ? vaccinationList?.error?.data?.message : "Error Interno del Servidor"} />
+
       ) : (
         <section className="vaccination-section">
           <div className="vaccination-second">

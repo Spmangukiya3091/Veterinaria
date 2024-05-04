@@ -14,6 +14,7 @@ import { failer, success } from "../../../Components/alert/success";
 
 import axios from "axios";
 import Loader from "../../../Components/loader/Loader";
+import Error from "../../../Components/error/Error";
 
 const Pagos = ({ email }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -212,10 +213,11 @@ const Pagos = ({ email }) => {
   const exportLink = "#";
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={paymentList?.isError ? paymentList?.error?.data?.message : "Error Interno del Servidor"} />
+
       ) : (
         <div className="pagos">
           <div className="main-title-box">
@@ -383,7 +385,7 @@ const Pagos = ({ email }) => {
                           </td>
                           <td className="text-start pe-0">{service ? service : "-"}</td>
                           <td className="text-start pe-0">{moment(createdAt).format("DD MMM YYYY")}</td>
-                          <td className="text-start pe-0">{final_amount ? final_amount : "-"}</td>
+                          <td className="text-start pe-0">{final_amount ? "S/ " + final_amount : "-"}</td>
                           <td className="text-end">
                             <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
                               <Dropdown.Toggle

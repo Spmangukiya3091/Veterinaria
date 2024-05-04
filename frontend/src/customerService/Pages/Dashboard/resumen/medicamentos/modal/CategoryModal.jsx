@@ -75,7 +75,7 @@ function CategoryModal({ show, handleClose, email }) {
       // Call the dltVaccine API
       await dltVaccine(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
 

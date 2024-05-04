@@ -11,6 +11,7 @@ import { useGetVeterinariansAppointmentQuery, useGetVeterinariansQuery } from ".
 import Loader from "../../../Components/loader/Loader";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
+import Error from "../../../Components/error/Error";
 
 function Calendario() {
   const location = useLocation()
@@ -21,7 +22,7 @@ function Calendario() {
   const [error, setError] = useState(false);
   const [veteId, setVeteId] = useState(veterineId);
   const [appointmentData, setAppointmentData] = useState([]);
-  const veterines = useGetVeterinariansQuery( { refetchOnMountOrArgChange: true });
+  const veterines = useGetVeterinariansQuery({ refetchOnMountOrArgChange: true });
   const appointments = useGetVeterinariansAppointmentQuery(veteId ? veteId : "", { refetchOnMountOrArgChange: true, skip: veteId === undefined });
   useEffect(() => {
     if (!veterines.isLoading && !appointments.isLoading) {
@@ -56,10 +57,10 @@ function Calendario() {
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={veterines?.isError ? veterines?.error?.data?.message : appointments.isError ? appointments.error?.data.message : "Error Interno del Servidor"} />
       ) : (
         <div className="calendario">
           {/* ... (existing code) */}

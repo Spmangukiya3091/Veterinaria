@@ -162,7 +162,7 @@ function Citas({ email }) {
       // Call the dltCitas API
       await dltCitas(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
 
@@ -218,9 +218,9 @@ function Citas({ email }) {
   const exportLink = "#";
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
+      ) : error ? (
         "Some Error Occured"
       ) : (
         <div className="citas">

@@ -10,6 +10,7 @@ import moment from "moment";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../Components/alert/success";
 import Loader from "../../../../Components/loader/Loader";
+import Error from "../../../../Components/error/Error";
 // import { useDispatch } from "react-redux";
 // import { showToast } from "../../../../store/tostify";
 
@@ -35,22 +36,22 @@ const PropietariosDetails = ({ email }) => {
   const location = useLocation();
   const id = location.pathname.split("/")[4];
 
-  const response = useGetSingleOwnerQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
+  const singleOwner = useGetSingleOwnerQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
   const petsByOwner = useGetPetByOwnerQuery(id, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
-    if (!response.isLoading && !petsByOwner.isLoading) {
+    if (!singleOwner.isLoading && !petsByOwner.isLoading) {
       setLoading(false);
-      setData(response.data);
+      setData(singleOwner.data);
       setPetsData(petsByOwner.data);
-    } else if (response.isError || petsByOwner.isError) {
+    } else if (singleOwner.isError || petsByOwner.isError) {
       setError(true);
     }
-  }, [response, id, petsByOwner]);
+  }, [singleOwner, id, petsByOwner]);
 
   const handleClose = () => {
     setOpen(false);
-    response.refetch();
+    singleOwner.refetch();
   };
   const handleShow = () => {
     setOpen(true);
@@ -111,14 +112,14 @@ const PropietariosDetails = ({ email }) => {
       // dispatch(showToast(dltResponse.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response]);
+  }, [singleOwner]);
 
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={singleOwner?.isError ? singleOwner?.error?.data?.message : petsByOwner.isError ? petsByOwner.error?.data.message : "Error Interno del Servidor"} />
       ) : (
         <section className="propietariosdetails-section">
           <div className="heading">

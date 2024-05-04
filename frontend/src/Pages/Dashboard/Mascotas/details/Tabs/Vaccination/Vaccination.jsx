@@ -11,6 +11,7 @@ import { useGetSinglePetVaccinationDetailsQuery, useRemoveVaccinationMutation } 
 import Loader from "../../../../../../Components/loader/Loader";
 import DeleteVerifyModal from "../../../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../../../Components/alert/success";
+import Error from "../../../../../../Components/error/Error";
 
 const Vaccination = ({ id, email }) => {
   const [show, setShow] = useState(false);
@@ -87,7 +88,7 @@ const Vaccination = ({ id, email }) => {
       // Call the dltVaccination API
       await dltVaccination(body);
     } else {
-      failer("Invalid Password ");
+      failer("Contraseña invalida");
     }
   };
   useEffect(() => {
@@ -109,10 +110,10 @@ const Vaccination = ({ id, email }) => {
   }, [response]);
   return (
     <>
-      {loading === true ? (
+      {loading ? (
         <Loader />
-      ) : error === true ? (
-        "Some Error Occured"
+      ) : error ? (
+        <Error message={vaccinationList?.isError ? vaccinationList?.error?.data?.message : "Error Interno del Servidor"} />
       ) : (
         <section className="vaccination-section">
           <div className="vaccination-second">
