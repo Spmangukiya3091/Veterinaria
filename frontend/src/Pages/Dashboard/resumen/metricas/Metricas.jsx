@@ -1,12 +1,14 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 function Metricas({ month, data }) {
+  const navigate = useNavigate()
   return (
     <div>
       <p className="card-main-title">Métricas mes actual</p>
       <Row>
         <Col sm={12} md={3} lg={3}>
-          <div className="card bg-body hoverable card-xl-stretch mb-xl-8">
+          <div className="card bg-body hoverable card-xl-stretch mb-xl-8" onClick={() => { navigate('/dashboard/citas') }}>
             <div className="card-body">
               <div className="card-top-box">
                 <img src="../images/cita.png" alt="citas" />
@@ -31,7 +33,7 @@ function Metricas({ month, data }) {
           </div>
         </Col>
         <Col sm={12} md={3} lg={3}>
-          <div className="card bg-body hoverable card-xl-stretch mb-xl-8">
+          <div className="card bg-body hoverable card-xl-stretch mb-xl-8" onClick={() => { navigate('/dashboard/mascotas') }}>
             <div className="card-body">
               <div className="card-top-box">
                 <img src="../images/masco.png" alt="masco" />
@@ -56,7 +58,7 @@ function Metricas({ month, data }) {
           </div>
         </Col>
         <Col sm={12} md={3} lg={3}>
-          <div className="card bg-body hoverable card-xl-stretch mb-xl-8">
+          <div className="card bg-body hoverable card-xl-stretch mb-xl-8" onClick={() => { navigate('/dashboard/inventario') }}>
             <div className="card-body">
               <div className="card-top-box">
                 <img src="../images/produc.png" alt="produc" />
@@ -81,7 +83,7 @@ function Metricas({ month, data }) {
           </div>
         </Col>
         <Col sm={12} md={3} lg={3}>
-          <div className="card bg-body hoverable card-xl-stretch mb-xl-8">
+          <div className="card bg-body hoverable card-xl-stretch mb-xl-8" onClick={() => { navigate('/dashboard/roles') }}>
             <div className="card-body">
               <div className="card-top-box">
                 <img src="../images/usua.png" alt="usua" />

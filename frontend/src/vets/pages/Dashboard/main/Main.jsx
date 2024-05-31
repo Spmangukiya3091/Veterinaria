@@ -19,6 +19,7 @@ import Navbars from "../../../components/navbar/Navbars";
 import { useGetSingleVeterinQuery } from "../../../../services/ApiServices";
 import { Helmet } from "react-helmet";
 import Loader from "../../../components/loader/Loader";
+import Error from "../../../components/error/Error";
 
 function Main() {
   const navigate = useNavigate();
@@ -71,7 +72,8 @@ function Main() {
       {loading ? (
         <Loader />
       ) : error ? (
-        "error"
+        <Error message={response?.error ? response?.error?.data?.message : "Interal Server Error"} />
+
       ) : (
         <div className="main-section-veterine">
           <Sidebar />
@@ -88,7 +90,7 @@ function Main() {
               <Route path="/propietarios" element={<Propietarios id={data?.id} />} />
               <Route path="/propietarios/details/:id" element={<PropietariosDetails />} />
               <Route path="/inventario" element={<Inventory />} />
-              <Route path="/Inventario/details/:id" element={<InventoryDetails />} />
+              <Route path="/inventario/details/:id" element={<InventoryDetails />} />
               {/* <Route path="/desktop" element={<Desktop />} /> */}
             </Routes>
           </div>

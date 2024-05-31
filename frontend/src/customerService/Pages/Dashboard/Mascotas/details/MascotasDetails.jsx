@@ -109,7 +109,7 @@ const MascotasDetails = ({ email }) => {
         pass: "",
         email: "",
       });
-      navigate("/dashboard/mascotas");
+      navigate("/customerservice/mascotas");
     } else if (response.isError && response.status === "rejected") {
       // console.log(response.error);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
@@ -211,7 +211,7 @@ const MascotasDetails = ({ email }) => {
                       </div>
 
                       <div className="fw-bold mt-5">Propietario</div>
-                      <Link to="/dashboard/propietarios/details">
+                      <Link to="/customerservice/propietarios/details">
                         {" "}
                         <div className="text-gray-600"> {data?.pet?.owner || "-"}</div>
                       </Link>
@@ -226,8 +226,8 @@ const MascotasDetails = ({ email }) => {
                 </div>
               </div>
             </Col>
-            <Col className="ms-lg-15">
-              <div className="drop-down">
+             <Col className="ms-lg-15">
+              <div className="drop-down" style={{ zIndex: 99 }}>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="dropdown-toggle btn btn-sm btn-flex btn-center" id="dropdown-basic">
                     Accion

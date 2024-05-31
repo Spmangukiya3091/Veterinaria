@@ -31,7 +31,7 @@ export const links = [
   },
   {
     title: "Inventario Productos",
-    path: "/dashboard/Inventario",
+    path: "/dashboard/inventario",
     icon: "/images/s6.png",
   },
   {

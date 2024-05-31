@@ -110,7 +110,7 @@ const ProductoModal = (props) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3">

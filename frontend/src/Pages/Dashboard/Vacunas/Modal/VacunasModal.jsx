@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { failer, success } from "../../../../Components/alert/success";
 import { useAddVaccineMutation, useGetSingleVaccineQuery, useUpdateVaccineMutation } from "../../../../services/ApiServices";
 
-const VacunasModal = ({ id, onHide, filter, show }) => {
+const VacunasModal = ({ id, onHide, show }) => {
   const [formData, setFormData] = useState({
     name: "",
     stock: "",
@@ -62,17 +62,29 @@ const VacunasModal = ({ id, onHide, filter, show }) => {
   };
 
   useEffect(() => {
-    if ((id !== undefined && response2.isSuccess) || (id === undefined && response.isSuccess)) {
-      clearForm()
-      onHide();
-      success();
-    } else if ((id !== undefined && response2.isError && response2?.error.status !== 400) || (id === undefined && response.isError && response?.error.status !== 400)) {
-      // console.error("Error occured: ", response?.error || response2?.error);
-      // console.log(response?.error)
-      failer(response?.error?.data?.message || response2?.error?.data?.message);
+    if (id !== undefined) {
+      if (!response2.isLoading && response2.status === "fulfilled") {
+        clearForm()
+        onHide();
+        success();
+
+      } else if (response2.isError && response2.status === "rejected" && response2?.error?.status !== 400) {
+        // console.log(response2.error);
+        failer(response2?.error?.data?.message);
+      }
+    } else {
+      if (!response.isLoading && response.status === "fulfilled") {
+        // console.log(response);
+        clearForm()
+        success();
+        onHide();
+      } else if (response.isError && response.status === "rejected" && response?.error?.status !== 400) {
+        // console.log(response.error);
+        failer(response?.error?.data?.message);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response, response2, id]);
+  }, [response, response2]);
 
   return (
     <>
@@ -81,7 +93,7 @@ const VacunasModal = ({ id, onHide, filter, show }) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Vacuna</Modal.Title>
         </Modal.Header>
         <Modal.Body className="px-9">
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Form.Group className="mb-3" controlId="formBasicSelect">
               <Form.Label>Nombre (Tipo)</Form.Label>
               <Form.Control placeholder="Nombre (Tipo)" name="name" value={formData.name} onChange={handleChange} required />

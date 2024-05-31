@@ -265,14 +265,16 @@ const Inventory = ({ email }) => {
                         />
                       </svg>
                     </span>
-                    <input
-                      type="text"
-                      data-kt-ecommerce-product-filter="search"
-                      className="form-control form-control-solid ps-12 w-250px"
-                      placeholder="Buscar"
-                      value={searchValue}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
+                    <form autoComplete="new-password">
+                        <input
+                          type="text"
+                          className="form-control form-control-solid ps-12 w-250px"
+                          placeholder="Buscar"
+                          value={searchValue}
+                          autocomplete="disabled"
+                          onChange={(e) => setSearchValue(e.target.value)}
+                        />
+                      </form>
                   </div>
                 </div>
                 <div className="card-toolbar flex-row-fluid justify-content-start gap-5">
@@ -403,7 +405,7 @@ const Inventory = ({ email }) => {
                           <td className="text-end">
                             <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
                               <Dropdown.Toggle
-                                className={`dropdown-toggle btn btn-sm  btn-flex btn-center  ${dropdowns[i] === true ? "active" : ""}`}
+                                className={`dropdown-toggle btn btn-sm btn-flex btn-center  ${dropdowns[i] === true ? "active" : ""}`}
                                 id="dropdown-basic"
                               >
                                 {"Acción"}
@@ -412,7 +414,7 @@ const Inventory = ({ email }) => {
                               {dropdowns[i] && (
                                 <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                                   <Dropdown.Item className="menu-item px-3">
-                                    <Link to={`/dashboard/Inventario/details/${id}`} className="menu-link px-3">
+                                    <Link to={`/dashboard/inventario/details/${id}`} className="menu-link px-3">
                                       Ver detalles
                                     </Link>
                                   </Dropdown.Item>

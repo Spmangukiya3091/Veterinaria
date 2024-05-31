@@ -90,7 +90,7 @@ const AdminMain = () => {
               <Route path="/propietarios" element={<Propietarios email={data?.user?.email} />} />
               <Route path="/propietarios/details/:id" element={<PropietariosDetails email={data?.user?.email} />} />
               <Route path="/inventario" element={<Inventory email={data?.user?.email} />} />
-              <Route path="/Inventario/details/:id" element={<InventoryDetails email={data?.user?.email} />} />
+              <Route path="/inventario/details/:id" element={<InventoryDetails email={data?.user?.email} />} />
               <Route path="/vacunas" element={<Vacunas email={data?.user?.email} />} />
               <Route path="/vacunas/vacunas-details/:id" element={<VacunasDetails email={data?.user?.email} />} />
               <Route path="/pagos" element={<Pagos email={data?.user?.email} />} />

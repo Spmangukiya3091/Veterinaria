@@ -76,12 +76,11 @@ function Resumen() {
   const pastMonths = getPastMonths().reverse();
   // console.log(pastMonths.reverse())
   const metricasData = useGetMetricsQuery(selectedMonth, { refetchOnMountOrArgChange: true });
-  const appoinmentGraph = useGetAppoinmentGraphQuery( { refetchOnMountOrArgChange: true });
-  const paymentGraph = useGetPaymentGraphQuery( { refetchOnMountOrArgChange: true });
-  const ownerGraph = useGetOwnerGraphQuery( { refetchOnMountOrArgChange: true });
-  const categoryList = useGetCategoryWithProductsQuery( { refetchOnMountOrArgChange: true });
-  const pendingAppointmentsList = useGetPendingAppoinmentQuery( { refetchOnMountOrArgChange: true });
-
+  const appoinmentGraph = useGetAppoinmentGraphQuery({ refetchOnMountOrArgChange: true });
+  const paymentGraph = useGetPaymentGraphQuery({ refetchOnMountOrArgChange: true });
+  const ownerGraph = useGetOwnerGraphQuery({ refetchOnMountOrArgChange: true });
+  const categoryList = useGetCategoryWithProductsQuery({ refetchOnMountOrArgChange: true });
+  const pendingAppointmentsList = useGetPendingAppoinmentQuery({ refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (

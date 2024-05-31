@@ -32,7 +32,7 @@ export const links = [
   // },
   {
     title: "Inventario Productos",
-    path: "/customerservice/Inventario",
+    path: "/customerservice/inventario",
     icon: "/images/s6.png",
   },
   {

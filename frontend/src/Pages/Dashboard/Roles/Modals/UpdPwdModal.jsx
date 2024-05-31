@@ -98,7 +98,7 @@ const UpdPwdModal = (props) => {
           <Modal.Title id="contained-modal-title-vcenter">Actualizar contraseña</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Form.Group className="mb-3" controlId="formBasicSelect">
               <Form.Label>Contraseña actual</Form.Label>
               <Form.Control

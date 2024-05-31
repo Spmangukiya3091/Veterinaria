@@ -124,14 +124,16 @@ function Historical({ id }) {
                         />
                       </svg>
                     </span>
-                    <input
-                      type="text"
-                      data-kt-ecommerce-product-filter="search"
-                      className="form-control form-control-solid ps-12 w-250px"
-                      placeholder="Buscar"
-                      value={searchValue}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
+                    <form autoComplete="new-password">
+                        <input
+                          type="text"
+                          className="form-control form-control-solid ps-12 w-250px"
+                          placeholder="Buscar"
+                          value={searchValue}
+                          autocomplete="disabled"
+                          onChange={(e) => setSearchValue(e.target.value)}
+                        />
+                      </form>
                   </div>
                 </div>
                 <div className="card-toolbar flex-row-fluid justify-content-start gap-5">

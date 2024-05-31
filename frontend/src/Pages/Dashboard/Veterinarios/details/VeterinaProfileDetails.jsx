@@ -230,8 +230,8 @@ const VeterinaProfileDetails = ({ email }) => {
                 </div>
               </div>
             </Col>
-            <Col className="ms-lg-15">
-              <div className="drop-down">
+             <Col className="ms-lg-15">
+              <div className="drop-down" style={{ zIndex: 99 }}>
                 <Dropdown as={ButtonGroup} show={isDropdownOpen} onClose={closeDropdown} onToggle={toggleDropdown} className="dropdown">
                   <Dropdown.Toggle className={`dropdown-toggle btn btn-sm btn-flex btn-center ${isDropdownOpen ? "active" : ""}`} id="dropdown-basic">
                     Accion

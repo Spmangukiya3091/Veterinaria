@@ -135,7 +135,7 @@ function MascotasModal({ show, handleClose, id }) {
           <Modal.Title id="contained-modal-title-vcenter">Información de Mascota</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">

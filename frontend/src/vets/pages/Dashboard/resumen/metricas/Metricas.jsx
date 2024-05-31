@@ -6,7 +6,7 @@ function Metricas({ data }) {
       <p className="card-main-title">Métricas mes actual</p>
       <Row>
         <Col sm={12} md={3} lg={3}>
-          <div className="card bg-body hoverable card-xl-stretch mb-xl-8">
+          <div className="card bg-body hoverable card-xl-stretch mb-xl-8" >
             <div className="card-body">
               <img src="../images/pendiente.png" alt="pendientes" />
 

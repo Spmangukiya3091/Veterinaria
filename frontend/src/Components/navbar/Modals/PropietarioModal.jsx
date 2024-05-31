@@ -5,6 +5,7 @@ import departamentoData from "../../../Department.json";
 import { useState } from "react";
 import { useAddOwnerMutation } from "../../../services/ApiServices";
 import moment from "moment";
+import validator from "validator";
 
 const PropietarioModal = (props) => {
   const [selectedDepartamento, setSelectedDepartamento] = useState("");
@@ -59,14 +60,30 @@ const PropietarioModal = (props) => {
     // If the email field is empty, return true
     return true;
   };
+  const validateIdentification = (identification) => {
+    if (identification !== "") {
+      return validator.isMobilePhone(identification.toString(), 'any', { strictMode: false }) && identification.length === 8;
+    }
+    return true; // Return true if identification is empty
+  };
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+    let processedValue = value;
+
+    if (name === "name" || name === "surname") {
+      // Replace multiple spaces with a single space
+      processedValue = value;
+    } else {
+      processedValue = value.trim(); // Trim leading and trailing spaces
+    }
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value.trim(), // Trim whitespace from the input value
+      [name]: processedValue,
     }));
   };
+
 
   const handleDepartamentoChange = (e) => {
     const selectedValue = e.target.value;
@@ -94,7 +111,7 @@ const PropietarioModal = (props) => {
     e.preventDefault();
     const form = e.currentTarget;
     setValidated(true); // Set validated to true only when the submit button is clicked
-    if (form.checkValidity() === false && validateEmail()) {
+    if (form.checkValidity() === false && validateEmail() && validateIdentification()) {
       e.stopPropagation();
     } else {
       await addPropritario(formData);
@@ -122,7 +139,7 @@ const PropietarioModal = (props) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Propietario</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
@@ -189,6 +206,7 @@ const PropietarioModal = (props) => {
                     onChange={(e) => {
                       setFormData({ ...formData, email: e.target.value });
                     }}
+                    autoComplete="new-password"
                     required
                     isInvalid={!validateEmail()}
                   />
@@ -198,19 +216,23 @@ const PropietarioModal = (props) => {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formBasicSelect">
+                <Form.Group className="mb-3">
                   <Form.Label>Doc. Identidad</Form.Label>
                   <Form.Control
                     aria-label="Default"
-                    type="number"
-                    placeholder="Doc. Identidad"
-                    name="doc_identity"
-                    onChange={(e) => handleOnChange(e)}
-                    value={formData.doc_identity}
+                    placeholder="Doc. de Identificación"
+                    value={formData.doc_identity || ""}
+                    pattern="[0-9]{8}"
+                    maxLength={8}
+                    type="tel"
+                    onChange={(e) => {
+                      setFormData({ ...formData, doc_identity: e.target.value });
+                    }}
                     required
+                    isInvalid={validated && formData.doc_identity !== "" && !validateIdentification(formData.doc_identity)}
                   />
                   <Form.Control.Feedback type="invalid">
-                    Por favor proporcione un Doc. Identidad
+                    {formData.doc_identity !== "" && !validateIdentification(formData.doc_identity) && "El número de identificación debe ser de 8 dígitos."}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Col>

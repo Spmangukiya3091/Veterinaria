@@ -472,24 +472,24 @@ const appointmentDataBySingleVeterinarian = async (req, res) => {
       const data = [];
 
       veterinarian.vetsAppointment.forEach((appointment) => {
-       const actualDate = new Date(appointment.date);
+        const actualDate = new Date(appointment.date);
         const startHour = parseInt(appointment.scheduleStart.split(":")[0]);
-        const startMinute  = parseInt(appointment.scheduleStart.split(":")[1]);
+        const startMinute = parseInt(appointment.scheduleStart.split(":")[1]);
         const startDate = moment(actualDate)
-        .hours(startHour)
-        .minutes(startMinute);
-      
-console.log("startDate",startDate)
+          .hours(startHour)
+          .minutes(startMinute);
+
+        console.log("startDate", startDate)
         const actualendDate = new Date(appointment.date);
         const endHour = parseInt(appointment.scheduleEnd.split(":")[0]);
-        console.log("endHour",endHour)
-       
+        console.log("endHour", endHour)
+
         const endMinute = parseInt(appointment.scheduleEnd.split(":")[1]);
-        console.log("endMinute",endMinute)
-       
+        console.log("endMinute", endMinute)
+
         const endDate = moment(actualendDate)
-        .hours(endHour)
-        .minutes(endMinute);
+          .hours(endHour)
+          .minutes(endMinute);
         data.push({
           title: appointment.observation,
           start: startDate,

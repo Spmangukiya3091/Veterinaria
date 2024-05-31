@@ -212,7 +212,7 @@ function CitasDetail({ email }) {
               </div>
             </Col>
             <Col className="ms-lg-15">
-              <div className="drop-down">
+              <div className="drop-down" style={{ zIndex: 99 }}>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="dropdown-toggle btn btn-sm btn-flex btn-center" id="dropdown-basic">
                     Accion

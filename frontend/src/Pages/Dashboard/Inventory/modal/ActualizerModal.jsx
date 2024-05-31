@@ -67,7 +67,7 @@ function ActualizerModal({ show, handleClose, id, status }) {
           <Modal.Title>Actualizar Producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col md={6} lg={6}>
                 <Form.Group className="mb-3 w-100">

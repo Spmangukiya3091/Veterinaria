@@ -2,7 +2,7 @@
   font-family: "Inter";
 
 
-    .overlay-image {
+  .overlay-image {
     position: absolute;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     background-color: rgba(0, 0, 0, 0.4);
     pointer-events: none;
   }
-  
+
   #kt_app_root {
     height: 100vh;
   }

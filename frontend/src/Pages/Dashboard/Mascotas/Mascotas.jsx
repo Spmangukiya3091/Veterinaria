@@ -28,6 +28,7 @@ const Mascotas = ({ email }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [petId, setPetId] = useState();
+  // eslint-disable-next-line no-unused-vars
   const [citas, setCitas] = useState({
     petId: "",
     ownerId: "",
@@ -228,6 +229,7 @@ const Mascotas = ({ email }) => {
       ) : (
         <>
           <div className="mascotas ">
+            <input type="hidden" value="something" />
             <div className="main-title-box">
               <p className="mascotas-main-title">Mascotas</p>
               <p className="mascotas-sub-title">Mascotas</p>
@@ -255,15 +257,16 @@ const Mascotas = ({ email }) => {
                           />
                         </svg>
                       </span>
-                      <input
-                        type="text"
-                        data-kt-ecommerce-product-filter="search"
-                        className="form-control form-control-solid ps-12 w-250px"
-                        placeholder="Buscar"
-                        value={searchValue}
-                        autocomplete="disabled"
-                        onChange={(e) => setSearchValue(e.target.value)}
-                      />
+                      <form autoComplete="new-password">
+                        <input
+                          type="text"
+                          className="form-control form-control-solid ps-12 w-250px"
+                          placeholder="Buscar"
+                          value={searchValue}
+                          autocomplete="disabled"
+                          onChange={(e) => setSearchValue(e.target.value)}
+                        />
+                      </form>
                     </div>
                   </div>
                   <div className="card-toolbar flex-row-fluid justify-content-start gap-5">
@@ -464,7 +467,7 @@ const Mascotas = ({ email }) => {
                 </div>
               </div>
             </div>
-            <CitasModal show={open} handleClose={handleCloseCitas} citas={citas} />
+            <CitasModal show={open} handleClose={handleCloseCitas} />
             <Alert
               show={modalShow}
               onHide={() => setModalShow(false)}

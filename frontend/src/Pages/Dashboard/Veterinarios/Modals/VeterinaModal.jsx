@@ -29,7 +29,6 @@ const VeterinaModal = (props) => {
 
   useEffect(() => {
     if (!specialityList.isLoading) {
-      console.log(specialityList)
       setLoading(false);
       setData(specialityList?.data?.specialities);
     } else if (specialityList.isError) {

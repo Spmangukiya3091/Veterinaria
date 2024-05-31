@@ -26,7 +26,7 @@ export const links = [
   },
   {
     title: "Inventario Productos",
-    path: "/veterine/Inventario",
+    path: "/veterine/inventario",
     icon: "/images/s6.png",
   },
 ];

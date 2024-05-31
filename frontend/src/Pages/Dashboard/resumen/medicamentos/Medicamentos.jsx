@@ -25,24 +25,33 @@ function Medicamentos({ data, filter }) {
               </tr>
             </thead>
             <tbody style={{ overflowY: "auto" }}>
-              {data?.categories.map((category, i) => (
-                <tr key={i}>
-                  <td>{category.category}</td>
-                  <td>{category.productCount}</td>
-                  <td>{moment(category.createdAt).format("DD MMM YYYY")}</td>
-                  <td>
-                    <Link
-                      to="#"
-                      onClick={() => {
-                        setShowCategory(true);
-                      }}
-                      className="btn btn-bg-light btn-active-color-primary btn-sm"
-                    >
-                      <i className="fa-solid fa-pen"></i>
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+              {
+                data?.categories.length > 0 ?
+                  data?.categories.map((category, i) => (
+                    <tr key={i}>
+                      <td>{category.category}</td>
+                      <td>{category.productCount}</td>
+                      <td>{moment(category.createdAt).format("DD MMM YYYY")}</td>
+                      <td>
+                        <Link
+                          to="#"
+                          onClick={() => {
+                            setShowCategory(true);
+                          }}
+                          className="btn btn-bg-light btn-active-color-primary btn-sm"
+                        >
+                          <i className="fa-solid fa-pen"></i>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))
+                  :
+                  <tr>
+                    <td colSpan="7" style={{ textAlign: "center" }}>
+                      No data available
+                    </td>
+                  </tr>
+              }
             </tbody>
           </table>
         </div>

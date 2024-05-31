@@ -20,7 +20,7 @@ const CitaModal = ({ show, onHide }) => {
   });
   const owners = useGetOwnersListQuery({ refetchOnMountOrArgChange: true });
   const pets = useGetPetByOwnerQuery(formData?.ownerId, { refetchOnMountOrArgChange: true });
-  const veterinarians = useGetVeterinariansQuery( { refetchOnMountOrArgChange: true });
+  const veterinarians = useGetVeterinariansQuery({ refetchOnMountOrArgChange: true });
   const [addCitas, response] = useAddAppoinmentMutation();
   const [validated, setValidated] = useState(false); // State for form validation
   useEffect(() => {
@@ -97,9 +97,7 @@ const CitaModal = ({ show, onHide }) => {
     if (form.checkValidity() === false) {
       e.stopPropagation();
     } else {
-
       addCitas(formData);
-
     }
   };
 
@@ -123,10 +121,10 @@ const CitaModal = ({ show, onHide }) => {
         <Modal.Title>Información de cita</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
           <Row>
             <Col>
-              <Form.Group className="mb-3">
+            <Form.Group className="mb-3">
                 <Form.Label>Propietario</Form.Label>
                 <Form.Select name="owner" onChange={handleOwnerChange} value={formData.ownerId} required>
                   <option value={""} disabled="true" selected="true">Seleccione Propietario</option>

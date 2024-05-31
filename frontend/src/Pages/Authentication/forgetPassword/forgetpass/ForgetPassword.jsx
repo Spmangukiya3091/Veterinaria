@@ -66,6 +66,7 @@ function ForgetPassword() {
                           <Form.Control
                             type="email"
                             placeholder="Correo electrónico"
+                            autoComplete="new-password"
                             name="email"
                             onChange={(e) => {
                               setEmail({ email: e.target.value });

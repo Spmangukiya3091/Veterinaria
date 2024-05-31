@@ -24,8 +24,8 @@ const PagosModal = ({ id, show, onHide }) => {
   });
   const [validated, setValidated] = useState(false); // State for form validation
 
-  const owners = useGetOwnersListQuery( { refetchOnMountOrArgChange: true });
-  const doctors = useGetVeterinariansQuery( { refetchOnMountOrArgChange: true });
+  const owners = useGetOwnersListQuery({ refetchOnMountOrArgChange: true });
+  const doctors = useGetVeterinariansQuery({ refetchOnMountOrArgChange: true });
   const paymentDetails = useGetSinglePaymentQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
 
   useEffect(() => {
@@ -143,7 +143,7 @@ const PagosModal = ({ id, show, onHide }) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Pagos</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3">

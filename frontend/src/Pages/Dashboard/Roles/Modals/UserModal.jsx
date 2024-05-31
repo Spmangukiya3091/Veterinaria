@@ -108,7 +108,6 @@ const UserModal = (props) => {
   };
   // Validation function for confirming password (matches password)
   const validateConfirmPassword = (password, confirmPassword) => {
-    console.log(password, confirmPassword)
     return password === confirmPassword;
   };
 
@@ -250,7 +249,7 @@ const UserModal = (props) => {
             <Modal.Title id="contained-modal-title-vcenter">{props.id ? "Editar Usuario" : "Crear Nuevo Usuario"}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
               <Row>
                 <Col>
                   <Form.Group className="mb-3" controlId="profilePic">
@@ -263,25 +262,18 @@ const UserModal = (props) => {
                         />
                       </div>
                       <div className="form-field">
-                        {(!selectedFile && !userData.profile) && (
-                          <>
-                            <Form.Control type="file" onChange={handleImageChange} ref={fileInputRef} style={{ display: "none" }} />
-                            <div className="info">
-                              <p>Adjunta una foto de perfil para completar datos adicionales.</p>
-                            </div>
-                          </>
-                        )}
-                        {selectedFile && (
-                          <div className="info">
-                            <p>Adjunta una foto de perfil para completar datos adicionales.</p>
+                        <Form.Control
+                          type="file"
+                          onChange={handleImageChange}
+                          ref={fileInputRef}
+                          style={{ display: "none" }}
+                        />
+                        <div className="info">
+                          <p>Adjunta una foto de perfil para completar datos adicionales.</p>
+                          {selectedFile && (
                             <p className="mt-3 filename">{selectedFile.name}</p>
-                          </div>
-                        )}
-                        {userData.profile && (
-                          <div className="info">
-                            <p>Ya has adjuntado una foto de perfil.</p>
-                          </div>
-                        )}
+                          )}
+                        </div>
                         <Button onClick={handleUploadButtonClick}>Adjuntar</Button>
                       </div>
                     </div>
@@ -336,7 +328,9 @@ const UserModal = (props) => {
                     <Form.Control
                       type="email"
                       name="email"
+                      autoComplete="new-password"
                       placeholder="Correo electrónico"
+
                       value={userData.email}
                       onChange={(e) => {
                         setUserData({ ...userData, email: e.target.value });
@@ -407,6 +401,7 @@ const UserModal = (props) => {
                         onChange={(e) => {
                           setUserData({ ...userData, password: e.target.value });
                         }}
+                        autoComplete="new-password"
                         pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$"
                         required
                         isInvalid={validated && userData.password !== "" && !validatePassword(userData.password)}
@@ -435,6 +430,7 @@ const UserModal = (props) => {
                         onChange={(e) => {
                           setUserData({ ...userData, confirmPassword: e.target.value });
                         }}
+                        autoComplete="new-password"
                         required
                         pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$"
                         isInvalid={userData.confirmPassword !== "" && !validateConfirmPassword(userData.password, userData.confirmPassword)}

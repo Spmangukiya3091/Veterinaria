@@ -26,6 +26,7 @@ schedule.scheduleJob('*/1 * * * * *', () => {
   updateProductStatus();
   updateAppointmentsStatus();
 });
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());

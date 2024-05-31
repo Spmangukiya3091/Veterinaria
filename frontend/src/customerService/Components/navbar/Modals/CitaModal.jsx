@@ -123,7 +123,7 @@ const CitaModal = ({ show, onHide }) => {
         <Modal.Title>Información de cita</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
           <Row>
             <Col>
               <Form.Group className="mb-3">

@@ -19,7 +19,7 @@ const ProductoModal = (props) => {
     presentation: "",
   });
   const [validated, setValidated] = useState(false); // State for form validation
-  const categoryList = useGetAllCategoriesQuery( { refetchOnMountOrArgChange: true });
+  const categoryList = useGetAllCategoriesQuery({ refetchOnMountOrArgChange: true });
   const [addProduct, response] = useAddProductMutation();
 
   useEffect(() => {
@@ -110,7 +110,7 @@ const ProductoModal = (props) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3">
@@ -270,20 +270,7 @@ const ProductoModal = (props) => {
           <Button
             onClick={() => {
               props.onHide();
-              setFormData({
-                product: "",
-                categoryId: "",
-                category: "",
-                composition: "",
-                stock: "",
-                sku: "",
-                status: "",
-                laboratory: "",
-                description: "",
-                brand: "",
-                price: "",
-                presentation: "",
-              });
+              clearForm();
             }}
             className="footer-btn btn btn-secondary"
           >

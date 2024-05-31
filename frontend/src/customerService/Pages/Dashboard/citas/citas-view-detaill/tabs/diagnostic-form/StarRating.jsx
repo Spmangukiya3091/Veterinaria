@@ -1,27 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 
-const StarRating = ({ rating, totalStars = 5 }) => {
-  const filledStars = Math.round(rating); // Round the rating to the nearest whole number
+const StarRating = ({ rating, onChange }) => {
+  const [hoverRating, setHoverRating] = useState(0);
 
-  const starElements = Array.from({ length: totalStars }, (_, index) => (
+  const handleMouseEnter = (starRating) => {
+    setHoverRating(starRating);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverRating(0);
+  };
+
+  const handleClick = (starRating) => {
+    onChange(starRating);
+  };
+
+  const stars = [1, 2, 3, 4, 5].map((star) => (
     <FontAwesomeIcon
-      key={index}
+      key={star}
       icon={solidStar}
-      className={`svg-icon svg-icon-2 ${index < filledStars ? "checked" : "unchecked"}`}
+      className="star me-2"
+      onMouseEnter={() => handleMouseEnter(star)}
+      onMouseLeave={handleMouseLeave}
+      onClick={() => handleClick(star)}
       style={{
-        color: index < filledStars ? "#336CFB" : "#DCDCDC",
+        color: star <= (hoverRating || rating) ? "#336CFB" : "#DCDCDC",
         cursor: "pointer",
-        fontSize: "15px", // Adjust the size of the stars as needed
+        fontSize: "24px", // Adjust the size of the stars as needed
       }}
     />
   ));
 
   return (
-    <div className="rating justify-content-start">
-      <div className="rating-label">{starElements}</div>
-    </div>
+    <>
+      <div className="stars">{stars}</div>
+      <div className="star-count mx-2 fw-bolder">{rating}</div>
+    </>
   );
 };
 

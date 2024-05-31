@@ -42,4 +42,3 @@ const StarRating = ({ rating, onChange }) => {
 };
 
 export default StarRating;
-    

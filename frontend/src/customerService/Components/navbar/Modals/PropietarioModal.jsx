@@ -62,11 +62,22 @@ const PropietarioModal = (props) => {
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
+    let processedValue = value;
+
+    if (name === "name" || name === "surname") {
+      // Replace multiple spaces with a single space
+      processedValue = value;
+    } else {
+      processedValue = value.trim(); // Trim leading and trailing spaces
+    }
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value.trim(), // Trim whitespace from the input value
+      [name]: processedValue,
     }));
+
   };
+
 
   const handleDepartamentoChange = (e) => {
     const selectedValue = e.target.value;
@@ -122,7 +133,7 @@ const PropietarioModal = (props) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Propietario</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
@@ -190,6 +201,7 @@ const PropietarioModal = (props) => {
                       setFormData({ ...formData, email: e.target.value });
                     }}
                     required
+                    autoComplete="new-password"
                     isInvalid={!validateEmail()}
                   />
                   <Form.Control.Feedback type="invalid">

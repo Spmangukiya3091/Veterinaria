@@ -188,13 +188,6 @@ export const dashboardApi = createApi({
       }),
     }),
 
-    getVetsPendingAppoinment: builder.query({
-      query: (id) => ({
-        url: `vets/pendingAppointments/${id}`,
-        method: "GET",
-      }),
-    }),
-
     getVetsMothlyMetrics: builder.query({
       query: (id) => ({
         url: `vets/monthlyMetrics/${id}`,
@@ -215,7 +208,6 @@ export const {
   useGetAppoinmentGraphQuery,
   useGetVetsAppoinmentGraphQuery,
   useGetVetsOwnerGraphQuery,
-  useGetVetsPendingAppoinmentQuery,
   useGetVetsMothlyMetricsQuery,
   useGetPaymentGraphQuery,
   useGetOwnerGraphQuery,

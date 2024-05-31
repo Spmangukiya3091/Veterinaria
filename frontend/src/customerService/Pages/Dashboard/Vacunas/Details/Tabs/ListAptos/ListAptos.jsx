@@ -107,7 +107,7 @@ const ListAptos = ({ id, vaccineData }) => {
                           <td className="text-end">
                             <div className="d-flex align-items-center">
                               <Link
-                                to={`/dashboard/mascotas/details/${petId}?tab=vacunas`}
+                                to={`/customerservice/mascotas/details/${petId}?tab=vacunas`}
                                 className="btn btn-sm btn-light btn-active-light-primary mx-2"
                                 data-kt-menu-trigger="click"
                                 data-kt-menu-placement="bottom-end"

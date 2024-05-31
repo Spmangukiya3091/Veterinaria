@@ -68,9 +68,8 @@ function ProximasCitas({ id }) {
                   {dateRange.map((date) => (
                     <li className="nav-item me-1" key={date.format("YYYY-MM-DD")} role="presentation">
                       <Link
-                        className={`nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 ${
-                          date.format("YYYY-MM-DD") === selectedDate ? "btn-active-primary" : ""
-                        }`}
+                        className={`nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3 ${date.format("YYYY-MM-DD") === selectedDate ? "btn-active-primary" : ""
+                          }`}
                         data-bs-toggle="tab"
                         onClick={() => handleDateClick(date)}
                         to={`#kt_schedule_day_${date.format("YYYY-MM-DD")}`}

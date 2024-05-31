@@ -1,36 +1,41 @@
 .mascotasdetails-section {
   padding: 25px;
   font-family: "Inter";
-  
-    .heading {
-      padding: 1.5rem 0;
-     .p-head{
+
+  .heading {
+    padding: 1.5rem 0;
+
+    .p-head {
       margin-bottom: 5px;
-    font: normal normal bold 26px/31px Inter;
-     }
-      p {
-        text-align: left;
-        font-size: 15px;
-        font-weight: 500;
-        margin-bottom: 0;
+      font: normal normal bold 26px/31px Inter;
+    }
+
+    p {
+      text-align: left;
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+  }
+
+  .buton {
+    .btn {
+      padding: 15px;
+      font-size: 14px;
+
+      .fa-shield-dog {
+        margin-right: 10px;
+        font-size: 20px;
       }
     }
-    .buton {
-      .btn {
-        padding: 15px;
-        font-size: 14px;
-        .fa-shield-dog {
-          margin-right: 10px;
-          font-size: 20px;
-        }
-      }
-    }
- 
+  }
+
   .head {
     background-color: #fff;
     padding: 30px 32px;
     border-radius: 8px;
     box-shadow: 0px 4px 12px 0px rgb(0 0 0 / 3%);
+
     .img {
       background-color: #F6F8FF;
       display: flex;
@@ -40,16 +45,19 @@
       height: 100px;
       width: 100px;
       margin: 10px auto;
+
       .fa-dog {
         color: #8a98a5;
         font-size: 20px;
       }
     }
+
     .pet-name {
       font: normal normal 15px/22px Inter;
       font-weight: 600;
       margin-bottom: 10px;
     }
+
     .status {
       background-color: #ffe229;
       border-radius: 50px;
@@ -65,46 +73,57 @@
         font-size: 6px;
         margin-right: 5px;
       }
+
       p {
         margin-bottom: 0;
         font-weight: 600;
         font-size: 14px;
       }
     }
+
     .information {
       text-align: left;
+
       .time {
         margin: 20px 0;
+
         p {
           margin-bottom: 0;
         }
+
         .time1 {
           border: 1px dashed #b9bfc2;
           border-radius: 8px;
           margin-bottom: 10px;
           padding: 10px 15px;
+
           h5 {
             font-size: 22px;
             font-weight: bold;
             margin-bottom: 0;
           }
+
           p {
             color: #8a98a5;
             font-size: 15px;
           }
         }
       }
+
       .info {
         margin-bottom: 20px;
+
         h6 {
           font-size: 15px;
           color: black;
           margin-bottom: 5px;
         }
+
         .edad-count {
           color: black;
           font: normal normal 600 13px/21px Inter;
         }
+
         p {
           font: normal normal 500 13px/21px Inter;
           color: #336cfb;
@@ -112,15 +131,17 @@
           margin-bottom: 0;
         }
       }
+
       .info-new {
-      
-       
-      
-          i {
-            color: #336cfb;
-          }
-      
+
+
+
+        i {
+          color: #336cfb;
+        }
+
       }
+
       .timezone {
         h6 {
           font-size: 15px;
@@ -128,6 +149,7 @@
           margin-bottom: 5px;
           font-weight: normal;
         }
+
         p {
           font: normal normal 13px/21px Inter;
           font-weight: 700;
@@ -135,6 +157,7 @@
       }
     }
   }
+
   .printbutton {
     float: right;
     background: #336cfb 0% 0% no-repeat padding-box;

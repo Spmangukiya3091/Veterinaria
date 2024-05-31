@@ -284,7 +284,6 @@ const VeterinaUserModal = (props) => {
     }
   };
 
-  console.log(formData.specialityId)
   return (
     <>
       <Modal show={props.show} onHide={handleModalHide} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -292,7 +291,7 @@ const VeterinaUserModal = (props) => {
           <Modal.Title id="contained-modal-title-vcenter">{props.id !== undefined ? "Editar" : "Crear"} Información de Doctor</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3" >
@@ -383,6 +382,7 @@ const VeterinaUserModal = (props) => {
                         pattern="[0-9]{8}"
                         maxLength={8}
                         type="tel"
+                        required
                         onChange={(e) => {
                           setFormData({ ...formData, identity: e.target.value });
                         }}
@@ -416,7 +416,6 @@ const VeterinaUserModal = (props) => {
                     {formData.phone !== "" && !validatePhone(formData.phone) && "Proporcione un número de teléfono válido en formato de 9 dígitos."}
                   </Form.Control.Feedback>
                 </Form.Group>
-
               </Col>
               <Col>
                 <Form.Group controlId="email" className="mb-3">
@@ -424,7 +423,9 @@ const VeterinaUserModal = (props) => {
                   <Form.Control
                     type="email"
                     name="email"
+                    autoComplete="new-email"
                     placeholder="Correo electrónico"
+
                     value={formData.email}
                     onChange={(e) => {
                       setFormData({ ...formData, email: e.target.value });
@@ -617,6 +618,7 @@ const VeterinaUserModal = (props) => {
                       type={showPassword ? "text" : "password"} // Update type attribute based on showPassword state
                       placeholder="Ingrese su contraseña"
                       value={formData?.password}
+                      autoComplete="new-password"
                       onChange={(e) => {
                         setFormData({ ...formData, password: e.target.value });
                       }}
@@ -644,6 +646,7 @@ const VeterinaUserModal = (props) => {
                     <Form.Control
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirmar contraseña"
+                      autoComplete="new-password"
                       value={formData?.confirmPassword}
                       onChange={(e) => {
                         setFormData({ ...formData, confirmPassword: e.target.value });

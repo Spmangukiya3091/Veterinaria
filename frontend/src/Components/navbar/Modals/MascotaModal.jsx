@@ -90,7 +90,7 @@ const MascotaModal = ({ onHide, show }) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Mascota</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicSelect">
@@ -171,7 +171,10 @@ const MascotaModal = ({ onHide, show }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={() => {
+            onHide();
+            clearForm()
+          }} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button

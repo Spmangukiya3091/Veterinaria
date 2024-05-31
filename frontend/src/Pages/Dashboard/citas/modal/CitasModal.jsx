@@ -74,6 +74,7 @@ function CitasModal({ show, handleClose, id, }) {
     // Reset petId when ownerId changes
     setFormData((prevFormData) => ({ ...prevFormData, petId: "" }));
   }, [formData.ownerId]);
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -163,7 +164,7 @@ function CitasModal({ show, handleClose, id, }) {
         <Modal.Title>Información de cita</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
           <Row>
             <Col>
               <Form.Group className="mb-3">

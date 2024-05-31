@@ -85,10 +85,10 @@ const Historical = ({ id }) => {
       searchData.status === ""
         ? `${id}?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}?status=${searchData.status}`
-        : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
-        ? `${id}`
-        : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+          ? `${id}?status=${searchData.status}`
+          : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
+            ? `${id}`
+            : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // historyList.refetch();
     setDropdownOpen(false);
@@ -124,14 +124,16 @@ const Historical = ({ id }) => {
                         />
                       </svg>
                     </span>
-                    <input
-                      type="text"
-                      data-kt-ecommerce-product-filter="search"
-                      className="form-control form-control-solid ps-12 w-250px"
-                      placeholder="Buscar"
-                      value={searchValue}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                    />
+                    <form autoComplete="new-password">
+                      <input
+                        type="text"
+                        className="form-control form-control-solid ps-12 w-250px"
+                        placeholder="Buscar"
+                        value={searchValue}
+                        autocomplete="disabled"
+                        onChange={(e) => setSearchValue(e.target.value)}
+                      />
+                    </form>
                   </div>
                 </div>
                 <div className="card-toolbar flex-row-fluid justify-content-start gap-5">
@@ -150,7 +152,7 @@ const Historical = ({ id }) => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu
                         className={`menu menu-sub menu-sub-dropdown w-250px w-md-300px ${isDropdownOpen ? "show" : ""}`}
-                        
+
                         id="kt_menu_62444587ce1ee"
                       >
                         <div className="px-7 py-5">
@@ -254,8 +256,8 @@ const Historical = ({ id }) => {
                                   status === "pending"
                                     ? "badge badge-light-warning text-warning"
                                     : status === "complete"
-                                    ? "badge badge-light-success text-success"
-                                    : "badge badge-secondary text-dark"
+                                      ? "badge badge-light-success text-success"
+                                      : "badge badge-secondary text-dark"
                                 }
                               >
                                 <p className="status-p mb-0">

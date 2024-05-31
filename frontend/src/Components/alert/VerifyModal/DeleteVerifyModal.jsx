@@ -7,7 +7,6 @@ const DeleteVerifyModal = (props) => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-
   const handleContinue = () => {
     // Pass the entered password back to the parent component
     if (password.trim() !== "") {
@@ -30,7 +29,7 @@ const DeleteVerifyModal = (props) => {
           Por motivos de seguridad, ingresa tu contraseña actual y completaremos la operación.
           <Form.Group className="form-group">
             <Form.Label>Contraseña actual</Form.Label>
-            <Form.Control required type="password" placeholder="Contraseña actual" value={password} onChange={handlePasswordChange} autocomplete="disabled" />
+            <Form.Control required type="password" placeholder="Contraseña actual"  value={password} onChange={handlePasswordChange} autoComplete="new-password" />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

@@ -102,7 +102,7 @@ const PagoModal = ({ id, show, onHide }) => {
           <Modal.Title id="contained-modal-title-vcenter">Información de Pagos</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
             <Row>
               <Col>
                 <Form.Group className="mb-3">

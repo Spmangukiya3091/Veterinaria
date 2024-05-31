@@ -201,6 +201,7 @@ function Login() {
                           type="email"
                           autoComplete="current-email"
                           placeholder="Correo electrónico"
+                          
                           required
                         />
                       </Form.Group>
