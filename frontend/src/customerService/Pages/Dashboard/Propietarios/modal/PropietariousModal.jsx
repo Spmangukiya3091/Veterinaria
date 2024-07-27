@@ -101,25 +101,30 @@ const PropietarioModal = (props) => {
     }
     return true; // Return true if identification is empty
   };
+
   const handleDepartamentoChange = (e) => {
     const selectedValue = e.target.value;
-    if (selectedValue) {
-      setSelectedDepartamento(selectedValue);
-      const selectedDepartamentoData = departamentoData.find((departamento) => departamento.Department === selectedValue);
-      if (selectedDepartamentoData) {
-        setDistritos(selectedDepartamentoData.DISTRITOS);
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          department: selectedValue,
-          district: "", // Reset district when department changes
-        }));
-      } else {
-        setDistritos([]);
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          department: "", // Reset department when no option is selected
-        }));
-      }
+    setSelectedDepartamento(selectedValue);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      department: selectedValue,
+      district: "", // Reset district when department changes
+    }));
+
+    const selectedDepartamentoData = departamentoData.find((departamento) => departamento.Department === selectedValue);
+
+    if (selectedDepartamentoData) {
+      // Sort the DISTRITOS array alphabetically
+      const sortedDistritos = [...selectedDepartamentoData.DISTRITOS].sort((a, b) => a.localeCompare(b));
+      //console.log(sortedDistritos);
+      setDistritos(sortedDistritos);
+    } else {
+      setDistritos([]);
+      setFormData((prevData) => ({
+        ...prevData,
+        department: "", // Reset department when no option is selected
+      }));
     }
   };
 
@@ -237,11 +242,12 @@ const PropietarioModal = (props) => {
                     aria-label="Default"
                     placeholder="Correo electrónico"
                     value={formData.email || ""}
+                    pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                     onChange={(e) => {
                       setFormData({ ...formData, email: e.target.value });
                     }}
                     autoComplete="new-password"
-                    required
+                    // required
                     isInvalid={!validateEmail()}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -337,7 +343,7 @@ const PropietarioModal = (props) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={() => { props.onHide(); clearForm() }}className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button

@@ -10,6 +10,8 @@ import CustomerServiceMain from "./customerService/Pages/Dashboard/main/Main.jsx
 import { ToastifyContainer } from "./store/tostify";
 import { CookiesProvider } from "react-cookie";
 import Dialog from "./vets/pages/Dashboard/resumen/dialog/Dialog.jsx";
+import ProtectedRoute from "./ProectedRoute.js";
+
 
 function App() {
   return (
@@ -18,14 +20,17 @@ function App() {
         <CookiesProvider>
           <ToastifyContainer />
           <Routes>
-            <Route exact path="/veterine/dialog" element={<Dialog />} />
-            <Route exact path="/" element={<Login />} />
+            <Route path="/veterine/dialog" element={<Dialog />} />
+            <Route path="/" element={<Login />} />
             <Route path="/forget" element={<ForgetPassword />} />
-            <Route exact path="/verification/:email" element={<Verification />} />
+            <Route path="/verification/:email" element={<Verification />} />
             <Route path="/updatePassword" element={<UpdatePassword />} />
-            <Route path="/dashboard/*" element={<Main />} />
-            <Route path="/veterine/*" element={<VeterineMain />} />
-            <Route path="/customerservice/*" element={<CustomerServiceMain />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard/*" element={<Main />} />
+              <Route path="/veterine/*" element={<VeterineMain />} />
+              <Route path="/customerservice/*" element={<CustomerServiceMain />} />
+            </Route>
           </Routes>
         </CookiesProvider>
       </BrowserRouter>

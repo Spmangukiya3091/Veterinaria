@@ -3,14 +3,14 @@ import { Button, Modal } from "react-bootstrap";
 import "./veterinamodal.scss";
 import EspecialidadModal from "./EspecialidadModal";
 import { failer, success } from "../../../../Components/alert/success";
-import { useGetSpecialityListQuery, useRemoveSpecialityMutation } from "../../../../services/ApiServices";
+import { useRemoveSpecialityMutation } from "../../../../services/ApiServices";
 import moment from "moment";
 import Loader from "../../../../Components/loader/Loader";
 import Alert from "../../../../Components/alert/Alert";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { Link } from "react-router-dom";
 
-const VeterinaModal = (props) => {
+const SpecialityModal = (props) => {
 
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -25,7 +25,7 @@ const VeterinaModal = (props) => {
     pass: "",
     email: props.email,
   });
-  const specialityList = useGetSpecialityListQuery({ refetchOnMountOrArgChange: true });
+  const specialityList = props.specialityList
 
   useEffect(() => {
     if (!specialityList.isLoading) {
@@ -81,17 +81,20 @@ const VeterinaModal = (props) => {
 
   useEffect(() => {
     if (!response.isLoading && response.isSuccess) {
-      success();
       setDltData({
         id: "",
         pass: "",
         email: "",
       });
-      // Refetch or update data if needed
+      setSpid()
+      setOpenform(false);
       specialityList.refetch();
+      // Refetch or update data if needed
+      success();
     } else if (response.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
@@ -190,6 +193,7 @@ const VeterinaModal = (props) => {
       <EspecialidadModal show={open} id={spid} handleClose={handleCloses} filter={specialityList} />
       <Alert show={modalShow} onHide={() => {
         setModalShow(false)
+        setSpid()
         specialityList.refetch();
         setDltData({
           id: "",
@@ -200,6 +204,7 @@ const VeterinaModal = (props) => {
       <DeleteVerifyModal
         show={openform}
         onHide={() => {
+          setSpid()
           setOpenform(false);
           setDltData({
             id: "",
@@ -214,4 +219,4 @@ const VeterinaModal = (props) => {
   );
 };
 
-export default VeterinaModal;
+export default SpecialityModal;

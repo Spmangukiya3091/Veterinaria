@@ -32,10 +32,10 @@ const SubMascotas = ({ data }) => {
                   data.pets.map(({ id, name, Species, sex, age }, i) => (
                     <tr key={i}>
                       <td>{i + 1}</td>
-                      <td>{name}</td>
-                      <td>{Species}</td>
-                      <td>{sex}</td>
-                      <td>{age}</td>
+                      <td>{name ? name : "-"}</td>
+                      <td>{Species ? Species : "-"}</td>
+                      <td>{sex ? sex : "-"}</td>
+                      <td>{age ? age : "-"}</td>
 
                       <td>
                         <Link
@@ -52,7 +52,7 @@ const SubMascotas = ({ data }) => {
                 ) : (
                   <tr>
                     <td colSpan="6" className="text-center">
-                      No data available
+                      Datos no disponibles
                     </td>
                   </tr>
                 )}

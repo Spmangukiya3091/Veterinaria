@@ -82,7 +82,7 @@ const InventoryDetails = () => {
                             setShow(!show);
                           }}
                         >
-                          Details
+                          Detalles
                           <span className="ms-2 rotate-180">
                             <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                           </span>

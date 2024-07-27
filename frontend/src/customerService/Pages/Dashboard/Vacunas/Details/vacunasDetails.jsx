@@ -32,7 +32,7 @@ const VacunasDetails = () => {
     }
   }, [vaccineDetail]);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => { setShow(false); vaccineDetail.refetch() };
   const handleHide = () => {
     setModalShow(false);
   };
@@ -101,7 +101,7 @@ const VacunasDetails = () => {
                             setShowDropdown(!showDropdown);
                           }}
                         >
-                          Details
+                          Detalles
                           <span className="ms-2 rotate-180">
                             <i className={`fa-solid fa-chevron-${showDropdown ? "up" : "down"} fs-8`}></i>
                           </span>

@@ -146,7 +146,7 @@ const Vacunas = () => {
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
-                        autocomplete="disabled"
+                        autoComplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </form>
@@ -232,7 +232,7 @@ const Vacunas = () => {
                       currentPosts.map(({ id, name, stock, creation, validity, aptos }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{i + 1}</span>
+                            <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
                           <td className="text-start pe-0">{name ? name : "-"}</td>
 
@@ -256,7 +256,7 @@ const Vacunas = () => {
                     ) : (
                       <tr>
                         <td colSpan="7" className="text-center">
-                          No data available
+                          Datos no disponibles
                         </td>
                       </tr>
                     )}

@@ -20,8 +20,14 @@ function Navbars({ user }) {
 
   const handleLogout = () => {
     // Remove cookies
-    removeCookie("user");
-    removeCookie("authToken");
+    removeCookie("user", { path: "/", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("authToken", { path: "/", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("user", { path: "/dashboard", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("authToken", { path: "/dashboard", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("user", { path: "/", domain: ".olivosdatasolutions.com" });
+    removeCookie("authToken", { path: "/", domain: ".olivosdatasolutions.com" });
+    removeCookie("user", { path: "/dashboard", domain: ".olivosdatasolutions.com" });
+    removeCookie("authToken", { path: "/dashboard", domain: ".olivosdatasolutions.com" });
 
     // Navigate to the home page
     navigate("/");
@@ -46,7 +52,7 @@ function Navbars({ user }) {
               <Avatars name={user?.name + " " + user?.surname} />
               <div className="avatar-title-box">
                 <p className="avatar-main-title">{user?.name + " " + user?.surname}</p>
-                <p className="avatar-sub-title">Veterinarian</p>
+                <p className="avatar-sub-title">Veterinario</p>
                 {/* <p className="avatar-sub-title">{user?.role}</p> */}
                 {/* <p className="avatar-main-title">{user?.user?.name}</p>
                 <p className="avatar-sub-title">{user?.user?.role}</p> */}

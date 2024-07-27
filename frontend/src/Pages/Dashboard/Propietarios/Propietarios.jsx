@@ -174,7 +174,8 @@ const Propietarios = ({ email }) => {
       allOwnersList.refetch();
     } else if (response.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message)
+      // failer(response?.error?.data?.message)
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -250,15 +251,15 @@ const Propietarios = ({ email }) => {
                       </svg>
                     </span>
                     <form autoComplete="new-password">
-                        <input
-                          type="text"
-                          className="form-control form-control-solid ps-12 w-250px"
-                          placeholder="Buscar"
-                          value={searchValue}
-                          autocomplete="disabled"
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                      </form>
+                      <input
+                        type="text"
+                        className="form-control form-control-solid ps-12 w-250px"
+                        placeholder="Buscar"
+                        value={searchValue}
+                        autoComplete="disabled"
+                        onChange={(e) => setSearchValue(e.target.value)}
+                      />
+                    </form>
                   </div>
                 </div>
                 <div className="card-toolbar flex-row-fluid justify-content-start gap-5">
@@ -364,7 +365,7 @@ const Propietarios = ({ email }) => {
                       currentPosts.map(({ id, name, surname, address, phone_1, doc_identity }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{i + 1}</span>
+                            <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
 
                           <td className="text-start pe-0" data-order="16">
@@ -418,7 +419,7 @@ const Propietarios = ({ email }) => {
                     ) : (
                       <tr>
                         <td colSpan="7" className="text-center">
-                          No data available
+                          Datos no disponibles
                         </td>
                       </tr>
                     )}

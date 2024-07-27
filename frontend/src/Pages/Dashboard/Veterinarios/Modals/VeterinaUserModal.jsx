@@ -4,7 +4,7 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "./modal.scss";
 import { failer, success } from "../../../../Components/alert/success";
 import departamentoData from "../../../../Department.json";
-import { useGetSingleVeterinQuery, useGetSpecialitiesQuery } from "../../../../services/ApiServices";
+import { useGetSingleVeterinQuery } from "../../../../services/ApiServices";
 import axios from "axios";
 import moment from "moment";
 import { useCookies } from "react-cookie";
@@ -34,7 +34,6 @@ const VeterinaUserModal = (props) => {
     specialityId: "",
   });
   const [validated, setValidated] = useState(false); // State for form validation
-  const specialityList = useGetSpecialitiesQuery({ refetchOnMountOrArgChange: true });
   const [specialities, setSpecialities] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedDepartamento, setSelectedDepartamento] = useState("");
@@ -42,14 +41,17 @@ const VeterinaUserModal = (props) => {
   const fileInputRef = useRef(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [isAnyChecked, setIsAnyChecked] = useState(false)
 
   const getVeterinDetails = useGetSingleVeterinQuery(props.id, { refetchOnMountOrArgChange: true, skip: props.id === undefined });
 
   useEffect(() => {
-    if (!specialityList.isLoading) {
-      setSpecialities(specialityList.data?.specialityList || []);
+    if (!props.specialityList.isLoading) {
+      console.log(props.specialityList.data)
+      setSpecialities(props.specialityList.data?.specialityList || []);
     }
-  }, [specialityList, props.show]);
+  }, [props.specialityList, props.show]);
 
   useEffect(() => {
     if (props.id !== undefined && !getVeterinDetails.isLoading && getVeterinDetails?.data) {
@@ -80,7 +82,7 @@ const VeterinaUserModal = (props) => {
         speciality,
         identity,
         dob,
-        phone,
+        phone: phone.toString(),
         email,
         password,
         confirmPassword: password,
@@ -154,10 +156,10 @@ const VeterinaUserModal = (props) => {
 
   const handleCheckboxChange = useCallback(
     (label) => {
-      const isChecked = formData?.workingDays.includes(label);
+      const isChecked = formData.workingDays.includes(label);
 
       if (isChecked) {
-        const updatedWorkingDays = formData?.workingDays.filter((day) => day !== label);
+        const updatedWorkingDays = formData.workingDays.filter((day) => day !== label);
         setFormData((prevData) => ({
           ...prevData,
           workingDays: updatedWorkingDays,
@@ -169,8 +171,9 @@ const VeterinaUserModal = (props) => {
         }));
       }
     },
-    [formData?.workingDays],
+    [formData.workingDays],
   );
+
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
   };
@@ -191,10 +194,14 @@ const VeterinaUserModal = (props) => {
       department: selectedValue,
       district: "", // Reset district when department changes
     }));
+
     const selectedDepartamentoData = departamentoData.find((departamento) => departamento.Department === selectedValue);
 
     if (selectedDepartamentoData) {
-      setDistritos(selectedDepartamentoData.DISTRITOS || []);
+      // Sort the DISTRITOS array alphabetically
+      const sortedDistritos = [...selectedDepartamentoData.DISTRITOS].sort((a, b) => a.localeCompare(b));
+      //console.log(sortedDistritos);
+      setDistritos(sortedDistritos);
     } else {
       setDistritos([]);
       setFormData((prevData) => ({
@@ -213,7 +220,8 @@ const VeterinaUserModal = (props) => {
     // Check if the email field is not empty
     if (formData?.email !== "") {
       // Implement custom email validation logic
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regular expression for basic email validation
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // Check if the email field is not empty and follows the proper format
       return emailPattern.test(formData?.email);
     }
     // If the email field is empty, return true
@@ -237,49 +245,54 @@ const VeterinaUserModal = (props) => {
     e.preventDefault();
     const form = e.currentTarget;
     const allUnchecked = formData?.workingDays.length === 0;
+
     setValidated(true); // Set validated to true only when the submit button is clicked
-    if (form.checkValidity() === false && validateIdentification(formData.identity) && validatePhone(formData.phone) && validateConfirmPassword() && validatePassword() && validateEmail() && !allUnchecked) {
+    if (allUnchecked || e.currentTarget.checkValidity() === false) {
       e.stopPropagation();
     } else {
-      try {
+      if (form.checkValidity() === false && validateIdentification(formData.identity) && validatePhone(formData.phone) && validateConfirmPassword() && validatePassword() && validateEmail() && !allUnchecked) {
+        e.stopPropagation();
+      } else {
+        try {
 
-        if (props.id !== undefined) {
-          // Handle update logic
-          const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/veterinarian/UpdateVeterinarian/${props.id}`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + cookies.authToken,
-            },
-          });
+          if (props.id !== undefined) {
+            // Handle update logic
+            const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/veterinarian/UpdateVeterinarian/${props.id}`, formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: "Bearer " + cookies.authToken,
+              },
+            });
 
-          if (response.status === 200) {
-            // Handle success
-            clearForm()
-            success();
-            handleModalHide();
+            if (response.status === 200) {
+              // Handle success
+              clearForm()
+              success();
+              handleModalHide();
+            }
+          } else {
+            // Handle create logic
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/veterinarian/createVeterinarian`, formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: "Bearer " + cookies.authToken,
+              },
+            });
+
+            if (response.status === 201) {
+              // Handle success
+              success();
+              handleModalHide();
+              clearForm()
+            }
           }
-        } else {
-          // Handle create logic
-          const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/veterinarian/createVeterinarian`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + cookies.authToken,
-            },
-          });
-
-          if (response.status === 201) {
-            // Handle success
-            success();
-            handleModalHide();
-            clearForm()
+        } catch (error) {
+          // console.log(error);
+          if (error?.response?.status !== 400) {
+            failer(error?.response?.data?.message);
           }
+          // dispatch(showToast("Error Interno del Servidor", "FAIL_TOAST"));
         }
-      } catch (error) {
-        // console.log(error);
-        if (error?.response?.status !== 400) {
-          failer(error?.response?.data?.message);
-        }
-        // dispatch(showToast("Error Interno del Servidor", "FAIL_TOAST"));
       }
     }
   };
@@ -341,6 +354,7 @@ const VeterinaUserModal = (props) => {
                     value={formData?.specialityId}
                     onChange={(e) => handleChange(e)}
                     name="specialityId"
+                    required
                   >
                     <option disabled="true" selected="true" value={""} >Seleccionar</option>
                     {specialities.length > 0
@@ -425,8 +439,8 @@ const VeterinaUserModal = (props) => {
                     name="email"
                     autoComplete="new-email"
                     placeholder="Correo electrónico"
-
                     value={formData.email}
+                    pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                     onChange={(e) => {
                       setFormData({ ...formData, email: e.target.value });
                     }}
@@ -488,7 +502,7 @@ const VeterinaUserModal = (props) => {
                 <Form.Group className="mb-3" controlId="distritoSelect">
                   <Form.Label>Distrito</Form.Label>
                   <Form.Select aria-label="Distrito" onChange={(e) => handleChange(e)} name="district" value={formData?.district} >
-                    <option disabled>Select Distrito</option>
+                    <option disabled="true" selected="true" value={""} >Select Distrito</option>
                     {distritos.sort().map((distrito, i) => (
                       <option key={i} value={distrito}>
                         {distrito}
@@ -570,9 +584,11 @@ const VeterinaUserModal = (props) => {
                         required={formData?.workingDays?.length !== 0 ? false : true}
                       />
                     </Col>
-                    <div style={{ color: "red", width: "100%" }}>
-                      {formData?.workingDays.length === 0 && "Por favor seleccione días laborables"}
-                    </div>
+                    {isAnyChecked && (
+                      <div style={{ color: "red", width: "100%" }}>
+                        Por favor seleccione días laborables
+                      </div>
+                    )}
                   </Row>
                 </Form.Group>
               </Col>

@@ -21,7 +21,7 @@ const Information = ({ data }) => {
               </tr>
               <tr>
                 <td className="info-head">Fecha de Nacimiento</td>
-                <td className="info-details">{moment(data?.dob).format("DD MMM YYYY, HH:MM A") || "-"}</td>
+                <td className="info-details">{moment(data?.dob || "-").format("YYYY") || "-"}</td>
               </tr>
               <tr>
                 <td className="info-head">Especie</td>
@@ -38,6 +38,10 @@ const Information = ({ data }) => {
               <tr>
                 <td className="info-head">Color</td>
                 <td className="info-details">{data?.color || "-"}</td>
+              </tr>
+              <tr>
+                <td className="info-head">Peso</td>
+                <td className="info-details">{data?.weight || "-"}</td>
               </tr>
             </tbody>
           </Table>

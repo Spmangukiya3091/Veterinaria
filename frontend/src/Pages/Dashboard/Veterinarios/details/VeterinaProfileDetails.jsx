@@ -8,7 +8,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Alert from "../../../../Components/alert/Alert";
 import VeterinaUserModal from "../Modals/VeterinaUserModal";
 import CitaModal from "../Modals/CitaModal";
-import { useGetSingleVeterinQuery, useRemoveVeterineMutation } from "../../../../services/ApiServices";
+import { useGetSingleVeterinQuery, useGetSpecialitiesQuery, useGetSpecialityListQuery, useRemoveVeterineMutation } from "../../../../services/ApiServices";
 import moment from "moment";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../Components/alert/success";
@@ -37,16 +37,17 @@ const VeterinaProfileDetails = ({ email }) => {
   const [dltMascotas, response] = useRemoveVeterineMutation();
 
   const veterinDetail = useGetSingleVeterinQuery(id, { refetchOnMountOrArgChange: true });
+  const specialities = useGetSpecialitiesQuery({ refetchOnMountOrArgChange: true });
 
   useEffect(() => {
-    if (!veterinDetail.isLoading) {
+    if (!veterinDetail.isLoading && !specialities.isLoading) {
       setLoading(false);
       setData(veterinDetail.data);
     } else if (veterinDetail.isError) {
       setError(true);
       setLoading(false);
     }
-  }, [veterinDetail]);
+  }, [specialities, veterinDetail]);
 
   const handleCloseMascota = () => setShown(false);
   const handleHide = () => {
@@ -147,7 +148,8 @@ const VeterinaProfileDetails = ({ email }) => {
     } else if (response.isError && response.status === "rejected") {
       // console.log(response.error);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
@@ -203,7 +205,7 @@ const VeterinaProfileDetails = ({ email }) => {
                         setShow(!show);
                       }}
                     >
-                      Details
+                      Detalles
                       <span className="ms-2 rotate-180">
                         <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                       </span>
@@ -230,7 +232,7 @@ const VeterinaProfileDetails = ({ email }) => {
                 </div>
               </div>
             </Col>
-             <Col className="ms-lg-15">
+            <Col className="ms-lg-15">
               <div className="drop-down" style={{ zIndex: 99 }}>
                 <Dropdown as={ButtonGroup} show={isDropdownOpen} onClose={closeDropdown} onToggle={toggleDropdown} className="dropdown">
                   <Dropdown.Toggle className={`dropdown-toggle btn btn-sm btn-flex btn-center ${isDropdownOpen ? "active" : ""}`} id="dropdown-basic">
@@ -283,7 +285,7 @@ const VeterinaProfileDetails = ({ email }) => {
           </Row>
           <CitaModal show={shown} onHide={handleCloseMascota} />
 
-          <VeterinaUserModal show={open} onHide={handleCloseCitas} id={data?.veterinarianData?.id} filter={veterinDetail} />
+          <VeterinaUserModal show={open} onHide={handleCloseCitas} id={data?.veterinarianData?.id} filter={veterinDetail} specialityList={specialities} />
           <Alert
             show={modalShow}
             onHide={() => setModalShow(false)}

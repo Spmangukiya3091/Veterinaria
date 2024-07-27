@@ -78,7 +78,7 @@ const Detalles = ({ data }) => {
               Método de Pago
             </Col>
             <Col className="info-details" lg={8}>
-              {data?.payment_method || "-"}
+              {data?.payment_method === "cash" ? "Efectivo" : data?.payment_method === "credit card" ? "Tarjeta de crédito" : data?.payment_method === "debit card" ? "Tarjeta de Débito" : "-"}
             </Col>
           </Row>
           <Row>

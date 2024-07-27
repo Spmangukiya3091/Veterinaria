@@ -439,7 +439,7 @@ const deleteUserProfile = async (req, res) => {
   const password = await Auth.findOne({
     where: { email: email, password: pass },
   });
-  const user = await Auth.findOne({ where: { id: id } });
+  const user = await Auth.findOne({ where: { standardAdminid: id } });
   const existingFilename = user?.profile?.split("/").pop();
   const imagePath = `./public/profile/${existingFilename}`;
 

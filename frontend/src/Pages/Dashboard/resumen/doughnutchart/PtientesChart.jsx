@@ -4,7 +4,15 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { useState } from "react";
 import ReactApexChart from "react-apexcharts";
-function PtientesChart({ data }) {
+function PtientesChart({ data, onChange, active }) {
+  const [activeButton, setActiveButton] = useState(active); // Default active value is 1
+
+  const handleButtonClick = (value) => {
+    setActiveButton(value);
+    if (onChange) {
+      onChange(value);
+    }
+  };
   const graphData = [
     {
       color: "pur",
@@ -87,8 +95,20 @@ function PtientesChart({ data }) {
       <div className="daoughnut-title-box">
         <p className="graph-title">Edad de Propietarios</p>
         <div className="daoughnut-btn-group">
-          <Button className="anual-btn">Anual</Button>
-          <Button className="mensual-btn">Mensual</Button>
+          <Button
+            className={`anual-btn ${activeButton === 2 ? "active" : ""}`}
+            value={1}
+            onClick={() => handleButtonClick(2)}
+          >
+            Anual
+          </Button>
+          <Button
+            className={`mensual-btn ${activeButton === 1 ? "active" : ""}`}
+            value={2}
+            onClick={() => handleButtonClick(1)}
+          >
+            Mensual
+          </Button>
         </div>
       </div>
       <div className="d-flex flex-wrap chart align-items-end">

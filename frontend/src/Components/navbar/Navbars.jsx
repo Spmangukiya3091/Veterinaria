@@ -37,8 +37,15 @@ function Navbars({ user }) {
   const handleShow = () => setShow(true);
   const handleLogout = () => {
     // Remove cookies
-    removeCookie("user");
-    removeCookie("authToken");
+    removeCookie("user", { path: "/", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("authToken", { path: "/", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("user", { path: "/dashboard", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("authToken", { path: "/dashboard", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("user", { path: "/", domain: ".olivosdatasolutions.com" });
+    removeCookie("authToken", { path: "/", domain: ".olivosdatasolutions.com" });
+    removeCookie("user", { path: "/dashboard", domain: ".olivosdatasolutions.com" });
+    removeCookie("authToken", { path: "/dashboard", domain: ".olivosdatasolutions.com" });
+
 
     // Navigate to the home page
     navigate("/");

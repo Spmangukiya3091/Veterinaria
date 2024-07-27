@@ -4,28 +4,27 @@ import "./category.scss";
 import { useState } from "react";
 import InformacionModal from "./InformacionModal";
 import { Link } from "react-router-dom";
-import { useGetCategoryWithProductsQuery, useRemoveCategoryMutation } from "../../../../../services/ApiServices";
+import { useRemoveCategoryMutation } from "../../../../../services/ApiServices";
 import moment from "moment";
 import Alert from "../../../../Components/alert/Alert";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../../Components/alert/success";
 import Error from "../../../../Components/error/Error";
 
-function CategoryModal({ show, handleClose, email }) {
+function CategoryModal({ show, handleClose, email, productCount }) {
   const [open, setOpen] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [catId, setCatId] = useState();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const categories = useGetCategoryWithProductsQuery({ refetchOnMountOrArgChange: true });
+  const categories = productCount;
   const [openform, setOpenform] = useState(false);
   const [dltData, setDltData] = useState({
     id: "",
     pass: "",
     email: email,
   });
-
   const [dltCategory, response] = useRemoveCategoryMutation();
   const handleConfirmDelete = () => {
     // Close the alert modal
@@ -63,10 +62,11 @@ function CategoryModal({ show, handleClose, email }) {
     }
   };
   useEffect(() => {
-    if (!categories.isLoading) {
+    if (!categories?.isLoading) {
       setLoading(false);
-      setData(categories.data);
-    } else if (categories.isError) {
+      console.log(categories?.data)
+      setData(categories?.data);
+    } else if (categories?.isError) {
       setLoading(false);
       setError(true);
     }
@@ -74,13 +74,13 @@ function CategoryModal({ show, handleClose, email }) {
 
   const handleModalClose = () => {
     setOpen(false);
-    setCatId();
+    setCatId(undefined);
     categories.refetch();
   };
   const handleOpen = () => setOpen(true);
 
   useEffect(() => {
-    if (!response.isLoading && response.status === "fulfilled") {
+    if (!response?.isLoading && response?.status === "fulfilled") {
       success();
       setDltData({
         id: "",
@@ -89,10 +89,11 @@ function CategoryModal({ show, handleClose, email }) {
       });
       // Refetch or update data if needed
       categories.refetch();
-    } else if (response.isError) {
+      handleClose();
+    } else if (response?.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
-
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // }, [dispatch, response]);
@@ -105,7 +106,6 @@ function CategoryModal({ show, handleClose, email }) {
         <Spinner animation="border" variant="primary" />
       ) : error ? (
         <Error message={categories?.isError ? categories?.error?.data?.message : "Error Interno del Servidor"} />
-
       ) : (
         <>
           <Modal className="category-modal" show={show} onHide={handleClose} centered size="lg">
@@ -169,7 +169,7 @@ function CategoryModal({ show, handleClose, email }) {
                       ) : (
                         <tr>
                           <td colSpan={4} className="text-center">
-                            No data available
+                            Datos no disponibles
                           </td>
                         </tr>
                       )}
@@ -181,13 +181,14 @@ function CategoryModal({ show, handleClose, email }) {
           </Modal>
           <Alert
             show={modalShow}
-            onHide={() => setModalShow(false)}
+            onHide={() => { setModalShow(false); setCatId(undefined) }}
             msg={"¿Seguro de completar esta operación?"}
             opendltModal={handleConfirmDelete}
           />
           <DeleteVerifyModal
             show={openform}
             onHide={() => {
+              setCatId(undefined);
               setOpenform(false);
               setDltData({
                 id: "",
@@ -203,5 +204,6 @@ function CategoryModal({ show, handleClose, email }) {
     </>
   );
 }
+
 
 export default CategoryModal;

@@ -102,20 +102,20 @@ const AptosModal = ({ show, onHide, vaccineId, vaccineName, owner, petId, id, pe
           pet: "",
           petId: "",
         });
-        onHide();
         success();
+        onHide();
       } else if (response2.isError && response2.status === "rejected") {
         failer(response2?.error?.data?.message);
       }
     } else {
       if (!response.isLoading && response.isSuccess) {
-        onHide();
         setFormData({
           ...formData,
           vaccine: vaccineName,
           vaccineId: id,
         });
         success();
+        onHide();
       } else if (response?.isError && response?.status === "rejected") {
         failer(response?.error?.data?.message);
       }

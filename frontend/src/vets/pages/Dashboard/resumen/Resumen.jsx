@@ -15,6 +15,9 @@ import {
   useGetVetsMothlyMetricsQuery,
   useGetVetsOwnerGraphQuery,
 } from "../../../../services/ApiServices";
+import Loader from "../../../components/loader/Loader";
+import moment from "moment";
+import Error from "../../../components/error/Error";
 
 function Resumen({ id }) {
   const openCustomDialog = () => {
@@ -28,12 +31,21 @@ function Resumen({ id }) {
   const [appoinmentData, setAppoinmentData] = useState([]);
   const [patientAgeGraphData, setPatientAgeGraphData] = useState([]);
   const [medicineData, setMedicineData] = useState([]);
+  const [value, setValue] = useState(2)
+  const getCurrentMonth2 = () => {
+    const date = new Date();
 
-  const metricasData = useGetVetsMothlyMetricsQuery(id, { refetchOnMountOrArgChange: true });
-  const dateQuery = `${id}?date=${new Date()}`;
-  const nextAppointments = useGetVetsAppointmentsByDateQuery(dateQuery, { refetchOnMountOrArgChange: true });
-  const appointments = useGetVetsAppoinmentGraphQuery(id, { refetchOnMountOrArgChange: true });
-  const patientsAgeGraph = useGetVetsOwnerGraphQuery(id, { refetchOnMountOrArgChange: true });
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1
+    };
+  };
+  const query = `${value === 1 ? `${id}?month=${getCurrentMonth2().month}` : value === 2 ? `${id}?year=${getCurrentMonth2().year}` : id}`
+  const metricasData = useGetVetsMothlyMetricsQuery(id, { refetchOnMountOrArgChange: true, skip: !id });
+  const dateQuery = `${id}?date=${moment(new Date()).format("YYYY-MM-DD")}`;
+  const nextAppointments = useGetVetsAppointmentsByDateQuery(dateQuery, { refetchOnMountOrArgChange: true, skip: !id });
+  const appointments = useGetVetsAppoinmentGraphQuery(id, { refetchOnMountOrArgChange: true, skip: !id });
+  const patientsAgeGraph = useGetVetsOwnerGraphQuery(query, { refetchOnMountOrArgChange: true, skip: !id });
   const medicines = useGetCategoryWithProductsQuery("", { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
@@ -44,77 +56,79 @@ function Resumen({ id }) {
       setAppoinmentData(appointments?.data?.weeklyData);
       setMedicineData(medicines?.data?.categories);
       setPatientAgeGraphData(patientsAgeGraph?.data);
-    } else if (metricasData.isError || nextAppointments.isError || appointments.isError || patientsAgeGraph.isError || medicines.isError) {
+    } else if (metricasData.isError && nextAppointments.isError && appointments.isError && patientsAgeGraph.isError && medicines.isError) {
       setLoading(false);
-      setError(true);
+      if (!nextAppointments.error.status === 404) {
+        setError(true);
+      }
     }
   }, [appointments, medicines, metricasData, nextAppointments, patientsAgeGraph]);
   return (
     <>
-      {/* {loading ? (
-        <Spinner animation="border" variant="primary" />
+      {loading ? (
+        <Loader />
       ) : error ? (
-        "Some Error Occured"
-      ) : ( */}
-      <div className="resumen">
-        <div className="resumen-top-container">
-          <div className="main-title-box">
-            <p className="resumen-main-title">Resumen</p>
-            <p className="resumen-sub-title">Resumen</p>
+        <Error />
+      ) : (
+        <div className="resumen">
+          <div className="resumen-top-container">
+            <div className="main-title-box">
+              <p className="resumen-main-title">Resumen</p>
+              <p className="resumen-sub-title">Resumen</p>
+            </div>
+            <div className="calendar-box">
+              <Button onClick={openCustomDialog} className="calendar-btn-top">
+                <i className="fa-regular fa-calendar"></i>
+                Ventana de Citas
+              </Button>
+            </div>
           </div>
-          <div className="calendar-box">
-            <Button onClick={openCustomDialog} className="calendar-btn-top">
-              <i className="fa-regular fa-calendar"></i>
-              Ventana de Citas
-            </Button>
+
+          <div className="card-wrapper">
+            {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <Metricas data={data} />}
           </div>
-        </div>
 
-        <div className="card-wrapper">
-          {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <Metricas data={data} />}
-        </div>
-
-        <div className="calendar-section">
-          <Row>
-            <Col sm={12} md={6} lg={6}>
-              {loading ? (
-                <Spinner animation="border" variant="primary" />
-              ) : error ? (
-                "Some Error Occured"
-              ) : (
-                <ProximasCitas data={nextAppointmentsData} id={id} />
-              )}
-            </Col>
-            <Col sm={12} md={6} lg={6}>
-              <div className="calendar-card-wrapper">
-                {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <CitasChart data={appoinmentData} />}
-              </div>
-            </Col>
-          </Row>
-        </div>
-
-        <div>
           <div className="calendar-section">
             <Row>
               <Col sm={12} md={6} lg={6}>
-                <div className="calendar-card-wrapper">
-                  {loading ? (
-                    <Spinner animation="border" variant="primary" />
-                  ) : error ? (
-                    "Some Error Occured"
-                  ) : (
-                    <PtientesChart data={patientAgeGraphData} />
-                  )}
-                </div>
+                {loading ? (
+                  <Spinner animation="border" variant="primary" />
+                ) : error ? (
+                  "Some Error Occured"
+                ) : (
+                  <ProximasCitas data={nextAppointmentsData} id={id} />
+                )}
               </Col>
               <Col sm={12} md={6} lg={6}>
-                {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <Medicamentos data={medicineData} />}
+                <div className="calendar-card-wrapper">
+                  {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <CitasChart data={appoinmentData} />}
+                </div>
               </Col>
             </Row>
           </div>
+
+          <div>
+            <div className="calendar-section">
+              <Row>
+                <Col sm={12} md={6} lg={6}>
+                  <div className="calendar-card-wrapper">
+                    {loading ? (
+                      <Spinner animation="border" variant="primary" />
+                    ) : error ? (
+                      "Some Error Occured"
+                    ) : (
+                      <PtientesChart data={patientAgeGraphData} onChange={setValue} active={value} />
+                    )}
+                  </div>
+                </Col>
+                <Col sm={12} md={6} lg={6}>
+                  {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <Medicamentos data={medicineData} />}
+                </Col>
+              </Row>
+            </div>
+          </div>
         </div>
-      </div>
-      {/* )} */}
+      )}
     </>
   );
 }

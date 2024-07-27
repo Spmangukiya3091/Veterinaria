@@ -30,7 +30,7 @@ const DeleteVerifyModal = (props) => {
           Por motivos de seguridad, ingresa tu contraseña actual y completaremos la operación.
           <Form.Group className="form-group">
             <Form.Label>Contraseña actual</Form.Label>
-            <Form.Control required type="password" placeholder="Contraseña actual" value={password} onChange={handlePasswordChange} autocomplete="off" />
+            <Form.Control required type="password" placeholder="Contraseña actual" value={password} onChange={handlePasswordChange} autoComplete="off" />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

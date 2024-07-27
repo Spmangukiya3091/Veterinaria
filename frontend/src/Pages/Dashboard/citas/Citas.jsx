@@ -178,7 +178,8 @@ function Citas({ email }) {
       // Refetch or update data if needed
       appointmentsByFilter.refetch();
     } else if (response.isError) {
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -206,7 +207,7 @@ function Citas({ email }) {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "appointment.xlsx");
+      link.setAttribute("download", "cita.xlsx");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -258,7 +259,7 @@ function Citas({ email }) {
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
-                        autocomplete="disabled"
+                        autoComplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </form>
@@ -375,90 +376,96 @@ function Citas({ email }) {
                   </thead>
                   <tbody>
                     {currentPosts?.length > 0 ? (
-                      currentPosts.map(({ id, pet, veterinarian, scheduleStart, scheduleEnd, date, status, rating }, i) => (
-                        <tr key={i}>
-                          <td className="text-start pe-0">
-                            <span className="fw-bold text-gray-600 fw-bolder">{i + 1}</span>
-                          </td>
-                          <td className="text-start pe-0">{pet ? pet : "-"}</td>
-                          <td className="text-start pe-0">{veterinarian ? veterinarian : "-"}</td>
+                      currentPosts.map(({ id, pet, veterinarian, scheduleStart, scheduleEnd, date, status, rating }, i) => {
+                        console.log("Original Date (UTC):", date);
+                        console.log("Converted Date (Local):", moment(date).local().format("DD MMM YYYY"));
 
-                          <td className="text-start pe-0" data-order="16">
-                            {scheduleStart ? moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
-                              " - " +
-                              moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") : "-"}
-                          </td>
-                          <td className="text-start pe-0">
-                            <div className=" fecha">{date ? moment(date).format("DD MMM YYYY") : "-"}</div>
-                          </td>
-                          <td className="text-start pe-0" data-order="rating-5">
-                            <div className="rating justify-content-start">
-                              <StarRating rating={rating} />
-                            </div>
-                          </td>
-                          <td className="text-start pe-0" data-order="status">
-                            <div
-                              className={`${status === "pending"
+                        return (
+                          <tr key={i}>
+                            <td className="text-start pe-0">
+                              <span className="fw-bold text-gray-600 fw-bolder">{i + 1 + (currentPage - 1) * postsPerPage}</span>
+                            </td>
+                            <td className="text-start pe-0">{pet ? pet : "-"}</td>
+                            <td className="text-start pe-0">{veterinarian ? veterinarian : "-"}</td>
+                            <td className="text-start pe-0" data-order="16">
+                              {scheduleStart ? moment(` ${scheduleStart}`, "HH:mm:ss").format("hh:mm A") +
+                                " - " +
+                                moment(` ${scheduleEnd}`, "HH:mm:ss").format("hh:mm A") : "-"}
+                            </td>
+                            <td className="text-start pe-0">
+                              <div className="fecha">
+                                {date ? moment(date).local().format("DD MMM YYYY") : "-"}
+                              </div>
+                            </td>
+                            <td className="text-start pe-0" data-order="rating-5">
+                              <div className="rating justify-content-start">
+                                <StarRating rating={rating} />
+                              </div>
+                            </td>
+                            <td className="text-start pe-0" data-order="status">
+                              <div className={`${status === "pending"
                                 ? "badge badge-light-warning text-warning"
                                 : status === "no attempt"
                                   ? "badge badge-light-dark"
                                   : "badge badge-light-success text-success "
                                 } `}
-                            >
-                              <p className="mb-0">{status === "pending" ? "Pendiente" : status === "no attempt" ? "No asistió" : "Completado"}</p>
-                            </div>
-                          </td>
-                          <td className="text-end">
-                            <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
-                              <Dropdown.Toggle
-                                className={`dropdown-toggle btn btn-sm  btn-flex btn-center  ${dropdowns[i] === true ? "active" : ""}`}
-                                id="dropdown-basic"
                               >
-                                {"Acción"}
-                                <i className="fa-solid fa-chevron-down"></i>
-                              </Dropdown.Toggle>
-                              {dropdowns[i] && (
-                                <Dropdown.Menu
-                                  key={dropdowns[i]}
-                                  className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
+                                <p className="mb-0">{status === "pending" ? "Pendiente" : status === "no attempt" ? "No asistió" : "Completado"}</p>
+                              </div>
+                            </td>
+                            <td className="text-end">
+                              <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
+                                <Dropdown.Toggle
+                                  className={`dropdown-toggle btn btn-sm  btn-flex btn-center  ${dropdowns[i] === true ? "active" : ""}`}
+                                  id="dropdown-basic"
                                 >
-                                  <Dropdown.Item className="menu-item px-3">
-                                    <Link to={`/dashboard/citas-view/${id}`} className="menu-link px-3">
-                                      Ver detalles
-                                    </Link>
-                                  </Dropdown.Item>
-                                  <Dropdown.Item className="menu-item px-3">
-                                    <Link
-                                      onClick={() => {
-                                        setAppId(id);
-                                        setShow(true);
-                                      }}
-                                      to="#"
-                                      className="menu-link px-3"
-                                    >
-                                      Editar
-                                    </Link>
-                                  </Dropdown.Item>
-                                  <Dropdown.Item className="menu-item px-3">
-                                    <Link
-                                      onClick={() => {
-                                        setAppId(id);
-                                        setModalShow(true);
-                                      }}
-                                      className="menu-link px-3 delete"
-                                    >
-                                      Eliminar cita
-                                    </Link>
-                                  </Dropdown.Item>
-                                </Dropdown.Menu>
-                              )}
-                            </Dropdown>
-                          </td>
-                        </tr>
-                      ))
+                                  {"Acción"}
+                                  <i className="fa-solid fa-chevron-down"></i>
+                                </Dropdown.Toggle>
+                                {dropdowns[i] && (
+                                  <Dropdown.Menu
+                                    key={dropdowns[i]}
+                                    className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4"
+                                  >
+                                    <Dropdown.Item className="menu-item px-3">
+                                      <Link to={`/dashboard/citas-view/${id}`} className="menu-link px-3">
+                                        Ver detalles
+                                      </Link>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="menu-item px-3">
+                                      <Link
+                                        onClick={() => {
+                                          setAppId(id);
+                                          setShow(true);
+                                        }}
+                                        to="#"
+                                        className="menu-link px-3"
+                                      >
+                                        Editar
+                                      </Link>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="menu-item px-3">
+                                      <Link
+                                        onClick={() => {
+                                          setAppId(id);
+                                          setModalShow(true);
+                                        }}
+                                        className="menu-link px-3 delete"
+                                      >
+                                        Eliminar cita
+                                      </Link>
+                                    </Dropdown.Item>
+                                  </Dropdown.Menu>
+                                )}
+                              </Dropdown>
+                            </td>
+                          </tr>
+                        )
+                      }
+                      )
                     ) : (
                       <tr>
-                        <td colSpan="8">No data available</td>
+                        <td colSpan="8" className="text-center">Datos no disponibles</td>
                       </tr>
                     )}
                   </tbody>

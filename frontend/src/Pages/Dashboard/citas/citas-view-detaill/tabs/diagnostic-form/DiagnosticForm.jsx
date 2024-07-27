@@ -14,7 +14,7 @@ import { useCookies } from "react-cookie";
 
 function DiagnosticForm({ data, refetch, historyRefetch }) {
   const [cookies] = useCookies(["authToken"]);
-  const [list, setList] = useState({ intake: "", Name: "", frequency: "" });
+  const [list, setList] = useState({ intake: "", Name: "", frequency: "", id: "" });
   const [lists, setLists] = useState([]);
   const [star, setStar] = useState();
   const [selectedOption, setSelectedOption] = useState([]);
@@ -27,7 +27,9 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
   });
   const dispatch = useDispatch();
   const medicines = useGetALlProductListQuery("", { refetchOnMountOrArgChange: true });
-  const option = medicines?.data?.productList?.filter((product) => product.product !== undefined).map((product) => product.product);
+  const option = medicines?.data?.productList
+    ?.filter((product) => product.product !== undefined)
+    ?.map((product) => ({ id: product.id, name: product.product }));
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,6 +38,7 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
       [name]: value,
     });
   };
+
   const handleChangeQuill = (value) => {
     setFormData({
       ...formData,
@@ -53,6 +56,10 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
 
   const handleFileChange = (e) => {
     const files = e.target.files;
+    if (selectedFiles.length + files.length > 10) {
+      dispatch(showToast("Los archivos no pueden ser más de 10 en total.", "FAIL_TOAST"));
+      return;
+    }
     setSelectedFiles([...selectedFiles, ...files]);
   };
 
@@ -64,8 +71,26 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
 
   const handleAddTodo = () => {
     if (list.intake.trim() !== "" && selectedOption.length > 0) {
-      setLists([...lists, { ...list, Name: selectedOption[0] }]);
-      setList({ intake: "", Name: "", frequency: "" });
+      const selectedMed = selectedOption[0];
+      const existingItemIndex = lists.findIndex((item) => item.id === selectedMed.id);
+
+      if (existingItemIndex > -1) {
+        const updatedLists = lists.map((item, index) => {
+          if (index === existingItemIndex) {
+            return {
+              ...item,
+              intake: parseInt(item.intake) + parseInt(list.intake),
+              frequency: parseInt(item.frequency) + parseInt(list.frequency),
+            };
+          }
+          return item;
+        });
+        setLists(updatedLists);
+      } else {
+        setLists([...lists, { ...list, Name: selectedMed.name, id: selectedMed.id }]);
+      }
+      setList({ intake: "", Name: "", frequency: "", id: "" });
+      setSelectedOption([]);
     }
   };
 
@@ -81,22 +106,45 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
 
   const handleSubmit = async () => {
     try {
+      // Validate condition_name and description
+      if (!formData.condition_name.trim()) {
+        dispatch(showToast("Nombre de Padecimiento es requerido", "FAIL_TOAST"));
+        return;
+      }
+      if (!formData.description.trim()) {
+        dispatch(showToast("Descripción es requerida", "FAIL_TOAST"));
+        return;
+      }
+      if (formData.rating === "0") {
+        dispatch(showToast("Calificación del paciente es requerida", "FAIL_TOAST"));
+        return;
+      }
+
+      // Validate file size for documentation
+      let totalSize = 0;
+      selectedFiles.forEach((file) => {
+        totalSize += file.size;
+      });
+      if (selectedFiles.length > 10) {
+        dispatch(showToast("Los archivos no pueden ser más de 10 en total.", "FAIL_TOAST"));
+        return;
+      }
+      if (totalSize > 10 * 1024 * 1024) { // 10 MB limit
+        dispatch(showToast("Los archivos no pueden ser mayores a 10 MB en total", "FAIL_TOAST"));
+        return;
+      }
+
       const formApiData = new FormData();
       formApiData.append("condition_name", formData.condition_name);
       formApiData.append("description", formData.description);
       formApiData.append("rating", star);
       formApiData.append("internal_observation", formData.internal_observation);
 
-      // Append selected files to the "documentation" field
       selectedFiles.forEach((file, index) => {
-        formApiData.append("documentation", file); // Use the same key for all files
+        formApiData.append("documentation", file);
       });
 
-      // Append medication list
-      // console.log(JSON.stringify(lists));
       formApiData.append("medication", JSON.stringify(lists));
-
-      // console.log("Submitted FormData:", formApiData);
 
       const response = await axios.put(`${process.env.REACT_APP_SERVER_URL}/appointment/registerDiagnostic/${data.id}`, formApiData, {
         headers: {
@@ -105,25 +153,21 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
         },
       });
 
-      // console.log(response);
-
       if (response.status === 200) {
-        // API call successful
-        // You can show a success message or perform any other actions
         refetch.refetch();
-        historyRefetch()
+        historyRefetch.refetch();
         dispatch(showToast("Diagnóstico guardado exitosamente!", "SUCCESS_TOAST"));
       }
     } catch (error) {
-      // console.log(error);
-      // failer(error?.response?.message)
-      dispatch(showToast(error?.response?.message, "FAIL_TOAST"));
+      console.log(error?.response?.data?.message);
+      dispatch(showToast(error?.response?.data?.message, "FAIL_TOAST"));
     }
   };
 
   const modules = {
     toolbar: [[{ header: [1, 2, 3, 5, 6, false] }], ["bold", "italic", "underline", "code"]],
   };
+
   return (
     <div className="diagnostic-container">
       <div className="second ">
@@ -133,7 +177,13 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
             <div className="diagnos-details">
               <Form.Group className="mb-3">
                 <Form.Label>Nombre de Padecimiento</Form.Label>
-                <Form.Control required type="text" placeholder="Nombre de Padecimiento" name="condition_name" onChange={handleChange} />
+                <Form.Control
+                  required
+                  type="text"
+                  placeholder="Nombre de Padecimiento"
+                  name="condition_name"
+                  onChange={handleChange}
+                />
                 <Form.Text className="text-muted">Se requiere un nombre de Padecimiento del paciente.</Form.Text>
               </Form.Group>
               <Form.Group className="mb-3">
@@ -165,7 +215,7 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
                   </div>
                 </div>
               </Form.Label>
-              <Form.Control type="file" name="documentation" onChange={handleFileChange} id="documentation" multiple />
+              <Form.Control type="file" name="documentation" onChange={handleFileChange} id="documentation" max={10} accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" multiple />
               <Form.Text className="text-muted">Suba la documentación necesaria para registrar la cita en el historial del paciente.</Form.Text>
             </Form.Group>
             <div>
@@ -177,18 +227,10 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
               ))}
             </div>
           </div>
-          {/* <div className="third container upload-hide">
-            <h4>Documentación</h4>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="documentation">Documentación</Form.Label>
-              <Form.Control type="file" name="documentation" id="documentation" onChange={handleFileChange} multiple />
-              <Form.Text className="text-muted">Suba la documentación necesaria para registrar la cita en el historial del paciente.</Form.Text>
-            </Form.Group>
-          </div> */}
           <div className="third container">
             <h4>Medicación</h4>
             <Form.Group className="mb-3">
-              <Form.Label>Choose an Option</Form.Label>
+              <Form.Label>Elige una opción</Form.Label>
               <Typeahead
                 id="exampleTypeahead"
                 labelKey="name" // Key to display in the dropdown
@@ -208,7 +250,6 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
                   <Form.Text className="text-muted">Cantidad de tomas que debe injerir del medicamento.</Form.Text>
                 </Form.Group>
               </Col>
-
               <Col sm={12} md={6} lg={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Frecuencia de medicación</Form.Label>
@@ -221,20 +262,22 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
               +Añadir Medicamento
             </Button>
             <p>Medicación Recetado</p>
-            {lists
-              ? lists.map((ele, ind) => (
-                <div className="files mb-2">
-                  <div className="files-inner">
-                    {ele.Name}
-                    <ul>
-                      <li>{ele.intake} unidades</li>
-                      <li>{ele.frequency} veces al día</li>
-                    </ul>
+            {lists.length > 0 &&
+              lists.map((ele, ind) => {
+                // console.log(ele);
+                return (
+                  <div className="files mb-2" key={ind}>
+                    <div className="files-inner">
+                      {ele.Name}
+                      <ul>
+                        <li>{ele.intake} unidades</li>
+                        <li>{ele.frequency} veces al día</li>
+                      </ul>
+                    </div>
+                    <img onClick={() => handleDeleteTodo(ind)} src="/images/delete.png" alt="delete" />
                   </div>
-                  <img onClick={() => handleDeleteTodo(ind)} src="/images/delete.png" alt="delete" />
-                </div>
-              ))
-              : ""}
+                );
+              })}
           </div>
           <div className="third container">
             <h4>
@@ -257,7 +300,6 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
             </div>
           </div>
           <div className="diagnostic-btn-group">
-            <Button className="btn-imprimir bg-white">Imprimir Diagnóstico</Button>
             <Button className="btn-guardar" onClick={handleSubmit}>
               Guardar Diagnóstico
             </Button>
@@ -266,6 +308,6 @@ function DiagnosticForm({ data, refetch, historyRefetch }) {
       </div>
     </div>
   );
-}
+}   
 
 export default DiagnosticForm;

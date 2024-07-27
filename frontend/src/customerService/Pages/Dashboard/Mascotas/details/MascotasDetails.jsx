@@ -38,7 +38,7 @@ const MascotasDetails = ({ email }) => {
   const [dltMascotas, response] = useRemovePetMutation();
 
   const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true });
-  const generatePdf = usePetSummaryPdfQuery(id, { refetchOnMountOrArgChange: true })
+  // const generatePdf = usePetSummaryPdfQuery(id, { refetchOnMountOrArgChange: true })
 
   useEffect(() => {
     if (!petDetails.isLoading) {
@@ -78,7 +78,7 @@ const MascotasDetails = ({ email }) => {
 
   const handleOpenPdfModal = async () => {
     setExport(true)
-    await generatePdf.refetch()
+    // await generatePdf.refetch()
   }
 
   const handleDeleteVerify = async (enteredPassword) => {
@@ -113,7 +113,7 @@ const MascotasDetails = ({ email }) => {
     } else if (response.isError && response.status === "rejected") {
       // console.log(response.error);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
-      failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
@@ -186,7 +186,7 @@ const MascotasDetails = ({ email }) => {
                         setShow(!show);
                       }}
                     >
-                      Details
+                      Detalles
                       <span className="ms-2 rotate-180">
                         <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                       </span>

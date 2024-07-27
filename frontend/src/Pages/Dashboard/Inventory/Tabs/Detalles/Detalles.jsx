@@ -70,18 +70,20 @@ const Detalles = ({ data, historyData }) => {
       </div>
       <div className="details my-3">
         <h4>Actualizaciones</h4>
-        {historyData?.productHistory?.length > 0 ? (
-          historyData?.productHistory.map(({ id, reason, createdAt }) => (
-            <div className="detail-wrapper" key={id}>
-              <div className="detail-title-box">
-                <p className="detail-title-main">{reason ? reason : "-"}</p>
-                <p className="detail-title-sub">{createdAt ? moment(createdAt).format("DD MMM YYYY, hh:mm A") : "-"}</p>
+        <div className="detail-container">
+          {historyData?.productHistory?.length > 0 ? (
+            historyData?.productHistory.map(({ id, reason, createdAt }) => (
+              <div className="detail-wrapper" key={id}>
+                <div className="detail-title-box">
+                  <p className="detail-title-main">{reason ? reason : "-"}</p>
+                  <p className="detail-title-sub">{createdAt ? moment(createdAt).format("DD MMM YYYY, hh:mm A") : "-"}</p>
+                </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="detail-wrapper">No history Available</div>
-        )}
+            ))
+          ) : (
+            <div className="detail-wrapper">Sin historial disponible</div>
+          )}
+        </div>
       </div>
     </>
   );

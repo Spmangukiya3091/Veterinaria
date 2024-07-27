@@ -8,13 +8,14 @@ import CategoryModal from "./modal/CategoryModal";
 import SingleInputDateRangePicker from "../../../Components/date-picker/DatePicker";
 import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
-import { useGetALlProductListQuery, useRemoveProductMutation } from "../../../../services/ApiServices";
+import { useGetAllCategoriesQuery, useGetALlProductListQuery, useGetCategoryWithProductsQuery, useRemoveProductMutation } from "../../../../services/ApiServices";
 import { failer, success } from "../../../Components/alert/success";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import Loader from "../../../Components/loader/Loader";
 import Error from "../../../Components/error/Error";
 
 const Inventory = ({ email }) => {
+  // const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [dropdowns, setDropdown] = useState(new Array(inventoryData?.length).fill(false));
@@ -25,7 +26,6 @@ const Inventory = ({ email }) => {
   const [error, setError] = useState(false);
   const [PID, setPID] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-
   const [searchValue, setSearchValue] = useState("");
   const [searchData, setSearchData] = useState({
     status: "",
@@ -41,26 +41,34 @@ const Inventory = ({ email }) => {
     email: email,
   });
   const [dltInventory, response] = useRemoveProductMutation();
-
   const products = useGetALlProductListQuery(searchQuery, { refetchOnMountOrArgChange: true });
-
+  const categories = useGetAllCategoriesQuery({ refetchOnMountOrArgChange: true });
+  const productCount = useGetCategoryWithProductsQuery({ refetchOnMountOrArgChange: true })
   useEffect(() => {
-    if (!products.isLoading) {
+    if (!products.isLoading && !categories.isLoading && !productCount.isLoading) {
       setLoading(false);
       setData(products?.data?.productList);
     } else if (products.isError) {
       setError(true);
       setLoading(false);
     }
-  }, [products]);
+  }, [categories, productCount, products]);
 
   const handleClose = () => {
     setShow(false);
-    setPID(undefined)
+    setPID(undefined);
     products.refetch();
+    categories.refetch()
+    productCount.refetch()
   };
 
-  const handleCloseCategory = () => setShowCategory(false);
+  const handleCloseCategory = () => {
+    setShowCategory(false)
+    products.refetch()
+    categories.refetch()
+    productCount.refetch()
+  };
+
   const handleShowCategory = () => setShowCategory(true);
   const toggleDropdowns = (i) => {
     const updatedDropdowns = [...dropdowns];
@@ -88,13 +96,13 @@ const Inventory = ({ email }) => {
     setSearchQuery("");
   };
 
-  const filteredData = data.filter(({ product, category, presentation, sku }) => {
-    const searchString = searchValue;
+  const filteredData = data?.filter(({ product, category, presentation, sku }) => {
+    const searchString = searchValue.toLowerCase();
     return (
       product?.toLowerCase().includes(searchString) ||
       category?.toLowerCase().includes(searchString) ||
       presentation?.toLowerCase().includes(searchString) ||
-      sku.includes(searchString)
+      sku?.includes(searchString)
     );
   });
 
@@ -184,18 +192,20 @@ const Inventory = ({ email }) => {
       products.refetch();
     } else if (response.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
-
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
+
   return (
     <>
       {loading ? (
         <Loader />
       ) : error ? (
         <Error message={products?.isError ? products?.error?.data?.message : "Error Interno del Servidor"} />
+
       ) : (
         <div className="inventory">
           <div className="main-title-box">
@@ -228,10 +238,10 @@ const Inventory = ({ email }) => {
                     <form autoComplete="new-password">
                       <input
                         type="text"
+                        data-kt-ecommerce-product-filter="search"
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
-                        autocomplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </form>
@@ -266,7 +276,7 @@ const Inventory = ({ email }) => {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option disabled="true" value={""} selected="true">Seleccionar</option>
+                                  <option disabled="true" value={""} selected="true">Estado</option>
                                   <option value="active">Activo</option>
                                   <option value="inactive">Inactivo</option>
                                 </select>
@@ -374,7 +384,13 @@ const Inventory = ({ email }) => {
                                     </Link>
                                   </Dropdown.Item>
                                   <Dropdown.Item className="menu-item px-3">
-                                    <Link onClick={() => setModalShow(true)} to="#" className="menu-link px-3 delete">
+                                    <Link
+                                      onClick={() => {
+                                        setModalShow(true);
+                                        setPID(id);
+                                      }}
+                                      className="menu-link px-3 delete"
+                                    >
                                       Eliminar producto
                                     </Link>
                                   </Dropdown.Item>
@@ -387,7 +403,7 @@ const Inventory = ({ email }) => {
                     ) : (
                       <tr>
                         <td colSpan="8" className="text-center">
-                          No data available
+                          Datos no disponibles
                         </td>
                       </tr>
                     )}
@@ -396,6 +412,8 @@ const Inventory = ({ email }) => {
               </div>
             </div>
           </div>
+          <InventoryModal show={show} onHide={handleClose} id={PID} filter={products} categories={categories} />
+          <CategoryModal show={showCategory} handleClose={handleCloseCategory} email={email} productCount={productCount} />
           <Alert
             show={modalShow}
             onHide={() => setModalShow(false)}
@@ -414,8 +432,6 @@ const Inventory = ({ email }) => {
             }}
             onDelete={handleDeleteVerify}
           />
-          <InventoryModal show={show} onHide={handleClose} id={PID} />
-          <CategoryModal show={showCategory} handleClose={handleCloseCategory} email={email} />
           <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
         </div>
       )}

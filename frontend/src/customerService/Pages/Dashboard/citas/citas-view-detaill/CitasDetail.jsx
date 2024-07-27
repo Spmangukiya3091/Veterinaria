@@ -35,9 +35,7 @@ function CitasDetail({ email }) {
     }
   }, [singleCita]);
 
-  const refetchApi = () => {
-    singleCita.refetch();
-  };
+
   const handleClose = () => {
     setOpen(false);
     singleCita.refetch();
@@ -85,8 +83,8 @@ function CitasDetail({ email }) {
 
       // Call the dltCitas API
       await dltCitas(body);
-      success();
-      navigate("/customerservice/citas");
+      // success();
+      // navigate("/customerservice/citas");
     } else {
       failer("Contraseña invalida");
     }
@@ -104,10 +102,11 @@ function CitasDetail({ email }) {
     } else if (response.isError) {
       // console.log(response.error);
       // dispatch(showToast(response?.error?.data?.message, "FAIL_TOAST"));
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, response]);
+  }, [response]);
 
   return (
     <>
@@ -182,7 +181,7 @@ function CitasDetail({ email }) {
                         setShow(!show);
                       }}
                     >
-                      Details
+                      Detalles
                       <span className="ms-2 rotate-180">
                         <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                       </span>
@@ -214,7 +213,7 @@ function CitasDetail({ email }) {
                 </div>
               </div>
             </Col>
-             <Col className="ms-lg-15">
+            <Col className="ms-lg-15">
               <div className="drop-down" style={{ zIndex: 99 }}>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="dropdown-toggle btn btn-sm btn-flex btn-center" id="dropdown-basic">
@@ -250,7 +249,7 @@ function CitasDetail({ email }) {
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-              <MainTab data={data} petId={data?.petId === undefined ? "" : data?.petId} refetch={refetchApi} />
+              <MainTab data={data} petId={data?.petId === undefined ? "" : data?.petId} refetch={singleCita} />
             </Col>
           </Row>
           <CitasModal show={open} handleClose={handleClose} id={id} />

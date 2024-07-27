@@ -3,7 +3,8 @@ import "../scss/graph.scss";
 import ReactApexChart from "react-apexcharts";
 
 function CitasChart({ data }) {
-  const weekData = data.filter((week) => week);
+  console.log(data)
+  const weekData = data?.filter((week) => week);
   // eslint-disable-next-line no-unused-vars
   const [chartData, setChartData] = useState({
     series: [

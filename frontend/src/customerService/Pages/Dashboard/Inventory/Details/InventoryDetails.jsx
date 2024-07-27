@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./inventoryDetail.scss";
 import { Button, ButtonGroup, Col, Collapse, Dropdown, Row } from "react-bootstrap";
 import MainTab from "../Tabs/MainTab";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Alert from "../../../../Components/alert/Alert";
 import ActualizerModal from "../modal/ActualizerModal";
 import InventoryModal from "../modal/InventoryModal";
-import { useGetProductHistoryQuery, useGetSingleProductQuery, useRemoveProductMutation } from "../../../../../services/ApiServices";
+import { useGetAllCategoriesQuery, useGetProductHistoryQuery, useGetSingleProductQuery, useRemoveProductMutation } from "../../../../../services/ApiServices";
 import moment from "moment";
 import { failer, success } from "../../../../Components/alert/success";
 import DeleteVerifyModal from "../../../../Components/alert/VerifyModal/DeleteVerifyModal";
@@ -16,6 +16,8 @@ import Error from "../../../../Components/error/Error";
 
 const InventoryDetails = ({ email }) => {
   const location = useLocation();
+  const id = location.pathname.split("/")[4];
+  console.log(id)
   const navigate = useNavigate();
 
   const [show, setShow] = useState(true);
@@ -25,12 +27,12 @@ const InventoryDetails = ({ email }) => {
   const [historyData, setHistoryData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const id = location.pathname.split("/")[4];
   const productDetails = useGetSingleProductQuery(id, { refetchOnMountOrArgChange: true });
   const productHistory = useGetProductHistoryQuery(id, { refetchOnMountOrArgChange: true });
+  const categories = useGetAllCategoriesQuery({ refetchOnMountOrArgChange: true });
 
   useEffect(() => {
-    if (!productDetails.isLoading && !productHistory.isLoading) {
+    if (!productDetails.isLoading && !productHistory.isLoading && !categories.isLoading) {
       setData(productDetails?.data?.product[0]);
       setHistoryData(productHistory.data);
       setLoading(false);
@@ -38,16 +40,20 @@ const InventoryDetails = ({ email }) => {
       setError(true);
       setLoading(false);
     }
-  }, [productDetails, productHistory]);
+  }, [productDetails, productHistory, categories]);
 
   const [open, setOpen] = useState(false);
-  const handleProdClose = () => setProdShow(false);
+  const handleProdClose = () => {
+    setProdShow(false);
+    productDetails.refetch();
+    productHistory.refetch();
+  };
   const handleClose = () => {
     setOpen(false);
     productDetails.refetch();
+    productHistory.refetch()
   };
   const handleShow = () => setOpen(true);
-
   const [openform, setOpenform] = useState(false);
   const [dltProduct, response] = useRemoveProductMutation();
   const [dltData, setDltData] = useState({
@@ -101,17 +107,21 @@ const InventoryDetails = ({ email }) => {
       success();
       navigate("/customerservice/inventario");
     } else if (response.isError) {
-      failer(response?.error?.data?.message);
+      // console.log(response.error);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
+
   return (
     <>
       {loading ? (
         <Loader />
       ) : error ? (
         <Error message={productDetails?.isError ? productDetails?.error?.data?.message : productHistory.isError ? productHistory.error?.data.message : "Error Interno del Servidor"} />
+
       ) : (
         <section className="inventorydetails-section">
           <div className="heading">
@@ -134,7 +144,7 @@ const InventoryDetails = ({ email }) => {
                   <div className="d-flex  text-center flex-center">
                     <div className="border border-gray-300 border-dashed rounded py-3 px-3 mb-3">
                       <div className="fs-5 fw-bold text-gray-700">
-                        <span className="w-75px">S/ {data?.price + ".00" || "-"}</span>
+                        <span className="w-75px">S/  {data?.price + ".00" || "-"}</span>
                       </div>
                       <div className="fw-semibold text-muted">Precio</div>
                     </div>
@@ -186,10 +196,10 @@ const InventoryDetails = ({ email }) => {
               </div>
             </Col>
             <Col className="ms-lg-15">
-              <Button onClick={handleShow} className="actualizer-btn btn btn-sm fw-bold btn-primary">
+              <Button onClick={handleShow} className="actualizer-btn btn btn-sm fw-bold btn-primary" style={{ zIndex: 99 }}>
                 Actualizar Producto
               </Button>
-              <div className="drop-down">
+              <div className="drop-down" style={{ zIndex: 99 }}>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="dropdown-toggle btn btn-sm  btn-flex btn-center" id="dropdown-basic">
                     Accion
@@ -198,20 +208,19 @@ const InventoryDetails = ({ email }) => {
 
                   <Dropdown.Menu className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4">
                     <Dropdown.Item className="menu-item px-3">
-                      <Link
-                        to="#"
+                      <div
                         className="menu-link px-3"
                         onClick={() => {
                           setProdShow(true);
                         }}
                       >
                         Editar
-                      </Link>
+                      </div>
                     </Dropdown.Item>
                     <Dropdown.Item className="menu-item px-3">
-                      <Link onClick={() => setModalShow(true)} href="#" className="menu-link px-3 delete">
+                      <div onClick={() => setModalShow(true)} className="menu-link px-3 delete">
                         Eliminar producto
-                      </Link>
+                      </div>
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -221,8 +230,8 @@ const InventoryDetails = ({ email }) => {
               </div>
             </Col>
           </Row>
-          <InventoryModal show={prodShow} onHide={handleProdClose} id={data.id} />
-          <ActualizerModal show={open} handleClose={handleClose} id={data.id} status={data.status} />
+          <InventoryModal show={prodShow} onHide={handleProdClose} id={data?.id} categories={categories} />
+          <ActualizerModal show={open} handleClose={handleClose} id={data?.id} status={data?.status} />
           <Alert
             show={modalShow}
             onHide={() => setModalShow(false)}

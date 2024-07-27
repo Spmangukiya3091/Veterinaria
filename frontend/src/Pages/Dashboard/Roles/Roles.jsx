@@ -210,7 +210,8 @@ const Roles = ({ email }) => {
     } else if (dltResponse.isError) {
       // console.log(dltResponse.error);
       // dispatch(showToast(dltResponse.error.message, "FAIL_TOAST"));
-      failer(dltResponse?.error?.data?.message);
+      // failer(dltResponse?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, dltResponse]);
@@ -256,7 +257,7 @@ const Roles = ({ email }) => {
                               setShowDropdown(!showDropdown);
                             }}
                           >
-                            Details
+                            Detalles
                             <span className="ms-2 rotate-180">
                               <i className={`fa-solid fa-chevron-${showDropdown ? "up" : "down"} fs-8`}></i>
                             </span>
@@ -335,7 +336,7 @@ const Roles = ({ email }) => {
                               className="form-control form-control-solid ps-12 w-250px"
                               placeholder="Buscar"
                               value={searchValue}
-                              autocomplete="disabled"
+                              autoComplete="disabled"
                               onChange={(e) => setSearchValue(e.target.value)}
                             />
                           </form>
@@ -380,9 +381,9 @@ const Roles = ({ email }) => {
                                         value={searchData.role}
                                       >
                                         <option disabled="true" value={""} selected="true">Seleccionar</option>
-                                        <option value="masterAdmin">Administrador Estandar</option>
+                                        <option value="admin">Administrador Estandar</option>
 
-                                        <option value="customer service">Servicio al Cliente</option>
+                                        <option value="customerService">Servicio al Cliente</option>
                                       </select>
                                     </div>
                                   </div>
@@ -443,10 +444,10 @@ const Roles = ({ email }) => {
                         </thead>
                         <tbody>
                           {currentPosts?.length > 0 ? (
-                            currentPosts.map(({ id, name, role, email, createdAt }, i) => (
+                            currentPosts.map(({ id, name, role, email, createdAt, last_login }, i) => (
                               <tr key={i}>
                                 <td className="text-start pe-0">
-                                  <span className=" text-gray-600 ">{i + 1}</span>
+                                  <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                                 </td>
                                 <td className="text-start pe-0">{name ? name : "-"}</td>
 
@@ -454,7 +455,7 @@ const Roles = ({ email }) => {
                                   {role === "admin" ? "Administrador Estandar" : "Servicio al Cliente"}
                                 </td>
                                 <td className="text-start pe-0">{email ? email : "-"}</td>
-                                <td className="text-start pe-0">{createdAt ? formatCreatedAtDate(createdAt) : "-"}</td>
+                                <td className="text-start pe-0">{last_login ? formatCreatedAtDate(last_login) : "-"}</td>
                                 <td className="text-end">
                                   <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
                                     <Dropdown.Toggle
@@ -506,7 +507,7 @@ const Roles = ({ email }) => {
                           ) : (
                             <tr>
                               <td colSpan="7" className="text-center">
-                                No data available
+                                Datos no disponibles
                               </td>
                             </tr>
                           )}
@@ -520,7 +521,7 @@ const Roles = ({ email }) => {
                 <UpdPwdModal show={showPwd} onHide={handlePwdClose} id={loginuserDetails?.id} />
                 <Alert
                   show={modalShow}
-                  onHide={() => setModalShow(false)}
+                  onHide={() => { setModalShow(false); setUserID() }}
                   msg={"¿Seguro de completar esta operación?"}
                   opendltModal={handleConfirmDelete}
                 />
@@ -533,6 +534,7 @@ const Roles = ({ email }) => {
                       pass: "",
                       email: "",
                     });
+                    setUserID()
                   }}
                   onDelete={handleDeleteVerify}
                 />

@@ -328,6 +328,7 @@ const UserModal = (props) => {
                     <Form.Control
                       type="email"
                       name="email"
+                      pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                       autoComplete="new-password"
                       placeholder="Correo electrónico"
 

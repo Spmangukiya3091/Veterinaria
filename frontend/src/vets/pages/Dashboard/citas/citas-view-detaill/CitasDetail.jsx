@@ -19,6 +19,7 @@ function CitasDetail() {
   useEffect(() => {
     if (!singleCita.isLoading) {
       setLoading(false);
+      console.log(singleCita.data, "data appointment")
       setData(singleCita?.data?.appointments[0]);
     } else if (singleCita.isError) {
       setLoading(false);
@@ -99,7 +100,7 @@ function CitasDetail() {
                         setShow(!show);
                       }}
                     >
-                      Details
+                      Detalles
                       <span className="ms-2 rotate-180">
                         <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                       </span>

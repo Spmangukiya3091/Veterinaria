@@ -86,7 +86,7 @@ const ListAptos = ({ id, vaccineData }) => {
                       currentPosts.map(({ id, owner, petId, petVaccinationData, status, ownerId }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{i + 1}</span>
+                            <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
                           <td className="text-start pe-0">{petVaccinationData?.name || "-"}</td>
 
@@ -132,7 +132,7 @@ const ListAptos = ({ id, vaccineData }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7" className="text-center">No data available</td>
+                        <td colSpan="7" className="text-center">Datos no disponibles</td>
                       </tr>
                     )}
                   </tbody>

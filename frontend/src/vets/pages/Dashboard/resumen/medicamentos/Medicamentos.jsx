@@ -10,12 +10,12 @@ function Medicamentos({ data }) {
         </div>
         <div className="tableFixHead">
           <table>
-            <thead>
+            <thead style={{ zIndex: 9 }}>
               <tr>
                 <th>CATEGORÍA</th>
                 <th>PRODUCTOS</th>
                 <th>F. DE CREACIÓN</th>
-                <th>OPCIONES</th>
+                {/* <th>OPCIONES</th> */}
               </tr>
             </thead>
             <tbody style={{ overflowY: "auto" }}>
@@ -24,11 +24,11 @@ function Medicamentos({ data }) {
                   <td>{category.category}</td>
                   <td>{category.productCount}</td>
                   <td>{moment(category.createdAt).format("DD MMM YYYY")}</td>
-                  <td>
+                  {/* <td>
                     <Link to="#" className="btn btn-bg-light btn-active-color-primary btn-sm">
                       Ver Detalles
                     </Link>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

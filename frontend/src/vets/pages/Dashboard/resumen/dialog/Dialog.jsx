@@ -55,11 +55,11 @@ function Dialog() {
                         " - " +
                         moment(`2023-01-01 ${appointment.scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A")}
                     </div>
-                    <Link to="#" className="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">
+                    <Link to={`/veterine/citas-view/${appointment.id}`} className="fs-5 fw-bold text-gray-800 text-hover-primary mb-2">
                       {`Cita #${appointment.id} - ${appointment.pet}`}
                     </Link>
                   </div>
-                  <Link to="#" className="btn btn-bg-light btn-active-color-primary btn-sm">
+                  <Link to={`/veterine/citas-view/${appointment.id}`} className="btn btn-bg-light btn-active-color-primary btn-sm">
                     Ver detalles
                   </Link>
                 </div>

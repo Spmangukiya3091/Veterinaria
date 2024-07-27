@@ -163,10 +163,11 @@ const Vacunas = ({ email }) => {
     } else if (response.isError && response.status === "rejected") {
       // console.log(response.error);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, response]);
+  }, [response]);
 
   const handleExportData = async () => {
     try {
@@ -242,7 +243,7 @@ const Vacunas = ({ email }) => {
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
-                        autocomplete="disabled"
+                        autoComplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </form>
@@ -327,7 +328,9 @@ const Vacunas = ({ email }) => {
                     </svg>{" "}
                     Exportar datos
                   </Link>
-                  <Button onClick={handleShow} className="new-btn">
+                  <Button onClick={() => {
+                    setShow(true);
+                  }} className="new-btn">
                     + Nueva vacuna
                   </Button>
                 </div>
@@ -350,12 +353,12 @@ const Vacunas = ({ email }) => {
                       currentPosts.map(({ id, name, stock, creation, validity, aptos }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{i + 1}</span>
+                            <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
                           <td className="text-start pe-0">{name ? name : "-"}</td>
 
                           <td className="text-start pe-0" data-order="16">
-                            {stock ? name : "-"}
+                            {stock ? stock : "-"}
                           </td>
                           <td className="text-start pe-0">{creation ? moment(creation).format("DD MMM YYYY") : "-"}</td>
                           <td className="text-start pe-0">{validity ? validity + " meses" : "-"}</td>
@@ -406,7 +409,7 @@ const Vacunas = ({ email }) => {
                     ) : (
                       <tr>
                         <td colSpan="7" className="text-center">
-                          No data available
+                          Datos no disponibles
                         </td>
                       </tr>
                     )}

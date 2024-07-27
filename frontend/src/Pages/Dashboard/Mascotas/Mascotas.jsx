@@ -179,7 +179,8 @@ const Mascotas = ({ email }) => {
       // Refetch or update data if needed
       petList.refetch();
     } else if (response.isError) {
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response?.error?.data?.message, "FAIL_TOAST"));
       // console.log(response.error);
     }
@@ -263,7 +264,7 @@ const Mascotas = ({ email }) => {
                           className="form-control form-control-solid ps-12 w-250px"
                           placeholder="Buscar"
                           value={searchValue}
-                          autocomplete="disabled"
+                          autoComplete="disabled"
                           onChange={(e) => setSearchValue(e.target.value)}
                         />
                       </form>
@@ -378,7 +379,7 @@ const Mascotas = ({ email }) => {
                         currentPosts.map(({ id, name, owner, ownerId, species, sex, age, rating }, i) => (
                           <tr key={i}>
                             <td className="text-start pe-0">
-                              <span className=" text-gray-600 ">{i + 1}</span>
+                              <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                             </td>
                             <td className="text-start pe-0">{name ? name : "-"}</td>
 
@@ -458,7 +459,7 @@ const Mascotas = ({ email }) => {
                       ) : (
                         <tr>
                           <td colSpan="8" className="text-center">
-                            No data available
+                            Datos no disponibles
                           </td>
                         </tr>
                       )}

@@ -48,7 +48,7 @@ const UpdPwdModal = (props) => {
     if (formData.password !== "") {
       // Implement custom password validation logic
       // Password must contain at least one capital letter, one special character, one numeric digit, and have a minimum length of 6 characters
-      const passwordPattern = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{6,}$/;
+      const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$/;
       return passwordPattern.test(formData.password);
     }
     // If the password field is empty, return false
@@ -61,6 +61,7 @@ const UpdPwdModal = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const form = e.currentTarget;
     setValidated(true); // Set validated to true only when the submit button is clicked
 
@@ -70,8 +71,6 @@ const UpdPwdModal = (props) => {
       validateConfirmPassword() // Validate confirm password field
     ) {
       await updPwd(formData);
-    } else {
-      dispatch(showToast("Password does not match", "FAIL_TOAST"));
     }
   };
 
@@ -108,7 +107,7 @@ const UpdPwdModal = (props) => {
                 onChange={handleChange}
                 value={formData.currentPassword}
                 required
-                isInvalid={!validateCurrentPassword()}
+                isInvalid={formData.currentPassword && !validateCurrentPassword()}
               />
               <Form.Control.Feedback type="invalid">
                 {!validateCurrentPassword() && " Por favor proporcione un Contraseña actual."}
@@ -117,9 +116,18 @@ const UpdPwdModal = (props) => {
 
             <Form.Group className="mb-3" controlId="formBasicSelect">
               <Form.Label>Nueva contraseña</Form.Label>
-              <Form.Control aria-label="Default" placeholder="Nueva contraseña" onChange={handleChange} value={formData.password} name="password" required isInvalid={!validatePassword()} />
+              <Form.Control
+                aria-label="Default"
+                placeholder="Nueva contraseña"
+                onChange={handleChange}
+                value={formData.password}
+                name="password"
+                required
+                pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$"
+                isInvalid={formData.password && !validatePassword()}
+              />
               <Form.Control.Feedback type="invalid">
-                {!validatePassword() && "La contraseña debe contener al menos una letra mayúscula, un carácter especial, un dígito numérico y tener una longitud mínima de 6 caracteres."}
+                {!validatePassword() && "La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un dígito numérico y tener una longitud mínima de 6 caracteres."}
               </Form.Control.Feedback>
             </Form.Group>
 

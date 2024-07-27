@@ -28,6 +28,7 @@ function Resumen() {
   const [paymentData, setPaymentData] = useState([]);
   const [ownerData, setOwnerData] = useState([]);
   const [categoryListData, setCategoryListData] = useState([]);
+  const [value, setValue] = useState(2)
   const [pendingAppointments, setPendingAppointments] = useState([]);
   const getCurrentMonth2 = () => {
     const date = new Date();
@@ -36,7 +37,6 @@ function Resumen() {
       year: date.getFullYear(),
       month: date.getMonth() + 1
     };
-
   };
   const [selectedMonth, setSelectedMonth] = useState({
     year: getCurrentMonth2().year,
@@ -79,7 +79,8 @@ function Resumen() {
   const metricasData = useGetMetricsQuery(selectedMonth, { refetchOnMountOrArgChange: true });
   const appoinmentGraph = useGetAppoinmentGraphQuery({ refetchOnMountOrArgChange: true });
   const paymentGraph = useGetPaymentGraphQuery({ refetchOnMountOrArgChange: true });
-  const ownerGraph = useGetOwnerGraphQuery({ refetchOnMountOrArgChange: true });
+  const query = `${value === 1 ? `?month=${getCurrentMonth2().month}` : value === 2 ? `?year=${getCurrentMonth2().year}` : ""}`
+  const ownerGraph = useGetOwnerGraphQuery(query, { refetchOnMountOrArgChange: true });
   const categoryList = useGetCategoryWithProductsQuery({ refetchOnMountOrArgChange: true });
   const pendingAppointmentsList = useGetPendingAppoinmentQuery({ refetchOnMountOrArgChange: true });
 
@@ -107,7 +108,7 @@ function Resumen() {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "Summary.xlsx");
+      link.setAttribute("download", "Resumen.xlsx");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -148,16 +149,18 @@ function Resumen() {
   }, [metricasData, appoinmentGraph, paymentGraph, ownerGraph, categoryList, pendingAppointmentsList]);
 
   const handleMonthChange = (e, month, year) => {
-    // console.log("e", e);
-    // console.log("year", year);
-    // console.log("month", month);
+    console.log("e", e);
+    console.log("year", year);
+    console.log("month", month);
     setSelectedMonth({
       ...selectedMonth,
       month: month,
       year: year
     })
     setLoading(true);
+    metricasData.refetch()
   };
+
   return (
     <div className="resumen">
       <div className="resumen-top-container">
@@ -226,7 +229,7 @@ function Resumen() {
           <Row>
             <Col sm={12} md={6} lg={6}>
               <div className="calendar-card-wrapper">
-                {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <PtientesChart data={ownerData} />}
+                {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <PtientesChart data={ownerData} onChange={setValue} active={value} />}
               </div>
             </Col>
             <Col sm={12} md={6} lg={6}>

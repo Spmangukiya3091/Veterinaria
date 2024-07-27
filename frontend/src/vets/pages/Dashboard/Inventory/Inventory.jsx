@@ -138,15 +138,15 @@ const Inventory = () => {
                       </svg>
                     </span>
                     <form autoComplete="new-password">
-                        <input
-                          type="text"
-                          className="form-control form-control-solid ps-12 w-250px"
-                          placeholder="Buscar"
-                          value={searchValue}
-                          autocomplete="disabled"
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                      </form>
+                      <input
+                        type="text"
+                        className="form-control form-control-solid ps-12 w-250px"
+                        placeholder="Buscar"
+                        value={searchValue}
+                        autoComplete="disabled"
+                        onChange={(e) => setSearchValue(e.target.value)}
+                      />
+                    </form>
                   </div>
                 </div>
                 <div className="card-toolbar flex-row-fluid justify-content-start gap-5">
@@ -178,7 +178,7 @@ const Inventory = () => {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option disabled >Seleccionar</option>
+                                  <option disabled="true" value={""} selected="true">Estado</option>
                                   <option value="active">Activo</option>
                                   <option value="inactive">Inactivo</option>
                                 </select>
@@ -264,7 +264,7 @@ const Inventory = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8" className="text-center">No data available</td>
+                        <td colSpan="8" className="text-center">Datos no disponibles</td>
                       </tr>
                     )}
                   </tbody>

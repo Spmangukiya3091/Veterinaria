@@ -77,6 +77,7 @@ function UpdatePassword() {
                         <Form.Label>Crear contraseña</Form.Label>
                         <Form.Control
                           type="email"
+                          pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                           placeholder="Crear contraseña"
                           name="password"
                           onChange={handleOnChange}

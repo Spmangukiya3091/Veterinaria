@@ -1,22 +1,23 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import "../scss/graph.scss";
 import ReactApexChart from "react-apexcharts";
 
 function Column({ data }) {
+  console.log(data, "data");
+
   const monthNameMappings = {
-    January: "Enero",
-    February: "Febrero",
-    March: "Marzo",
-    April: "Abril",
-    May: "Mayo",
-    June: "Junio",
-    July: "Julio",
-    August: "Agosto",
-    September: "Septiembre",
-    October: "Octubre",
-    November: "Noviembre",
-    December: "Diciembre",
+    enero: "Enero",
+    febrero: "Febrero",
+    marzo: "Marzo",
+    abril: "Abril",
+    mayo: "Mayo",
+    junio: "Junio",
+    julio: "Julio",
+    agosto: "Agosto",
+    septiembre: "Septiembre",
+    octubre: "Octubre",
+    noviembre: "Noviembre",
+    diciembre: "Diciembre",
   };
 
   const sortedData = [...data?.lastSixMonthsData].sort((a, b) => {
@@ -24,8 +25,16 @@ function Column({ data }) {
     return monthOrder || a.totalAmount - b.totalAmount;
   });
 
+  // Debugging logs to verify sortedData
+  console.log("sortedData:", sortedData);
+
   const months = sortedData.map((data) => monthNameMappings[data.month]);
   const values = sortedData.map((data) => data.totalAmount);
+
+  // Debugging logs to verify months and values
+  console.log("months:", months);
+  console.log("values:", values);
+
   const [chartData, setChartData] = useState({
     series: [
       {
@@ -74,11 +83,25 @@ function Column({ data }) {
             fontSize: "12px",
           },
         },
+        title: {
+          text: "Meses",
+          style: {
+            color: "#a1a5b7",
+            fontSize: "12px",
+          },
+        },
       },
       yaxis: {
         labels: {
           style: {
             colors: "#a1a5b7",
+            fontSize: "12px",
+          },
+        },
+        title: {
+          text: "Ingresos",
+          style: {
+            color: "#a1a5b7",
             fontSize: "12px",
           },
         },
@@ -113,7 +136,7 @@ function Column({ data }) {
         },
         y: {
           formatter: function (val) {
-            return "$" + val;
+            return "S/ " + val;
           },
         },
       },
@@ -127,8 +150,18 @@ function Column({ data }) {
           },
         },
       },
+      title: {
+        // text: "Ingresos según Pagos",
+        align: "left",
+        style: {
+          fontSize: "16px",
+          color: "#666",
+        },
+      },
     },
   });
+
+  console.log("chartData:", chartData);
 
   return (
     <>
@@ -136,11 +169,11 @@ function Column({ data }) {
       <div className="line-chart-container">
         <div className="line-chart-info text-start">
           <p className="line-main-title">S/ {data?.currentMonthData || 0}</p>
-          <p className="line-sub-title">Mes actual</p>
+          <p className="line-sub-title">Mes actual {data?.currentMonth}</p>
         </div>
         <div className="line-chart-info text-end">
           <p className="line-main-title">S/ {data?.currentYearData || 0}</p>
-          <p className="line-sub-title">Año 2023</p>
+          <p className="line-sub-title">Año {data?.currentYear}</p>
         </div>
       </div>
       <div id="chart" className="line-chart chart">

@@ -168,8 +168,8 @@ export const dashboardApi = createApi({
     }),
 
     getOwnerGraph: builder.query({
-      query: () => ({
-        url: `ownerGraph`,
+      query: (query) => ({
+        url: `ownerGraph${query}`,
         method: "GET",
       }),
     }),

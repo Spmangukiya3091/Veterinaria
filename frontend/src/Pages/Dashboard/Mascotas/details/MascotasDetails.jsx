@@ -38,8 +38,6 @@ const MascotasDetails = ({ email }) => {
   const [dltMascotas, response] = useRemovePetMutation();
 
   const petDetails = useGetSinglePetQuery(id, { refetchOnMountOrArgChange: true });
-  const generatePdf = usePetSummaryPdfQuery(id, { refetchOnMountOrArgChange: true })
-
   useEffect(() => {
     if (!petDetails.isLoading) {
       setLoading(false);
@@ -78,7 +76,6 @@ const MascotasDetails = ({ email }) => {
 
   const handleOpenPdfModal = async () => {
     setExport(true)
-    await generatePdf.refetch()
   }
 
   const handleDeleteVerify = async (enteredPassword) => {
@@ -113,7 +110,8 @@ const MascotasDetails = ({ email }) => {
     } else if (response.isError && response.status === "rejected") {
       // console.log(response.error);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
-      failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
+      // failer(response?.error?.data?.message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
@@ -186,7 +184,7 @@ const MascotasDetails = ({ email }) => {
                         setShow(!show);
                       }}
                     >
-                      Details
+                      Detalles
                       <span className="ms-2 rotate-180">
                         <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                       </span>
@@ -217,7 +215,7 @@ const MascotasDetails = ({ email }) => {
                       </Link>
 
                       <div className="fw-bold mt-5">Fecha creación</div>
-                      <div className="text-gray-600">{data?.pet?.dob ? moment(data?.pet?.dob).format("DD MMM YYYY, HH:MM A") : "-"}</div>
+                      <div className="text-gray-600">{data?.pet?.createdAt ? moment(data?.pet?.createdAt).format("DD MMM YYYY, HH:MM A") : "-"}</div>
 
                       <div className="fw-bold mt-5">Última Cita</div>
                       <div className="text-gray-600">{data?.lastAppointment?.date ? moment(data?.lastAppointment?.date).format("DD MMM YYYY, HH:MM A") : "-"}</div>

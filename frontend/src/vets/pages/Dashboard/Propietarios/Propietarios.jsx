@@ -129,7 +129,7 @@ const Propietarios = ({ id }) => {
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
-                        autocomplete="disabled"
+                        autoComplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </form>
@@ -215,7 +215,7 @@ const Propietarios = ({ id }) => {
                       currentPosts.map(({ id, name, surname, address, phone_1, doc_identity }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{i + 1}</span>
+                            <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
 
                           <td className="text-start pe-0" data-order="16">
@@ -242,7 +242,7 @@ const Propietarios = ({ id }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="6" className="text-center">No data available</td>
+                        <td colSpan="6" className="text-center">Datos no disponibles</td>
                       </tr>
                     )}
                   </tbody>

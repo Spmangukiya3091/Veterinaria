@@ -14,6 +14,7 @@ const MascotaModal = ({ onHide, show }) => {
     Species: "",
     breed: "",
     color: "",
+    weight: ""
   });
 
   const [validated, setValidated] = useState(false); // State for form validation
@@ -36,6 +37,7 @@ const MascotaModal = ({ onHide, show }) => {
       Species: "",
       breed: "",
       color: "",
+      weight: ""
     });
     setValidated(false); // Reset validated state
   };
@@ -165,6 +167,13 @@ const MascotaModal = ({ onHide, show }) => {
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <Form.Label>Color</Form.Label>
                   <Form.Control placeholder="Color" aria-label="Default " name="color" onChange={handleChange} value={formData.color} />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className="mb-3" controlId="formBasicSelect">
+                  <Form.Label>Peso (kg)</Form.Label>
+                  <Form.Control placeholder="Peso" aria-label="Default " type="number" min="0"
+                    max="1000" step="0.01" name="weight" onChange={handleChange} value={formData.weight} />
                 </Form.Group>
               </Col>
             </Row>

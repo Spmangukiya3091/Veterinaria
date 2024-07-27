@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 function Diagnostic({ data }) {
   const renderStars = (rating) => {
@@ -19,7 +20,39 @@ function Diagnostic({ data }) {
     ));
     return [...solidStars, ...regularStars];
   };
+  const handleDownloadPDf = async () => {
+    try {
+      const cookies = document.cookie.split(";");
+      let jwtCookie = null;
 
+      cookies.forEach((cookie) => {
+        if (cookie.includes("authToken=")) {
+          jwtCookie = "Bearer " + cookie.split("authToken=")[1].trim();
+        }
+      });
+
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/appointment/singleAppointmentPdf/${data?.id}`, {
+        headers: {
+          Authorization: jwtCookie,
+        },
+        responseType: "blob", // Specify the response type as blob
+      });
+
+      // Create a Blob URL and initiate download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.target = "_blank"
+      link.referrerPolicy = "referer"
+      link.setAttribute("download", `cita_${data?.id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      // Handle errors
+      console.error("Error exporting data:", error);
+    }
+  }
   // console.log(data?.medication, data?.documentation);
   return (
     <div className="diagnostic-container">
@@ -44,7 +77,7 @@ function Diagnostic({ data }) {
         <div className="third container">
           <h4>Documentación</h4>
           {data && data?.documentation !== null ? (
-            data?.documentation.length > 0 ? (
+            data?.documentation?.length > 0 ? (
               data?.documentation.map((document, index) => (
                 <div key={index} className="files mb-2">
                   {Object.entries(document).map(([key, value]) => (
@@ -60,10 +93,10 @@ function Diagnostic({ data }) {
                 </div>
               ))
             ) : (
-              <div className="d-flex justify-content-between w-100">No Documentation</div>
+              <div className="d-flex justify-content-between w-100">Sin documentación</div>
             )
           ) : (
-            <div className="d-flex justify-content-between w-100">No Documentation</div>
+            <div className="d-flex justify-content-between w-100">Sin documentación</div>
           )}
         </div>
 
@@ -84,7 +117,7 @@ function Diagnostic({ data }) {
               </div>
             ))
           ) : (
-            <div className="d-flex justify-content-between w-100">No Medication Data</div>
+            <div className="d-flex justify-content-between w-100">Sin datos de medicación</div>
           )}
         </div>
         <div className="fourth container">
@@ -104,7 +137,7 @@ function Diagnostic({ data }) {
             </Col>
           </Row>
         </div>
-        <button className="printbutton">Imprimir Diagnóstico</button>
+        <button className="printbutton" onClick={handleDownloadPDf}>Imprimir Diagnóstico</button>
       </div>
     </div>
   );

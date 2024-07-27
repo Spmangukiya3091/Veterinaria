@@ -25,6 +25,7 @@ function MascotasModal({ show, handleClose, id }) {
     Species: "",
     breed: "",
     color: "",
+    weight: ""
   });
 
   const [validated, setValidated] = useState(false); // State for form validation
@@ -36,7 +37,7 @@ function MascotasModal({ show, handleClose, id }) {
 
   useEffect(() => {
     if (id !== undefined && !petDetails.isLoading && petDetails?.data) {
-      const { name, owner, ownerId, sex, dob, Species, breed, color } = petDetails?.data?.pet;
+      const { name, owner, ownerId, sex, dob, Species, breed, color, weight } = petDetails?.data?.pet;
       setFormData({
         name,
         owner,
@@ -46,13 +47,14 @@ function MascotasModal({ show, handleClose, id }) {
         Species,
         breed,
         color,
+        weight
       });
     } else if (id === undefined) {
       clearForm(); // Clear form fields when there is no owner ID
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, petDetails, show]);
-
+  // console.log(formData,"formdata")
   const clearForm = () => {
     setFormData({
       name: "",
@@ -63,6 +65,7 @@ function MascotasModal({ show, handleClose, id }) {
       Species: "",
       breed: "",
       color: "",
+      weight: ""
     });
     setValidated(false); // Reset validated state
   };
@@ -215,6 +218,12 @@ function MascotasModal({ show, handleClose, id }) {
                 <Form.Group className="mb-3" controlId="formBasicSelect">
                   <Form.Label>Color</Form.Label>
                   <Form.Control placeholder="Color" aria-label="Default " name="color" onChange={handleChange} value={formData.color} />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className="mb-3" controlId="formBasicSelect">
+                  <Form.Label>Peso</Form.Label>
+                  <Form.Control placeholder="Peso" aria-label="Default " type="number" name="weight" onChange={handleChange} value={formData.weight} />
                 </Form.Group>
               </Col>
             </Row>

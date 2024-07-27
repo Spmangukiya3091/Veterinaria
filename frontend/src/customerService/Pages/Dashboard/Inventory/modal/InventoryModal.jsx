@@ -4,7 +4,6 @@ import { failer, success } from "../../../../Components/alert/success";
 import { useState } from "react";
 import {
   useAddProductMutation,
-  useGetAllCategoriesQuery,
   useGetSingleProductQuery,
   useUpdateProductMutation,
 } from "../../../../../services/ApiServices";
@@ -24,12 +23,19 @@ function InventoryModal(props) {
     price: "", // Initialize as an empty string
     presentation: "",
   });
+  const [categoryList, setCategoryList] = useState()
   const [validated, setValidated] = useState(false); // State for form validation
-  const categoryList = useGetAllCategoriesQuery( { refetchOnMountOrArgChange: true });
+
   const productDetails = useGetSingleProductQuery(props.id, { refetchOnMountOrArgChange: true });
   const [addProduct, response] = useAddProductMutation();
   const [updateProduct, response2] = useUpdateProductMutation();
 
+  useEffect(() => {
+    if (props.show && props?.categories?.data) {
+      // console.log(props.categories?.data, props.show)
+      setCategoryList(props?.categories);
+    }
+  }, [props.categories, props.show]);
   useEffect(() => {
     if (props.id !== undefined && !productDetails.isLoading && productDetails?.data?.product[0]) {
       const { product, brand, category, categoryId, composition, stock, sku, status, laboratory, description, price, presentation } =
@@ -94,7 +100,7 @@ function InventoryModal(props) {
     // Ensure the entered value is a valid number
     if (!isNaN(enteredValue)) {
       // Convert the input string to a floating-point number with two decimal places
-      const formattedPrice = parseFloat(enteredValue).toFixed(2);
+      const formattedPrice = enteredValue;
       setFormData({
         ...formData,
         price: formattedPrice,
@@ -134,8 +140,8 @@ function InventoryModal(props) {
     } else {
       if (!response.isLoading && response.status === "fulfilled") {
         // console.log(response);
-        success();
         clearForm()
+        success();
         props.onHide();
       } else if (response.isError && response.status === "rejected" && response?.error?.status !== 400) {
         // console.log(response.error);
@@ -152,7 +158,7 @@ function InventoryModal(props) {
           <Modal.Title id="contained-modal-title-vcenter">Información de Producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={handleSubmit} autoComplete="new-password">
+          <Form autoComplete="new-password" noValidate validated={validated} onSubmit={handleSubmit}>
             <Row>
               <Col>
                 <Form.Group className="mb-3">
@@ -168,7 +174,7 @@ function InventoryModal(props) {
               <Col>
                 <Form.Group className="mb-3">
                   <Form.Label>Categoría</Form.Label>
-                  <Form.Select aria-label="Default select example" value={formData.categoryId} name="categoryId" onChange={handleChange}>
+                  <Form.Select value={formData.categoryId} name="categoryId" onChange={handleChange}>
                     <option disabled="true" value={""} selected="true">Categoría</option>
                     {categoryList?.data?.categoryList.map((category, i) => (
                       <option key={i} value={category.id}>
@@ -220,7 +226,7 @@ function InventoryModal(props) {
                   <Col>
                     <Form.Group className="mb-3">
                       <Form.Label>Estado</Form.Label>
-                      <Form.Select aria-label="Default select example" value={formData.status} name="status" onChange={handleChange} required>
+                      <Form.Select value={formData.status} name="status" onChange={handleChange} required>
                         <option disabled="true" value={""} selected="true">Estado</option>
                         <option value="active">Activo</option>
                         <option value="inactive">InActivo</option>
@@ -281,7 +287,7 @@ function InventoryModal(props) {
                     type="number"
                     id="price"
                     name="price"
-                    value={formData.price === 0 ? "0.00" : formData.price} // Show 0.00 if price is 0, otherwise show the formatted price
+                    value={formData.price} // Show 0.00 if price is 0, otherwise show the formatted price
                     required
                     onChange={handlePriceChange}
                   />

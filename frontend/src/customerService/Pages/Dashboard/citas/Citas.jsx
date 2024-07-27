@@ -179,7 +179,8 @@ function Citas({ email }) {
     } else if (response.isError) {
       // console.log(response.error);
       // dispatch(showToast(response?.error?.data?.message, "FAIL_TOAST"));
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
@@ -225,7 +226,7 @@ function Citas({ email }) {
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
-                        autocomplete="disabled"
+                        autoComplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </form>
@@ -328,7 +329,7 @@ function Citas({ email }) {
                       currentPosts.map(({ id, pet, veterinarian, scheduleStart, scheduleEnd, date, status, rating }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className="fw-bold text-gray-600 fw-bolder">{i + 1}</span>
+                            <span className="fw-bold text-gray-600 fw-bolder">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
                           <td className="text-start pe-0">{pet ? pet : "-"}</td>
                           <td className="text-start pe-0">{veterinarian ? veterinarian : "-"}</td>
@@ -408,7 +409,7 @@ function Citas({ email }) {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8">No data available</td>
+                        <td colSpan="8">Datos no disponibles</td>
                       </tr>
                     )}
                   </tbody>

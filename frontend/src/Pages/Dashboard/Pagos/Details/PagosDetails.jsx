@@ -42,7 +42,10 @@ const PagosDetails = ({ email }) => {
   }, [paymentDetails]);
 
   const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false)
+    paymentDetails.refetch()
+  };
   const [openform, setOpenform] = useState(false);
   const [dltPagos, response] = useRemovePaymentMutation();
   const [dltData, setDltData] = useState({
@@ -97,7 +100,8 @@ const PagosDetails = ({ email }) => {
       navigate("/dashboard/pagos");
     } else if (response.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,7 +154,7 @@ const PagosDetails = ({ email }) => {
                             setShowDropdown(!showDropdown);
                           }}
                         >
-                          Details
+                          Detalles
                           <span className="ms-2 rotate-180">
                             <i className={`fa-solid fa-chevron-${showDropdown ? "up" : "down"} fs-8`}></i>
                           </span>
@@ -163,10 +167,10 @@ const PagosDetails = ({ email }) => {
                           <div className="text-gray-600">{data?.service || "-"}</div>
 
                           <div className="fw-bold mt-5">Tipo de Pago</div>
-                          <div className="text-gray-600">{data?.payment_method || "-"}</div>
+                          <div className="text-gray-600"> {data?.payment_method === "cash" ? "Efectivo" : data?.payment_method === "credit card" ? "Tarjeta de crédito" : data?.payment_method === "debit card" ? "Tarjeta de Débito" : "-"}</div>
 
                           <div className="fw-bold mt-5">Fecha creación</div>
-                          <div className="text-gray-600">{data ? moment(data?.created_at).format("DD MMM YYYY, hh:mm A") : "-"}</div>
+                          <div className="text-gray-600">{data ? moment(data?.createdAt).format("DD MMM YYYY, hh:mm A") : "-"}</div>
                         </div>
                       </Collapse>
                     </div>
@@ -174,7 +178,7 @@ const PagosDetails = ({ email }) => {
                 </div>
               </div>
             </Col>
-             <Col className="ms-lg-15">
+            <Col className="ms-lg-15">
               <div className="drop-down" style={{ zIndex: 99 }}>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="dropdown-toggle btn btn-sm  btn-flex btn-center" id="dropdown-basic">

@@ -32,12 +32,16 @@ function InformacionModal({ show, handleClose, id }) {
   const [updateCategory, response] = useUpdateCategoryMutation();
 
   useEffect(() => {
-    if (categoryData) {
+    if (categoryData && id) {
       setFormData({
         category: categoryData?.category[0]?.category,
       });
+    } else {
+      setFormData({
+        category: "",
+      });
     }
-  }, [categoryData]);
+  }, [categoryData, id]);
 
   const handleSaveChanges = () => {
     if (formData?.category.trim()?.length === 0) {
@@ -87,5 +91,4 @@ function InformacionModal({ show, handleClose, id }) {
     </div>
   );
 }
-
-export default InformacionModal;
+export default InformacionModal

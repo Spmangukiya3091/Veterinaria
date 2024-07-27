@@ -82,8 +82,8 @@ function CitasDetail({ email }) {
 
       // Call the dltCitas API
       await dltCitas(body);
-      success();
-      navigate("/dashboard/citas");
+      // success();
+      // navigate("/dashboard/citas");
     } else {
       failer("Contraseña invalida");
     }
@@ -100,7 +100,8 @@ function CitasDetail({ email }) {
       navigate("/dashboard/citas");
     } else if (response.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,7 +180,7 @@ function CitasDetail({ email }) {
                         setShow(!show);
                       }}
                     >
-                      Details
+                      Detalles
                       <span className="ms-2 rotate-180">
                         <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                       </span>

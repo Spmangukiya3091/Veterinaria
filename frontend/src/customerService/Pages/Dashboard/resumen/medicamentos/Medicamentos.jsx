@@ -17,7 +17,7 @@ function Medicamentos({ data, filter }) {
         </div>
         <div className="tableFixHead">
           <table>
-            <thead>
+            <thead style={{ zIndex: 9 }}>
               <tr>
                 <th>CATEGORÍA</th>
                 <th>PRODUCTOS</th>

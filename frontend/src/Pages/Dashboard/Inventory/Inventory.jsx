@@ -8,7 +8,7 @@ import CategoryModal from "./modal/CategoryModal";
 import SingleInputDateRangePicker from "../../../Components/date-picker/DatePicker";
 import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
-import { useGetALlProductListQuery, useRemoveProductMutation } from "../../../services/ApiServices";
+import { useGetAllCategoriesQuery, useGetALlProductListQuery, useGetCategoryWithProductsQuery, useRemoveProductMutation } from "../../../services/ApiServices";
 import DeleteVerifyModal from "../../../Components/alert/VerifyModal/DeleteVerifyModal";
 import { failer, success } from "../../../Components/alert/success";
 // import { showToast } from "../../../store/tostify";
@@ -45,27 +45,33 @@ const Inventory = ({ email }) => {
   });
   const [dltInventory, response] = useRemoveProductMutation();
   const products = useGetALlProductListQuery(searchQuery, { refetchOnMountOrArgChange: true });
-
+  const categories = useGetAllCategoriesQuery({ refetchOnMountOrArgChange: true });
+  const productCount = useGetCategoryWithProductsQuery({ refetchOnMountOrArgChange: true })
   useEffect(() => {
-    if (!products.isLoading) {
+    if (!products.isLoading && !categories.isLoading && !productCount.isLoading) {
       setLoading(false);
       setData(products?.data?.productList);
     } else if (products.isError) {
       setError(true);
       setLoading(false);
     }
-  }, [products]);
+  }, [categories, productCount, products]);
 
   const handleClose = () => {
     setShow(false);
     setPID(undefined);
     products.refetch();
+    categories.refetch()
+    productCount.refetch()
   };
 
   const handleCloseCategory = () => {
     setShowCategory(false)
     products.refetch()
+    categories.refetch()
+    productCount.refetch()
   };
+
   const handleShowCategory = () => setShowCategory(true);
   const toggleDropdowns = (i) => {
     const updatedDropdowns = [...dropdowns];
@@ -189,7 +195,8 @@ const Inventory = ({ email }) => {
       products.refetch();
     } else if (response.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
 
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
@@ -218,7 +225,7 @@ const Inventory = ({ email }) => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "inventory.xlsx");
+      link.setAttribute("download", "inventario.xlsx");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -266,15 +273,15 @@ const Inventory = ({ email }) => {
                       </svg>
                     </span>
                     <form autoComplete="new-password">
-                        <input
-                          type="text"
-                          className="form-control form-control-solid ps-12 w-250px"
-                          placeholder="Buscar"
-                          value={searchValue}
-                          autocomplete="disabled"
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                      </form>
+                      <input
+                        type="text"
+                        data-kt-ecommerce-product-filter="search"
+                        className="form-control form-control-solid ps-12 w-250px"
+                        placeholder="Buscar"
+                        value={searchValue}
+                        onChange={(e) => setSearchValue(e.target.value)}
+                      />
+                    </form>
                   </div>
                 </div>
                 <div className="card-toolbar flex-row-fluid justify-content-start gap-5">
@@ -306,7 +313,7 @@ const Inventory = ({ email }) => {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option disabled>Seleccionar</option>
+                                  <option disabled="true" value={""} selected="true">Estado</option>
                                   <option value="active">Activo</option>
                                   <option value="inactive">Inactivo</option>
                                 </select>
@@ -405,7 +412,7 @@ const Inventory = ({ email }) => {
                           <td className="text-end">
                             <Dropdown as={ButtonGroup} show={dropdowns} onClose={() => closeDropdowns(i)} onToggle={() => toggleDropdowns(i)}>
                               <Dropdown.Toggle
-                                className={`dropdown-toggle btn btn-sm btn-flex btn-center  ${dropdowns[i] === true ? "active" : ""}`}
+                                className={`dropdown-toggle btn btn-sm  btn-flex btn-center  ${dropdowns[i] === true ? "active" : ""}`}
                                 id="dropdown-basic"
                               >
                                 {"Acción"}
@@ -450,7 +457,7 @@ const Inventory = ({ email }) => {
                     ) : (
                       <tr>
                         <td colSpan="8" className="text-center">
-                          No data available
+                          Datos no disponibles
                         </td>
                       </tr>
                     )}
@@ -459,8 +466,8 @@ const Inventory = ({ email }) => {
               </div>
             </div>
           </div>
-          <InventoryModal show={show} onHide={handleClose} id={PID} filter={products} />
-          <CategoryModal show={showCategory} handleClose={handleCloseCategory} email={email} />
+          <InventoryModal show={show} onHide={handleClose} id={PID} filter={products} categories={categories} />
+          <CategoryModal show={showCategory} handleClose={handleCloseCategory} email={email} productCount={productCount} />
           <Alert
             show={modalShow}
             onHide={() => setModalShow(false)}

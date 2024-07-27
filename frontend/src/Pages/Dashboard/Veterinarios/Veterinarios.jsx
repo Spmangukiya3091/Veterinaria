@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Card, Col, Dropdown, Form, Row } from "react-bootstrap";
 import "./veterinarios.scss";
-import VeterinaModal from "./Modals/VeterinaModal";
 import { useNavigate } from "react-router-dom";
 import VeterinaUserModal from "./Modals/VeterinaUserModal";
 import SingleInputDateRangePicker from "../../../Components/date-picker/DatePicker";
-import Alert from "../../../Components/alert/Alert";
 import CitasPagination from "../../../Components/pagination/citas-pagination/Citas-Pagination";
 import { useGetSpecialitiesQuery, useGetSpecialityListQuery, useGetVeterinariansFilterQuery } from "../../../services/ApiServices";
 import Loader from "../../../Components/loader/Loader";
+import SpecialityModal from "./Modals/SpecialityModal";
 
 const Veterinarios = ({ email }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [show, setShow] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [data, setData] = useState([]);
   const [specialityData, setSpecialityData] = useState([]);
-  const [specialityListData, setSpecialityListData] = useState([]);
+  // const [specialityListData, setSpecialityListData] = useState([]);
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,13 +29,11 @@ const Veterinarios = ({ email }) => {
   const specialities = useGetSpecialitiesQuery({ refetchOnMountOrArgChange: true });
   const specialityList = useGetSpecialityListQuery({ refetchOnMountOrArgChange: true });
 
-
   useEffect(() => {
     if (!veterinList.isLoading && !specialities.isLoading && !specialityList.isLoading) {
       setLoading(false);
       setData(veterinList?.data?.veterinarianList);
       setSpecialityData(specialities?.data?.specialityList);
-      setSpecialityListData(specialityList?.data?.specialities)
     } else if (veterinList.isError || specialities.isError) {
       setError(true);
       setLoading(false);
@@ -49,6 +45,7 @@ const Veterinarios = ({ email }) => {
     setShow(false)
     veterinList.refetch();
     specialities.refetch()
+    specialityList.refetch()
   };
 
   const toggleDropdown = () => {
@@ -69,9 +66,6 @@ const Veterinarios = ({ email }) => {
       name?.toLowerCase().includes(searchString) || surname?.toLowerCase().includes(searchString)
     );
   });
-  const handleHide = () => {
-    setModalShow(false);
-  };
   const [openModal, setOpenModal] = useState(false);
   const handleModalHide = () => {
     setOpenModal(false);
@@ -148,15 +142,15 @@ const Veterinarios = ({ email }) => {
                     </svg>
                   </span>
                   <form autoComplete="new-password">
-                        <input
-                          type="text"
-                          className="form-control form-control-solid ps-12 w-250px"
-                          placeholder="Buscar"
-                          value={searchValue}
-                          autocomplete="disabled"
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                      </form>
+                    <input
+                      type="text"
+                      className="form-control form-control-solid ps-12 w-250px"
+                      placeholder="Buscar"
+                      value={searchValue}
+                      autoComplete="disabled"
+                      onChange={(e) => setSearchValue(e.target.value)}
+                    />
+                  </form>
                 </div>
               </div>
               <div className="card-toolbar flex-row-fluid justify-content-start gap-5">
@@ -287,10 +281,9 @@ const Veterinarios = ({ email }) => {
             )}
           </div>
         </div>
-        <Alert show={modalShow} onHide={handleHide} msg={"¿Seguro de completar esta operación?"} />
-        <VeterinaModal show={show} onHide={handleClose} email={email} openModal={openModal} />
+        <SpecialityModal show={show} onHide={handleClose} email={email} openModal={openModal} specialityList={specialityList} />
         <CitasPagination current={currentPage} total={Math.ceil(filteredData?.length / postsPerPage)} onPageChange={setCurrentPage} />
-        <VeterinaUserModal show={openModal} onHide={handleModalHide} filter={veterinList} />
+        <VeterinaUserModal show={openModal} onHide={handleModalHide} filter={veterinList} specialityList={specialities} />
       </div>
     </>
   );

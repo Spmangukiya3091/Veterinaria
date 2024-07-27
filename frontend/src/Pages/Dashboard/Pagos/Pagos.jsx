@@ -172,7 +172,8 @@ const Pagos = ({ email }) => {
       paymentList.refetch();
     } else if (response.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -253,7 +254,7 @@ const Pagos = ({ email }) => {
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
-                        autocomplete="disabled"
+                        autoComplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </form>
@@ -435,7 +436,7 @@ const Pagos = ({ email }) => {
                     ) : (
                       <tr>
                         <td colSpan="7" className="text-center">
-                          No data available
+                          Datos no disponibles
                         </td>
                       </tr>
                     )}

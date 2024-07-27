@@ -20,12 +20,15 @@
 
   #sidebar {
     scrollbar-width: none;
+
     &::-webkit-scrollbar {
       width: 0.1rem;
     }
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }
+
     &::-webkit-scrollbar-thumb {
       background: transparent;
     }
@@ -157,6 +160,44 @@
   // .sidebar-nav .nav-content a.active i {
   //   color: #4154f1;
   // }
+}
+
+.watsapp-btn {
+  display: flex;
+  align-items: center;
+  font: normal normal normal 14px/21px Inter;
+  letter-spacing: 0px;
+  color: #162236;
+  transition: 0.3s;
+  background: #336cfb;
+  padding: 10px 15px;
+  background: #f6f8ff 0% 0% no-repeat padding-box;
+  border-radius: 8px;
+  bottom: 20px;
+  position: absolute;
+  width: 90%;
+}
+
+.watsapp-btn:hover {
+  display: flex !important;
+  align-items: center !important;
+  font: normal normal normal 14px/21px Inter !important;
+  letter-spacing: 0px !important;
+  color: #162236 !important;
+  transition: 0.3s !important;
+  background: #336cfb !important;
+  padding: 10px 15px !important;
+  background: #f6f8ff 0% 0% no-repeat padding-box !important;
+  border-radius: 8px !important;
+  bottom: 20px !important;
+  position: absolute !important;
+  width: 90% !important;
+}
+
+.watsapp-btn img {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
 }
 
 @media (max-width: 1199px) {

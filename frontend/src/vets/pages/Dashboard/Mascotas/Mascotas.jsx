@@ -122,7 +122,7 @@ const Mascotas = ({ id }) => {
                           className="form-control form-control-solid ps-12 w-250px"
                           placeholder="Buscar"
                           value={searchValue}
-                          autocomplete="disabled"
+                          autoComplete="disabled"
                           onChange={(e) => setSearchValue(e.target.value)}
                         />
                       </form>
@@ -210,7 +210,7 @@ const Mascotas = ({ id }) => {
                       currentPosts.map(({ id, name, owner, ownerId, Species, sex, age, rating }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{i + 1}</span>
+                            <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
                           <td className="text-start pe-0">{name}</td>
 
@@ -245,7 +245,7 @@ const Mascotas = ({ id }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="8" className="text-center">No data available</td>
+                        <td colSpan="8" className="text-center">Datos no disponibles</td>
                       </tr>
                     )}
                   </tbody>

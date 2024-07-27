@@ -4,8 +4,17 @@ import { failer, success } from "../../../../Components/alert/success";
 import moment from "moment";
 import { useAddPetMutation, useGetOwnersListQuery, useGetSinglePetQuery, useUpdatePetMutation } from "../../../../../services/ApiServices";
 
-
 function MascotasModal({ show, handleClose, id }) {
+  // console.log(id)
+  const currentYear = new Date().getFullYear();
+  const startYear = currentYear - 100; // Change the range as needed
+  const endYear = currentYear;
+
+  const yearOptions = [];
+  for (let year = startYear; year <= endYear; year++) {
+    yearOptions.push(year);
+  }
+
   const [formData, setFormData] = useState({
     name: "",
     owner: "",
@@ -15,6 +24,7 @@ function MascotasModal({ show, handleClose, id }) {
     Species: "",
     breed: "",
     color: "",
+    weight: ""
   });
 
   const [validated, setValidated] = useState(false); // State for form validation
@@ -25,8 +35,8 @@ function MascotasModal({ show, handleClose, id }) {
   const ownersList = useGetOwnersListQuery({ refetchOnMountOrArgChange: true });
 
   useEffect(() => {
-    if (id !== undefined && !petDetails.isLoading && petDetails.data) {
-      const { name, owner, ownerId, sex, dob, Species, breed, color } = petDetails?.data?.pet;
+    if (id !== undefined && !petDetails.isLoading && petDetails?.data) {
+      const { name, owner, ownerId, sex, dob, Species, breed, color, weight } = petDetails?.data?.pet;
       setFormData({
         name,
         owner,
@@ -36,14 +46,14 @@ function MascotasModal({ show, handleClose, id }) {
         Species,
         breed,
         color,
+        weight
       });
     } else if (id === undefined) {
       clearForm(); // Clear form fields when there is no owner ID
-
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, show]);
-
+  }, [id, petDetails, show]);
+  // console.log(formData,"formdata")
   const clearForm = () => {
     setFormData({
       name: "",
@@ -54,6 +64,7 @@ function MascotasModal({ show, handleClose, id }) {
       Species: "",
       breed: "",
       color: "",
+      weight: ""
     });
     setValidated(false); // Reset validated state
   };
@@ -121,7 +132,7 @@ function MascotasModal({ show, handleClose, id }) {
   }, [response, response2]);
   return (
     <>
-      <Modal size="lg" show={show} onHide={handleClose} centered>
+      <Modal size="lg" show={show} onHide={() => { handleClose(); clearForm() }} centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Información de Mascota</Modal.Title>
         </Modal.Header>
@@ -171,14 +182,19 @@ function MascotasModal({ show, handleClose, id }) {
 
               <Col>
                 <Form.Group className="mb-3" controlId="formBasicDate">
-                  <Form.Label>F. de Nacimiento</Form.Label>
-                  <Form.Control
-                    type="date"
-                    placeholder="DD/MM/YYYY"
-                    name="dob"
+                  <Form.Label>Año de Nacimiento</Form.Label>
+                  <Form.Select
                     onChange={handleChange}
-                    value={formData.dob ? moment(formData.dob).format("YYYY-MM-DD") : ""}
-                  />
+                    value={formData.dob ? moment(formData.dob).format("YYYY") : ""}
+                    name="dob"
+                  >
+                    <option value="">Año</option>
+                    {yearOptions.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </Form.Select>
                 </Form.Group>
               </Col>
             </Row>
@@ -203,11 +219,17 @@ function MascotasModal({ show, handleClose, id }) {
                   <Form.Control placeholder="Color" aria-label="Default " name="color" onChange={handleChange} value={formData.color} />
                 </Form.Group>
               </Col>
+              <Col>
+                <Form.Group className="mb-3" controlId="formBasicSelect">
+                  <Form.Label>Peso</Form.Label>
+                  <Form.Control placeholder="Peso" aria-label="Default " type="number" name="weight" onChange={handleChange} value={formData.weight} />
+                </Form.Group>
+              </Col>
             </Row>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose} className="footer-btn btn btn-secondary">
+          <Button onClick={() => { handleClose(); clearForm() }} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button

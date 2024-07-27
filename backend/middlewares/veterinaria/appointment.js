@@ -6,7 +6,7 @@ const ProfileStorage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(
       null,
-     file.originalname 
+      file.originalname
     );
   },
 });
@@ -35,7 +35,7 @@ const uploadDoc = multer({
   storage: ProfileStorage,
   limits: {
     fileSize: 10000000,
-    files: 10, 
+    files: 10,
   },
   fileFilter: profileFilter,
 })

@@ -98,13 +98,13 @@ function ProximasCitas({ id }) {
                             {`Cita #${appointment.id} - ${appointment.pet}`}
                           </Link>
                         </div>
-                        <Link to="#" className="btn btn-bg-light btn-active-color-primary btn-sm">
+                      <Link to={`/veterine/citas-view/${appointment?.id}`} className="btn btn-bg-light btn-active-color-primary btn-sm">
                           Ver detalles
                         </Link>
                       </div>
                     ))
                   ) : (
-                    <div>No Appointments</div>
+                    <div>Sin citas</div>
                   )}
                 </div>
               </div>

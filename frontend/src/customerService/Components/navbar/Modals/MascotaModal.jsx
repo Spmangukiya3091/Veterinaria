@@ -14,6 +14,7 @@ const MascotaModal = ({ onHide, show }) => {
     Species: "",
     breed: "",
     color: "",
+    weight: ""
   });
 
   const [validated, setValidated] = useState(false); // State for form validation
@@ -36,6 +37,7 @@ const MascotaModal = ({ onHide, show }) => {
       Species: "",
       breed: "",
       color: "",
+      weight: ""
     });
     setValidated(false); // Reset validated state
   };
@@ -66,6 +68,7 @@ const MascotaModal = ({ onHide, show }) => {
       e.stopPropagation();
     } else {
       await addPet(formData);
+
     }
   };
 
@@ -84,7 +87,7 @@ const MascotaModal = ({ onHide, show }) => {
   }, [response]);
   return (
     <>
-      <Modal size="lg" show={show} onHide={() => { onHide(); clearForm() }} centered>
+      <Modal size="lg" show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">Información de Mascota</Modal.Title>
         </Modal.Header>
@@ -166,11 +169,20 @@ const MascotaModal = ({ onHide, show }) => {
                   <Form.Control placeholder="Color" aria-label="Default " name="color" onChange={handleChange} value={formData.color} />
                 </Form.Group>
               </Col>
+              <Col>
+                <Form.Group className="mb-3" controlId="formBasicSelect">
+                  <Form.Label>Peso</Form.Label>
+                  <Form.Control placeholder="Peso" aria-label="Default " type="number" name="weight" onChange={handleChange} value={formData.weight} />
+                </Form.Group>
+              </Col>
             </Row>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={() => {
+            onHide();
+            clearForm()
+          }} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button
@@ -187,6 +199,7 @@ const MascotaModal = ({ onHide, show }) => {
     </>
   );
 }
+
 
 
 export default MascotaModal;

@@ -12,7 +12,7 @@ import {
 } from "../../../../services/ApiServices";
 import moment from "moment";
 
-function CitasModal({ show, handleClose, id, }) {
+const CitasModal = ({ id, show, handleClose }) => {
   const [formData, setFormData] = useState({
     owner: "",
     ownerId: "",
@@ -25,18 +25,18 @@ function CitasModal({ show, handleClose, id, }) {
     scheduleEnd: "",
     observation: "",
   });
+
   const owners = useGetOwnersListQuery({ refetchOnMountOrArgChange: true });
-  const pets = useGetPetByOwnerQuery(formData?.ownerId, { refetchOnMountOrArgChange: true });
+  const pets = useGetPetByOwnerQuery(formData?.ownerId, { refetchOnMountOrArgChange: true, skip: formData.ownerId === "" });
   const veterinarians = useGetVeterinariansQuery({ refetchOnMountOrArgChange: true });
-  const citasDetail = useGetSingleAppointmentQuery(id, { refetchOnMountOrArgChange: true, skip: id === undefined });
+  const citasDetail = useGetSingleAppointmentQuery(id, { refetchOnMountOrArgChange: true, skip: !id });
   const [addCitas, response] = useAddAppoinmentMutation();
   const [updateCitas, response2] = useUpdateAppointmentMutation();
   const [validated, setValidated] = useState(false); // State for form validation
 
   useEffect(() => {
-    if (id !== undefined && id !== "" && !citasDetail.isLoading && citasDetail.data?.appointments[0]) {
-      const { owner, ownerId, pet, petId, veterinarian, veterinarianId, date, scheduleStart, scheduleEnd, observation } =
-        citasDetail?.data?.appointments[0];
+    if (id && !citasDetail.isLoading && citasDetail.data?.appointments[0]) {
+      const { owner, ownerId, pet, petId, veterinarian, veterinarianId, date, scheduleStart, scheduleEnd, observation } = citasDetail.data.appointments[0];
       setFormData({
         owner,
         ownerId,
@@ -49,8 +49,8 @@ function CitasModal({ show, handleClose, id, }) {
         scheduleEnd,
         observation,
       });
-    } else if (id === undefined || id === "") {
-      clearForm()
+    } else if (!id) {
+      clearForm();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, citasDetail, show]);
@@ -70,11 +70,13 @@ function CitasModal({ show, handleClose, id, }) {
     });
     setValidated(false); // Reset validated state
   };
+
   useEffect(() => {
-    // Reset petId when ownerId changes
-    setFormData((prevFormData) => ({ ...prevFormData, petId: "" }));
+    // Reset petId when ownerId changes, but preserve if petId is already set
+    if (formData.ownerId && !formData.petId) {
+      setFormData((prevFormData) => ({ ...prevFormData, petId: "", pet: "" }));
+    }
   }, [formData.ownerId]);
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,12 +89,12 @@ function CitasModal({ show, handleClose, id, }) {
   const handleOwnerChange = (e) => {
     const ownerId = e.target.value;
     const owner = e.target.options[e.target.selectedIndex].text;
-
     setFormData({
       ...formData,
       owner,
       ownerId,
-      petId: ""
+      petId: "",
+      pet: "",
     });
   };
 
@@ -109,14 +111,12 @@ function CitasModal({ show, handleClose, id, }) {
   const handleVetChange = (e) => {
     const veterinarianId = e.target.value;
     const veterinarian = e.target.options[e.target.selectedIndex].text;
-
     setFormData({
       ...formData,
       veterinarianId,
       veterinarian,
     });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,7 +125,7 @@ function CitasModal({ show, handleClose, id, }) {
     if (form.checkValidity() === false) {
       e.stopPropagation();
     } else {
-      if (id !== undefined && id !== "" && id !== " ") {
+      if (id) {
         const body = {
           id,
           ...formData,
@@ -138,9 +138,9 @@ function CitasModal({ show, handleClose, id, }) {
   };
 
   useEffect(() => {
-    if (id !== undefined) {
+    if (id) {
       if (!response2.isLoading && response2.isSuccess) {
-        clearForm()
+        clearForm();
         handleClose();
         success();
       } else if (response2.isError && response2.status === "rejected" && response2?.error?.status !== 400) {
@@ -148,7 +148,7 @@ function CitasModal({ show, handleClose, id, }) {
       }
     } else {
       if (!response.isLoading && response.isSuccess) {
-        clearForm()
+        clearForm();
         handleClose();
         success();
       } else if (response.isError && response.status === "rejected" && response?.error?.status !== 400) {
@@ -170,13 +170,14 @@ function CitasModal({ show, handleClose, id, }) {
               <Form.Group className="mb-3">
                 <Form.Label>Propietario</Form.Label>
                 <Form.Select name="owner" onChange={handleOwnerChange} value={formData.ownerId} required>
-                  <option value={""} disabled="true" selected="true">Seleccione Propietario</option>
+                  <option value={""} disabled>
+                    Seleccione Propietario
+                  </option>
                   {owners?.data?.ownersList.map((owner) => (
                     <option key={owner.id} value={owner.id}>
                       {owner.name + " " + owner.surname}
                     </option>
                   ))}
-
                 </Form.Select>
                 <Form.Control.Feedback type="invalid">
                   Por favor seleccione propietario
@@ -187,7 +188,9 @@ function CitasModal({ show, handleClose, id, }) {
               <Form.Group className="mb-3">
                 <Form.Label>Mascota</Form.Label>
                 <Form.Select name="pet" onChange={handlePetChange} value={formData.petId} required>
-                  <option value={""} disabled="true" selected="true">Seleccione Mascota</option>
+                  <option value={""} disabled>
+                    Seleccione Mascota
+                  </option>
                   {pets?.data?.pets.map((pet) => (
                     <option key={pet.id} value={pet.id}>
                       {pet.name}
@@ -205,7 +208,9 @@ function CitasModal({ show, handleClose, id, }) {
               <Form.Group className="mb-3">
                 <Form.Label>Veterinario</Form.Label>
                 <Form.Select aria-label="Default select example" name="veterinarian" onChange={handleVetChange} value={formData.veterinarianId} required>
-                  <option value={""} disabled="true" selected="true">Seleccione Veterinario</option>
+                  <option value={""} disabled>
+                    Seleccione Veterinario
+                  </option>
                   {veterinarians?.data?.veterinarianList.map((vet) => (
                     <option key={vet.id} value={vet.id}>
                       {vet.name + " " + vet.surname}
@@ -287,6 +292,6 @@ function CitasModal({ show, handleClose, id, }) {
       </Modal.Footer>
     </Modal>
   );
-}
+};
 
 export default CitasModal;

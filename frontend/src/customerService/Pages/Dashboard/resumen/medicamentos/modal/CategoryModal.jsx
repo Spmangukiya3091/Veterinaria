@@ -25,7 +25,7 @@ function CategoryModal({ show, handleClose, email }) {
     email: email,
   });
 
-  const categoryList = useGetAllCategoriesQuery( { refetchOnMountOrArgChange: true });
+  const categoryList = useGetAllCategoriesQuery({ refetchOnMountOrArgChange: true });
   useEffect(() => {
     if (!categoryList.isLoading) {
       setLoading(false);
@@ -40,6 +40,7 @@ function CategoryModal({ show, handleClose, email }) {
   const handleCloses = () => {
     setOpen(false);
     setCatID();
+    categoryList.refetch()
   };
   const handleOpen = () => setOpen(true);
 
@@ -91,7 +92,8 @@ function CategoryModal({ show, handleClose, email }) {
       categoryList.refetch();
     } else if (response.isError) {
       // console.log(response.error);
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
@@ -167,7 +169,9 @@ function CategoryModal({ show, handleClose, email }) {
         </Modal>
       )}
       <InformacionModal show={open} id={catID} handleClose={handleCloses} filter={categoryList} />
-      <Alert show={modalShow} onHide={() => setModalShow(false)} msg={"¿Seguro de completar esta operación?"} opendltModal={handleConfirmDelete} />
+      <Alert show={modalShow}
+        onHide={() => { setModalShow(false); setCatID(undefined) }}
+        msg={"¿Seguro de completar esta operación?"} opendltModal={handleConfirmDelete} />
       <DeleteVerifyModal
         show={openform}
         onHide={() => {
@@ -177,6 +181,7 @@ function CategoryModal({ show, handleClose, email }) {
             pass: "",
             email: "",
           });
+          setCatID(undefined)
         }}
         onDelete={handleDeleteVerify}
       />

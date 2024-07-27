@@ -89,8 +89,6 @@ const PropietariosDetails = ({ email }) => {
 
       // Call the dltOwner API
       await dltOwner(body);
-
-      navigate("/dashboard/propietarios");
     } else {
       failer("Invalid Password");
     }
@@ -107,12 +105,13 @@ const PropietariosDetails = ({ email }) => {
       navigate("/dashboard/propietarios");
     } else if (dltResponse.isError) {
       // console.log(dltResponse.error);
-      failer(dltResponse?.error?.data?.message);
+      // failer(dltResponse?.error?.data?.message);
+      failer("Contraseña incorrecta");
 
       // dispatch(showToast(dltResponse.error.message, "FAIL_TOAST"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [singleOwner]);
+  }, [dltResponse]);
 
   return (
     <>
@@ -171,7 +170,7 @@ const PropietariosDetails = ({ email }) => {
                         setShow(!show);
                       }}
                     >
-                      Details
+                      Detalles
                       <span className="ms-2 rotate-180">
                         <i className={`fa-solid fa-chevron-${show ? "up" : "down"} fs-8`}></i>
                       </span>

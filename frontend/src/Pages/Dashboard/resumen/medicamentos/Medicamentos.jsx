@@ -16,7 +16,7 @@ function Medicamentos({ data, filter }) {
         </div>
         <div className="tableFixHead">
           <table>
-            <thead>
+            <thead style={{ zIndex: 9 }}>
               <tr>
                 <th>CATEGORÍA</th>
                 <th>PRODUCTOS</th>
@@ -48,7 +48,7 @@ function Medicamentos({ data, filter }) {
                   :
                   <tr>
                     <td colSpan="7" style={{ textAlign: "center" }}>
-                      No data available
+                      Datos no disponibles
                     </td>
                   </tr>
               }

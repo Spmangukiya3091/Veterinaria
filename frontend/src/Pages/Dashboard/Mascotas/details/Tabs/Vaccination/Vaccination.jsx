@@ -29,6 +29,10 @@ const Vaccination = ({ id, email }) => {
     pass: "",
     email: email,
   });
+  const [vaccineDates, setVaccineDates] = useState({
+    fvaccination: "",
+    validity: ""
+  })
 
   const vaccinationList = useGetSinglePetVaccinationDetailsQuery(id, { refetchOnMountOrArgChange: true });
 
@@ -51,6 +55,10 @@ const Vaccination = ({ id, email }) => {
     setShow(false);
     setVaccineId(undefined)
     vaccinationList.refetch()
+    setVaccineDates({
+      fvaccination: "",
+      validity:""
+    })
   };
   const handleCloseVacuna = () => {
     setAddVacuna(false);
@@ -102,7 +110,8 @@ const Vaccination = ({ id, email }) => {
       // Refetch or update data if needed
       vaccinationList.refetch();
     } else if (response.isError) {
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
       // dispatch(showToast(response?.error?.data?.message, "FAIL_TOAST"));
       // console.log(response.error);
     }
@@ -150,7 +159,7 @@ const Vaccination = ({ id, email }) => {
                   {data?.length > 0 ? (
                     data.map(({ id, vaccine, exploration, F_vaccination, validity, status }, i) => (
                       <tr key={i}>
-                        <td>{i + 1}</td>
+                        <td>{i + 1 }</td>
                         <td>{vaccine ? vaccine : "-"}</td>
                         <td className={`${exploration === "APTO" ? "textSuccess" : "textDanger"}`}>{exploration}</td>
                         <td>{F_vaccination !== null ? moment(F_vaccination).format("DD MMM YYYY") : "-"}</td>
@@ -192,6 +201,10 @@ const Vaccination = ({ id, email }) => {
                                 onClick={() => {
                                   setShow(true);
                                   setVaccineId(id);
+                                  setVaccineDates({
+                                    fvaccination: F_vaccination,
+                                    validity: validity
+                                  })
                                 }}
                               >
                                 <i className="bi bi-calendar-event"></i>
@@ -221,7 +234,7 @@ const Vaccination = ({ id, email }) => {
                   ) : (
                     <tr>
                       <td colSpan="7" className="text-center">
-                        No data available
+                        Datos no disponibles
                       </td>
                     </tr>
                   )}
@@ -232,7 +245,7 @@ const Vaccination = ({ id, email }) => {
         </section>
       )}
       <UpdVacunaStat show={updStat} handleClose={handleUpdStatclose} vaccineId={vaccineId} filter={vaccinationList} />
-      <EditVaccinModal show={show} handleClose={handleCloseEdit} vaccineId={vaccineId} filter={vaccinationList} />
+      <EditVaccinModal show={show} handleClose={handleCloseEdit} vaccineId={vaccineId} filter={vaccinationList} dates={vaccineDates} />
       <AddVacunaModal show={addVacuna} handleClose={handleCloseVacuna} filter={vaccinationList} />
       <Alert show={modalShow} onHide={() => setModalShow(false)} msg={"¿Seguro de completar esta operación?"} opendltModal={handleConfirmDelete} />
       <DeleteVerifyModal

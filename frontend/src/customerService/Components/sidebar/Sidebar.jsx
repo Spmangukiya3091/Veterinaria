@@ -32,6 +32,10 @@ function Sidebar() {
             );
           })}
         </ul>
+        <a className="nav-link watsapp-btn" href="https://wa.me/51992258990" target="_blank" rel="noopener noreferrer">
+          <img src="/images/watsapp.png" alt="watsapp" />
+          <span>Contactar Soporte</span>
+        </a>
       </aside>
     </div>
   );

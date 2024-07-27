@@ -37,8 +37,14 @@ function Navbars({ user }) {
   const handleShow = () => setShow(true);
   const handleLogout = () => {
     // Remove cookies
-    removeCookie("user");
-    removeCookie("authToken");
+    removeCookie("user", { path: "/", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("authToken", { path: "/", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("user", { path: "/dashboard", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("authToken", { path: "/dashboard", domain: process.env.REACT_APP_DOMAIN_URL });
+    removeCookie("user", { path: "/", domain: ".olivosdatasolutions.com" });
+    removeCookie("authToken", { path: "/", domain: ".olivosdatasolutions.com" });
+    removeCookie("user", { path: "/dashboard", domain: ".olivosdatasolutions.com" });
+    removeCookie("authToken", { path: "/dashboard", domain: ".olivosdatasolutions.com" });
 
     // Navigate to the home page
     navigate("/");
@@ -51,7 +57,7 @@ function Navbars({ user }) {
     <>
       <div className="navbars bg-white">
         <Navbar>
-          <p className="nav-title">Bienvenido, Nombre de Administrador</p>
+          <p className="nav-title">Bienvenido, {user?.user?.name || "Servicio al Cliente	"}</p>
           <div className="notification-box d-flex align-content-center">
             <Dropdown as={ButtonGroup} show={isDropdownOpen} onClose={closeDropdown} onToggle={toggleDropdown} align={"end"}>
               <Dropdown.Toggle id="dropdown-basic" className="nueva-btn btn btn-primary">
@@ -80,7 +86,7 @@ function Navbars({ user }) {
                 <Avatars name={user?.user?.name} />
                 <div className="avatar-title-box">
                   <p className="avatar-main-title">{user?.user?.name}</p>
-                  <p className="avatar-sub-title">{user?.user?.role}</p>
+                  <p className="avatar-sub-title">{user?.user?.role === "customerService" && "Servicio al Cliente	"}</p>
                 </div>
                 <i className="fa-solid fa-chevron-down"></i>
               </div>

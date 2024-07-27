@@ -65,6 +65,7 @@ function ForgetPassword() {
                           <Form.Label>Correo electrónico</Form.Label>
                           <Form.Control
                             type="email"
+                            pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
                             placeholder="Correo electrónico"
                             autoComplete="new-password"
                             name="email"

@@ -31,14 +31,14 @@ const SubMascotas = ({ data }) => {
                 {data.pets.length > 0 ? (
                   data.pets.map(({ id, name, Species, sex, age }, i) => (
                     <tr key={i}>
-                      <td>{i + 1}</td>
+                      <td>{i + 1 }</td>
                       <td>{name ? name : "-"}</td>
                       <td>{Species ? Species : "-"}</td>
                       <td>{sex ? sex : "-"}</td>
                       <td>{age ? age : "-"}</td>
                       <td>
                         <Link
-                          to="/customerservice/mascotas/details"
+                          to={`/customerservice/mascotas/details/${id}`}
                           className="btn btn-sm btn-light btn-active-light-primary"
                           data-kt-menu-trigger="click"
                           data-kt-menu-placement="bottom-end"
@@ -51,7 +51,7 @@ const SubMascotas = ({ data }) => {
                 ) : (
                   <tr>
                     <td colSpan="6" className="text-center">
-                      No data available
+                      Datos no disponibles
                     </td>
                   </tr>
                 )}

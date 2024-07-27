@@ -6,6 +6,7 @@ import { useUserLoginMutation } from "../../../services/ApiServices";
 import { useDispatch } from "react-redux";
 import { showToast } from "../../../store/tostify";
 import { useCookies } from "react-cookie";
+
 function Login() {
   // eslint-disable-next-line no-unused-vars
   const [, setCookie] = useCookies(["user"]);
@@ -27,6 +28,44 @@ function Login() {
     const { data, isError, error } = await userLogin(formData);
     const expiresIn = 24 * 60 * 60 * 60;
     if (data !== undefined) {
+      setCookie("user", data.user.id, {
+        maxAge: expiresIn,
+        path: "/",
+        // domain: "localhost",
+        // domain: "develop.olivosdatasolutions.com",
+        domain: process.env.REACT_APP_DOMAIN_URL,
+        sameSite: "Lax",
+        secure: false,
+      });
+
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/",
+        // domain: "localhost",
+        // domain: "develop.olivosdatasolutions.com",
+        domain: process.env.REACT_APP_DOMAIN_URL,
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/dashboard",
+        // domain: "localhost",
+        // domain: "develop.olivosdatasolutions.com",
+        domain: process.env.REACT_APP_DOMAIN_URL,
+        sameSite: "Lax",
+        secure: false,
+      });
+      setCookie("authToken", data.token, {
+        maxAge: expiresIn,
+        path: "/",
+        // domain: "localhost",
+        // domain: "develop.olivosdatasolutions.com",
+        domain: process.env.REACT_APP_DOMAIN_URL,
+        sameSite: "Lax",
+        secure: false,
+      });
+
       if (data.user.role === "user") {
         navigate("/veterine/resumen");
       } else if (data.user.role === "masterAdmin") {
@@ -36,124 +75,11 @@ function Login() {
       } else if (data.user.role === "customerService") {
         navigate("/customerservice/resumen");
       }
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "app.olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "app.olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "app.olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "app.olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "develop.olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "develop.olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "develop.olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "develop.olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "olivosdatasolutions.com",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "localhost",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("user", data.user.id, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "localhost",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/dashboard",
-        domain: "localhost",
-        sameSite: "Lax",
-        secure: false,
-      });
-      setCookie("authToken", data.token, {
-        maxAge: expiresIn,
-        path: "/",
-        domain: "localhost",
-        sameSite: "Lax",
-        secure: false,
-      });
-
       dispatch(showToast("iniciar sesión exitosamente", "SUCCESS_TOAST"));
     } else if (data === undefined) {
-      dispatch(showToast("Invalid email or password", "FAIL_TOAST"));
+      dispatch(showToast("Correo electrónico o contraseña no válidos", "FAIL_TOAST"));
     } else if (data.user.role !== "masterAdmin") {
-      dispatch(showToast("invalid user type", "FAIL_TOAST"));
+      dispatch(showToast("tipo de usuario no válido", "FAIL_TOAST"));
     } else if (isError) {
       dispatch(showToast(error?.data?.message, "FAIL_TOAST"));
       navigate("/");
@@ -201,7 +127,7 @@ function Login() {
                           type="email"
                           autoComplete="current-email"
                           placeholder="Correo electrónico"
-                          
+
                           required
                         />
                       </Form.Group>

@@ -69,12 +69,12 @@ function Citas({ id }) {
     // Refetch data based on the search criteria
     setSearchQuery(
       searchData.status === ""
-        ? `?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
+        ? `${id}?startDate=${searchData.startDate}&endDate=${searchData.endDate}`
         : searchData.startDate === "" && searchData.endDate === ""
-          ? `?status=${searchData.status}`
+          ? `${id}?status=${searchData.status}`
           : searchData.status === "" && searchData.startDate === "" && searchData.endDate === ""
             ? ""
-            : `?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
+            : `${id}?status=${searchData.status}&startDate=${searchData.startDate}&endDate=${searchData.endDate}`,
     );
     // appointmentsByFilter.refetch();
     setDropdownOpen(false);
@@ -130,15 +130,15 @@ function Citas({ id }) {
                       </svg>
                     </span>
                     <form autoComplete="new-password">
-                        <input
-                          type="text"
-                          className="form-control form-control-solid ps-12 w-250px"
-                          placeholder="Buscar"
-                          value={searchValue}
-                          autocomplete="disabled"
-                          onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                      </form>
+                      <input
+                        type="text"
+                        className="form-control form-control-solid ps-12 w-250px"
+                        placeholder="Buscar"
+                        value={searchValue}
+                        autoComplete="disabled"
+                        onChange={(e) => setSearchValue(e.target.value)}
+                      />
+                    </form>
                   </div>
                 </div>
                 <div className="card-toolbar flex-row-fluid justify-content-start gap-5">
@@ -170,7 +170,7 @@ function Citas({ id }) {
                               <label className="form-label fw-bold">Estado</label>
                               <div>
                                 <select className="form-select form-select-solid" name="status" onChange={handleChange} value={searchData.status}>
-                                  <option disabled >Seleccionar</option>
+                                  <option disabled value={""}>Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>
@@ -230,21 +230,21 @@ function Citas({ id }) {
                   </thead>
                   <tbody>
                     {currentPosts?.length > 0 ? (
-                      currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, createdAt, status, rating }, i) => (
+                      currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, createdAt, status, rating, date }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className="fw-bold text-gray-600 fw-bolder">{i + 1}</span>
+                            <span className="fw-bold text-gray-600 fw-bolder">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
                           <td className="text-start pe-0">{pet}</td>
                           {/* <td className="text-start pe-0">{veterinarian}</td> */}
 
                           <td className="text-start pe-0" data-order="16">
-                            {moment(`2023-01-01 ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A") +
+                            {moment(`${date} ${scheduleStart}`, "YYYY-MM-DD HH:mm:ss").format("hh:mm A") +
                               " - " +
-                              moment(`2023-01-01 ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("h:mm A")}
+                              moment(`${date} ${scheduleEnd}`, "YYYY-MM-DD HH:mm:ss").format("hh:mm A")}
                           </td>
                           <td className="text-start pe-0">
-                            <div className=" fecha">{moment(createdAt).format("DD MMM YYYY")}</div>
+                            <div className=" fecha">{moment(date).format("DD MMM YYYY")}</div>
                           </td>
                           <td className="text-start pe-0" data-order="rating-5">
                             <div className="rating justify-content-start">
@@ -277,7 +277,7 @@ function Citas({ id }) {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7">No data available</td>
+                        <td colSpan="7">Datos no disponibles</td>
                       </tr>
                     )}
                   </tbody>

@@ -53,7 +53,7 @@ const Vaccination = ({ id }) => {
                   {data?.length > 0 ? (
                     data.map(({ id, vaccine, exploration, F_vaccination, validity, status }, i) => (
                       <tr key={i}>
-                        <td>{i + 1}</td>
+                        <td>{i + 1 }</td>
                         <td>{vaccine ? vaccine : "-"}</td>
                         <td className={`${exploration === "APTO" ? "textSuccess" : "textDanger"}`}>{exploration}</td>
                         <td>{F_vaccination !== null ? moment(F_vaccination).format("DD MMM YYYY") : "-"}</td>
@@ -77,7 +77,7 @@ const Vaccination = ({ id }) => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="7">No data available</td>
+                      <td colSpan="7">Datos no disponibles</td>
                     </tr>
                   )}
                 </tbody>

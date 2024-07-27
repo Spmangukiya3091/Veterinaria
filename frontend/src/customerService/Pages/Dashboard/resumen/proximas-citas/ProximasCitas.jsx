@@ -36,7 +36,7 @@ function ProximasCitas({ data }) {
 
                   <td className="text-center">
                     <Link
-                      to="/customerservice/citas-view?status=Pendiente"
+                      to={`/customerservice/citas-view/${id}`}
                       className="btn btn-sm btn-light btn-active-light-primary"
                       data-kt-menu-trigger="click"
                       data-kt-menu-placement="bottom-end"
@@ -48,7 +48,7 @@ function ProximasCitas({ data }) {
               ))
               : (
                 <tr>
-                  <td colSpan="7">No data available</td>
+                  <td colSpan="7">Datos no disponibles</td>
                 </tr>
               )}
           </tbody>

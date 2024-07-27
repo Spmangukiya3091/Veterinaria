@@ -75,10 +75,12 @@ function Resumen() {
 
   const pastMonths = getPastMonths().reverse();
   // console.log(pastMonths.reverse())
+  const [value, setValue] = useState(2)
+  const query = `${value === 1 ? `?month=${getCurrentMonth2().month}` : value === 2 ? `?year=${getCurrentMonth2().year}` : ""}`
   const metricasData = useGetMetricsQuery(selectedMonth, { refetchOnMountOrArgChange: true });
   const appoinmentGraph = useGetAppoinmentGraphQuery({ refetchOnMountOrArgChange: true });
   const paymentGraph = useGetPaymentGraphQuery({ refetchOnMountOrArgChange: true });
-  const ownerGraph = useGetOwnerGraphQuery({ refetchOnMountOrArgChange: true });
+  const ownerGraph = useGetOwnerGraphQuery(query, { refetchOnMountOrArgChange: true });
   const categoryList = useGetCategoryWithProductsQuery({ refetchOnMountOrArgChange: true });
   const pendingAppointmentsList = useGetPendingAppoinmentQuery({ refetchOnMountOrArgChange: true });
 
@@ -122,6 +124,7 @@ function Resumen() {
       year: year
     })
     setLoading(true);
+    metricasData.refetch()
   };
   return (
     <div className="resumen">
@@ -175,7 +178,7 @@ function Resumen() {
           <Row>
             <Col sm={12} md={6} lg={6}>
               <div className="calendar-card-wrapper">
-                {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <PtientesChart data={ownerData} />}
+                {loading ? <Spinner animation="border" variant="primary" /> : error ? "Some Error Occured" : <PtientesChart data={ownerData} onChange={setValue} active={value} />}
               </div>
             </Col>
             <Col sm={12} md={6} lg={6}>

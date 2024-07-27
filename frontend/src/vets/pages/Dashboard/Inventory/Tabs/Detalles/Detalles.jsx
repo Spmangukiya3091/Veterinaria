@@ -80,7 +80,7 @@ const Detalles = ({ data, historyData }) => {
             </div>
           ))
         ) : (
-          <div className="detail-wrapper">No history Available</div>
+          <div className="detail-wrapper">Sin historial disponible</div>
         )}
       </div>
     </>

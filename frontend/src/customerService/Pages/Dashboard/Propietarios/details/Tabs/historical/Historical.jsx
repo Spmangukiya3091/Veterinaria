@@ -128,7 +128,7 @@ const Historical = ({ id }) => {
                         className="form-control form-control-solid ps-12 w-250px"
                         placeholder="Buscar"
                         value={searchValue}
-                        autocomplete="disabled"
+                        autoComplete="disabled"
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </form>
@@ -172,7 +172,7 @@ const Historical = ({ id }) => {
                                   onChange={handleChange}
                                   value={searchData.status}
                                 >
-                                  <option disabled >Seleccionar</option>
+                                  <option disabled value={""}>Seleccionar</option>
                                   <option value="complete">Completado</option>
                                   <option value="pending">Pendiente</option>
                                   <option value="no attempt">No asistió</option>
@@ -234,7 +234,7 @@ const Historical = ({ id }) => {
                       currentPosts.map(({ id, pet, scheduleStart, scheduleEnd, date, status, ACCIONES }, i) => (
                         <tr key={i}>
                           <td className="text-start pe-0">
-                            <span className=" text-gray-600 ">{i + 1}</span>
+                            <span className=" text-gray-600 ">{i + 1 + (currentPage - 1) * postsPerPage}</span>
                           </td>
                           <td className="text-start pe-0">{pet ? pet : "-"}</td>
 
@@ -280,7 +280,7 @@ const Historical = ({ id }) => {
                     ) : (
                       <tr>
                         <td colSpan="6" className="text-center">
-                          No data available
+                          Datos no disponibles
                         </td>
                       </tr>
                     )}

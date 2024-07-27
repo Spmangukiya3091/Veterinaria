@@ -125,7 +125,7 @@ function InventoryModal(props) {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide} className="footer-btn btn btn-secondary">
+          <Button onClick={() => { props.onHide();  }} className="footer-btn btn btn-secondary">
             Cancelar
           </Button>
           <Button

@@ -38,7 +38,7 @@ const VacunasDetails = ({ email }) => {
   }, [vaccineDetail]);
 
   const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  const handleClose = () => { setShow(false); vaccineDetail.refetch() };
   const [openform, setOpenform] = useState(false);
   const [dltVaccine, response] = useRemoveVaccineMutation();
   const [dltData, setDltData] = useState({
@@ -95,7 +95,8 @@ const VacunasDetails = ({ email }) => {
     } else if (response.isError && response.status === "rejected") {
       // console.log(response.error);
       // dispatch(showToast(response.error.message, "FAIL_TOAST"));
-      failer(response?.error?.data?.message);
+      // failer(response?.error?.data?.message);
+      failer("Contraseña incorrecta");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
@@ -164,7 +165,7 @@ const VacunasDetails = ({ email }) => {
                             setShowDropdown(!showDropdown);
                           }}
                         >
-                          Details
+                          Detalles
                           <span className="ms-2 rotate-180">
                             <i className={`fa-solid fa-chevron-${showDropdown ? "up" : "down"} fs-8`}></i>
                           </span>
@@ -185,7 +186,7 @@ const VacunasDetails = ({ email }) => {
                 </div>
               </div>
             </Col>
-             <Col className="ms-lg-15">
+            <Col className="ms-lg-15">
               <div className="drop-down" style={{ zIndex: 99 }}>
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="dropdown-toggle btn btn-sm btn-flex btn-center" id="dropdown-basic">
